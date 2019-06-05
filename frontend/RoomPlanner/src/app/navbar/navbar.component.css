@@ -1,0 +1,16 @@
+nav{
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    background: #ffffff;
+    border-bottom: 1px solid #eee;
+    height: 64px;
+}
+
+.logo{
+    height: 40px;
+    position: absolute;
+    top:12px;
+    left: 20px;
+}
