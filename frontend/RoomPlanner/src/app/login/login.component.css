@@ -11,10 +11,17 @@
     -o-background-size: cover;
     background-size: cover;
 }
+
 .login-card{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    padding: 35px 35px;
+    background: rgba(0, 0, 0, 0.7);
     
+}
+
+input{
+    display: block;
 }
