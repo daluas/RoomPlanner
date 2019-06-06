@@ -3,18 +3,35 @@ import { LoginModel } from '../../models/LoginUser';
 import { LoggedUser } from '../../models/LoggedUser';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { LoginToken } from '../../models/LoginToken';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private backendUrl: string
-  private headers: HttpHeaders;
+  private backendUrl: string = '';
+  private headers: HttpHeaders = new HttpHeaders();
 
   constructor(private httpClient: HttpClient) { }
 
-  authenticateUser(user: LoginModel) {
-    this.httpClient.post(this.backendUrl, user, { headers: this.headers })
-    //.toPromise()
+  authenticateUser(user: LoginModel): Promise<Object> {
+    console.log(this.headers);
+    
+    return this.httpClient.post(`${this.backendUrl}/auth`, user, { headers: this.headers })
+      .toPromise()
+    //   .then(data => {
+    //     console.log(data) // user_id, token, 
+    //     return "ok";
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //     return "error";
+    //   });
+    // return "nothing"
+  }
+
+  validateAndSendRequest(token: string, request: any): Promise<Object> {
+    this.headers.append("Authorization", token)
+    return this.httpClient.post(`${this.backendUrl}`, {}, { headers: this.headers }).toPromise();
   }
 
 
@@ -41,11 +58,11 @@ export class AuthService {
   }
 
   // login(clientData: LoginModel){
-  login(email: string, password: string) {
-    let clientData: LoginModel = {
+  login(email: string, password: string): Promise<LoggedUser> {
+    let clientData: LoginModel = new LoginModel().create({
       email: email,
       password: password
-    };
+    });
     // this.httpClient.post(this.backendUrl, clientData, this.tokenHeader)
     let loggedUser: LoggedUser = {
       type: '',
