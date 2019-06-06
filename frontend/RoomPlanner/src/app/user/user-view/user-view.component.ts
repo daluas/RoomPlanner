@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserViewComponent implements OnInit {
 
+  dropdownOpen: boolean = false;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  toggleDropdown(){
+    this.dropdownOpen = !this.dropdownOpen;
+  }
 }
