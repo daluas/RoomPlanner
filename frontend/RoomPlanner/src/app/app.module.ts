@@ -10,6 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { MaterialDesignModule } from './material-design/material-design.module';
 import { SharedModule } from './shared/shared.module';
 import { NavbarComponent } from './navbar/navbar.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,9 @@ import { NavbarComponent } from './navbar/navbar.component';
     BrowserAnimationsModule,
     CoreModule,
     MaterialDesignModule,
-    SharedModule
+    SharedModule,
+    FormsModule, 
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
