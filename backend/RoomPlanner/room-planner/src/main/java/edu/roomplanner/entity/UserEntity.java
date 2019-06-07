@@ -4,19 +4,33 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 @Setter
 @Getter
-public class UserEntity {
+public abstract class UserEntity {
 
     @Id
-    @SequenceGenerator(name = "gen_user_id", allocationSize = 1, sequenceName = "seq_user_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user_id")
-    private Long id;
+    @GeneratedValue
+    @Column(name = "id")
+    private Integer id;
 
-    @Column(name = "birth_date")
-    private Date birthDate;
+    @Column(name = "email",unique = true,nullable = false)
+    private String email;
+
+    @Column(name = "password",nullable = false)
+    private String password;
+
+    @Column(name = "type",nullable = false)
+    private String type;
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<RoleEntity> roleEntityList;
+
 }
