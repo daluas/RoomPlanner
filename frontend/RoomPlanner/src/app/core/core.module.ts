@@ -11,11 +11,6 @@ import { Interceptor } from './interceptor';
   ],
   providers: [
     AuthService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: Interceptor,
-      multi: true
-    },
     HttpClient
   ],
   exports: []
