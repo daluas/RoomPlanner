@@ -20,8 +20,6 @@ public class RoleEntity {
     @Column(name = "name",unique = true,nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "roleEntityList")
-    private List<UserEntity> userEntityList;
 
     @ManyToMany
     @JoinTable(

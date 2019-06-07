@@ -10,6 +10,12 @@ import java.util.List;
 @Table(name = "users")
 @Setter
 @Getter
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(
+        discriminatorType = DiscriminatorType.STRING,
+        name = "type",
+        columnDefinition = "varchar(50)"
+)
 public abstract class UserEntity {
 
     @Id
@@ -23,7 +29,7 @@ public abstract class UserEntity {
     @Column(name = "password",nullable = false)
     private String password;
 
-    @Column(name = "type",nullable = false)
+    @Column(name = "type",nullable = false,insertable = false,updatable = false)
     private String type;
 
     @ManyToMany

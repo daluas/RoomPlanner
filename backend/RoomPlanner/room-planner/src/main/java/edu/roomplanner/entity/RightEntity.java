@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "rights")
@@ -20,6 +19,4 @@ public class RightEntity {
     @Column(name = "name",unique = true,nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "rightEntityList")
-    private List<RoleEntity> roleEntityList;
 }
