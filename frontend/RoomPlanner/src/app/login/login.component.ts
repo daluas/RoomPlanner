@@ -22,7 +22,6 @@ export class LoginComponent implements OnInit {
   });
 
 
-  @Input() color: ThemePalette;
   @Input() diameter: number;
   @Input() mode: ProgressSpinnerMode;
   @Input() strokeWidth: number;
