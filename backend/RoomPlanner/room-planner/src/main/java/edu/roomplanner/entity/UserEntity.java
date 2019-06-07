@@ -1,22 +1,72 @@
 package edu.roomplanner.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Date;
+import javax.validation.constraints.NotEmpty;
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 @Table(name = "users")
 @Setter
 @Getter
-public class UserEntity {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserEntity implements UserDetails {
 
     @Id
-    @SequenceGenerator(name = "gen_user_id", allocationSize = 1, sequenceName = "seq_user_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user_id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
 
-    @Column(name = "birth_date")
-    private Date birthDate;
+    @NotEmpty
+    private String email;
+
+    @NotEmpty
+    private String password;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = Arrays.asList( "ROLE_USER");
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream().map(SimpleGrantedAuthority::new).collect(toList());
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
