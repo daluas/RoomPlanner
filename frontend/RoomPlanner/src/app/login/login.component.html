@@ -1,24 +1,25 @@
 <div class="container">
     <mat-card>
-
-        <h1>Login</h1>
-
+        <div class="head">
+            <h1>Login</h1>
+        </div>
         <mat-card-content>
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-
+            <form [formGroup]="loginForm">
                 <mat-form-field>
-                    <input matInput placeholder="Enter your email" formControlName="email" required>
-                    <!-- <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error> -->
+                    <input matInput placeholder="Enter your email" formControlName="email">
+                    <mat-error *ngIf="loginForm.controls.email.invalid ">{{getErrorMessage()}}</mat-error>
                 </mat-form-field>
-                <br/>
                 <mat-form-field>
-                    <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" formControlName="password" required>
-                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <input matInput placeholder="Enter your password" type="password" formControlName="password">
+                    <!-- <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" autocomplete="off">
                         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
+                    </button> -->
                 </mat-form-field>
-                <br/>
-                <button mat-raised-button color="primary">Login</button>
+                <button mat-raised-button [disabled]="!loginForm.valid" class="login-button" (click)="onSubmit()">Login</button>
+                <!-- <div class="status" *ngIf="loginForm.valid">Invalid fields<div></div> -->
+                <mat-spinner
+                    class="login-spinner" [diameter]=diameter [value]=value [mode]=mode >
+                </mat-spinner>
             </form>
         </mat-card-content>
     </mat-card>
