@@ -5,6 +5,7 @@ import { LoginModel } from '../core/models/LoginUser';
 import { AuthService } from '../core/services/auth/auth.service'
 import { ThemePalette, ProgressSpinnerMode } from '@angular/material';
 import { LoggedUser } from '../core/models/LoggedUser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ import { LoggedUser } from '../core/models/LoggedUser';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
+  
   hide=true;
   statusMessage: string;
 
@@ -29,7 +30,8 @@ export class LoginComponent implements OnInit {
   @Input() value: number;
   
   constructor(private fb: FormBuilder,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private router: Router) {
     this.loginForm.value.email = "";
     this.loginForm.value.password = "";    
   }
@@ -60,14 +62,30 @@ export class LoginComponent implements OnInit {
       password: this.loginForm.value.password
     });
 
+    let scope = this;
     this.authService.authenticateUser(user)
       .then((user: LoggedUser) => {
-        console.log(user);
+       
+        switch(user.type){
+          case "user":
+            this.router.navigate(["/user"])
+            break;
+          case "room":
+            break;
+          case "admin":
+            break;
+          default:
+            break;
+        }
       })
       .catch((error) => {
         console.log(error);
       });
       
       this.mode='indeterminate';
+  }
+
+  navigateToUser(): any {
+    this.router.navigate(['/user']);
   }
 }

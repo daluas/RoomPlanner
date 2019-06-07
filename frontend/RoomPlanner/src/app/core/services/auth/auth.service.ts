@@ -4,33 +4,36 @@ import { LoggedUser } from '../../models/LoggedUser';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { LoginToken } from '../../models/LoginToken';
 import { of } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class AuthService {
-	private backendUrl: string = '';
-	private headers: HttpHeaders = new HttpHeaders();
 
-	constructor(private httpClient: HttpClient) { }
+	private backendUrl: string = '';
+	private userData
+	constructor(
+		private httpClient: HttpClient,
+		private router: Router
+	) { }
 
 	authenticateUser(user: LoginModel): Promise<Object> {
-		console.log(this.headers);
-		return this.httpClient.post(`${this.backendUrl}/auth`, user, { headers: this.headers })
+		return this.httpClient.post(`${this.backendUrl}/auth`, user)
 			.toPromise()
 	}
 	// return new Promise<Object>((resolve, reject) => {
 
-	validateAndSendRequest(token: string, request: any): Promise<Object> {
-		this.headers.append("Authorization", token)
-		return this.httpClient.post(`${this.backendUrl}`, {}, { headers: this.headers }).toPromise();
-	}
-
-	checkRoom(password: string): Promise<boolean[]> {
+	checkRoomPassword(password: string): Promise<boolean[]> {
 		return of([true]).toPromise();
 	}
+	getCurrentUser() {
 
-	// login(clientData: LoginModel){
+		// if logout
+		return null;
+	}
+
+	//unused?
 	login(email: string, password: string): Promise<LoggedUser> {
 		let clientData: LoginModel = new LoginModel().create({
 			email: email,
@@ -64,6 +67,11 @@ export class AuthService {
 
 	}
 
+	logout() {
+		// complete here
+		localStorage.clear();
+		this.router.navigate(['/login']);
+	}
 
 
 }
