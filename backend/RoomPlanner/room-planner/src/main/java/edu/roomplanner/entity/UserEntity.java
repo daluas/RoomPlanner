@@ -4,19 +4,33 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "users")
 @Setter
 @Getter
-public class UserEntity {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(
+        discriminatorType = DiscriminatorType.STRING,
+        name = "type",
+        columnDefinition = "varchar(50)"
+)
+public abstract class UserEntity {
 
     @Id
-    @SequenceGenerator(name = "gen_user_id", allocationSize = 1, sequenceName = "seq_user_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user_id")
-    private Long id;
+    @GeneratedValue
+    @Column(name = "id")
+    private Integer id;
 
-    @Column(name = "birth_date")
-    private Date birthDate;
+    @Column(name = "type",nullable = false, insertable =false, updatable = false)
+   private String type;
+
+    @Column(name = "email",unique = true,nullable = false)
+    private String email;
+
+    @Column(name = "password",nullable = false)
+    private String password;
+
+
+
 }
