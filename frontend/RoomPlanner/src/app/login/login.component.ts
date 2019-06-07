@@ -13,7 +13,7 @@ import { LoggedUser } from '../core/models/LoggedUser';
 })
 export class LoginComponent implements OnInit {
 
-  hide:boolean;
+  hide=true;
   statusMessage: string;
 
   loginForm = this.fb.group({
@@ -36,11 +36,9 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit() {
-    this.hide=true; 
     this.statusMessage="";
 
     this.mode='determinate';
-    this.color='primary';
     this.value=0;
     this.diameter=30;
   }
@@ -55,6 +53,8 @@ export class LoginComponent implements OnInit {
   onSubmit() {
 
     //change this mock with actual form data
+    console.log(this.loginForm.value.email);
+    console.log(this.loginForm.value.password);
     let user: LoginModel = new LoginModel().create({
       email: this.loginForm.value.email,
       password: this.loginForm.value.password

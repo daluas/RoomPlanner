@@ -10,15 +10,15 @@
                     <mat-error *ngIf="loginForm.controls.email.invalid ">{{getErrorMessage()}}</mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" formControlName="password">
-                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <input matInput placeholder="Enter your password" type="password" formControlName="password">
+                    <!-- <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" autocomplete="off">
                         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
+                    </button> -->
                 </mat-form-field>
-                <button mat-raised-button color="primary" [disabled]="!loginForm.valid" class="login-button" (click)="onSubmit()">Login</button>
+                <button mat-raised-button [disabled]="!loginForm.valid" class="login-button" (click)="onSubmit()">Login</button>
                 <!-- <div class="status" *ngIf="loginForm.valid">Invalid fields<div></div> -->
                 <mat-spinner
-                    class="login-spinner" [diameter]=diameter [color]=color [value]=value [mode]=mode >
+                    class="login-spinner" [diameter]=diameter [value]=value [mode]=mode >
                 </mat-spinner>
             </form>
         </mat-card-content>

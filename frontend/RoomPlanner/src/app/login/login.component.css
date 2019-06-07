@@ -20,8 +20,9 @@ mat-card{
     transform: translate(-50%, -50%);
     padding: 0px;
     
-    border-radius: 15px;
+    border-radius: 0;
     box-shadow: 0 3px 20px 0px rgba(0,0,0,0.1);
+    background: rgb(255,255,255,0.95);
 }
 mat-card-content{
     padding: 15px 35px 35px 35px;
@@ -35,18 +36,18 @@ mat-form-field{
     margin-bottom: 35px;
     float:left;
     width: 100px;
+    background-color: #0098c3;
+    color: #fff;
 }
 
 .head{
     color: #fff;
     font-weight: normal;
     text-align: center;
-    background: #673AB7;
+    background: rgba(0,0,0,0.6);
     margin: 0px;
     padding: 15px 0;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    
+    margin-top: -68px !important;    
 }
 h1{
     margin:0px;
@@ -60,17 +61,22 @@ h1{
 }
 ::ng-deep .mat-focused .mat-form-field-label {
     /*change color of label*/
-    color:#673AB7 !important;
+    color:#0098c3 !important;
    }
    ::ng-deep.mat-form-field-underline {
     /*change color of underline*/
-    background-color:#673AB7 !important;
+    background-color:#0098c3 !important;
   } 
   
   ::ng-deep.mat-form-field-ripple {
    /*change color of underline when focused*/
-   background-color: #673AB7 !important;
+   background-color: #0098c3 !important;
   }
+
+  .mat-progress-spinner circle, .mat-spinner circle {
+    stroke: #0098c3 !important;
+}
+    
 @media only screen and (max-width: 300px) {
     mat-card{
         width: 220px;
