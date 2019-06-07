@@ -15,8 +15,8 @@ import javax.persistence.Entity;
 public class PersonEntity extends UserEntity {
 
     @Column(name = "first_name")
-    private String first_name;
+    private String firstName;
 
-    @Column(name ="last_name")
-    private String last_name;
+    @Column(name = "last_name")
+    private String lastName;
 }

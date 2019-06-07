@@ -23,19 +23,19 @@ public class RoomDto {
     public RoomDto() {
     }
 
-    public static RoomDto mapToDto(RoomEntity roomEntity){
+    public static RoomDto mapToDto(RoomEntity roomEntity) {
         RoomDto roomDto = new RoomDto();
         roomDto.setId(roomEntity.getId());
         roomDto.setFloor(roomEntity.getFloor());
-        roomDto.setName(roomEntity.getRoom_name());
+        roomDto.setName(roomEntity.getRoomName());
         roomDto.setMaxPersons(roomEntity.getMaxPersons());
         return roomDto;
     }
 
-    public static List<RoomDto> mapListToDto(List<UserEntity> roomEntityList){
+    public static List<RoomDto> mapListToDto(List<UserEntity> roomEntityList) {
         List<RoomDto> roomDtoList = new ArrayList<>();
-        for(UserEntity room : roomEntityList){
-            roomDtoList.add(mapToDto((RoomEntity)room));
+        for (UserEntity room : roomEntityList) {
+            roomDtoList.add(mapToDto((RoomEntity) room));
         }
         return roomDtoList;
     }

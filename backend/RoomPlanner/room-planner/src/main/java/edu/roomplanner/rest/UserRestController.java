@@ -4,6 +4,7 @@ import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -21,8 +22,8 @@ public class UserRestController {
         return userService.getAllRooms();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value="/rooms/{id}")
-    RoomDto getRoomById(@PathVariable Integer id){
+    @RequestMapping(method = RequestMethod.GET, value = "/rooms/{id}")
+    RoomDto getRoomById(@PathVariable Integer id) {
         return userService.getRoomById(id);
     }
 }

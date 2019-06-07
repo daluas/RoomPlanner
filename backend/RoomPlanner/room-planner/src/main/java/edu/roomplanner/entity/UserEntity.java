@@ -22,15 +22,13 @@ public abstract class UserEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "type",nullable = false, insertable =false, updatable = false)
-   private String type;
+    @Column(name = "type", nullable = false, insertable = false, updatable = false)
+    private String type;
 
-    @Column(name = "email",unique = true,nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password",nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
-
-
 
 }
