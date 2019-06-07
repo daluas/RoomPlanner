@@ -1,3 +1,20 @@
 <nav>
-    <a><img class="logo" src="../../../../assets/images/cegeka-logo.png" alt="logo"></a>
+    <img class="logo" src="../../../../assets/images/cegeka-logo.png" alt="logo">
+    <div class="right-buttons" *ngIf="isLoggedIn">
+        <div class="username">{{username}} <i class="material-icons person-icon">person</i></div>
+        <div class="button" *ngIf="isAdmin()"><span>ADMIN</span></div>
+        <div class="button" *ngIf="isAdmin()"><span>BOOKING</span></div>
+        <div class="button">
+            <span (click)="logOut()">LOG OUT</span>
+            <div class="room-password-popup" *ngIf="passwordFormOpen">
+                <mat-form-field class="room-password-input">
+                    <input matInput placeholder="Room password" type="password" [(ngModel)]="roomPassword">
+                </mat-form-field>
+
+                <div *ngIf="roomPasswordInvalid" class="error-message">Invalid credentials</div>
+
+                <button mat-raised-button color="primary" [disabled]="roomPassword.length === 0" (click)="logOutRoom()">Sign Out</button>
+            </div>
+        </div>
+    </div>
 </nav>

@@ -14,3 +14,75 @@ nav{
     top:12px;
     left: 20px;
 }
+
+.right-buttons{
+    float: right;
+    margin-right: 20px;
+}
+
+.button{
+    display: inline-block;
+    vertical-align: top;
+    line-height: 63px;
+    margin-left: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 12px;
+    position: relative;
+}
+
+.button span{
+    color: #999;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.button span:hover{
+    color: #222222;
+}
+
+.username{
+    display: inline-block;
+    vertical-align: top;
+    line-height: 61px;
+    color: #999;
+    font-size: 13px;
+}
+
+.person-icon{
+    display: inline-block;
+    vertical-align: top;
+    line-height: 62px;
+    font-size: 12px;
+}
+
+.room-password-popup{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translate(0, calc(100% + 1px));
+    line-height: initial;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 5px 10px;
+    padding-bottom: 0;
+    border: 1px solid #eee;
+    white-space:nowrap;
+}
+
+.error-message{
+    position: absolute;
+    bottom: 1px;
+    left: 10px;
+    color: red;
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.room-password-input{
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.log-out-room-button{
+    display: inline-block;
+}
