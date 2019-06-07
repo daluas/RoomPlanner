@@ -24,16 +24,21 @@ export class UserViewComponent implements OnInit {
   defaultDate: Date = this._dateAdapter.today();;
   selectedDate: Date;
 
+  finalDate:Date;
+
   onDateChanged(date) {
     this.dateChanged=true;
   }
 
   onApplyFilters(){
+
     if(this.dateChanged){
       console.log(`The date is: ${this.selectedDate}`);
+      this.finalDate=this.selectedDate;
     }
     else{
       console.log(`The date is: ${this.defaultDate}`);
+      this.finalDate=this.defaultDate;
     }
     // var datee=[];
     // var datee2=[];
@@ -45,6 +50,8 @@ export class UserViewComponent implements OnInit {
     //     datee[i].classList.add('example-custom-date-class');
     //   }
     //   console.log(datee[i]);
+    
+
     
   }
 
