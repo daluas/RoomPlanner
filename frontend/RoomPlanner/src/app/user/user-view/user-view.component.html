@@ -1,10 +1,20 @@
 <div class="container">
   <div class="filters-container">
     <div class="filters-header" [ngClass]="{'header-border-bottom': dropdownOpen}" (click)="toggleDropdown()">
-      FILTERS <i class="material-icons dropdown-button">arrow_drop_down</i>
+      FILTERS
+      <i class="material-icons dropdown-button">arrow_drop_down</i>
     </div>
     <div class="filters-elements" [ngClass]="{'filters-open': dropdownOpen}">
-      filters developped by Iuliana
+      <div class="calendar">
+
+        <div class="calendar-wrapper">
+          <mat-calendar #calendar [(selected)]="selectedDate" (dateRangesChange)="onDateRangesChange(calendar, $event)" (selectedChange)="onDateChanged($event)"></mat-calendar>
+        </div>
+
+
+      </div>
+      <div class="filters-body"></div>
+      <button mat-stroked-button class="button-filters" color="primary" (click)="onApplyFilters()">Apply filters</button>
     </div>
   </div>
 
