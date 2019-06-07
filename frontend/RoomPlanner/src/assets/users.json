@@ -1,0 +1,17 @@
+[
+    {
+        "email": "user1@cegeka.ro",
+        "token": "U-T-O-K-E-N",
+        "type": "user"
+    },
+    {
+        "email": "room1@cegeka.ro",
+        "token": "R-T-O-K-E-N",
+        "type": "room"
+    },
+    {
+        "email": "admin1@cegeka.ro",
+        "token": "A-T-O-K-E-N",
+        "type": "admin"
+    }
+]

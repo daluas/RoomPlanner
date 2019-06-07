@@ -1,4 +1,10 @@
 export class LoginToken {
-    name: string;
     value: string;
+    expirationDate: Date;
+
+    constructor() { }
+
+    create(tokenModel: any): LoginToken {
+        return Object.assign(new LoginToken(), tokenModel);
+    }
 }
