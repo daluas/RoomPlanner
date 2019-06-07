@@ -3,6 +3,7 @@ import { LoginModel } from '../../models/LoginUser';
 import { LoggedUser } from '../../models/LoggedUser';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { LoginToken } from '../../models/LoginToken';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,11 +26,13 @@ export class AuthService {
     return this.httpClient.post(`${this.backendUrl}`, {}, { headers: this.headers }).toPromise();
   }
 
-  checkRoom(password: string): Promise<boolean> {
-    return new Promise((res, rej) => {
-      res(true),
-        rej(false)
-    })
+  checkRoom(password: string): Promise<boolean[]> {
+	return of([true]).toPromise();
+
+	// return new Promise((res, rej) => {
+    //   res(true),
+    //     rej(false)
+    // })
   }
 
   // login(clientData: LoginModel){

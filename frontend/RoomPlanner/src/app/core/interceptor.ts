@@ -17,27 +17,25 @@ import { LoggedUser } from './models/LoggedUser';
 
 @Injectable()
 export class Interceptor implements HttpInterceptor {
+
     constructor() { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (request.url === '/auth') {
-            const token = new LoginToken().create({
-                "value": "U-T-O-K-E-N",
-                "expirationDate": new Date(new Date(Date.now()).getTime() + 60 * 60 * 24 * 1000)
-            })
-            
+            const token = this.refreshToken();
+
             const loggedUserMock: LoggedUser = new LoggedUser().create({
                 "email": "user1@cegeka.ro",
                 "token": token,
                 "type": "user"
             })
+            localStorage.setItem('access-token', JSON.stringify(token));
 
             return of(new HttpResponse({
                 status: 200,
                 body: loggedUserMock
             }));
         }
-
 
         if (!request.headers.has("Content-Type")) {
             request = request.clone({
@@ -46,6 +44,7 @@ export class Interceptor implements HttpInterceptor {
         }
 
         request = this.addAuthenticationToken(request);
+
         return next.handle(request).pipe(
             tap({
                 next: (response: HttpResponse<any>) => {
@@ -63,45 +62,50 @@ export class Interceptor implements HttpInterceptor {
     }
 
     addAuthenticationToken(request: HttpRequest<any>): HttpRequest<any> {
-        // If we do not have a token yet then we should not set the header.
-        // Here we could first retrieve the token from where we store it.
-        if (localStorage.getItem('access-token') == null) {
-            console.log("no token available");
-            return request;
-        }
         // If you are calling an outside domain then do not add the token.
         // if (!request.url.match(/www.mydomain.com\//)) {
         //     return request;
         // }
-        const token = localStorage.getItem('access-token');
+        let token: LoginToken = this.refreshToken();
+        console.log("adding authorization token", token, "to ", request)
         return request.clone({
-            headers: request.headers.set("Authorization", token)
+            headers: request.headers.set("Authorization", token.value)
         });
     }
 
-    createToken() { // mock function
-
+    createToken(): LoginToken { // mock function; logic will be passed in refreshToken ?
+        console.log("creating token");
+        return new LoginToken().create({
+            "value": "U-T-O-K-E-N",
+            "expirationDate": new Date(new Date(Date.now()).getTime() - 60 * 60 * 24 * 1000)
+        })
     }
+
+
     //add 24h to token duration
-    refreshToken(token: string = ''): string {
-        console.log('refreshing token');
-        console.log(token);
-        if (token === undefined) {
-            console.log("UNDEF");
+    refreshToken(): LoginToken {
+        console.log("Refreshing token");
+
+        if (localStorage.getItem('access-token') == null) {
+            console.log("no token available");
+            const newToken: LoginToken = this.createToken();
+            localStorage.setItem('access-token', JSON.stringify(newToken));
+            return newToken;
         }
 
-        let storedToken: LoginToken = new LoginToken().create(localStorage.getItem('access-token'));
+        let tokenParsed = JSON.parse(localStorage.getItem('access-token'))
+        let storedToken: LoginToken = new LoginToken().create(tokenParsed);
 
-        let expirationDate = storedToken.expirationDate
-        console.log(expirationDate);
+        let expirationDate: Date = new Date(storedToken.expirationDate)
+        let now = new Date(Date.now());
 
-        let newExpirationDate = new Date(new Date(expirationDate).getTime() + 60 * 60 * 24 * 1000);
-        let newExpirationDateStr = newExpirationDate.toString();
+        if (expirationDate < now) {
+            alert('Token is expired');
+            storedToken.expirationDate = new Date(new Date(Date.now()).getTime() + 60 * 60 * 24 * 1000)
+            localStorage.setItem('access-token', JSON.stringify(storedToken));
+        }
 
-        console.log(newExpirationDate, newExpirationDateStr);
-
-        localStorage.setItem(token, newExpirationDateStr);
-        return '';
+        return storedToken;
     }
 
 }
