@@ -15,46 +15,21 @@ export class AuthService {
 
   authenticateUser(user: LoginModel): Promise<Object> {
     console.log(this.headers);
-    
     return this.httpClient.post(`${this.backendUrl}/auth`, user, { headers: this.headers })
       .toPromise()
-    //   .then(data => {
-    //     console.log(data) // user_id, token, 
-    //     return "ok";
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //     return "error";
-    //   });
-    // return "nothing"
   }
+  // return new Promise<Object>((resolve, reject) => {
 
   validateAndSendRequest(token: string, request: any): Promise<Object> {
     this.headers.append("Authorization", token)
     return this.httpClient.post(`${this.backendUrl}`, {}, { headers: this.headers }).toPromise();
   }
 
-
-  setToken(token: LoginToken): boolean {
-    localStorage.setItem(token.name, token.value);
-    return true;
-  }
-
-  checkToken(token: string): boolean {
-    let expirationTime = localStorage.getItem(token); // probably date of expiration ?
-    console.log(expirationTime);
-    return false;
-  }
-
-  //add 24h to token duration
-  updateToken(token: string): boolean {
-    let expirationDate = localStorage.getItem(token);
-
-    let newExpirationDate = new Date(new Date(expirationDate).getTime() + 60 * 60 * 24 * 1000);
-    let newExpirationDateStr = newExpirationDate.toString();
-    console.log(newExpirationDate, newExpirationDateStr);
-    localStorage.setItem(token, newExpirationDateStr);
-    return true;
+  checkRoom(password: string): Promise<boolean> {
+    return new Promise((res, rej) => {
+      res(true),
+        rej(false)
+    })
   }
 
   // login(clientData: LoginModel){
@@ -64,10 +39,10 @@ export class AuthService {
       password: password
     });
     // this.httpClient.post(this.backendUrl, clientData, this.tokenHeader)
-    let loggedUser: LoggedUser = {
+    let loggedUser: LoggedUser = new LoggedUser().create({
       type: '',
       username: ''
-    }
+    })
 
     return new Promise((resolve, reject) => {
       if (clientData["email"] === 'room1' && clientData["password"] !== 'room.1') {

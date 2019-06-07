@@ -13,18 +13,18 @@ const routes: Routes = [
   },
   {
     path: "login",
-    component: LoginComponent,
-    canActivate: [AuthGuard]
+    component: LoginComponent
+    // canActivate: [AuthGuard]
   },
   {
     path: "user",
-    loadChildren: "./user/user.module#UserModule",
-    canActivate: [AuthGuard]
+    loadChildren: "./user/user.module#UserModule"
+    // canActivate: [AuthGuard]
   },
   {
     path: "room",
-    loadChildren: "./room/room.module#RoomModule",
-    canActivate: [AuthGuard]
+    loadChildren: "./room/room.module#RoomModule"
+    // canActivate: [AuthGuard]
   },
   {
     path: "**",
