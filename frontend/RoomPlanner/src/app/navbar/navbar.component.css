@@ -63,7 +63,7 @@ nav{
     transform: translate(0, calc(100% + 1px));
     line-height: initial;
     background: rgba(255, 255, 255, 0.7);
-    padding: 5px 10px;
+    padding: 5px 4px 5px 10px;
     padding-bottom: 0;
     border: 1px solid #eee;
     white-space:nowrap;
@@ -85,4 +85,67 @@ nav{
 
 .log-out-room-button{
     display: inline-block;
+}
+
+.close-button{
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 10px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.menu-button{
+    display: none;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 1024px) {
+    .menu-button{
+        display: block;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        color: #222222;
+    }
+
+    .right-buttons{
+        display: none;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        transform: translate(0, 100%);
+        background: rgb(0,0,0, 0.65);
+        padding: 0 20px;
+        min-width: 150px;
+    }
+
+    .right-buttons-open{
+        display: block;
+    }
+
+    .button span, .username{
+        color: #fff;
+    }
+    
+    .button span:hover{
+        color: #cecece;
+    }
+
+    .button, .username{
+        display: block;
+        width: 100%;
+        text-align: right;
+        margin: 0;
+        border-bottom: 1px solid #fff;
+    }
+
+    .button:last-child{
+        border: none;
+    }
+
+    .room-password-popup{
+        transform: translate(0, 100%);
+        right: -20px;
+    }
 }

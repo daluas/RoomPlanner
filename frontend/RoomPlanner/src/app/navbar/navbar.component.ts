@@ -14,6 +14,8 @@ export class NavbarComponent implements OnInit {
   roomPassword: string = "";
   roomPasswordInvalid: boolean = false;
 
+  mobileViewMenuOpen: boolean = false;
+
   constructor() { }
 
   ngOnInit() {
