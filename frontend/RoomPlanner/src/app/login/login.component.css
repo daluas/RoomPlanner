@@ -4,7 +4,7 @@
     position: absolute;
     top:0;
     left:0;
-
+   
     background: url("../../assets/images/cegeka-background.png") no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -12,16 +12,19 @@
     background-size: cover;
 }
 
-.login-card{
+mat-card{
     position: absolute;
+    text-align: center;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 35px 35px;
-    background: rgba(0, 0, 0, 0.7);
-    
+    width: 25%;
+    height: 25%;
+    border-radius: 20px;
+    box-shadow: 0 3px 20px 0px rgba(0,0,0,0.1);
 }
 
-input{
+mat-form-field{    
     display: block;
-}
+} 
