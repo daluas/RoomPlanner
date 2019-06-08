@@ -13,8 +13,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     JwtTokenProvider jwtTokenProvider;
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -30,7 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/signin").permitAll()
-                .antMatchers(HttpMethod.GET, "/test/**").permitAll() //TODO
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

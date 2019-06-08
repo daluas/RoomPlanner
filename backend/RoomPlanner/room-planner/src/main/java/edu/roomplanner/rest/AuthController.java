@@ -1,7 +1,10 @@
 package edu.roomplanner.rest;
 
-import edu.roomplanner.repository.UserRepository;
+import edu.roomplanner.dto.CustomUserDetails;
+import edu.roomplanner.entity.PersonEntity;
+import edu.roomplanner.repository.PersonRepository;
 import edu.roomplanner.security.AuthenticationRequest;
+import edu.roomplanner.service.impl.CustomUserDetailsService;
 import edu.roomplanner.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,18 +34,22 @@ public class AuthController {
     JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    UserRepository users;
+    PersonRepository persons;
+
+    @Autowired
+    CustomUserDetailsService customUserDetailsService;
 
     @PostMapping("/signin")
     public ResponseEntity signin(@RequestBody AuthenticationRequest data) {
         try {
-            String username = data.getUsername();
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-            String token = jwtTokenProvider.createToken(username, this.users.findByEmail(username).
-                    orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).
-                    getRoles());
+            String email = data.getEmail();
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, data.getPassword()));
+            PersonEntity personEntity = this.persons.findByEmail(email).
+                    orElseThrow(() -> new UsernameNotFoundException("Email " + email + "not found"));
+            CustomUserDetails customUserDetails = customUserDetailsService.buildCustomerUserDetails(personEntity);
+            String token = jwtTokenProvider.createToken(email, customUserDetails.getRoles());
             Map<Object, Object> model = new HashMap<>();
-            model.put("username", username);
+            model.put("username", email);
             model.put("token", token);
             return ok(model);
         } catch (AuthenticationException e) {

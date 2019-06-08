@@ -1,72 +1,42 @@
 package edu.roomplanner.entity;
 
-import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import java.util.*;
-
-import static java.util.stream.Collectors.toList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 @Setter
 @Getter
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserEntity implements UserDetails {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(
+        discriminatorType = DiscriminatorType.STRING,
+        name = "type",
+        columnDefinition = "varchar(50)"
+)
+public abstract class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    @GeneratedValue
+    @Column(name = "id")
+    private Integer id;
 
-    @NotEmpty
+    @Column(name = "email",unique = true,nullable = false)
     private String email;
 
-    @NotEmpty
+    @Column(name = "password",nullable = false)
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = Arrays.asList( "ROLE_USER");
+    @Column(name = "type",nullable = false,insertable = false,updatable = false)
+    private String type;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream().map(SimpleGrantedAuthority::new).collect(toList());
-    }
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<RoleEntity> roleEntityList;
 
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }
