@@ -62,7 +62,6 @@ export class LoginComponent implements OnInit {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password
     });
-    let scope = this;
 
     this.authService.authenticateUser(user)
       .then((user: LoggedUser) => {

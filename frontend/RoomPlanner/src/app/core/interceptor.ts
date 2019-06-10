@@ -8,7 +8,8 @@ import {
     HttpErrorResponse,
     HttpHeaders
 } from "@angular/common/http";
-import { Observable, of } from 'rxjs';
+
+import { Observable, of, throwError } from 'rxjs';
 import { LoginModel } from './models/LoginUser';
 import { tap, map } from 'rxjs/operators';
 import { LoginToken } from './models/LoginToken';
@@ -23,7 +24,6 @@ export class Interceptor implements HttpInterceptor {
     }
     interceptLogin(): LoggedUser {
         const token = this.refreshToken();
-
         const loggedUserMock: LoggedUser = new LoggedUser().create({
             "email": "user1@cegeka.ro",
             "token": token,
@@ -36,17 +36,54 @@ export class Interceptor implements HttpInterceptor {
     constructor() { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        console.log("interceptor request");
+        console.log(request);
+
         if (!request.headers.has("Content-Type")) {
             request = request.clone({
                 headers: request.headers.set("Content-Type", "application/json")
             });
         }
 
-        if (request.url === '/auth') {
-            let user : LoggedUser = this.interceptLogin()
-            return of(new HttpResponse({
-                status: 200,
-                body: user
+        if (request.url === '/auth/signin') {
+            let user: LoggedUser = this.interceptLogin()
+
+            let reqBody = request.body;
+            if (reqBody.email === 'room1@cegeka.ro' && reqBody.password === 'room.1') {
+                let loggedUser: LoggedUser = new LoggedUser().create({
+                    type: "room",
+                    username: "room1"
+                })
+                return of(new HttpResponse({
+                    status: 200,
+                    body: loggedUser
+                }));
+            }
+            if (reqBody.email === 'admin1' && reqBody.password === 'admin.1') {
+                let loggedUser: LoggedUser = new LoggedUser().create({
+                    type: "admin",
+                    username: "admin1"
+                })
+                return of(new HttpResponse({
+                    status: 200,
+                    body: loggedUser
+                }));
+			}
+			if (reqBody.email === 'user1' && reqBody.password === 'user.1') {
+                let loggedUser: LoggedUser = new LoggedUser().create({
+                    type: "user",
+                    username: "user1"
+                })
+                return of(new HttpResponse({
+                    status: 200,
+                    body: loggedUser
+                }));
+			}
+
+
+            return throwError(new HttpResponse({
+                status: 404,
+                statusText: "Not Found"
             }));
         }
 
@@ -84,7 +121,7 @@ export class Interceptor implements HttpInterceptor {
         let token: LoginToken = this.refreshToken();
         console.log("adding authorization token", token, "to ", request)
         return request.clone({
-            headers: request.headers.set("Authorization", token.value)
+            headers: request.headers.set("Authorization", `Bearer ${token.value}`)
         });
     }
 
@@ -97,7 +134,7 @@ export class Interceptor implements HttpInterceptor {
     }
 
 
-    //add 24h to token duration
+    //add 24h to token duration (token stored in localstring);
     refreshToken(): LoginToken {
         console.log("Refreshing token");
 
