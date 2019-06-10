@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
     private router: Router) {
     this.loginForm.value.email = "";
     this.loginForm.value.password = "";
-    this.statusMessage = "hello";
+    this.statusMessage = "";
     this.status = true;
     this.isLoading = true;
   }
@@ -65,8 +65,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.authenticateUser(user)
       .then((user: LoggedUser) => {
-        // new LoggedUser().create(body)
-        // this.authService.setCurrentUser(up)
+        this.authService.setCurrentUser(user)
         switch (user.type) {
           case "user":
             this.router.navigate(["/user"])
@@ -87,7 +86,7 @@ export class LoginComponent implements OnInit {
       });
   }
   getStatus(): boolean {
-    return this.status = false;
+    return this.status = true;
   }
   onSubmit() {
     this.mode = 'indeterminate';
