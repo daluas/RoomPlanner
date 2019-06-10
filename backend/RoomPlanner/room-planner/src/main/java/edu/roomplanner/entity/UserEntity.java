@@ -1,14 +1,16 @@
 package edu.roomplanner.entity;
 
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
-@Setter
 @Getter
+@Setter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(
         discriminatorType = DiscriminatorType.STRING,
@@ -20,7 +22,7 @@ public abstract class UserEntity {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "type", nullable = false, insertable = false, updatable = false)
     private String type;

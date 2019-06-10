@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public RoomDto getRoomById(Integer id) {
+    public RoomDto getRoomById(Long id) {
         UserEntity userEntity = userRepository.findById(id).get();
         return RoomDto.mapToDto((RoomEntity) userEntity);
     }

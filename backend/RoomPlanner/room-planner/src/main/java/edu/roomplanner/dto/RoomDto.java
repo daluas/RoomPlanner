@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode
 public class RoomDto {
-    private Integer id;
+    private Long id;
     private String name;
     private Integer floor;
     private Integer maxPersons;

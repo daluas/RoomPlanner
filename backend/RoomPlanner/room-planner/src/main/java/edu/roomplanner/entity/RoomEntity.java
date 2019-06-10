@@ -1,7 +1,6 @@
 package edu.roomplanner.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 

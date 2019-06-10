@@ -8,6 +8,6 @@ public interface UserService {
 
     List<RoomDto> getAllRooms();
 
-    RoomDto getRoomById(Integer id);
+    RoomDto getRoomById(Long id);
 
 }
