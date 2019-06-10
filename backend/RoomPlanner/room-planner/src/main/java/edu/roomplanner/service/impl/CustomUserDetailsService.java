@@ -3,17 +3,15 @@ package edu.roomplanner.service.impl;
 import edu.roomplanner.dto.CustomUserDetails;
 import edu.roomplanner.entity.PersonEntity;
 import edu.roomplanner.entity.RoleEntity;
-import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.PersonRepository;
-import edu.roomplanner.repository.UserRepository;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -33,10 +31,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public CustomUserDetails buildCustomerUserDetails(PersonEntity personEntity) {
-
+        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         return CustomUserDetails.builder()
                 .email(personEntity.getEmail())
-                .password(personEntity.getPassword())
+                .password(encoder.encode(personEntity.getPassword()))
                 .roles(transformEntityRolesToStringRoles(personEntity.getRoleEntityList()))
                 .build();
     }

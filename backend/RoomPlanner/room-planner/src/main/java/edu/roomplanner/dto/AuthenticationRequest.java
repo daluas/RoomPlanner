@@ -1,4 +1,4 @@
-package edu.roomplanner.security;
+package edu.roomplanner.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +12,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthenticationRequest implements Serializable {
+
     private String email;
     private String password;
+
 }

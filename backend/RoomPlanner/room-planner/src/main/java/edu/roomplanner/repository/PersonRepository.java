@@ -4,7 +4,6 @@ import edu.roomplanner.entity.PersonEntity;
 import edu.roomplanner.entity.RoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -15,6 +14,7 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long> {
             PersonEntity personEntity = new PersonEntity();
             personEntity.setId(1);
             personEntity.setEmail(email);
+            personEntity.setType("User");
             personEntity.setPassword("user1");
             personEntity.setFirstName("fUser");
             personEntity.setLastName("lUser");
@@ -25,7 +25,6 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long> {
             return Optional.of(personEntity);
         }
         return Optional.empty();
-
     }
 
 }
