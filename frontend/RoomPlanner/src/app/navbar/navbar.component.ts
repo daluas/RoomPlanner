@@ -56,9 +56,7 @@ export class NavbarComponent implements OnInit {
   logOut() {
     if (this.usertype === "room") {
       if (this.passwordFormOpen) {
-        this.roomPassword = "";
-        this.passwordFormOpen = false;
-        this.roomPasswordInvalid = false;
+        this.closePasswordForm();
       } else {
         this.passwordFormOpen = true;
       }
@@ -70,6 +68,12 @@ export class NavbarComponent implements OnInit {
     console.log('updateUserState');
 
     this.updateUserState();
+  }
+
+  closePasswordForm() {
+    this.roomPassword = "";
+    this.passwordFormOpen = false;
+    this.roomPasswordInvalid = false;
   }
 
   logOutRoom() {
