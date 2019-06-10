@@ -57,24 +57,30 @@ h1{
     margin-bottom: 35px;
     float:right;
     width: 20%;
-    height: 20%;
+    height: 20%;    
 }
+.spinner-color::ng-deep circle {
+    stroke: #0098c3 !important;
+}
+
+.statusMessage{
+    margin-top: 25px;
+    margin-left: 150px;
+    color: red;
+}
+
 ::ng-deep .mat-focused .mat-form-field-label {
     /*change color of label*/
     color:#0098c3 !important;
-   }
-   ::ng-deep.mat-form-field-underline {
+}
+::ng-deep.mat-form-field-underline {
     /*change color of underline*/
     background-color:#0098c3 !important;
-  } 
+} 
   
-  ::ng-deep.mat-form-field-ripple {
+::ng-deep.mat-form-field-ripple {
    /*change color of underline when focused*/
    background-color: #0098c3 !important;
-  }
-
-  .mat-progress-spinner circle, .mat-spinner circle {
-    stroke: #0098c3 !important;
 }
     
 @media only screen and (max-width: 300px) {
