@@ -88,18 +88,19 @@ export class LoginComponent implements OnInit {
       });
   }
   getStatus(): boolean {
-    return this.status = true;
+    return this.status = false;
   }
   onSubmit() {
     this.mode = 'indeterminate';
-
+    this.isLoading = true;
+    this.statusMessage="";
     setTimeout(() => {
       this.status = this.getStatus();
       this.isLoading = false;
       if (this.status == false) {
         this.statusMessage = "Invalid credentials";
         //todo
-        
+        this.loginForm.reset();
         return;
       }
       this.statusMessage = "Login successfully";
