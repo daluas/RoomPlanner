@@ -62,6 +62,13 @@ h1{
 .spinner-color::ng-deep circle {
     stroke: #0098c3 !important;
 }
+
+.statusMessage{
+    margin-top: 25px;
+    margin-left: 150px;
+    color: red;
+}
+
 ::ng-deep .mat-focused .mat-form-field-label {
     /*change color of label*/
     color:#0098c3 !important;
