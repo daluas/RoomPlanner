@@ -18,13 +18,77 @@ mat-card{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 35px 35px;
-    width: 25%;
-    height: 25%;
-    border-radius: 20px;
+    padding: 0px;
+    
+    border-radius: 0;
     box-shadow: 0 3px 20px 0px rgba(0,0,0,0.1);
+    background: rgb(255,255,255,0.95);
 }
-
+mat-card-content{
+    padding: 15px 35px 35px 35px;
+}
 mat-form-field{    
     display: block;
 } 
+
+.login-button {
+    margin-top: 15px;
+    margin-bottom: 35px;
+    float:left;
+    width: 100px;
+    background-color: #0098c3;
+    color: #fff;
+}
+
+.head{
+    color: #fff;
+    font-weight: normal;
+    text-align: center;
+    background: rgba(0,0,0,0.6);
+    margin: 0px;
+    padding: 15px 0;
+    margin-top: -68px !important;    
+}
+h1{
+    margin:0px;
+}
+.login-spinner{
+    margin-top: 15px;
+    margin-bottom: 35px;
+    float:right;
+    width: 20%;
+    height: 20%;
+}
+::ng-deep .mat-focused .mat-form-field-label {
+    /*change color of label*/
+    color:#0098c3 !important;
+   }
+   ::ng-deep.mat-form-field-underline {
+    /*change color of underline*/
+    background-color:#0098c3 !important;
+  } 
+  
+  ::ng-deep.mat-form-field-ripple {
+   /*change color of underline when focused*/
+   background-color: #0098c3 !important;
+  }
+
+  .mat-progress-spinner circle, .mat-spinner circle {
+    stroke: #0098c3 !important;
+}
+    
+@media only screen and (max-width: 300px) {
+    mat-card{
+        width: 220px;
+    }
+}
+@media only screen and (min-width: 301px) and (max-width: 600px) {
+    mat-card{
+        width: 300px;
+    }
+}
+@media only screen and (min-width: 601px){
+    mat-card{
+        width: 360px;
+    }
+}
