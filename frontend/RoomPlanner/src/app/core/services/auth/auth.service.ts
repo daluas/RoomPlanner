@@ -24,13 +24,16 @@ export class AuthService {
 	}
 	// return new Promise<Object>((resolve, reject) => {
 
-	checkRoomPassword(password: string): Promise<boolean[]> {
-		return of([true]).toPromise();
+	checkRoomPassword(password: string): Promise<boolean> {
+		return of(true).toPromise();
 	}
-	getCurrentUser() {
+	getCurrentUser(): Promise<LoggedUser> {
+		return new Promise((res) => {
+			// wait until the current user is retrieved from backend
+			// if it wasn't retrieved already
 
-		// if logout
-		return null;
+			res(null);
+		});
 	}
 
 	//unused?

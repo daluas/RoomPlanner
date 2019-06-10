@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../core/core.module';
+import { LoggedUser } from '../core/models/LoggedUser';
+import { LoginToken } from '../core/models/LoginToken';
 
 @Component({
   selector: 'app-navbar',
@@ -7,6 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
+  currentUser: any;
   isLoggedIn: boolean = false;
   username: string;
   usertype: string;
@@ -16,28 +20,26 @@ export class NavbarComponent implements OnInit {
 
   mobileViewMenuOpen: boolean = false;
 
-  constructor() { }
+  constructor(public authService: AuthService) { }
 
   ngOnInit() {
     this.updateUserState();
   }
 
-  updateUserState() {
+  async updateUserState() {
     this.resetState();
 
-    // TO DO
+    this.currentUser = await this.authService.getCurrentUser();
 
-    // get from auth service if user is logged in
-    this.isLoggedIn = true;
+    if(this.currentUser){
+      this.isLoggedIn = true;
+      this.usertype = this.currentUser.type;
+      this.username = this.getUsernameFromEmail(this.currentUser.email);
+    }
+  }
 
-    // if logged in
-    // get user object and set:
-
-    // username
-    this.username = "mockusername";
-
-    // usertype
-    this.usertype = "room"
+  getUsernameFromEmail(email: string): string{
+    return email.split('@')[0];
   }
 
   resetState() {
@@ -47,6 +49,7 @@ export class NavbarComponent implements OnInit {
     this.roomPassword = "";
     this.passwordFormOpen = false;
     this.roomPasswordInvalid = false;
+    this.currentUser = null;
   }
 
   isAdmin() {
@@ -63,10 +66,7 @@ export class NavbarComponent implements OnInit {
       return;
     }
 
-    // TO DO
-    // call sign out function from service
-    console.log('updateUserState');
-
+    this.authService.logout();
     this.updateUserState();
   }
 
@@ -77,31 +77,16 @@ export class NavbarComponent implements OnInit {
   }
 
   logOutRoom() {
-
     if (this.roomPassword.length > 0) {
-      console.log('logOutRoom');
-
-      this.roomPasswordInvalid = true;
-
-      // TO DO
-      // return new Promise(async (res)=>{
-      //   if (!scope.passwordFormOpen) {
-      //     scope.passwordFormOpen = true;
-      //     res(false);
-      //   } else {
-      //     //
-      //     //await for service to validate password, .then((bool) => { res(bool) })
-
-      //     let roomPasswordValid = false;
-
-      //     if(roomPasswordValid){
-      //       res(true);
-      //     }
-
-      //     this.roomPasswordInvalid = true;
-      //     res(false)
-      //   }
-      // });
+      let scope = this;
+      this.authService.checkRoomPassword(this.roomPassword).then((isValid) => {
+        if(isValid){
+          scope.authService.logout();
+          scope.updateUserState();
+        } else {
+          scope.roomPasswordInvalid = true;
+        }
+      });
     }
   }
 }
