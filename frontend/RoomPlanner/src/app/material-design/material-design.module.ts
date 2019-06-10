@@ -18,6 +18,8 @@ import { MatDatepickerModule, MatNativeDateModule } from '@angular/material';
     MatCardModule,
     MatIconModule,
     MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatProgressSpinnerModule
   ],
   exports: [
@@ -27,6 +29,8 @@ import { MatDatepickerModule, MatNativeDateModule } from '@angular/material';
     MatCardModule,
     MatIconModule,
     MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatProgressSpinnerModule
   ]
 })

@@ -62,10 +62,14 @@ export class LoginComponent implements OnInit {
       password: this.loginForm.value.password
     });
 
-    let scope = this;
+    // let scope = this;
     this.authService.authenticateUser(user)
       .then((user: LoggedUser) => {
-       
+        console.log(user);
+
+        this.authService.setCurrentUser(user);
+
+        
         switch(user.type){
           case "user":
             this.router.navigate(["/user"])

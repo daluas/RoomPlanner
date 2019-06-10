@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { LoginModel } from '../../models/LoginUser';
 import { LoggedUser } from '../../models/LoggedUser';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from "@angular/common/http";
 import { LoginToken } from '../../models/LoginToken';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -11,26 +11,51 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
+
 	private backendUrl: string = '';
-	private userData
+	private userData;
+	private currentUser: LoggedUser;
+
+
 	constructor(
 		private httpClient: HttpClient,
 		private router: Router
-	) { }
+	) {
 
-	authenticateUser(user: LoginModel): Promise<Object> {
-		return this.httpClient.post(`${this.backendUrl}/auth`, user)
+	}
+	setCurrentUser(loggedUserModel: LoggedUser): any {
+		this.currentUser = loggedUserModel;
+	}
+
+	authenticateUser(credentials: LoginModel) {
+		return this.httpClient.post(`${this.backendUrl}/auth/signin`, credentials)
 			.toPromise()
+			// .then((data) => {
+			// 	console.log(data);
+
+			// 	let user: LoggedUser = new LoggedUser().create(data);
+			// 	this.setCurrentUser(user);
+
+			// 	return of(new HttpResponse({
+			// 		status: 200,
+			// 		body: user
+			// 	}));
+
+			// }).catch(error => {
+			// 	console.log(error)
+			// 	return error
+			// })
 	}
 	// return new Promise<Object>((resolve, reject) => {
 
-	checkRoomPassword(password: string): Promise<boolean[]> {
-		return of([true]).toPromise();
-	}
-	getCurrentUser() {
+	checkRoomPassword(password: string): Promise<boolean> {
 
-		// if logout
-		return null;
+
+		return of(true).toPromise();
+	}
+	getCurrentUser(): LoggedUser {
+		if (this.currentUser === undefined) return null;
+		return this.currentUser;
 	}
 
 	//unused?

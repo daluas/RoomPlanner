@@ -1,6 +1,6 @@
 import { LoginToken } from './LoginToken';
 
-export class LoggedUser{
+export class LoggedUser {
     email: string;
     type: string;
     token: LoginToken
