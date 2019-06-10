@@ -13,11 +13,11 @@ import java.util.List;
 public class RoleEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_role_id")
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
-    @Column(name = "name",unique = true,nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
 
@@ -26,5 +26,5 @@ public class RoleEntity {
             name = "roles_rights",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "right_id"))
-    private List<RightEntity> rightEntityList;
+    private List<RightEntity> rights;
 }

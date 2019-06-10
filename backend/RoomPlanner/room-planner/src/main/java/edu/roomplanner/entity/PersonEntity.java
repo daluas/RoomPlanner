@@ -10,12 +10,12 @@ import javax.persistence.Entity;
 @Entity
 @Setter
 @Getter
-@DiscriminatorValue("person")
+@DiscriminatorValue("PERSON")
 public class PersonEntity extends UserEntity {
 
     @Column(name = "first_name")
     private String firstName;
 
-    @Column(name ="last_name")
+    @Column(name = "last_name")
     private String lastName;
 }

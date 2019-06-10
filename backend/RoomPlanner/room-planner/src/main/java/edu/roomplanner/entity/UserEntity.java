@@ -1,5 +1,6 @@
 package edu.roomplanner.entity;
 
+import edu.roomplanner.types.UserType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,24 +20,25 @@ import java.util.List;
 public abstract class UserEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user_id")
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
-    @Column(name = "email",unique = true,nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password",nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "type",nullable = false,insertable = false,updatable = false)
-    private String type;
+    @Column(name = "type", nullable = false, insertable = false, updatable = false)
+    @Enumerated(EnumType.STRING)
+    private UserType type;
 
     @ManyToMany
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<RoleEntity> roleEntityList;
+    private List<RoleEntity> roles;
 
 }
