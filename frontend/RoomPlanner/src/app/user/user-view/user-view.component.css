@@ -9,7 +9,7 @@
     top: 10px;
     left: 0;
     height: calc(100% - 20px);
-    width: 450px;
+    width: 350px;
     overflow: auto;
     border-right: 1px solid #ccc;
     box-sizing: border-box;
@@ -19,8 +19,8 @@
 .room-view-container{
     position: absolute;
     top: 10px;
-    left: 450px;
-    width: calc(100% - 450px);
+    left: 350px;
+    width: calc(100% - 350px);
     height: calc(100% - 20px);
     box-sizing: border-box;
     padding: 10px;
