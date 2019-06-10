@@ -18,30 +18,45 @@ import { LoggedUser } from './models/LoggedUser';
 @Injectable()
 export class Interceptor implements HttpInterceptor {
 
+    interceptLogout(): boolean {
+        return true;
+    }
+    interceptLogin(): LoggedUser {
+        const token = this.refreshToken();
+
+        const loggedUserMock: LoggedUser = new LoggedUser().create({
+            "email": "user1@cegeka.ro",
+            "token": token,
+            "type": "user"
+        })
+        localStorage.setItem('access-token', JSON.stringify(token));
+
+        return loggedUserMock;
+    }
     constructor() { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (request.url === '/auth') {
-            const token = this.refreshToken();
-
-            const loggedUserMock: LoggedUser = new LoggedUser().create({
-                "email": "user1@cegeka.ro",
-                "token": token,
-                "type": "user"
-            })
-            localStorage.setItem('access-token', JSON.stringify(token));
-
-            return of(new HttpResponse({
-                status: 200,
-                body: loggedUserMock
-            }));
-        }
-
         if (!request.headers.has("Content-Type")) {
             request = request.clone({
                 headers: request.headers.set("Content-Type", "application/json")
             });
         }
+
+        if (request.url === '/auth') {
+            let user : LoggedUser = this.interceptLogin()
+            return of(new HttpResponse({
+                status: 200,
+                body: user
+            }));
+        }
+
+        // if (request.url === '/logout') {
+        //     let user : LoggedUser = this.interceptLogout()
+        //     return of(new HttpResponse({
+        //         status: 200,
+        //         body: user
+        //     }));
+        // }
 
         request = this.addAuthenticationToken(request);
 
