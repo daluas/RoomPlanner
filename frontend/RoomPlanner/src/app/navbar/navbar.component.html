@@ -1,3 +1,28 @@
 <nav>
-    <a><img class="logo" src="../../../../assets/images/cegeka-logo.png" alt="logo"></a>
+    <img class="logo" src="../../../../assets/images/cegeka-logo.png" alt="logo">
+
+    <i class="material-icons menu-button" *ngIf="isLoggedIn" (click)="mobileViewMenuOpen = !mobileViewMenuOpen">
+        {{mobileViewMenuOpen ? 'close' : 'menu'}}
+    </i>
+
+    <div class="right-buttons" *ngIf="isLoggedIn" [ngClass]="{'right-buttons-open': mobileViewMenuOpen}">
+        <div class="username">{{username}} <i class="material-icons person-icon">person</i></div>
+        <div class="button" *ngIf="isAdmin()" routerLink="/admin"><span>ADMIN</span></div>
+        <div class="button" *ngIf="isAdmin()" routerLink="/user"><span>BOOKING</span></div>
+        <div class="button">
+            <span (click)="logOut()">LOG OUT</span>
+            <div class="room-password-popup" *ngIf="passwordFormOpen">
+                <mat-form-field class="room-password-input">
+                    <input matInput placeholder="Room password" type="password" [(ngModel)]="roomPassword">
+                </mat-form-field>
+
+                <div *ngIf="roomPasswordInvalid" class="error-message">Invalid credentials</div>
+
+                <button mat-raised-button color="primary" [disabled]="roomPassword.length === 0"
+                    (click)="logOutRoom()">Sign Out</button>
+
+                <i class="material-icons close-button" (click)="closePasswordForm()"> close </i>
+            </div>
+        </div>
+    </div>
 </nav>

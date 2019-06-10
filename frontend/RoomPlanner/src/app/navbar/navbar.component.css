@@ -14,3 +14,138 @@ nav{
     top:12px;
     left: 20px;
 }
+
+.right-buttons{
+    float: right;
+    margin-right: 20px;
+}
+
+.button{
+    display: inline-block;
+    vertical-align: top;
+    line-height: 63px;
+    margin-left: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 12px;
+    position: relative;
+}
+
+.button span{
+    color: #999;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.button span:hover{
+    color: #222222;
+}
+
+.username{
+    display: inline-block;
+    vertical-align: top;
+    line-height: 61px;
+    color: #999;
+    font-size: 13px;
+}
+
+.person-icon{
+    display: inline-block;
+    vertical-align: top;
+    line-height: 62px;
+    font-size: 12px;
+}
+
+.room-password-popup{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translate(0, calc(100% + 1px));
+    line-height: initial;
+    background: rgba(255, 255, 255);
+    padding: 5px 4px 5px 10px;
+    padding-bottom: 0;
+    border: 1px solid #eee;
+    white-space:nowrap;
+}
+
+.error-message{
+    position: absolute;
+    bottom: 1px;
+    left: 10px;
+    color: red;
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.room-password-input{
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.log-out-room-button{
+    display: inline-block;
+}
+
+.close-button{
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 10px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.menu-button{
+    display: none;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 1024px) {
+    .menu-button{
+        display: block;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        color: #222222;
+    }
+
+    .right-buttons{
+        display: none;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        transform: translate(0, 100%);
+        background: rgb(0,0,0, 0.9);
+        padding: 0 20px;
+        min-width: 150px;
+    }
+
+    .right-buttons-open{
+        display: block;
+    }
+
+    .button span, .username{
+        color: #fff;
+    }
+    
+    .button span:hover{
+        color: #cecece;
+    }
+
+    .button, .username{
+        display: block;
+        width: 100%;
+        text-align: right;
+        margin: 0;
+        border-bottom: 1px solid #fff;
+    }
+
+    .button:last-child{
+        border: none;
+    }
+
+    .room-password-popup{
+        transform: translate(0, 100%);
+        right: -20px;
+    }
+}

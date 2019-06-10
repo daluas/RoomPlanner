@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit {
     this.mode = 'determinate';
     this.value = 0;
     this.diameter = 30;
+
   }
 
 
@@ -67,6 +68,7 @@ export class LoginComponent implements OnInit {
       .then((user: LoggedUser) => {
         // new LoggedUser().create(body)
         // this.authService.setCurrentUser(up)
+        this.authService.setCurrentUser(user);
         switch (user.type) {
           case "user":
             this.router.navigate(["/user"])

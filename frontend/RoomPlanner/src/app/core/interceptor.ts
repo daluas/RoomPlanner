@@ -25,12 +25,12 @@ export class Interceptor implements HttpInterceptor {
     interceptLogin(): LoggedUser {
         const token = this.refreshToken();
         const loggedUserMock: LoggedUser = new LoggedUser().create({
-            "email": "user1@cegeka.ro",
+            "email": "room1@cegeka.ro",
             "token": token,
-            "type": "user"
+            "type": "room"
         })
         localStorage.setItem('access-token', JSON.stringify(token));
-
+        localStorage.setItem('user-data', JSON.stringify(loggedUserMock));
         return loggedUserMock;
     }
     constructor() { }
@@ -52,27 +52,27 @@ export class Interceptor implements HttpInterceptor {
             if (reqBody.email === 'room1@cegeka.ro' && reqBody.password === 'room.1') {
                 let loggedUser: LoggedUser = new LoggedUser().create({
                     type: "room",
-                    username: "room1"
+                    email: "room1@cegeka.ro"
                 })
                 return of(new HttpResponse({
                     status: 200,
                     body: loggedUser
                 }));
             }
-            if (reqBody.email === 'admin1' && reqBody.password === 'admin.1') {
+            if (reqBody.email === 'admin1@cegeka.ro' && reqBody.password === 'admin.1') {
                 let loggedUser: LoggedUser = new LoggedUser().create({
                     type: "admin",
-                    username: "admin1"
+                    email: "admin1@cegeka.ro"
                 })
                 return of(new HttpResponse({
                     status: 200,
                     body: loggedUser
                 }));
 			}
-			if (reqBody.email === 'user1' && reqBody.password === 'user.1') {
+			if (reqBody.email === 'user1@cegeka.ro' && reqBody.password === 'user.1') {
                 let loggedUser: LoggedUser = new LoggedUser().create({
                     type: "user",
-                    username: "user1"
+                    email: "user1@cegeka.ro"
                 })
                 return of(new HttpResponse({
                     status: 200,
@@ -153,7 +153,10 @@ export class Interceptor implements HttpInterceptor {
 
         if (expirationDate < now) {
             alert('Token is expired');
+
             storedToken.expirationDate = new Date(new Date(Date.now()).getTime() + 60 * 60 * 24 * 1000)
+            //call to backend to retrieve updated token  ||  go to login again
+
             localStorage.setItem('access-token', JSON.stringify(storedToken));
         }
 
