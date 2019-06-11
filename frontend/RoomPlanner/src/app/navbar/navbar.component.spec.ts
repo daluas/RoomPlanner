@@ -5,13 +5,26 @@ import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { MaterialDesignModule } from '../material-design/material-design.module';
 import { AuthService } from '../core/core.module';
+import { Observable, Subscriber } from 'rxjs';
+import { LoggedUser } from '../core/models/LoggedUser';
 
 describe('Given a NavbarComponent', () => {
   let component: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
 
   let mockAuthService = {
-    getCurrentUser: () => { }
+    user: null,
+    userSubject: null,
+    getCurrentUser: function () {
+      return new Observable((observer) => {
+        observer.next(this.user);
+        this.userSubject = observer;
+      });
+    },
+    setCurrentUser: function (loggedUserModel) {
+      this.user = loggedUserModel;
+      this.userSubject.next(this.user);
+    }
   }
 
   beforeEach(async(() => {
@@ -37,40 +50,38 @@ describe('Given a NavbarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should not display buttons when user is null', async() => {
-    spyOn(component.authService, 'getCurrentUser').and.returnValue(null);
-
-    await component.updateUserState();
+  it('should not display buttons when user is null', () => {
+    component.authService.setCurrentUser(null);
     fixture.detectChanges();
     let rightButtons = getRigntButtons();
 
     expect(rightButtons).toBeFalsy();
   });
 
-  it('should display buttons when user is not null', async() => {
-    spyOn(component.authService, 'getCurrentUser').and.returnValue({
+  it('should display buttons when user is not null', () => {
+    let currentUser = new LoggedUser().create({
       email: "test@test.com",
       type: "user"
     });
 
-    await component.updateUserState();
+    component.authService.setCurrentUser(currentUser);
     fixture.detectChanges();
     let rightButtons = getRigntButtons();
 
     expect(rightButtons).toBeTruthy();
   });
 
-  it('should display username when user with email is provided', async() => {
-    spyOn(component.authService, 'getCurrentUser').and.returnValue({
-      email: "testid@test.com",
+  it('should display username when user with email is provided', () => {
+    let currentUser = new LoggedUser().create({
+      email: "testname@test.com",
       type: "user"
     });
 
-    await component.updateUserState();
+    component.authService.setCurrentUser(currentUser);
     fixture.detectChanges();
     let username = fixture.debugElement.query(By.css('.username'));
 
-    expect(username.nativeElement.innerText.includes('testid')).toBeTruthy();
+    expect(username.nativeElement.innerText.includes('testname')).toBeTruthy();
   });
 
 });
