@@ -1,17 +1,19 @@
 package edu.roomplanner.entity;
+import lombok.Getter;
+import lombok.Setter;
 
-import lombok.*;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 @Entity
 @Getter
 @Setter
-@DiscriminatorValue("room")
+@DiscriminatorValue("ROOM")
 public class RoomEntity extends UserEntity {
 
     @Column(name = "room_name")
-    private String roomName;
+    private String name;
 
     @Column(name = "floor")
     private Integer floor;

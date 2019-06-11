@@ -1,6 +1,7 @@
 package edu.roomplanner.rest;
 
 import edu.roomplanner.dto.RoomDto;
+import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.service.UserService;
 import edu.roomplanner.service.ValidationService;
 import org.slf4j.Logger;
