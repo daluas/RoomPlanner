@@ -23,8 +23,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<RoomDto> getAllRooms() {
-
-
         List<UserEntity> roomEntities = userRepository.findByType(UserType.ROOM);
         return RoomDto.mapListToDto(roomEntities);
     }

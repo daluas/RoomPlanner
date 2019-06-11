@@ -27,15 +27,15 @@ public class UserRestService {
         this.validationService = validationService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/rooms")
-    List<RoomDto> getAllRooms() {
+    @RequestMapping(method = RequestMethod.GET, value = "/controller")
+    ResponseEntity<List<RoomDto>> getAllRooms() {
         restLogger.info("getAllRooms was called.");
         List<RoomDto> allRoomsList =  userService.getAllRooms();
         restLogger.info("getAllRooms returned: " +  allRoomsList);
-        return allRoomsList;
+        return new ResponseEntity<>(allRoomsList, HttpStatus.FOUND);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/rooms/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/controller/{id}")
     ResponseEntity<RoomDto> getRoomById(@PathVariable Long id) {
         RoomDto roomDto = new RoomDto();
         if(validationService.checkValidRoomId(id)){
