@@ -6,14 +6,21 @@
     </div>
     <div class="filters-elements" [ngClass]="{'filters-open': dropdownOpen}">
       <div class="calendar">
-
         <div class="calendar-wrapper">
-          <mat-calendar #calendar [(selected)]="selectedDate" (dateRangesChange)="onDateRangesChange(calendar, $event)" (selectedChange)="onDateChanged($event)"></mat-calendar>
+          <mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="onDateChanged(selected)"></mat-calendar>
         </div>
-
-
       </div>
-      <div class="filters-body"></div>
+      <div class="filters-body">
+        <div class="floor">
+          <h4>Floor:</h4>
+          <mat-form-field>
+            <mat-label>Select an option:</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let floor of floors" [value]="floor">{{floor}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
       <button mat-stroked-button class="button-filters" color="primary" (click)="onApplyFilters()">Apply filters</button>
     </div>
   </div>

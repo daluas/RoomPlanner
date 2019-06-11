@@ -9,7 +9,7 @@
     top: 10px;
     left: 0;
     height: calc(100% - 20px);
-    width: 450px;
+    width: 350px;
     overflow: auto;
     border-right: 1px solid #ccc;
     box-sizing: border-box;
@@ -19,8 +19,8 @@
 .room-view-container{
     position: absolute;
     top: 10px;
-    left: 450px;
-    width: calc(100% - 450px);
+    left: 350px;
+    width: calc(100% - 350px);
     height: calc(100% - 20px);
     box-sizing: border-box;
     padding: 10px;
@@ -44,9 +44,18 @@
     display: block;
     margin: 0 auto;
 }
+.filters-body{
+    width:calc(100%-100px);
+    display: block;
+    margin: 0 auto;
+}
+
+.floor{
+    margin-left:20px;
+}
 
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
     .container{
         position: relative;
     }
@@ -107,3 +116,36 @@
     background-color: orange;
     border-radius: 50%;
 } */
+
+@media screen and (min-width : 500px) and (max-width : 768px) {
+    .calendar-wrapper{
+        width:70%;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .floor{
+        width:60%;
+        display: block;
+        margin: 0 auto;
+    }
+}
+
+::ng-deep .mat-focused .mat-form-field-label{
+    color:#0098c3 !important;
+}
+
+::ng-deep .mat-select-arrow-wrapper .mat-select-arrow{
+    color:#0098c3 !important;
+}
+::ng-deep.mat-form-field-underline {
+    background-color:#0098c3 !important;
+} 
+  
+::ng-deep.mat-form-field-ripple {
+   background-color: #0098c3 !important;
+}
+
+::ng-deep .mat-stroked-button {
+    color: #0098c3 !important;
+ }

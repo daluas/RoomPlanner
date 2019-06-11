@@ -3,6 +3,7 @@ import { MatCalendar,DateAdapter } from '@angular/material';
 import { UserdataService } from '../../shared/services/userdata.service';
 import { RoomModel } from '../../core/models/RoomModel';
 
+
 @Component({
   selector: 'app-user-view',
   templateUrl: './user-view.component.html',
@@ -13,14 +14,14 @@ export class UserViewComponent implements OnInit {
   dropdownOpen: boolean = false;
   dateChanged:boolean=false;
 
+  floors:number[]=[1,2,3,4,5,6,7,8];
+
   constructor(
     private _dateAdapter: DateAdapter<Date>,
     private userdataService: UserdataService
   ) { }
 
-  ngOnInit() {
-    
-  }
+  ngOnInit() {}
 
   toggleDropdown(){
     this.dropdownOpen = !this.dropdownOpen;
@@ -29,29 +30,32 @@ export class UserViewComponent implements OnInit {
   defaultDate: Date = this._dateAdapter.today();;
   selectedDate: Date;
 
+  finalDate:Date;
+
+  returnDate:Date;
+
   onDateChanged(date) {
     this.dateChanged=true;
   }
 
   onApplyFilters(){
+
     if(this.dateChanged){
-      console.log(`The date is: ${this.selectedDate}`);
-      let rooms: RoomModel[] = this.userdataService.getRoomsByDate(new Date(this.selectedDate));
+      this.finalDate=this.selectedDate; 
     }
     else{
-      console.log(`The date is: ${this.defaultDate}`);
+      this.finalDate=this.defaultDate;
     }
-    // var datee=[];
-    // var datee2=[];
-    // for(let i=0;i<30;i++){
-    //   datee[i]=document.getElementsByClassName("mat-calendar-body-cell-content")[i];
-    //   datee2[i]=document.getElementsByClassName("mat-calendar-body-cell-content")[i].firstChild;
-      
-    //   if((parseInt(datee2[i], 10))<7){
-    //     datee[i].classList.add('example-custom-date-class');
-    //   }
-    //   console.log(datee[i]);
-    
+
+
+    /*let rooms: RoomModel[] = */
+    this.returnDate=this.userdataService.getRoomsByDate(new Date(this.finalDate));
+     
+  }
+
+  getReturnDate()
+  {
+    return this.returnDate;
   }
 
  
