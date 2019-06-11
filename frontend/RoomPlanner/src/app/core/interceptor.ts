@@ -54,7 +54,7 @@ export class Interceptor implements HttpInterceptor {
                     type: "room",
                     email: "room1@cegeka.ro"
                 })
-                return of(new HttpResponse({
+                return of(new HttpResponse<LoggedUser>({
                     status: 200,
                     body: loggedUser
                 }));
@@ -63,22 +63,22 @@ export class Interceptor implements HttpInterceptor {
                 let loggedUser: LoggedUser = new LoggedUser().create({
                     type: "admin",
                     email: "admin1@cegeka.ro"
-                })
-                return of(new HttpResponse({
+                });
+                return of(new HttpResponse<LoggedUser>({
                     status: 200,
                     body: loggedUser
                 }));
-			}
-			if (reqBody.email === 'user1@cegeka.ro' && reqBody.password === 'user.1') {
+            }
+            if (reqBody.email === 'user1@cegeka.ro' && reqBody.password === 'user.1') {
                 let loggedUser: LoggedUser = new LoggedUser().create({
                     type: "user",
                     email: "user1@cegeka.ro"
                 })
-                return of(new HttpResponse({
+                return of(new HttpResponse<LoggedUser>({
                     status: 200,
                     body: loggedUser
                 }));
-			}
+            }
 
 
             return throwError(new HttpResponse({

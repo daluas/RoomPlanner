@@ -26,9 +26,10 @@ export class AuthService {
 	}
 
 	checkIfLoggedIn(): any {
-        if (localStorage.getItem('access-token') == null) {
-          return;
-        }
+        // if (localStorage.getItem('access-token') == null) {
+        //   return;
+		// }
+		
 		let userParsed = JSON.parse(localStorage.getItem('user-data'))
 		let user: LoggedUser = new LoggedUser().create(userParsed);
 		console.log(user);
