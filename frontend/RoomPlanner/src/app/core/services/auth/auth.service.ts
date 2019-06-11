@@ -10,9 +10,6 @@ import { Router } from '@angular/router';
 	providedIn: 'root'
 })
 export class AuthService {
-
-
-
 	private backendUrl: string = '';
 	private userData;
 	private currentUser: LoggedUser;
@@ -65,11 +62,22 @@ export class AuthService {
 		// })
 	}
 
-	checkRoomPassword(password: string): Promise<boolean> {
-		return of(true).toPromise();
+	checkRoomPassword(password: string): Promise<Object> {
+		let userParsed = JSON.parse(localStorage.getItem('user-data'))
+		if (userParsed) {
+			let user: LoggedUser = new LoggedUser().create(userParsed);
+			let loginModel: LoginModel = new LoginModel().create({email: user.email, password: password});
+
+			return this.authenticateUser(loginModel);
+		}
+		return of(false).toPromise();
 	}
 
-	getCurrentUser(): Observable<LoggedUser> {
+	getCurrentUser(): LoggedUser {
+		return this.currentUser;
+	}
+
+	getCurrentUserObserver(): Observable<LoggedUser> {
 		return new Observable((observer) => {
 			observer.next(this.currentUser);
 			this.currentUserSubject = observer;
