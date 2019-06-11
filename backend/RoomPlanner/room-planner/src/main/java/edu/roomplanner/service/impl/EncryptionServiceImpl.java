@@ -2,45 +2,32 @@ package edu.roomplanner.service.impl;
 
 import edu.roomplanner.service.EncryptionService;
 import org.jasypt.util.text.BasicTextEncryptor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
+@Service
 public class EncryptionServiceImpl implements EncryptionService {
 
-    private static char[] password;
+    @Value("${security.encryption.password}")
+    private String password;
 
-    static {
-        try (InputStream in = EncryptionServiceImpl.class.getClassLoader().getResourceAsStream("application.properties")) {
-            Properties props = new Properties();
-            props.load(in);
-            password = props.getProperty("password").toCharArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public EncryptionServiceImpl() {
     }
 
     @Override
     public String encrypt(String text) {
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
-        textEncryptor.setPasswordCharArray(password);
-        String encryptedText = textEncryptor.encrypt(text);
+        textEncryptor.setPasswordCharArray(password.toCharArray());
 
-        return encryptedText;
+        return textEncryptor.encrypt(text);
     }
 
     @Override
     public String decrypt(String text) {
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
-        textEncryptor.setPasswordCharArray(password);
-        String decryptedText = textEncryptor.decrypt(text);
+        textEncryptor.setPasswordCharArray(password.toCharArray());
 
-        return decryptedText;
-    }
-
-    public static char[] getPassword() {
-        return password;
+        return textEncryptor.decrypt(text);
     }
 
 }
