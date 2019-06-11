@@ -44,14 +44,4 @@ public class UserRestService {
         }
         return new ResponseEntity<>(roomDto, HttpStatus.NOT_FOUND);
     }
-
-    @GetMapping(value = "/users", produces = "application/json")
-    public List<UserEntity> getUsers() {
-        return userService.getUsers();
-    }
-
-    @PostMapping
-    public UserEntity createUser(@RequestBody UserEntity userEntity) {
-        return userService.saveUser(userEntity);}
-
 }
