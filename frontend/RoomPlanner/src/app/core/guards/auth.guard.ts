@@ -2,13 +2,12 @@ import { Injectable } from '@angular/core';
 import { CanActivate, CanActivateChild, CanLoad, Route, UrlSegment, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable, Subscriber } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
-import { LoggedUser } from '../models/LoggedUser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(public authService: AuthService, private router: Router) { }
 
   canActivate(
     router: ActivatedRouteSnapshot,
@@ -16,43 +15,29 @@ export class AuthGuard implements CanActivate {
 
     let currentUser = this.authService.getCurrentUser();
 
-    switch (state.url) {
-      case '/login':
-        if (currentUser) {
-          this.router.navigate([currentUser.type]);
-          return false;
-        }
-        break;
-      case '/room':
-        if (!currentUser) {
-          this.router.navigate(['login']);
-          return false;
-        }
-        if (currentUser.type !== 'room') {
-          this.router.navigate([currentUser.type]);
-          return false;
-        }
-        break;
-      case '/user':
-        if (!currentUser) {
-          this.router.navigate(['login']);
-          return false;
-        }
-        if (currentUser.type !== 'user' && currentUser.type !== 'admin') {
-          this.router.navigate([currentUser.type]);
-          return false;
-        }
-        break;
-      case '/admin':
-        if (!currentUser) {
-          this.router.navigate(['login']);
-          return false;
-        }
-        if (currentUser.type !== 'admin') {
-          this.router.navigate([currentUser.type]);
-          return false;
-        }
-        break;
+    if (state.url !== '/login' && !currentUser) {
+      this.router.navigate(['login']);
+      return false;
+    }
+    
+    if (state.url === '/login' && currentUser) {
+      this.router.navigate([currentUser.type]);
+      return false;
+    }
+
+    if (state.url === '/room' && currentUser.type !== 'room'){
+      this.router.navigate([currentUser.type]);
+      return false;
+    }
+
+    if (state.url === '/user' && ['user', 'admin'].indexOf(currentUser.type) === -1){
+      this.router.navigate([currentUser.type]);
+      return false;
+    }
+
+    if(state.url === '/admin' && currentUser.type !== 'admin'){
+      this.router.navigate([currentUser.type]);
+      return false;
     }
 
     return true;
