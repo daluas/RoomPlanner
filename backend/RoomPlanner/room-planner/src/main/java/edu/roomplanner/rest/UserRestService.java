@@ -20,11 +20,13 @@ public class UserRestService {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/users",produces = "application/json")
-    public List<UserEntity> getUsers(){ return userService.getUsers(); }
+    @GetMapping(value = "/users", produces = "application/json")
+    public List<UserEntity> getUsers() {
+        return userService.getUsers();
+    }
 
     @PostMapping
-    public UserEntity createUser(@RequestBody UserEntity userEntity){
+    public UserEntity createUser(@RequestBody UserEntity userEntity) {
         return userService.saveUser(userEntity);
     }
 

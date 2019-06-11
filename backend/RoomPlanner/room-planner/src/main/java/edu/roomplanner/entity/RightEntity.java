@@ -13,6 +13,7 @@ public class RightEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_right_id")
+    @SequenceGenerator(name = "seq_right_id", sequenceName = "seq_right_id", initialValue = 1, allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
