@@ -14,6 +14,14 @@ public class EncryptionServiceImpl implements EncryptionService {
     public EncryptionServiceImpl() {
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
     @Override
     public String encrypt(String text) {
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();

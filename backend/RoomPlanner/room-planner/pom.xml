@@ -16,13 +16,15 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<jasypt.version>1.9.2</jasypt.version>
+		<junit-jupiter-api.version>5.0.3</junit-jupiter-api.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.jasypt</groupId>
 			<artifactId>jasypt</artifactId>
-			<version>1.9.2</version>
+			<version>${jasypt.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -51,7 +53,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.0.3</version>
+            <version>${junit-jupiter-api.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
