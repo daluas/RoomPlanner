@@ -8,7 +8,7 @@ import { LoggedUser } from '../core/models/LoggedUser';
 import { Router } from '@angular/router';
 import { HttpResponse, HttpHandler } from '@angular/common/http';
 import { Interceptor } from '../core/interceptor';
-
+import { ReactiveFormsModule }  from '@angular/forms';
 
 @Component({
   selector: 'app-login',
