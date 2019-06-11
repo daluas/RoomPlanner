@@ -12,11 +12,12 @@ import javax.persistence.*;
 public class RightEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_right_id")
+    @SequenceGenerator(name = "seq_right_id", sequenceName = "seq_right_id", initialValue = 1, allocationSize = 1)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
-    @Column(name = "name",unique = true,nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
 }

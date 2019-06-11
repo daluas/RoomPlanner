@@ -10,17 +10,16 @@ import javax.persistence.Entity;
 @Entity
 @Getter
 @Setter
-@DiscriminatorValue("room")
+@DiscriminatorValue("ROOM")
 public class RoomEntity extends UserEntity {
 
     @Column(name = "room_name")
-    private String roomName;
+    private String name;
 
     @Column(name = "floor")
     private Integer floor;
 
     @Column(name = "max_persons")
     private Integer maxPersons;
-
 
 }
