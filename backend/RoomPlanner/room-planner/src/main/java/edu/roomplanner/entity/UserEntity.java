@@ -1,22 +1,45 @@
 package edu.roomplanner.entity;
 
+import edu.roomplanner.types.UserType;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 @Setter
 @Getter
-public class UserEntity {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(
+        discriminatorType = DiscriminatorType.STRING,
+        name = "type",
+        columnDefinition = "varchar(50)"
+)
+public abstract class UserEntity {
 
     @Id
-    @SequenceGenerator(name = "gen_user_id", allocationSize = 1, sequenceName = "seq_user_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user_id")
+    @SequenceGenerator(name = "seq_user_id", sequenceName = "seq_user_id", initialValue = 1, allocationSize = 1)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "birth_date")
-    private Date birthDate;
+    @Column(name = "email", unique = true, nullable = false)
+    private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "type", nullable = false, insertable = false, updatable = false)
+    @Enumerated(EnumType.STRING)
+    private UserType type;
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<RoleEntity> roles;
+
 }
