@@ -1,5 +1,7 @@
 package edu.roomplanner.rest;
 
+
+import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +28,9 @@ public class UserRestService {
     }
 
     @PostMapping
-    public UserEntity createUser(@RequestBody UserEntity userEntity) {
+    public  UserEntity createUser(@RequestBody UserEntity userEntity) {
         return userService.saveUser(userEntity);
     }
+
 
 }
