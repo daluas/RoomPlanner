@@ -6,6 +6,8 @@ import { AuthService } from '../core/services/auth/auth.service'
 import { ThemePalette, ProgressSpinnerMode } from '@angular/material';
 import { LoggedUser } from '../core/models/LoggedUser';
 import { Router } from '@angular/router';
+import { HttpResponse, HttpHandler } from '@angular/common/http';
+import { Interceptor } from '../core/interceptor';
 
 
 @Component({
@@ -41,7 +43,6 @@ export class LoginComponent implements OnInit {
     this.isLoading = true;
   }
 
-
   ngOnInit() {
     this.statusMessage = "";
 
@@ -51,62 +52,77 @@ export class LoginComponent implements OnInit {
 
   }
 
-
   getErrorMessage() {
     return this.loginForm.controls.email.hasError('invalid') ? 'You must enter a value' :
       this.loginForm.controls.email.hasError('email') ? 'Not a valid email' :
         '';
   }
 
+  loginSuccessfully(){
+    this.status = true;
+    this.isLoading = false;
+    this.statusMessage = "Login successfully";
+  }
+
+  loginFailed(){
+    this.status = false;
+    this.isLoading = false;
+    this.statusMessage = "Invalid credentials";
+    this.loginForm.reset();
+  }
+
   authenticate() {
-    let user: LoginModel = new LoginModel().create({
+    var user: LoginModel = new LoginModel().create({
       email: this.loginForm.value.email,
       password: this.loginForm.value.password
     });
 
     this.authService.authenticateUser(user)
       .then((user: LoggedUser) => {
+        console.log(user);
         this.authService.setCurrentUser(user)
         switch (user.type) {
+          
           case "user":
-            this.router.navigate(["/user"])
+            this.loginSuccessfully();
+            setTimeout(() => {
+              this.router.navigate(["/user"]);
+            }, 1000);
             break;
+
           case "room":
-            this.router.navigate(["/room"])
+          this.loginSuccessfully();
+            setTimeout(() => {
+              this.router.navigate(["/room"]);
+            }, 1000);
             break;
+
           case "admin":
-            this.router.navigate(["/admin"])
+          this.loginSuccessfully();
+            setTimeout(() => {
+              this.router.navigate(["/admin"]);
+            }, 1000);
             break;
+
           default:
-            this.status = false;
+            this.loginFailed();
             break;
         }
       })
       .catch((error) => {
+        this.loginFailed();
         console.log(error);
       });
+
   }
-  getStatus(): boolean {
-    return this.status = true;
-  }
+
   onSubmit() {
     this.mode = 'indeterminate';
     this.isLoading = true;
-    this.statusMessage="";
-    setTimeout(() => {
-      this.status = this.getStatus();
-      this.isLoading = false;
-      if (this.status == false) {
-        this.statusMessage = "Invalid credentials";
-        //todo
-        this.loginForm.reset();
-        return;
-      }
-      this.statusMessage = "Login successfully";
-      setTimeout(() => {
+    this.statusMessage = "";
 
-        this.authenticate()
-      }, 1000);
+    setTimeout(() => {
+      this.authenticate();
     },
       1000);
   }

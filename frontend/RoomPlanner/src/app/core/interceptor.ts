@@ -56,6 +56,7 @@ export class Interceptor implements HttpInterceptor {
                 })
                 return of(new HttpResponse({
                     status: 200,
+                    statusText: "Ok",
                     body: loggedUser
                 }));
             }
@@ -66,6 +67,7 @@ export class Interceptor implements HttpInterceptor {
                 })
                 return of(new HttpResponse({
                     status: 200,
+                    statusText: "Ok",
                     body: loggedUser
                 }));
 			}
@@ -75,7 +77,7 @@ export class Interceptor implements HttpInterceptor {
                     email: "user1@cegeka.ro"
                 })
                 return of(new HttpResponse({
-                    status: 200,
+                    status: 200,                    
                     body: loggedUser
                 }));
 			}
