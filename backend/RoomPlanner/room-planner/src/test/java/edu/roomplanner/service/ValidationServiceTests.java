@@ -1,8 +1,6 @@
 package edu.roomplanner.service;
 
 import edu.roomplanner.RoomPlannerApplication;
-import edu.roomplanner.dto.RoomDto;
-import edu.roomplanner.utils.BuilderClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = RoomPlannerApplication.class
 )
-@Sql(executionPhase=Sql.ExecutionPhase.BEFORE_TEST_METHOD,scripts="classpath:scripts/init_h2db.sql")
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:scripts/init_h2db.sql")
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class ValidationServiceTests {
 
@@ -26,41 +24,42 @@ public class ValidationServiceTests {
     private ValidationService validationService;
 
     @Test
-    public void Should_Return_True_When_CheckValidRoomId_Is_Called_With_Injected_Room_Id(){
+    public void Should_Return_True_When_CheckValidRoomId_Is_Called_With_Injected_Room_Id() {
 
         boolean response = validationService.checkValidRoomId(2L);
 
-       Assert.assertTrue("CheckValidRoomId failed to check valid for Room Id.",response);
+        Assert.assertTrue("CheckValidRoomId failed to check valid for Room Id.", response);
     }
 
     @Test
-    public void Should_Return_False_When_CheckValidRoomId_Is_Called_With_Injected_Person_Id(){
+    public void Should_Return_False_When_CheckValidRoomId_Is_Called_With_Injected_Person_Id() {
 
         boolean response = validationService.checkValidRoomId(1L);
 
-        Assert.assertFalse("CheckValidRoomId failed to check invalid for Person Id.",response);
+        Assert.assertFalse("CheckValidRoomId failed to check invalid for Person Id.", response);
     }
 
     @Test
-    public void Should_Return_False_When_CheckValidRoomId_Is_Called_With_NonExistent_Id(){
+    public void Should_Return_False_When_CheckValidRoomId_Is_Called_With_NonExistent_Id() {
 
         boolean response = validationService.checkValidRoomId(7L);
 
-        Assert.assertFalse("CheckValidRoomId failed to check invalid for NonExistent Id.",response);
+        Assert.assertFalse("CheckValidRoomId failed to check invalid for NonExistent Id.", response);
     }
+
     @Test
-    public void Should_Return_True_When_CheckExistingRoomId_Is_Called_With_Valid_Id(){
+    public void Should_Return_True_When_CheckExistingRoomId_Is_Called_With_Valid_Id() {
 
         boolean response = validationService.checkExistingRoomId(2L);
 
-        Assert.assertTrue("CheckExistingRoomId failed to check valid for Room Id.",response);
+        Assert.assertTrue("CheckExistingRoomId failed to check valid for Room Id.", response);
     }
 
     @Test
-    public void Should_Return_False_When_CheckExistingRoomId_Is_Called_With_NonExisting_Id(){
+    public void Should_Return_False_When_CheckExistingRoomId_Is_Called_With_NonExisting_Id() {
 
         boolean response = validationService.checkExistingRoomId(7L);
 
-        Assert.assertFalse("CheckExistingRoomId failed to check invalid for NonExistent Id.",response);
+        Assert.assertFalse("CheckExistingRoomId failed to check invalid for NonExistent Id.", response);
     }
 }
