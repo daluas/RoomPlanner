@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../core/core.module';
 import { LoggedUser } from '../core/models/LoggedUser';
-import { LoginToken } from '../core/models/LoginToken';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -9,76 +8,79 @@ import { Subscription } from 'rxjs';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
 
-  currentUserSub: Subscription;
+  currentUserObserver: Subscription;
   currentUser: LoggedUser;
   isLoggedIn: boolean = false;
-  username: string;
-  usertype: string;
   passwordFormOpen: boolean = false;
   roomPassword: string = "";
   roomPasswordInvalid: boolean = false;
+  mobileMenuOpen: boolean = false;
 
-  mobileViewMenuOpen: boolean = false;
-
-  constructor(public authService: AuthService) {
-
-  }
+  constructor(public authService: AuthService) { }
 
   ngOnInit() {
-    this.currentUserSub = this.authService.getCurrentUserObserver().subscribe(currentUser => {
+    this.currentUserObserver = this.authService.getCurrentUserObserver().subscribe(currentUser => {
       this.resetState();
 
       if (currentUser) {
         this.isLoggedIn = true;
-        this.usertype = currentUser.type;
-        this.username = this.getUsernameFromEmail(currentUser.email);
+        this.currentUser = currentUser;
       }
-    })
-
-
-  }
-
-  getUsernameFromEmail(email: string): string {
-    return email.split('@')[0];
+    });
   }
 
   resetState() {
-    this.isLoggedIn = false;
-    this.username = "";
-    this.usertype = "";
-    this.roomPassword = "";
-    this.passwordFormOpen = false;
-    this.roomPasswordInvalid = false;
     this.currentUser = null;
+    this.isLoggedIn = false;
+    this.passwordFormOpen = false;
+    this.roomPassword = "";
+    this.roomPasswordInvalid = false;
+    this.mobileMenuOpen = false;
+  }
+
+  getUsernameFromEmail(): string {
+    let email = this.currentUser.email;
+    return email.split('@')[0];
   }
 
   isAdmin() {
-    return this.usertype === "admin";
+    return this.currentUser.type === "admin";
   }
 
   logOut() {
-    if (this.usertype === "room") {
+    if (this.currentUser.type === "room") {
       if (this.passwordFormOpen) {
         this.closePasswordForm();
       } else {
         this.passwordFormOpen = true;
       }
+
       return;
     }
 
     this.authService.logout();
   }
 
+  toggleMobileMenu() {
+    if (this.mobileMenuOpen) {
+      this.closePasswordForm();
+    }
+
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
   closePasswordForm() {
-    this.roomPassword = "";
     this.passwordFormOpen = false;
+    this.roomPassword = "";
     this.roomPasswordInvalid = false;
   }
 
   logOutRoom() {
     if (this.roomPassword.length > 0) {
+      this.roomPasswordInvalid = false;
+
       let scope = this;
       this.authService.checkRoomPassword(this.roomPassword).then((isValid) => {
         if (isValid) {
@@ -90,8 +92,7 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-
   ngOnDestroy() {
-    this.currentUserSub.unsubscribe();
+    this.currentUserObserver.unsubscribe();
   }
 }
