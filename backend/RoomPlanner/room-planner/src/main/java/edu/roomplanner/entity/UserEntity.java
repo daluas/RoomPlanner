@@ -1,11 +1,11 @@
 package edu.roomplanner.entity;
 
-import lombok.Data;
+import edu.roomplanner.types.UserType;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -19,18 +19,26 @@ import javax.persistence.*;
 )
 public abstract class UserEntity {
 
-    @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user_id")
+    @SequenceGenerator(name = "seq_user_id", sequenceName = "seq_user_id", initialValue = 1, allocationSize = 1)
     @Column(name = "id")
     private Long id;
-
-    @Column(name = "type", nullable = false, insertable = false, updatable = false)
-    private String type;
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "type", nullable = false, insertable = false, updatable = false)
+    @Enumerated(EnumType.STRING)
+    private UserType type;
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<RoleEntity> roles;
 
 }

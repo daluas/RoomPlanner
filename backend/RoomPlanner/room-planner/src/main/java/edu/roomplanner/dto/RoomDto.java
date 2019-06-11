@@ -27,7 +27,7 @@ public class RoomDto {
         RoomDto roomDto = new RoomDto();
         roomDto.setId(roomEntity.getId());
         roomDto.setFloor(roomEntity.getFloor());
-        roomDto.setName(roomEntity.getRoomName());
+        roomDto.setName(roomEntity.getName());
         roomDto.setMaxPersons(roomEntity.getMaxPersons());
         return roomDto;
     }

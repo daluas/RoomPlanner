@@ -1,6 +1,7 @@
 package edu.roomplanner.rest;
 
 import edu.roomplanner.dto.RoomDto;
+import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.service.UserService;
 import edu.roomplanner.service.ValidationService;
 import org.slf4j.Logger;
@@ -13,15 +14,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-public class UserRestController {
+public class UserRestService {
 
-    static Logger restLogger = LoggerFactory.getLogger(UserRestController.class);
+    static Logger restLogger = LoggerFactory.getLogger(UserRestService.class);
 
     private final UserService userService ;
     private final ValidationService validationService;
 
     @Autowired
-    public UserRestController(UserService userService, ValidationService validationService) {
+    public UserRestService(UserService userService, ValidationService validationService) {
         this.userService = userService;
         this.validationService = validationService;
     }
@@ -43,4 +44,14 @@ public class UserRestController {
         }
         return new ResponseEntity<>(roomDto, HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping(value = "/users", produces = "application/json")
+    public List<UserEntity> getUsers() {
+        return userService.getUsers();
+    }
+
+    @PostMapping
+    public UserEntity createUser(@RequestBody UserEntity userEntity) {
+        return userService.saveUser(userEntity);}
+
 }

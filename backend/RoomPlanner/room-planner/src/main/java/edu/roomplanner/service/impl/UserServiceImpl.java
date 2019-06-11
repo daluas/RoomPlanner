@@ -32,4 +32,14 @@ public class UserServiceImpl implements UserService {
         return RoomDto.mapToDto((RoomEntity) userEntity);
     }
 
+    @Override
+    public List<UserEntity> getUsers() {
+        return (List<UserEntity>) userRepository.findAll();
+    }
+
+    @Override
+    public UserEntity saveUser(UserEntity userEntity) {
+        return userRepository.save(userEntity);
+    }
+
 }
