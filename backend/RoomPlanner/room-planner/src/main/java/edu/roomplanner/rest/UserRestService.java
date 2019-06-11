@@ -1,22 +1,22 @@
 package edu.roomplanner.rest;
 
 import edu.roomplanner.dto.RoomDto;
-import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.service.UserService;
 import edu.roomplanner.service.ValidationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.EqualsAndHashCode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@EqualsAndHashCode
 @RestController
 public class UserRestService {
 
-    static Logger restLogger = LoggerFactory.getLogger(UserRestService.class);
+    private static Logger restLogger = LogManager.getLogger(UserRestService.class);
 
     private final UserService userService ;
     private final ValidationService validationService;
@@ -41,6 +41,8 @@ public class UserRestService {
         RoomDto roomDto = new RoomDto();
         if(validationService.checkValidRoomId(id)){
             roomDto = userService.getRoomById(id);
+            restLogger.info("getRoomById was called.");
+            restLogger.info("The following object was returned: " + roomDto);
             return new ResponseEntity<>(roomDto, HttpStatus.FOUND);
         }
         return new ResponseEntity<>(roomDto, HttpStatus.NOT_FOUND);
