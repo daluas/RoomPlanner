@@ -1,29 +1,14 @@
 package edu.roomplanner.rooms;
 
-import edu.roomplanner.entity.RoomEntity;
-import edu.roomplanner.entity.UserEntity;
-import edu.roomplanner.repository.UserRepository;
-import edu.roomplanner.rest.UserRestController;
-import edu.roomplanner.service.UserService;
-import edu.roomplanner.service.ValidationService;
-import org.junit.Test;
+import edu.roomplanner.rest.UserRestService;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import javax.validation.Validation;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(UserRestController.class)
+@WebMvcTest(UserRestService.class)
 public class UserControllerTests {
 
    /* @Autowired

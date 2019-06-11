@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-public class UserRestController {
+public class UserRestService {
 
-    static Logger restLogger = LoggerFactory.getLogger(UserRestController.class);
+    static Logger restLogger = LoggerFactory.getLogger(UserRestService.class);
 
     private final UserService userService ;
     private final ValidationService validationService;
 
     @Autowired
-    public UserRestController(UserService userService, ValidationService validationService) {
+    public UserRestService(UserService userService, ValidationService validationService) {
         this.userService = userService;
         this.validationService = validationService;
     }
@@ -32,6 +32,7 @@ public class UserRestController {
         List<RoomDto> allRoomsList =  userService.getAllRooms();
         restLogger.info("getAllRooms returned: " +  allRoomsList);
         return allRoomsList;
+
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/rooms/{id}")
