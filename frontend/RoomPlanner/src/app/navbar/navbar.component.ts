@@ -29,7 +29,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.currentUserSub = this.authService.getCurrentUser().subscribe(currentUser => {
       this.resetState();
-      console.log(currentUser);
+
       if (currentUser) {
         this.isLoggedIn = true;
         this.usertype = currentUser.type;
@@ -41,7 +41,6 @@ export class NavbarComponent implements OnInit {
   }
 
   getUsernameFromEmail(email: string): string {
-    console.log(email);
     return email.split('@')[0];
   }
 
@@ -92,7 +91,7 @@ export class NavbarComponent implements OnInit {
   }
 
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.currentUserSub.unsubscribe();
   }
 }
