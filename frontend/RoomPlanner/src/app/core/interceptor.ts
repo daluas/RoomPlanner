@@ -17,6 +17,7 @@ import { LoggedUser } from './models/LoggedUser';
 
 @Injectable()
 export class Interceptor implements HttpInterceptor {
+    BASE_URL: string;
 
     interceptLogout(): boolean {
         return true;
@@ -60,6 +61,7 @@ export class Interceptor implements HttpInterceptor {
                     body: loggedUser
                 }));
             }
+
             if (reqBody.email === 'admin1@cegeka.ro' && reqBody.password === 'admin.1') {
                 let loggedUser: LoggedUser = new LoggedUser().create({
                     type: "admin",
@@ -70,6 +72,7 @@ export class Interceptor implements HttpInterceptor {
                     body: loggedUser
                 }));
             }
+            
             if (reqBody.email === 'user1@cegeka.ro' && reqBody.password === 'user.1') {
                 let loggedUser: LoggedUser = new LoggedUser().create({
                     type: "user",

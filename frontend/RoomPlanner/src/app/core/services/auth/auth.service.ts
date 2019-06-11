@@ -10,14 +10,15 @@ import { Router } from '@angular/router';
 	providedIn: 'root'
 })
 export class AuthService {
+	// private backendUrl: string = 'localhost:8081';
 	private backendUrl: string = '';
 	private userData;
 	private currentUser: LoggedUser;
 	private currentUserSubject: Subscriber<LoggedUser> = new Subscriber<LoggedUser>();
 
 	constructor(
-		private httpClient: HttpClient,
-		private router: Router
+		public httpClient: HttpClient,
+		public router: Router
 	) {
 		this.checkIfLoggedIn()
 	}
@@ -45,8 +46,7 @@ export class AuthService {
 	}
 
 	authenticateUser(credentials: LoginModel): Promise<Object> {
-		return this.httpClient.post(`${this.backendUrl}/auth/signin`, credentials)
-			.toPromise()
+		return this.httpClient.post(`${this.backendUrl}/auth/signin`, credentials).toPromise()
 	}
 
 	async checkRoomPassword(password: string): Promise<Object> {
@@ -64,7 +64,7 @@ export class AuthService {
 						}
 						resolve(false);
 					})
-					.catch((err)=>{
+					.catch((err) => {
 						console.log(err);
 						resolve(false);
 					})
