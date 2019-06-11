@@ -44,9 +44,18 @@
     display: block;
     margin: 0 auto;
 }
+.filters-body{
+    width:calc(100%-100px);
+    display: block;
+    margin: 0 auto;
+}
+
+.floor{
+    margin-left:20px;
+}
 
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
     .container{
         position: relative;
     }
@@ -107,3 +116,36 @@
     background-color: orange;
     border-radius: 50%;
 } */
+
+@media screen and (min-width : 500px) and (max-width : 768px) {
+    .calendar-wrapper{
+        width:70%;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .floor{
+        width:60%;
+        display: block;
+        margin: 0 auto;
+    }
+}
+
+::ng-deep .mat-focused .mat-form-field-label{
+    color:#0098c3 !important;
+}
+
+::ng-deep .mat-select-arrow-wrapper .mat-select-arrow{
+    color:#0098c3 !important;
+}
+::ng-deep.mat-form-field-underline {
+    background-color:#0098c3 !important;
+} 
+  
+::ng-deep.mat-form-field-ripple {
+   background-color: #0098c3 !important;
+}
+
+::ng-deep .mat-stroked-button {
+    color: #0098c3 !important;
+ }
