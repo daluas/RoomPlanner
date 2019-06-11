@@ -37,7 +37,8 @@ export class Interceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         console.log("interceptor request");
         console.log(request);
-        let newRequest;
+        
+        let newRequest : HttpRequest<any>;
         if (!request.headers.has("Content-Type")) {
             newRequest = request.clone({
                 headers: request.headers.set("Content-Type", "application/json")
@@ -64,27 +65,27 @@ export class Interceptor implements HttpInterceptor {
                     type: "admin",
                     email: "admin1@cegeka.ro"
                 });
-                // return of(new HttpResponse<LoggedUser>({
-                //     status: 200,
-                //     body: loggedUser
-                // }));
+                return of(new HttpResponse<LoggedUser>({
+                    status: 200,
+                    body: loggedUser
+                }));
             }
             if (reqBody.email === 'user1@cegeka.ro' && reqBody.password === 'user.1') {
                 let loggedUser: LoggedUser = new LoggedUser().create({
                     type: "user",
                     email: "user1@cegeka.ro"
                 })
-                // return of(new HttpResponse<LoggedUser>({
-                //     status: 200,
-                //     body: loggedUser
-                // }));
+                return of(new HttpResponse<LoggedUser>({
+                    status: 200,
+                    body: loggedUser
+                }));
             }
 
 
-            // return throwError(new HttpResponse({
-            //     status: 404,
-            //     statusText: "Not Found"
-            // }));
+            return throwError(new HttpResponse({
+                status: 404,
+                statusText: "Not Found"
+            }));
         }
 
         // if (request.url === '/logout') {

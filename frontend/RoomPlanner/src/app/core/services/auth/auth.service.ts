@@ -23,6 +23,8 @@ export class AuthService {
 	}
 
 	checkIfLoggedIn(): void {
+		if (localStorage.getItem('user-data') == null) return;
+
 		if (localStorage.getItem('access-token') == null) {
 			return;
 		}
@@ -42,35 +44,33 @@ export class AuthService {
 		this.currentUserSubject.next(this.currentUser);
 	}
 
-	authenticateUser(credentials: LoginModel) {
+	authenticateUser(credentials: LoginModel): Promise<Object> {
 		return this.httpClient.post(`${this.backendUrl}/auth/signin`, credentials)
 			.toPromise()
-		// .then((data) => {
-		// 	console.log(data);
-
-		// 	let user: LoggedUser = new LoggedUser().create(data);
-		// 	this.setCurrentUser(user);
-
-		// 	return of(new HttpResponse({
-		// 		status: 200,
-		// 		body: user
-		// 	}));
-
-		// }).catch(error => {
-		// 	console.log(error)
-		// 	return error
-		// })
 	}
 
-	checkRoomPassword(password: string): Promise<Object> {
-		let userParsed = JSON.parse(localStorage.getItem('user-data'))
-		if (userParsed) {
-			let user: LoggedUser = new LoggedUser().create(userParsed);
-			let loginModel: LoginModel = new LoginModel().create({email: user.email, password: password});
-
-			return this.authenticateUser(loginModel);
-		}
-		return of(false).toPromise();
+	async checkRoomPassword(password: string): Promise<Object> {
+		return new Promise(async (resolve) => {
+			let userParsed = JSON.parse(localStorage.getItem('user-data'))
+			if (userParsed) {
+				let user: LoggedUser = new LoggedUser().create(userParsed);
+				let loginModel: LoginModel = new LoginModel().create({ email: user.email, password: password });
+				console.log(user, loginModel);
+				await this.authenticateUser(loginModel)
+					.then((data) => {
+						console.log(data);
+						if (data) {
+							resolve(true);
+						}
+						resolve(false);
+					})
+					.catch((err)=>{
+						console.log(err);
+						resolve(false);
+					})
+			}
+			resolve(false);
+		})
 	}
 
 	getCurrentUser(): LoggedUser {
