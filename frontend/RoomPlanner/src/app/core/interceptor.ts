@@ -15,7 +15,6 @@ import { tap, map } from 'rxjs/operators';
 import { LoginToken } from './models/LoginToken';
 import { LoggedUser } from './models/LoggedUser';
 
-
 @Injectable()
 export class Interceptor implements HttpInterceptor {
 
@@ -38,9 +37,9 @@ export class Interceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         console.log("interceptor request");
         console.log(request);
-
+        let newRequest;
         if (!request.headers.has("Content-Type")) {
-            request = request.clone({
+            newRequest = request.clone({
                 headers: request.headers.set("Content-Type", "application/json")
             });
         }
@@ -48,12 +47,13 @@ export class Interceptor implements HttpInterceptor {
         if (request.url === '/auth/signin') {
             let user: LoggedUser = this.interceptLogin()
 
-            let reqBody = request.body;
+            let reqBody = newRequest.body;
             if (reqBody.email === 'room1@cegeka.ro' && reqBody.password === 'room.1') {
                 let loggedUser: LoggedUser = new LoggedUser().create({
                     type: "room",
                     email: "room1@cegeka.ro"
                 })
+
                 return of(new HttpResponse<LoggedUser>({
                     status: 200,
                     body: loggedUser
@@ -64,27 +64,27 @@ export class Interceptor implements HttpInterceptor {
                     type: "admin",
                     email: "admin1@cegeka.ro"
                 });
-                return of(new HttpResponse<LoggedUser>({
-                    status: 200,
-                    body: loggedUser
-                }));
+                // return of(new HttpResponse<LoggedUser>({
+                //     status: 200,
+                //     body: loggedUser
+                // }));
             }
             if (reqBody.email === 'user1@cegeka.ro' && reqBody.password === 'user.1') {
                 let loggedUser: LoggedUser = new LoggedUser().create({
                     type: "user",
                     email: "user1@cegeka.ro"
                 })
-                return of(new HttpResponse<LoggedUser>({
-                    status: 200,
-                    body: loggedUser
-                }));
+                // return of(new HttpResponse<LoggedUser>({
+                //     status: 200,
+                //     body: loggedUser
+                // }));
             }
 
 
-            return throwError(new HttpResponse({
-                status: 404,
-                statusText: "Not Found"
-            }));
+            // return throwError(new HttpResponse({
+            //     status: 404,
+            //     statusText: "Not Found"
+            // }));
         }
 
         // if (request.url === '/logout') {
@@ -95,13 +95,18 @@ export class Interceptor implements HttpInterceptor {
         //     }));
         // }
 
-        request = this.addAuthenticationToken(request);
+        let newrequest = this.addAuthenticationToken(newRequest);
 
-        return next.handle(request).pipe(
+        return next.handle(newrequest).pipe(
             tap({
                 next: (response: HttpResponse<any>) => {
-                    console.log("response");
-                    console.log(response)
+                    if (response instanceof HttpResponse) {
+                        response = response.clone({ body: "" })
+                    }
+                    if (response instanceof HttpErrorResponse) {
+                        console.log("error response (never)");
+                        console.log(response)
+                    }
                 },
                 error: (error: HttpErrorResponse) => {
                     console.log(error);
