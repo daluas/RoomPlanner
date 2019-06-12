@@ -10,20 +10,20 @@
           <mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="onDateChanged($event)"></mat-calendar>
         </div>
       </div>
-      <div class="filters-body">
+      <div class="filters-body" >
 
-        <div class="hours">
+        <div class="hours" *ngIf="dateInThePastIn==false">
 
           <div class="hours-header" >
-            <span style="font-weight: bold; margin-left: 40px;">From</span>
-            <span style="font-weight: bold; margin-left: 130px;">To</span>
+            <span class="startHourText" >From</span>
+            <span class="endHourText" >To</span>
           </div>
-          <mat-form-field (change)="onStartHourChange($event)" style="width:40%; margin-right: 20px;">
+          <mat-form-field (change)="onStartHourChange($event)" class="startHour">
             <input matInput type="time" min="180" step="1800" >
           </mat-form-field>
-          <span style="font-weight: bold;">-</span>
+          <span ><b>-</b></span>
 
-          <mat-form-field style="width:40%; margin-left: 20px;">
+          <mat-form-field class="endHour" >
             <input matInput type="time">
           </mat-form-field>
         </div>
@@ -39,7 +39,7 @@
         </div>
 
         <div class="people">
-          <h4>Number of people attending</h4>
+          <h4>Capacity (people)</h4>
           <span class="text-small">1</span>
           <mat-slider thumbLabel min="1" max="30" step="1" (change)="onSliderChange($event)"></mat-slider>
           <span class="text-small">30</span>

@@ -85,6 +85,25 @@ mat-slider {
     font-size: 15px;
 }
 
+.startHourText{
+    font-weight: bold;
+     margin-left: 40px;
+}
+.startHour{
+    width:40%;
+     margin-right: 20px;
+}
+
+.endHourText{
+    font-weight: bold;
+     margin-left: 130px;
+}
+
+.endHour{
+    width:40%;
+    margin-left: 20px;
+}
+
 @media screen and (max-width: 768px) {
     .container{
         position: relative;
@@ -181,38 +200,22 @@ mat-slider {
     }
 }
 
-::ng-deep .mat-focused .mat-form-field-label{
-    color:#0098c3 !important;
-}
-
-::ng-deep .mat-select-arrow-wrapper .mat-select-arrow{
-    color:#0098c3 !important;
-}
-::ng-deep .mat-form-field-underline {
-    background-color:#0098c3 !important;
-} 
-  
-::ng-deep .mat-form-field-ripple {
-   background-color: #0098c3 !important;
-}
-
-::ng-deep .mat-stroked-button {
-    color: #0098c3 !important;
- }
-
- ::ng-deep .mat-calendar-body-selected {
-    background-color: #0098c3 !important;
- }
 
  ::ng-deep .mat-slider-thumb-label{
-    background-color: #0098c3 !important;
+    background-color: #673ab7 !important;
+   
  }
 
+ ::ng-deep .mat-accent .mat-slider-thumb-label-text{
+     color: white;
+ }
+
+
  ::ng-deep .mat-slider-thumb{
-    background-color: #0098c3 !important;
+    background-color: #673ab7 !important;
  }
 
 
 ::ng-deep .mat-accent .mat-slider-track-fill {
-    background-color:  #4dd8ff !important;
+    background-color: #673ab7 !important;
 } 

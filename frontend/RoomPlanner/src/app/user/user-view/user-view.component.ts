@@ -15,13 +15,20 @@ export class UserViewComponent implements OnInit {
   dropdownOpen: boolean = false;
   dateChanged: boolean = false;
   
-  filtersReturned:Filters;
-
+  
+  
+  floors: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
   numberOfPeople:number;
   floorSelected:number;
+  filtersReturned:Filters;
 
+  defaultDate: Date = this._dateAdapter.today();;
+  selectedDate: Date;
+  returnDate: Date;
+  finalDate: Date;
+ 
 
-  floors: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
+  dateInThePastIn:boolean=false;
 
   constructor(
     private _dateAdapter: DateAdapter<Date>,
@@ -34,15 +41,22 @@ export class UserViewComponent implements OnInit {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
-  defaultDate: Date = this._dateAdapter.today();;
-  selectedDate: Date;
-
-  finalDate: Date;
-
-  returnDate: Date;
-
   onDateChanged(date) {
     this.dateChanged = true;
+
+    if(date.getDate()<this.defaultDate.getDate()){
+      console.log("data din trecut!");
+      this.dateInThePastIn=true;
+      
+    }else if(date.getDate()==this.defaultDate.getDate()){
+      this.dateChanged=false;
+
+      this.dateInThePastIn=false;
+    }else{
+      this.dateInThePastIn=false;
+    }
+
+    
   }
 
   onApplyFilters() {
