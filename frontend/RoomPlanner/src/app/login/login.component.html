@@ -13,12 +13,12 @@
                     <input matInput placeholder="Enter your password" type="password" formControlName="password" name="email">
                 </mat-form-field>
                 <span>
-                    <button mat-raised-button [disabled]="!loginForm.valid" class="login-button" (click)="onSubmit()">Login</button>
+                    <button mat-raised-button color="primary" [disabled]="!loginForm.valid" class="login-button" (click)="onSubmit()">Login</button>
                     <app-spinner [isLoading]="isLoading"></app-spinner>
-                    <div *ngIf="status " style="color: green" class="statusMessage">
+                    <div *ngIf="status"  class="statusMessage colorGreen">
                         {{statusMessage}}
                     </div>
-                    <div *ngIf="!status " style="color:red" class="statusMessage">
+                    <div *ngIf="!status " class="statusMessage colorRed">
                         {{statusMessage}}
                     </div>
                 </span>

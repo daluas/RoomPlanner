@@ -4,15 +4,17 @@ import { AuthService } from './services/auth/auth.service';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { Interceptor } from './interceptor';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { RoomDataService } from './services/room-data/room-data.service';
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
     AuthService,
-    HttpClient
+    HttpClient,
+    RoomDataService
   ],
   exports: []
 })

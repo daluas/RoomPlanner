@@ -45,6 +45,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return email.split('@')[0];
   }
 
+  checkEnterPressed(event: KeyboardEvent) {
+    if(event.key === "Enter"){
+      this.logOutRoom();
+    }
+  }
+
   isAdmin() {
     return this.currentUser.type === "admin";
   }
@@ -75,6 +81,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.passwordFormOpen = false;
     this.roomPassword = "";
     this.roomPasswordInvalid = false;
+  }
+
+  closeNavPopups(){
+    this.mobileMenuOpen = false;
+    this.closePasswordForm();
   }
 
   logOutRoom() {

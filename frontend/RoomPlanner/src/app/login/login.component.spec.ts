@@ -86,15 +86,4 @@ fdescribe('LoginComponent', () => {
     expect(submitButton.disabled).toBeFalsy();
   }))
 
-  // it(`status message should be 'Login successfully' when credentials are valid`, async(() => {
-  //   component.loginForm.controls['email'].setValue('user1@cegeka.ro');
-  //   component.loginForm.controls['password'].setValue('user.1');
-  //   fixture.detectChanges();
-  //   submitButton.click();
-  //   component.onSubmit();
-  //   fixture.detectChanges();
-  
-  //   expect(statusMessage.textContent).toBe('Login successfully');
-  // }))
-
 });

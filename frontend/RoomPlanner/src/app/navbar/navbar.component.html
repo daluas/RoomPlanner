@@ -16,7 +16,11 @@
 
             <div class="room-password-popup" *ngIf="passwordFormOpen">
                 <mat-form-field class="room-password-input">
-                    <input matInput placeholder="Room password" type="password" [(ngModel)]="roomPassword">
+                    <input matInput 
+                        placeholder="Room password" 
+                        type="password"
+                        (keydown)="checkEnterPressed($event)"
+                        [(ngModel)]="roomPassword">
                 </mat-form-field>
 
                 <div *ngIf="roomPasswordInvalid" class="error-message">Invalid credentials</div>
@@ -29,4 +33,6 @@
             </div>
         </div>
     </div>
+
+    <div class="close-mobile-menu" *ngIf="passwordFormOpen || mobileMenuOpen" (click)="closeNavPopups()"></div>
 </nav>

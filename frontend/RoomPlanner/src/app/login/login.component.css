@@ -21,7 +21,9 @@ mat-card{
     padding: 0px;
     
     border-radius: 0;
-    box-shadow: 0 3px 20px 0px rgba(0,0,0,0.1);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    box-shadow: 0 10px 20px 10px rgba(0,0,0,0.5) !important;
     background: rgb(255,255,255,0.95);
 }
 mat-card-content{
@@ -36,7 +38,6 @@ mat-form-field{
     margin-bottom: 35px;
     float:left;
     width: 100px;
-    background-color: #0098c3;
     color: #fff;
 }
 
@@ -48,6 +49,8 @@ mat-form-field{
     margin: 0px;
     padding: 15px 0;
     margin-top: -68px !important;    
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 h1{
     margin:0px;
@@ -59,18 +62,12 @@ h1{
     color: red;
 }
 
-::ng-deep .mat-focused .mat-form-field-label {
-    /*change color of label*/
-    color:#0098c3 !important;
+.colorRed{
+    color: red;
 }
-::ng-deep.mat-form-field-underline {
-    /*change color of underline*/
-    background-color:#0098c3 !important;
-} 
-  
-::ng-deep.mat-form-field-ripple {
-   /*change color of underline when focused*/
-   background-color: #0098c3 !important;
+
+.colorGreen{
+    color: green;
 }
     
 @media only screen and (max-width: 300px) {

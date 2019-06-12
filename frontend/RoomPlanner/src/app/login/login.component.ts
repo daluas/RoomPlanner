@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
 import { Validators, FormGroup, Form, NgForm, FormBuilder } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { LoginModel } from '../core/models/LoginUser';
+import { LoginModel } from '../core/models/LoginModel';
 import { AuthService } from '../core/services/auth/auth.service'
 import { LoggedUser } from '../core/models/LoggedUser';
 import { Router } from '@angular/router';
@@ -58,6 +58,7 @@ export class LoginComponent implements OnInit {
     this.isLoading = false;
     this.statusMessage = "Invalid credentials";
     this.loginForm.reset();
+    this.loginForm.markAllAsTouched();
   }
 
   authenticate() {

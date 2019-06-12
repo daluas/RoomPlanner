@@ -4,7 +4,7 @@ nav{
     top: 0;
     z-index: 1000;
     background: #ffffff;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e1e1e1;
     height: 64px;
 }
 
@@ -16,6 +16,7 @@ nav{
 }
 
 .right-buttons{
+    position: relative;
     float: right;
     margin-right: 20px;
 }
@@ -52,7 +53,7 @@ nav{
 .person-icon{
     display: inline-block;
     vertical-align: top;
-    line-height: 62px;
+    line-height: 63px;
     font-size: 12px;
 }
 
@@ -65,8 +66,9 @@ nav{
     background: rgba(255, 255, 255);
     padding: 5px 4px 5px 10px;
     padding-bottom: 0;
-    border: 1px solid #eee;
+    border: 1px solid #e1e1e1;
     white-space:nowrap;
+    z-index: 10;
 }
 
 .error-message{
@@ -100,25 +102,14 @@ nav{
     cursor: pointer;
 }
 
-.logout-button {
-    width: 100px;
-    background-color: #0098c3;
-    color: #fff;
+.close-mobile-menu{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9;
 }
-
-::ng-deep .mat-focused .mat-form-field-label {
-    /*change color of label*/
-    color:#0098c3 !important;
-}
-::ng-deep.mat-form-field-underline {
-    /*change color of underline*/
-    background-color:#0098c3 !important;
-} 
-   
-::ng-deep.mat-form-field-ripple {
-    /*change color of underline when focused*/
-    background-color: #0098c3 !important;
- }
 
 @media screen and (max-width: 1024px) {
     .menu-button{
@@ -138,6 +129,7 @@ nav{
         background: rgb(0,0,0, 0.9);
         padding: 0 20px;
         min-width: 150px;
+        z-index: 10;
     }
 
     .right-buttons-open{

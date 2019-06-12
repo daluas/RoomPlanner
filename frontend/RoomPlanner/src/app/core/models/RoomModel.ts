@@ -1,6 +1,5 @@
 export class RoomModel{
 
-
     constructor(){}
 
     create(roomModel: any): RoomModel {

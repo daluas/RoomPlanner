@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatCalendar, DateAdapter } from '@angular/material';
-import { UserdataService } from '../../shared/services/userdata.service';
+import { RoomDataService } from '../../core/services/room-data/room-data.service';
 import { RoomModel } from '../../core/models/RoomModel';
 
 
@@ -18,7 +18,7 @@ export class UserViewComponent implements OnInit {
 
   constructor(
     private _dateAdapter: DateAdapter<Date>,
-    private userdataService: UserdataService
+    private roomDataService: RoomDataService
   ) { }
 
   ngOnInit() { }
@@ -49,7 +49,7 @@ export class UserViewComponent implements OnInit {
 
 
     /*let rooms: RoomModel[] = */
-    this.returnDate = this.userdataService.getRoomsByDate(new Date(this.finalDate));
+    this.returnDate = this.roomDataService.getRoomsByDate(new Date(this.finalDate));
 
   }
 

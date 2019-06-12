@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { RoomModel } from '../../core/models/RoomModel';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserdataService {
+export class RoomDataService {
 
   constructor() { }
 
