@@ -33,9 +33,9 @@ public class UserRestService {
 
     @RequestMapping(method = RequestMethod.GET, value = "/rooms")
     ResponseEntity<List<RoomDto>> getAllRooms() {
-        restLogger.info("getAllRooms was called.");
+        restLogger.info("Method was called.");
         List<RoomDto> allRoomsList = userService.getAllRooms();
-        restLogger.info("getAllRooms returned: " + allRoomsList);
+        restLogger.info("The following object was returned:" + allRoomsList);
         return new ResponseEntity<>(allRoomsList, HttpStatus.FOUND);
     }
 
@@ -44,7 +44,7 @@ public class UserRestService {
         RoomDto roomDto = new RoomDto();
         if (validationService.checkValidRoomId(id)) {
             roomDto = userService.getRoomById(id);
-            restLogger.info("getRoomById was called.");
+            restLogger.info("Method was called.");
             restLogger.info("The following object was returned: " + roomDto);
             return new ResponseEntity<>(roomDto, HttpStatus.FOUND);
         }
