@@ -2,7 +2,6 @@ package edu.roomplanner.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Any;
 
 import javax.persistence.*;
 import java.util.Calendar;
