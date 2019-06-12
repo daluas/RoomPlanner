@@ -50,10 +50,18 @@
     margin: 0 auto;
 }
 
-.floor{
-    margin-left:20px;
-}
 
+
+.mat-calendar {
+    display: block;
+    border-bottom-width: 1px;
+    border-bottom-style: ridge;
+    border-bottom-color:#bbbcbf;
+
+    /* -webkit-box-shadow: 5px 5px 10px 0px rgba(168,166,168,0.72);
+    -moz-box-shadow: 5px 5px 10px 0px rgba(168,166,168,0.72);
+    box-shadow: 5px 5px 10px 0px rgba(168,166,168,0.72); */
+}
 
 @media screen and (max-width: 768px) {
     .container{
@@ -124,11 +132,6 @@
         margin: 0 auto;
     }
 
-    .floor{
-        width:60%;
-        display: block;
-        margin: 0 auto;
-    }
 }
 
 ::ng-deep .mat-focused .mat-form-field-label{
@@ -148,4 +151,8 @@
 
 ::ng-deep .mat-stroked-button {
     color: #0098c3 !important;
+ }
+
+ ::ng-deep .mat-calendar-body-selected {
+    background-color: #0098c3 !important;
  }
