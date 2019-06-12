@@ -3,13 +3,15 @@ package edu.roomplanner.service.impl;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.service.MapperService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class MapperServiceImpl {
+public class MapperServiceImpl implements MapperService {
+
 
     public RoomDto mapToDto(RoomEntity roomEntity) {
         RoomDto roomDto = new RoomDto();

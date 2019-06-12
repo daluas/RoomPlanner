@@ -22,7 +22,7 @@
         <!--Different rolling files for different levels-->
 
         <RollingFile name="debugLog" fileName="logs\debugLog.log"
-                     filePattern="${sys:APP_LOG_ROOT}/application-debug-%d{yyyy-MM-dd}-%i.log">
+                     filePattern="C:\Users\Public\$${date:yyyy-MM}\app-%d{MM-dd-yyyy}-%i.log.zip">
             <LevelRangeFilter minLevel="DEBUG" maxLevel="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
@@ -32,7 +32,7 @@
         </RollingFile>
 
         <RollingFile name="errorLog" fileName="logs\errorLog.log"
-                     filePattern="${sys:APP_LOG_ROOT}/application-error-%d{yyyy-MM-dd}-%i.log" >
+                     filePattern="C:\Users\Public\$${date:yyyy-MM}\app-%d{MM-dd-yyyy}-%i.log.zip" >
             <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
@@ -42,7 +42,7 @@
         </RollingFile>
 
         <RollingFile name="traceLog" fileName="logs\traceLog.log"
-                     filePattern="${sys:APP_LOG_ROOT}/application-error-%d{yyyy-MM-dd}-%i.log" >
+                     filePattern="C:\Users\Public\$${date:yyyy-MM}\app-%d{MM-dd-yyyy}-%i.log.zip" >
             <LevelRangeFilter minLevel="TRACE" maxLevel="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
@@ -59,7 +59,7 @@
 
         <Root level = "all">
             <AppenderRef ref="ConsoleAppender">
-                <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+                <LevelRangeFilter minLevel="info" maxLevel="info" onMatch="ACCEPT" onMismatch="DENY"/>
             </AppenderRef>
             <AppenderRef ref="infoLog"/>
             <AppenderRef ref="debugLog"/>
