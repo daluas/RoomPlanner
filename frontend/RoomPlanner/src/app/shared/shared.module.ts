@@ -2,15 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialDesignModule } from '../material-design/material-design.module';
 import { UserdataService } from './services/userdata.service';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [SpinnerComponent],
   imports: [
     CommonModule,
     MaterialDesignModule
     
   ],
   providers:[UserdataService],
-  exports:[]
+  exports:[
+    SpinnerComponent
+  ]
 })
 export class SharedModule { }
