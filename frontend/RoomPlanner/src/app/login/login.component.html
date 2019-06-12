@@ -14,8 +14,7 @@
                 </mat-form-field>
                 <span>
                     <button mat-raised-button [disabled]="!loginForm.valid" class="login-button" (click)="onSubmit()">Login</button>
-                    <mat-spinner *ngIf="isLoading" class="login-spinner spinner-color" [diameter]=diameter [value]=value [mode]=mode>
-                    </mat-spinner>
+                    <app-spinner [isLoading]="isLoading"></app-spinner>
                     <div *ngIf="status " style="color: green" class="statusMessage">
                         {{statusMessage}}
                     </div>

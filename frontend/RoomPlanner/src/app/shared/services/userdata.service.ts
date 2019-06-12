@@ -8,7 +8,9 @@ export class UserdataService {
 
   constructor() { }
 
-  getRoomsByDate(date: Date) : RoomModel[] {
-    return [new RoomModel().create({})];
+  getRoomsByDate(date: Date):Date /*: RoomModel[]*/ {
+    console.log(`The date is: ${date}`);
+    //return [new RoomModel().create({})];
+    return date;
   }
 }

@@ -3,10 +3,23 @@ import { TestBed } from '@angular/core/testing';
 import { UserdataService } from './userdata.service';
 
 describe('UserdataService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+
+  let service:UserdataService;
+
+  beforeEach(() => TestBed.configureTestingModule({
+    providers:[UserdataService]
+  }));
 
   it('should be created', () => {
-    const service: UserdataService = TestBed.get(UserdataService);
+   service= TestBed.get(UserdataService);
     expect(service).toBeTruthy();
+  });
+
+
+  it('should return the date given as parameter', () => {
+    service= TestBed.get(UserdataService);
+    var date=new Date();
+    var dateReturned=service.getRoomsByDate(date);
+    expect(dateReturned).toBe(date);
   });
 });

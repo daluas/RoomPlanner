@@ -59,6 +59,7 @@ export class Interceptor implements HttpInterceptor {
 
                 return of(new HttpResponse<LoggedUser>({
                     status: 200,
+                    statusText: "Ok",
                     body: loggedUser
                 }));
             }
@@ -70,6 +71,7 @@ export class Interceptor implements HttpInterceptor {
                 });
                 return of(new HttpResponse<LoggedUser>({
                     status: 200,
+                    statusText: "Ok",
                     body: loggedUser
                 }));
             }

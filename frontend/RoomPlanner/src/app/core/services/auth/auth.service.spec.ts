@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-
+import { HttpClientModule, HttpClient, HttpHandler } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { inject } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -7,7 +7,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Interceptor } from '../../interceptor';
 import { Router } from '@angular/router';
 
-fdescribe('AuthService', () => {
+describe('AuthService', () => {
 
   let routerMock = { navigate: (path: string) => { } }
   let authService: AuthService

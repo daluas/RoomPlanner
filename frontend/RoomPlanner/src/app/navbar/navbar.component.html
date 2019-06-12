@@ -18,7 +18,7 @@
 
                 <div *ngIf="roomPasswordInvalid" class="error-message">Invalid credentials</div>
 
-                <button mat-raised-button color="primary" [disabled]="roomPassword.length === 0"
+                <button mat-raised-button class="logout-button" [disabled]="roomPassword.length === 0"
                     (click)="logOutRoom()">Sign Out</button>
 
                 <i class="material-icons close-button" (click)="closePasswordForm()"> close </i>

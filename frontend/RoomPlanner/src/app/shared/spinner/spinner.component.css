@@ -1,0 +1,10 @@
+.login-spinner{
+    margin-top: 15px;
+    margin-bottom: 35px;
+    float:right;
+    width: 20%;
+    height: 20%;    
+}
+.spinner-color::ng-deep circle {
+    stroke: #0098c3 !important;
+}
