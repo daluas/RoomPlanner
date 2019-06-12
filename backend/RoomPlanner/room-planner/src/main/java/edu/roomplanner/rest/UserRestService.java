@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 public class UserRestService {
 
-    private static Logger restLogger = LogManager.getLogger(UserRestService.class);
+    private static Logger LOGGER = LogManager.getLogger(UserRestService.class);
 
     private final UserService userService;
     private final ValidationService validationService;
@@ -33,10 +33,10 @@ public class UserRestService {
 
     @RequestMapping(method = RequestMethod.GET, value = "/rooms")
     ResponseEntity<List<RoomDto>> getAllRooms() {
-        restLogger.info("Method was called.");
-        List<RoomDto> allRoomsList = userService.getAllRooms();
-        restLogger.info("The following object was returned:" + allRoomsList);
-        return new ResponseEntity<>(allRoomsList, HttpStatus.FOUND);
+        LOGGER.info("Method was called.");
+        List<RoomDto> allRooms = userService.getAllRooms();
+        LOGGER.info("The following object was returned:" + allRooms);
+        return new ResponseEntity<>(allRooms, HttpStatus.FOUND);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/rooms/{id}")
@@ -44,8 +44,8 @@ public class UserRestService {
         RoomDto roomDto = new RoomDto();
         if (validationService.checkValidRoomId(id)) {
             roomDto = userService.getRoomById(id);
-            restLogger.info("Method was called.");
-            restLogger.info("The following object was returned: " + roomDto);
+            LOGGER.info("Method was called.");
+            LOGGER.info("The following object was returned: " + roomDto);
             return new ResponseEntity<>(roomDto, HttpStatus.FOUND);
         }
         return new ResponseEntity<>(roomDto, HttpStatus.NOT_FOUND);

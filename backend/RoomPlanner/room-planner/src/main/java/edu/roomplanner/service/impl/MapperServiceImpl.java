@@ -13,7 +13,7 @@ import java.util.List;
 public class MapperServiceImpl implements MapperService {
 
 
-    public RoomDto mapToDto(RoomEntity roomEntity) {
+    public RoomDto mapEntityToDto(RoomEntity roomEntity) {
         RoomDto roomDto = new RoomDto();
         roomDto.setId(roomEntity.getId());
         roomDto.setFloor(roomEntity.getFloor());
@@ -22,10 +22,10 @@ public class MapperServiceImpl implements MapperService {
         return roomDto;
     }
 
-    public List<RoomDto> mapListToDto(List<UserEntity> roomEntityList) {
+    public List<RoomDto> mapEntityListToDtoList(List<UserEntity> roomEntityList) {
         List<RoomDto> roomDtoList = new ArrayList<>();
         for (UserEntity room : roomEntityList) {
-            roomDtoList.add(mapToDto((RoomEntity) room));
+            roomDtoList.add(mapEntityToDto((RoomEntity) room));
         }
         return roomDtoList;
     }
