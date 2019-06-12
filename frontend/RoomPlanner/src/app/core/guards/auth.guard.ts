@@ -10,7 +10,7 @@ export class AuthGuard implements CanActivate {
   constructor(public authService: AuthService, private router: Router) { }
 
   canActivate(
-    router: ActivatedRouteSnapshot,
+    next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
     let currentUser = this.authService.getCurrentUser();

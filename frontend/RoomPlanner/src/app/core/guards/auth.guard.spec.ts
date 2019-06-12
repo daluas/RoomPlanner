@@ -5,8 +5,8 @@ import { AuthService } from '../core.module';
 import { Router } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-fdescribe('AuthGuard', () => {
-  describe('canActivate', () => {
+describe('Given a AuthGuard', () => {
+  describe('with canActivate', () => {
     let injector: TestBed;
     let authService: AuthService
     let guard: AuthGuard;
