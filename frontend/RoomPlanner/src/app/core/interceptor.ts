@@ -14,6 +14,7 @@ import { LoginModel } from './models/LoginUser';
 import { tap, map } from 'rxjs/operators';
 import { LoginToken } from './models/LoginToken';
 import { LoggedUser } from './models/LoggedUser';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable()
 export class Interceptor implements HttpInterceptor {
@@ -33,7 +34,7 @@ export class Interceptor implements HttpInterceptor {
         localStorage.setItem('user-data', JSON.stringify(loggedUserMock));
         return loggedUserMock;
     }
-    constructor() { }
+    constructor(private _snackBar: MatSnackBar) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         console.log("interceptor request");
@@ -85,10 +86,10 @@ export class Interceptor implements HttpInterceptor {
             }
 
 
-            return throwError(new HttpResponse({
-                status: 404,
-                statusText: "Not Found"
-            }));
+            // return throwError(new HttpResponse({
+            //     status: 404,
+            //     statusText: "Not Found"
+            // }));
         }
 
         // if (request.url === '/logout') {
@@ -115,6 +116,9 @@ export class Interceptor implements HttpInterceptor {
                 error: (error: HttpErrorResponse) => {
                     console.log(error);
                     console.log(error.message);
+                    //launch toastr"
+                    this._snackBar.open(`${error.message}`, 'Close');
+
                 },
                 complete: () => console.log('on complete')
             })
@@ -161,7 +165,7 @@ export class Interceptor implements HttpInterceptor {
         let now = new Date(Date.now());
 
         if (expirationDate < now) {
-            alert('Token is expired');
+            // alert('Token is expired');
 
             storedToken.expirationDate = new Date(new Date(Date.now()).getTime() + 60 * 60 * 24 * 1000)
             //call to backend to retrieve updated token  ||  go to login again

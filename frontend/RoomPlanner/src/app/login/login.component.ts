@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.authenticateUser(user)
       .then((user: LoggedUser) => {
-        this.authService.setCurrentUser(user)
+        this.authService.OnCurrentUserChanged(user)
         switch (user.type) {
           case "user":
             this.router.navigate(["/user"])

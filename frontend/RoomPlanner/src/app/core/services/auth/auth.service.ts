@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
 export class AuthService {
 	// private backendUrl: string = 'localhost:8081';
 	private backendUrl: string = '';
-	private userData;
 	private currentUser: LoggedUser;
 	private currentUserSubject: Subscriber<LoggedUser> = new Subscriber<LoggedUser>();
 
@@ -20,11 +19,13 @@ export class AuthService {
 		public httpClient: HttpClient,
 		public router: Router
 	) {
-		this.checkIfLoggedIn()
+		this.setInitialUserFromLocalStorage()
 	}
 
-	checkIfLoggedIn(): void {
-		if (localStorage.getItem('user-data') == null) return;
+	setInitialUserFromLocalStorage(): void {
+		if (localStorage.getItem('user-data') == null) {
+			return;
+		}
 
 		if (localStorage.getItem('access-token') == null) {
 			return;
@@ -34,12 +35,12 @@ export class AuthService {
 		if (userParsed) {
 			let user: LoggedUser = new LoggedUser().create(userParsed);
 			console.log(user);
-			this.setCurrentUser(user);
+			this.OnCurrentUserChanged(user);
 		}
 
 	}
 
-	setCurrentUser(loggedUserModel: LoggedUser): void {
+	OnCurrentUserChanged(loggedUserModel: LoggedUser): void {
 		this.currentUser = loggedUserModel;
 		console.log(this.currentUser);
 		this.currentUserSubject.next(this.currentUser);
