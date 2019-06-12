@@ -10,4 +10,6 @@ public interface UserService {
 
     RoomDto getRoomById(Long id);
 
+    List<RoomDto> getFiltredRooms();
+
 }

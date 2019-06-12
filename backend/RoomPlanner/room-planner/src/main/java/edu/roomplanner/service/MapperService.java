@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface MapperService {
 
-    RoomDto mapToDto(RoomEntity roomEntity);
-    List<RoomDto> mapListToDto(List<UserEntity> roomEntityList);
+    RoomDto mapEntityToDto(RoomEntity roomEntity);
+    List<RoomDto> mapEntityListToDtoList(List<UserEntity> roomEntityList);
 }
