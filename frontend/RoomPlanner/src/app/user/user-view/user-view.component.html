@@ -7,7 +7,7 @@
     <div class="filters-elements" [ngClass]="{'filters-open': dropdownOpen}">
       <div class="calendar">
         <div class="calendar-wrapper">
-          <mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="onDateChanged(selected)"></mat-calendar>
+          <mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="onDateChanged($event)"></mat-calendar>
         </div>
       </div>
       <div class="filters-body">
@@ -24,7 +24,7 @@
 
         <div class="people">
           <h4>Number of people attending</h4>
-          <mat-slider min="1" max="10" step="1" value="0"></mat-slider>
+          <mat-slider thumbLabel  min="1" max="10" step="1" value="0"></mat-slider>
         </div>
 
       </div>
