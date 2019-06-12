@@ -57,7 +57,7 @@
             <AppenderRef ref="ConsoleAppender"/>
         </Logger>
 
-        <Root level = "all">
+        <Root level = "all" includeLocation = "true">
             <AppenderRef ref="ConsoleAppender">
                 <LevelRangeFilter minLevel="info" maxLevel="info" onMatch="ACCEPT" onMismatch="DENY"/>
             </AppenderRef>
