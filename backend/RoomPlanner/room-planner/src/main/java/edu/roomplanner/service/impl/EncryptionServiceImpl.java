@@ -11,9 +11,6 @@ public class EncryptionServiceImpl implements EncryptionService {
     @Value("${security.encryption.password}")
     private String password;
 
-    public EncryptionServiceImpl() {
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
