@@ -3,7 +3,12 @@ package edu.roomplanner.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
 import edu.roomplanner.dto.RoomDto;
+import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.repository.UserRepository;
+import edu.roomplanner.types.UserType;
 import edu.roomplanner.utils.BuilderClass;
+import org.flywaydb.core.Flyway;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,21 +30,38 @@ import java.util.List;
         classes = RoomPlannerApplication.class
 )
 @AutoConfigureMockMvc
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:scripts/inith2db.sql")
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class UsersRestControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private Flyway flyway;
+
+    @Before
+    public void init() {
+        flyway.clean();
+        flyway.migrate();
+    }
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
     public void ShouldReturnResponseEntityWithValidRoomDtoListAndStatusFoundWhenGetAllRoomsIsCalled() throws Exception {
 
-        RoomDto testRoomDto1 = BuilderClass.buildRoomDto(2L, "Wonderland", 5, 14);
-        RoomDto testRoomDto2 = BuilderClass.buildRoomDto(3L, "Westeros", 8, 21);
+        RoomDto testRoomDto1 = BuilderClass.buildRoomDto(1L, "Wonderland", 5, 14);
+        RoomDto testRoomDto2 = BuilderClass.buildRoomDto(2L, "Westeros", 8, 21);
 
         List<RoomDto> roomDtoList = Arrays.asList(testRoomDto1, testRoomDto2);
         String jsonRoomDtoList = new ObjectMapper().writeValueAsString(roomDtoList);
+
+        UserEntity testUserEntity1 = BuilderClass.buildRoomEntity(1L,"wonderland@yahoo.com","4wonD2C%",UserType.ROOM,"Wonderland",5,14);
+        UserEntity testUserEntity2 = BuilderClass.buildRoomEntity(2L,"westeros@yahoo.com","4westAD8%",UserType.ROOM,"Westeros",8,21);
+
+        userRepository.save(testUserEntity1);
+        userRepository.save(testUserEntity2);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/rooms"))
                 .andExpect(MockMvcResultMatchers.status().isFound())
@@ -49,10 +71,13 @@ public class UsersRestControllerTests {
     @Test
     public void ShouldReturnResponseEntityWithValidRoomDtoAndStatusFoundWhenGetRoomByIdIsCalled() throws Exception {
 
-        RoomDto testRoomDto = BuilderClass.buildRoomDto(2L, "Wonderland", 5, 14);
+        RoomDto testRoomDto = BuilderClass.buildRoomDto(1L, "Wonderland", 5, 14);
         String jsonRoomDto = new ObjectMapper().writeValueAsString(testRoomDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 2))
+        UserEntity testUserEntity1 = BuilderClass.buildRoomEntity(1L,"wonderland@yahoo.com","4wonD2C%",UserType.ROOM,"Wonderland",5,14);
+        userRepository.save(testUserEntity1);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 1))
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDto));
     }

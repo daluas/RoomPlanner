@@ -1,6 +1,7 @@
 alter table users drop column birth_date;
 
-alter table users add column email varchar(100) not null unique;
+alter table users add column email varchar(100) not null;
+alter table users add constraint users_email_nn unique(email);
 alter table users add column password varchar(50) not null;
 alter table users add column type varchar(50) not null;
 alter table users add column first_name varchar(50);
@@ -17,18 +18,22 @@ create sequence seq_right_id start with 1 increment BY 1;
 create table roles
 (
 	id serial not null primary key,
-	name varchar(50) not null unique
+	name varchar(50) not null
 
 );
+
+alter table roles add constraint roles_name_nn unique(name);
 
 alter table roles alter column id set default nextval('seq_role_id');
 
 create table rights
 (
 	id serial not null primary key,
-	name varchar(50) not null unique
+	name varchar(50) not null
 
 );
+
+alter table rights add constraint rights_name_nn unique(name);
 
 alter table rights alter column id set default nextval('seq_right_id');
 
