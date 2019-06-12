@@ -32,5 +32,8 @@ public class ReservationEntity {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    @Column(name = "room_id", nullable = false)
+    private Long roomId;
+
 
 }
