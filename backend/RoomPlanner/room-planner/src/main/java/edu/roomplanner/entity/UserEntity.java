@@ -43,8 +43,7 @@ public abstract class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<RoleEntity> roles;
 
-    @OneToMany
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "person")
     private Set<ReservationEntity> reservations;
 
 }

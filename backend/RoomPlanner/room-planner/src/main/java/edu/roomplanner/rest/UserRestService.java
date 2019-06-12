@@ -1,6 +1,5 @@
 package edu.roomplanner.rest;
 
-
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

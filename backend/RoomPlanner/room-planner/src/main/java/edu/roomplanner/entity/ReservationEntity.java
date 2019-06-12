@@ -2,6 +2,7 @@ package edu.roomplanner.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Any;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -29,11 +30,12 @@ public class ReservationEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity person;
 
-    @Column(name = "room_id", nullable = false)
-    private Long roomId;
-
+    @ManyToOne
+    @JoinColumn(name = "room_id", nullable = false)
+    private UserEntity room;
 
 }
