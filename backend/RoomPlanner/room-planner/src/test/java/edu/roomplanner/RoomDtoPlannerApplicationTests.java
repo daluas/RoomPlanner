@@ -14,5 +14,4 @@ public class RoomDtoPlannerApplicationTests {
     @Test
     public void contextLoads() {
     }
-
 }
