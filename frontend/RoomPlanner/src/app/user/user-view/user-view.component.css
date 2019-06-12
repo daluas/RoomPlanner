@@ -35,7 +35,8 @@
 .button-filters{
     display: block;
     font-size: 20px;
-    margin-left:20px;
+    width: 100%;
+    margin-top: 15%;
     /* margin: 0 auto; */
 }
 
@@ -55,6 +56,11 @@
     margin-left:20px;
 }
 
+.hours{
+    margin-left:20px;
+    margin-top: 20px;
+}
+
 .people{
     margin-left:20px;
 }
@@ -71,8 +77,12 @@
 }
 
 mat-slider {
-    width: 100%;
-    margin-left: -10px;
+    width: 90%;
+    margin-left: 0px;
+}
+
+.text-small{
+    font-size: 15px;
 }
 
 @media screen and (max-width: 768px) {
@@ -149,6 +159,13 @@ mat-slider {
         width:60%;
         display: block;
         margin: 0 auto;
+    }
+
+    .hours{
+        width:60%;
+        display: block;
+        margin: 0 auto;
+        margin-top:10%;
     }
 
     .people{
