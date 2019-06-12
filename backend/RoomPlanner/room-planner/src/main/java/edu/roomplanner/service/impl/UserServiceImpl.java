@@ -4,6 +4,7 @@ import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.UserRepository;
+import edu.roomplanner.service.MapperService;
 import edu.roomplanner.service.UserService;
 import edu.roomplanner.types.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,22 +16,24 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+    private MapperService mapperService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, MapperService mapperService) {
         this.userRepository = userRepository;
+        this.mapperService = mapperService;
     }
 
     @Override
     public List<RoomDto> getAllRooms() {
         List<UserEntity> roomEntities = userRepository.findByType(UserType.ROOM);
-        return RoomDto.mapListToDto(roomEntities);
+        return mapperService.mapListToDto(roomEntities);
     }
 
     @Override
     public RoomDto getRoomById(Long id) {
         UserEntity userEntity = userRepository.findById(id).get();
-        return RoomDto.mapToDto((RoomEntity) userEntity);
+        return mapperService.mapToDto((RoomEntity) userEntity);
     }
 
 }

@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = RoomPlannerApplication.class
 )
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:scripts/init_h2db.sql")
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:scripts/inith2db.sql")
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class ValidationServiceTests {
 
@@ -24,7 +24,7 @@ public class ValidationServiceTests {
     private ValidationService validationService;
 
     @Test
-    public void Should_Return_True_When_CheckValidRoomId_Is_Called_With_Injected_Room_Id() {
+    public void ShouldReturnTrueWhenCheckValidRoomIdIsCalledWithInjectedRoomId() {
 
         boolean response = validationService.checkValidRoomId(2L);
 
@@ -32,7 +32,7 @@ public class ValidationServiceTests {
     }
 
     @Test
-    public void Should_Return_False_When_CheckValidRoomId_Is_Called_With_Injected_Person_Id() {
+    public void ShouldReturnFalseWhenCheckValidRoomIdIsCalledWithInjectedPersonId() {
 
         boolean response = validationService.checkValidRoomId(1L);
 
@@ -40,7 +40,7 @@ public class ValidationServiceTests {
     }
 
     @Test
-    public void Should_Return_False_When_CheckValidRoomId_Is_Called_With_NonExistent_Id() {
+    public void ShouldReturnFalseWhenCheckValidRoomIdIsCalledWithNonExistentId() {
 
         boolean response = validationService.checkValidRoomId(7L);
 
@@ -48,7 +48,7 @@ public class ValidationServiceTests {
     }
 
     @Test
-    public void Should_Return_True_When_CheckExistingRoomId_Is_Called_With_Valid_Id() {
+    public void ShouldReturnTrueWhenCheckExistingRoomIdIsCalledWithValidId() {
 
         boolean response = validationService.checkExistingRoomId(2L);
 
@@ -56,7 +56,7 @@ public class ValidationServiceTests {
     }
 
     @Test
-    public void Should_Return_False_When_CheckExistingRoomId_Is_Called_With_NonExisting_Id() {
+    public void ShouldReturnFalseWhenCheckExistingRoomIdIsCalledWithNonExistingId() {
 
         boolean response = validationService.checkExistingRoomId(7L);
 

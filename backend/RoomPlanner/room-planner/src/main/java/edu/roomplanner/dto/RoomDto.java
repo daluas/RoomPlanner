@@ -19,24 +19,4 @@ public class RoomDto {
     private String name;
     private Integer floor;
     private Integer maxPersons;
-
-    public RoomDto() {
-    }
-
-    public static RoomDto mapToDto(RoomEntity roomEntity) {
-        RoomDto roomDto = new RoomDto();
-        roomDto.setId(roomEntity.getId());
-        roomDto.setFloor(roomEntity.getFloor());
-        roomDto.setName(roomEntity.getName());
-        roomDto.setMaxPersons(roomEntity.getMaxPersons());
-        return roomDto;
-    }
-
-    public static List<RoomDto> mapListToDto(List<UserEntity> roomEntityList) {
-        List<RoomDto> roomDtoList = new ArrayList<>();
-        for (UserEntity room : roomEntityList) {
-            roomDtoList.add(mapToDto((RoomEntity) room));
-        }
-        return roomDtoList;
-    }
 }

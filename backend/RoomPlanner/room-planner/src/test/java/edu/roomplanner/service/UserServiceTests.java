@@ -21,7 +21,7 @@ import java.util.List;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = RoomPlannerApplication.class
 )
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:scripts/init_h2db.sql")
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:scripts/inith2db.sql")
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class UserServiceTests {
 
@@ -29,7 +29,7 @@ public class UserServiceTests {
     private UserService userService;
 
     @Test
-    public void Should_Return_RoomDto_List_When_GetAllRooms_Is_Called() {
+    public void ShouldReturnRoomDtoListWhenGetAllRoomsIsCalled() {
 
         RoomDto testRoomDto1 = BuilderClass.buildRoomDto(2L, "Wonderland", 5, 14);
         RoomDto testRoomDto2 = BuilderClass.buildRoomDto(3L, "Westeros", 8, 21);
@@ -41,7 +41,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void Should_Return_Expected_RoomDto_When_GetRoomById_Is_Called() {
+    public void ShouldReturnExpectedRoomDtoWhenGetRoomByIdIsCalled() {
 
         RoomDto expectedRoomDto = BuilderClass.buildRoomDto(2L, "Wonderland", 5, 14);
         RoomDto actualRoomDto = userService.getRoomById(2L);
