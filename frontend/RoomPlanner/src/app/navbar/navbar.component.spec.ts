@@ -10,7 +10,7 @@ import { AuthGuard } from '../core/guards/auth.guard';
 import { Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-fdescribe('Given a NavbarComponent', () => {
+describe('Given a NavbarComponent', () => {
   let component: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
   let routerMock = {navigate: (path: string) => {}}

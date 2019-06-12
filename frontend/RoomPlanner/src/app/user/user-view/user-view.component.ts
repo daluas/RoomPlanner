@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatCalendar,DateAdapter } from '@angular/material';
+import { MatCalendar, DateAdapter } from '@angular/material';
 import { UserdataService } from '../../shared/services/userdata.service';
 import { RoomModel } from '../../core/models/RoomModel';
 
@@ -12,51 +12,50 @@ import { RoomModel } from '../../core/models/RoomModel';
 export class UserViewComponent implements OnInit {
 
   dropdownOpen: boolean = false;
-  dateChanged:boolean=false;
+  dateChanged: boolean = false;
 
-  floors:number[]=[1,2,3,4,5,6,7,8];
+  floors: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
 
   constructor(
     private _dateAdapter: DateAdapter<Date>,
     private userdataService: UserdataService
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  toggleDropdown(){
+  toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
   defaultDate: Date = this._dateAdapter.today();;
   selectedDate: Date;
 
-  finalDate:Date;
+  finalDate: Date;
 
-  returnDate:Date;
+  returnDate: Date;
 
   onDateChanged(date) {
-    this.dateChanged=true;
+    this.dateChanged = true;
   }
 
-  onApplyFilters(){
+  onApplyFilters() {
 
-    if(this.dateChanged){
-      this.finalDate=this.selectedDate; 
+    if (this.dateChanged) {
+      this.finalDate = this.selectedDate;
     }
-    else{
-      this.finalDate=this.defaultDate;
+    else {
+      this.finalDate = this.defaultDate;
     }
 
 
     /*let rooms: RoomModel[] = */
-    this.returnDate=this.userdataService.getRoomsByDate(new Date(this.finalDate));
-     
+    this.returnDate = this.userdataService.getRoomsByDate(new Date(this.finalDate));
+
   }
 
-  getReturnDate()
-  {
+  getReturnDate() {
     return this.returnDate;
   }
 
- 
+
 }
