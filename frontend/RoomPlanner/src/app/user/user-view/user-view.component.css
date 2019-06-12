@@ -35,7 +35,8 @@
 .button-filters{
     display: block;
     font-size: 20px;
-    margin: 0 auto;
+    margin-left:20px;
+    /* margin: 0 auto; */
 }
 
 
@@ -50,7 +51,13 @@
     margin: 0 auto;
 }
 
+.floor{
+    margin-left:20px;
+}
 
+.people{
+    margin-left:20px;
+}
 
 .mat-calendar {
     display: block;
@@ -61,6 +68,10 @@
     /* -webkit-box-shadow: 5px 5px 10px 0px rgba(168,166,168,0.72);
     -moz-box-shadow: 5px 5px 10px 0px rgba(168,166,168,0.72);
     box-shadow: 5px 5px 10px 0px rgba(168,166,168,0.72); */
+}
+
+mat-slider {
+    width: 100%;
 }
 
 @media screen and (max-width: 768px) {
@@ -93,6 +104,7 @@
     }
 
     .button-filters{
+        display: block;
         font-size: 15px;
     }
 
@@ -132,6 +144,23 @@
         margin: 0 auto;
     }
 
+    .floor{
+        width:60%;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .people{
+        width:60%;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .button-filters{
+        display: block;
+        font-size: 20px;
+        margin-left: 20%;
+    }
 }
 
 ::ng-deep .mat-focused .mat-form-field-label{
@@ -141,11 +170,11 @@
 ::ng-deep .mat-select-arrow-wrapper .mat-select-arrow{
     color:#0098c3 !important;
 }
-::ng-deep.mat-form-field-underline {
+::ng-deep .mat-form-field-underline {
     background-color:#0098c3 !important;
 } 
   
-::ng-deep.mat-form-field-ripple {
+::ng-deep .mat-form-field-ripple {
    background-color: #0098c3 !important;
 }
 
@@ -154,5 +183,9 @@
  }
 
  ::ng-deep .mat-calendar-body-selected {
+    background-color: #0098c3 !important;
+ }
+
+ ::ng-deep{
     background-color: #0098c3 !important;
  }

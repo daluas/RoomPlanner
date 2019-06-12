@@ -11,7 +11,22 @@
         </div>
       </div>
       <div class="filters-body">
-        
+        <div class="floor">
+          <h4>Floor</h4>
+          <mat-form-field>
+            <mat-label>Select an option:</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let floor of floors" [value]="floor">{{floor}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+
+        <div class="people">
+          <h4>Number of people attending</h4>
+          <mat-slider min="1" max="10" step="1" value="0"></mat-slider>
+        </div>
+
       </div>
       <button mat-stroked-button class="button-filters" color="primary" (click)="onApplyFilters()">Apply filters</button>
     </div>
