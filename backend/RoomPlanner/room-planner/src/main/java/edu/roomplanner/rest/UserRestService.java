@@ -2,7 +2,6 @@ package edu.roomplanner.rest;
 
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.service.UserService;
-import edu.roomplanner.service.ValidationService;
 import lombok.EqualsAndHashCode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,12 +22,10 @@ public class UserRestService {
     private static Logger LOGGER = LogManager.getLogger(UserRestService.class);
 
     private final UserService userService;
-    private final ValidationService validationService;
 
     @Autowired
-    public UserRestService(UserService userService, ValidationService validationService) {
+    public UserRestService(UserService userService) {
         this.userService = userService;
-        this.validationService = validationService;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/rooms")
@@ -41,13 +38,12 @@ public class UserRestService {
 
     @RequestMapping(method = RequestMethod.GET, value = "/rooms/{id}")
     ResponseEntity<RoomDto> getRoomById(@PathVariable Long id) {
-        RoomDto roomDto = new RoomDto();
-        if (validationService.checkValidRoomId(id)) {
-            roomDto = userService.getRoomById(id);
-            LOGGER.info("Method was called.");
-            LOGGER.info("The following object was returned: " + roomDto);
-            return new ResponseEntity<>(roomDto, HttpStatus.FOUND);
+        LOGGER.info("Method was called.");
+        RoomDto roomDto = userService.getRoomById(id);
+        LOGGER.info("The following object was returned: " + roomDto);
+        if (roomDto == null) {
+            return new ResponseEntity<>(new RoomDto(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(roomDto, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(roomDto, HttpStatus.FOUND);
     }
 }

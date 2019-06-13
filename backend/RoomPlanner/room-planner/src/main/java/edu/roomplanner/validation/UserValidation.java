@@ -1,6 +1,6 @@
-package edu.roomplanner.service;
+package edu.roomplanner.validation;
 
-public interface ValidationService {
+public interface UserValidation {
 
     boolean checkValidRoomId(Long id);
 

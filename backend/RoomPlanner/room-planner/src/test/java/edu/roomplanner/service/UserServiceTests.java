@@ -5,7 +5,8 @@ import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
-import edu.roomplanner.utils.BuilderClass;
+import edu.roomplanner.builders.RoomDtoBuilder;
+import edu.roomplanner.builders.RoomEntityBuilder;
 import org.flywaydb.core.Flyway;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
@@ -45,17 +45,45 @@ public class UserServiceTests {
     private UserRepository userRepository;
 
     @Test
-    public void ShouldReturnRoomDtoListWhenGetAllRoomsIsCalled() {
+    public void shouldReturnRoomDtoListWhenGetAllRoomsIsCalled() {
 
-        RoomDto testRoomDto1 = BuilderClass.buildRoomDto(1L, "Wonderland", 5, 14);
-        RoomDto testRoomDto2 = BuilderClass.buildRoomDto(2L, "Westeros", 8, 21);
-        List<RoomDto> expectedRoomDtoList = Arrays.asList(testRoomDto1, testRoomDto2);
+        RoomDto roomDtoOne = new RoomDtoBuilder()
+                .withId(1L)
+                .withName("Wonderland")
+                .withFloor(5)
+                .withMaxPersons(14)
+                .build();
+        RoomDto roomDtoTwo = new RoomDtoBuilder()
+                .withId(2L)
+                .withName("Westeros")
+                .withFloor(8)
+                .withMaxPersons(21)
+                .build();
 
-        UserEntity testUserEntity1 = BuilderClass.buildRoomEntity(1L,"wonderland@yahoo.com","4wonD2C%",UserType.ROOM,"Wonderland",5,14);
-        UserEntity testUserEntity2 = BuilderClass.buildRoomEntity(2L,"westeros@yahoo.com","4westAD8%",UserType.ROOM,"Westeros",8,21);
+        List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
 
-        userRepository.save(testUserEntity1);
-        userRepository.save(testUserEntity2);
+        UserEntity userEntityOne = new RoomEntityBuilder()
+                .withId(1L)
+                .withEmail("wonderland@yahoo.com")
+                .withPassword("4wonD2C%")
+                .withType(UserType.ROOM)
+                .withName("Wonderland")
+                .withFloor(5)
+                .withMaxPersons(14)
+                .build();
+
+        UserEntity userEntityTwo = new RoomEntityBuilder()
+                .withId(2L)
+                .withEmail("westeros@yahoo.com")
+                .withPassword("4westAD8%")
+                .withType(UserType.ROOM)
+                .withName("Westeros")
+                .withFloor(8)
+                .withMaxPersons(21)
+                .build();
+
+        userRepository.save(userEntityOne);
+        userRepository.save(userEntityTwo);
 
         List<RoomDto> actualRoomDtoList = userService.getAllRooms();
 
@@ -63,12 +91,25 @@ public class UserServiceTests {
     }
 
     @Test
-    public void ShouldReturnExpectedRoomDtoWhenGetRoomByIdIsCalled() {
+    public void shouldReturnExpectedRoomDtoWhenGetRoomByIdIsCalled() {
 
-        UserEntity testUserEntity1 = BuilderClass.buildRoomEntity(1L,"wonderland@yahoo.com","4wonD2C%",UserType.ROOM,"Wonderland",5,14);
-        userRepository.save(testUserEntity1);
+        UserEntity userEntity = new RoomEntityBuilder()
+                .withId(1L)
+                .withEmail("wonderland@yahoo.com")
+                .withPassword("4wonD2C%")
+                .withType(UserType.ROOM)
+                .withName("Wonderland")
+                .withFloor(5)
+                .withMaxPersons(14)
+                .build();
+        userRepository.save(userEntity);
 
-        RoomDto expectedRoomDto = BuilderClass.buildRoomDto(1L, "Wonderland", 5, 14);
+        RoomDto expectedRoomDto = new RoomDtoBuilder()
+                .withId(1L)
+                .withName("Wonderland")
+                .withFloor(5)
+                .withMaxPersons(14)
+                .build();
         RoomDto actualRoomDto = userService.getRoomById(1L);
 
         Assert.assertEquals("GetRoomById service method method failed to return a valid object.", expectedRoomDto, actualRoomDto);

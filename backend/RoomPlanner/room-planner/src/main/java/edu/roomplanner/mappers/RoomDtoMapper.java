@@ -1,19 +1,15 @@
-package edu.roomplanner.service.impl;
+package edu.roomplanner.mappers;
 
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
-import edu.roomplanner.service.MapperService;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class MapperServiceImpl implements MapperService {
+public class RoomDtoMapper {
 
-
-    public RoomDto mapEntityToDto(RoomEntity roomEntity) {
+    public static RoomDto mapEntityToDto(RoomEntity roomEntity) {
         RoomDto roomDto = new RoomDto();
         roomDto.setId(roomEntity.getId());
         roomDto.setFloor(roomEntity.getFloor());
@@ -22,7 +18,7 @@ public class MapperServiceImpl implements MapperService {
         return roomDto;
     }
 
-    public List<RoomDto> mapEntityListToDtoList(List<UserEntity> roomEntityList) {
+    public static List<RoomDto> mapEntityListToDtoList(List<UserEntity> roomEntityList) {
         List<RoomDto> roomDtoList = new ArrayList<>();
         for (UserEntity room : roomEntityList) {
             roomDtoList.add(mapEntityToDto((RoomEntity) room));
