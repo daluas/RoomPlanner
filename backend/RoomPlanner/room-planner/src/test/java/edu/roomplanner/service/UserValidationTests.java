@@ -6,7 +6,7 @@ import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.builders.PersonEntityBuilder;
 import edu.roomplanner.builders.RoomEntityBuilder;
-import edu.roomplanner.validation.UserValidation;
+import edu.roomplanner.validation.validator.UserValidation;
 import org.flywaydb.core.Flyway;
 import org.junit.Assert;
 import org.junit.Before;
@@ -85,7 +85,7 @@ public class UserValidationTests {
     }
 
     @Test
-    public void shouldReturnTrueWhenCheckExistingRoomIdIsCalledWithValidId() {
+    public void shouldReturnTrueWhenCheckExistingEntityIdIsCalledWithValidId() {
 
         UserEntity userEntity = new RoomEntityBuilder()
                 .withId(1L)
@@ -97,15 +97,15 @@ public class UserValidationTests {
                 .withMaxPersons(14)
                 .build();
         userRepository.save(userEntity);
-        boolean response = userValidation.checkExistingRoomId(1L);
+        boolean response = userValidation.checkExistingEntityId(1L);
 
         Assert.assertTrue("CheckExistingRoomId failed to check valid for Room Id.", response);
     }
 
     @Test
-    public void shouldReturnFalseWhenCheckExistingRoomIdIsCalledWithNonExistingId() {
+    public void shouldReturnFalseWhenCheckExistingEntityIdIsCalledWithNonExistingId() {
 
-        boolean response = userValidation.checkExistingRoomId(7L);
+        boolean response = userValidation.checkExistingEntityId(7L);
 
         Assert.assertFalse("CheckExistingRoomId failed to check invalid for NonExistent Id.", response);
     }

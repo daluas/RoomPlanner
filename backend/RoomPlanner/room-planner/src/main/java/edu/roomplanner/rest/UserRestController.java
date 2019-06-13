@@ -17,14 +17,14 @@ import java.util.List;
 
 @EqualsAndHashCode
 @RestController
-public class UserRestService {
+public class UserRestController {
 
-    private static Logger LOGGER = LogManager.getLogger(UserRestService.class);
+    private static Logger LOGGER = LogManager.getLogger(UserRestController.class);
 
     private final UserService userService;
 
     @Autowired
-    public UserRestService(UserService userService) {
+    public UserRestController(UserService userService) {
         this.userService = userService;
     }
 
