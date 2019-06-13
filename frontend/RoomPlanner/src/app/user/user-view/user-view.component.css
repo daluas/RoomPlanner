@@ -35,28 +35,34 @@
 .button-filters{
     display: block;
     font-size: 20px;
-    margin-left:20px;
-    /* margin: 0 auto; */
+    margin:25px auto;
+    width: calc(100% - 20px);
+    max-width: 500px;
 }
 
 
 .calendar-wrapper{
-    width:calc(100%-100px);
+   
     display: block;
     margin: 0 auto;
 }
 .filters-body{
-    width:calc(100%-100px);
+   
     display: block;
     margin: 0 auto;
 }
 
 .floor{
-    margin-left:20px;
+    margin-left:15px;
+}
+
+.hours{
+    margin-left:15px;
+    margin-top: 20px;
 }
 
 .people{
-    margin-left:20px;
+    margin-left:15px;
 }
 
 .mat-calendar {
@@ -71,8 +77,31 @@
 }
 
 mat-slider {
-    width: 100%;
-    margin-left: -10px;
+    width: 90%;
+    margin-left: 0px;
+}
+
+.text-small{
+    font-size: 15px;
+}
+
+.startHourText{
+    font-weight: bold;
+     margin-left: 40px;
+}
+.startHour{
+    width:40%;
+     margin-right: 20px;
+}
+
+.endHourText{
+    font-weight: bold;
+     margin-left: 130px;
+}
+
+.endHour{
+    width:40%;
+    margin-left: 20px;
 }
 
 @media screen and (max-width: 768px) {
@@ -131,6 +160,14 @@ mat-slider {
         margin-right: -10px;
         width: 100%;
     }
+
+    .button-filters{
+        display: block;
+        font-size: 20px;
+        margin:25px auto;
+        width: calc(100% - 20px);
+        max-width: 500px;
+    }
 }
 
 /* .example-custom-date-class {
@@ -151,6 +188,13 @@ mat-slider {
         margin: 0 auto;
     }
 
+    .hours{
+        width:60%;
+        display: block;
+        margin: 0 auto;
+        margin-top:10%;
+    }
+
     .people{
         width:60%;
         display: block;
@@ -160,7 +204,28 @@ mat-slider {
     .button-filters{
         display: block;
         font-size: 20px;
-        margin-left: 20%;
+        margin:25px auto;
+        width: calc(100% - 20px);
+        max-width: 500px;
     }
 }
 
+
+ ::ng-deep .mat-slider-thumb-label{
+    background-color: #673ab7 !important;
+   
+ }
+
+ ::ng-deep .mat-accent .mat-slider-thumb-label-text{
+     color: white;
+ }
+
+
+ ::ng-deep .mat-slider-thumb{
+    background-color: #673ab7 !important;
+ }
+
+
+::ng-deep .mat-accent .mat-slider-track-fill {
+    background-color: #673ab7 !important;
+} 

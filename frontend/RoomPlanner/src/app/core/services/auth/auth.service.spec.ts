@@ -6,6 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Interceptor } from '../../interceptor';
 import { Router } from '@angular/router';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material';
 
 describe('AuthService', () => {
 
@@ -15,7 +16,7 @@ describe('AuthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [],
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, MatSnackBarModule],
       providers: [
         AuthService,
         // {
@@ -25,12 +26,14 @@ describe('AuthService', () => {
         {
           provide: Router,
           useValue: routerMock
-        }
+        },
+        MatSnackBar
         // {
         //   provide: HTTP_INTERCEPTORS,
         //   useClass: Interceptor,
         //   multi: true
         // }
+
       ]
     });
     authService = TestBed.get(AuthService);

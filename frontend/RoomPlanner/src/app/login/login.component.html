@@ -5,9 +5,9 @@
         </div>
         <mat-card-content>
             <form [formGroup]="loginForm">
-                <mat-form-field>
-                    <input matInput placeholder="Enter your email" formControlName="email" name="email">
-                    <mat-error *ngIf="loginForm.controls.email.invalid">{{getErrorMessage()}}</mat-error>
+                <mat-form-field >
+                    <input matInput placeholder="Enter your email" formControlName="email">
+                    <mat-error *ngIf="loginForm.controls.email.invalid ">{{getErrorMessage()}}</mat-error>
                 </mat-form-field>
                 <mat-form-field>
                     <input matInput placeholder="Enter your password" type="password" formControlName="password" name="email">
