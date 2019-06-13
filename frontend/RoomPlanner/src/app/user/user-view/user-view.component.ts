@@ -3,6 +3,7 @@ import { MatCalendar, DateAdapter } from '@angular/material';
 import { UserdataService } from '../../shared/services/userdata.service';
 import { RoomModel } from '../../core/models/RoomModel';
 import { Filters } from '../../shared/models/Filters';
+import { Time } from '@angular/common';
 
 
 @Component({
@@ -14,21 +15,25 @@ export class UserViewComponent implements OnInit {
 
   dropdownOpen: boolean = false;
   dateChanged: boolean = false;
-  
-  
-  
-  floors: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
-  numberOfPeople:number;
-  floorSelected:number;
-  filtersReturned:Filters;
 
-  defaultDate: Date = this._dateAdapter.today();;
+
+
+  floors: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
+  startHour:Time;
+  endHour:Time;
+  numberOfPeople: number;
+  floorSelected: number;
+
+  filters: Filters;
+
+  defaultDate: Date = new Date(new Date().setHours(0,0,0,0));
+  
   selectedDate: Date;
   returnDate: Date;
   finalDate: Date;
- 
 
-  dateInThePastIn:boolean=false;
+
+  dateInThePastIn: boolean = false;
 
   constructor(
     private _dateAdapter: DateAdapter<Date>,
@@ -43,20 +48,11 @@ export class UserViewComponent implements OnInit {
 
   onDateChanged(date) {
     this.dateChanged = true;
+    this.dateInThePastIn=false;
 
-    if(date.getDate()<this.defaultDate.getDate()){
-      console.log("data din trecut!");
+    if(this.defaultDate.getTime()>date.getTime()){
       this.dateInThePastIn=true;
-      
-    }else if(date.getDate()==this.defaultDate.getDate()){
-      this.dateChanged=false;
-
-      this.dateInThePastIn=false;
-    }else{
-      this.dateInThePastIn=false;
     }
-
-    
   }
 
   onApplyFilters() {
@@ -70,7 +66,32 @@ export class UserViewComponent implements OnInit {
 
 
     /*let rooms: RoomModel[] = */
-    this.returnDate = this.userdataService.getRoomsByDate(new Date(this.finalDate));
+    //this.returnDate = this.userdataService.getRoomsByDate(new Date(this.finalDate));
+
+    console.log(`Selected date is: ${this.finalDate}`);
+
+    if(this.startHour!=null){
+      console.log(`Start hour selected: ${this.startHour}`);
+    }
+    if(this.endHour!=null){
+      console.log(`End hour selected: ${this.endHour}`);
+    }
+    if(this.numberOfPeople!=null){
+      console.log(`Number of people selected: ${this.numberOfPeople}`);
+    }
+    if(this.floorSelected!=null){
+      console.log(`The floor selected: ${this.floorSelected}`);
+    }
+
+    this.filters=new Filters().create({
+      date:this.finalDate,
+      startHour:this.startHour,
+      endHour:this.endHour,
+      floor:this.floorSelected,
+      numberOfPeople:this.numberOfPeople
+    });
+
+    console.log(this.filters);
 
   }
 
@@ -78,19 +99,20 @@ export class UserViewComponent implements OnInit {
     return this.returnDate;
   }
 
-  onSliderChange(event){
-    this.numberOfPeople=event.value;
-    console.log(`Number of people selected: ${this.numberOfPeople}`);
+  onSliderChange(event) {
+    this.numberOfPeople = event.value;
   }
 
-  onStartHourChange(event){
-    console.log(event.target.value);
-    console.log(event.target.type);
+  onStartHourChange(event) {
+    this.startHour=event.target.value;
   }
 
-  onFloorChange(event){
-    this.floorSelected=event.value;
-    console.log(`The floor selected: ${this.floorSelected}`);
+  onEndHourChange(event){
+    this.endHour=event.target.value;
+  }
+
+  onFloorChange(event) {
+    this.floorSelected = event.value;
   }
 
 
