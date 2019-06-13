@@ -2,8 +2,9 @@ package edu.roomplanner.rest;
 
 import edu.roomplanner.dto.CustomUserDetails;
 import edu.roomplanner.entity.PersonEntity;
-import edu.roomplanner.repository.PersonRepository;
 import edu.roomplanner.dto.AuthenticationRequest;
+import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.impl.CustomUserDetailsService;
 import edu.roomplanner.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +27,17 @@ public class AuthController {
 
     private AuthenticationManager authenticationManager;
     private JwtTokenProvider jwtTokenProvider;
-    private PersonRepository persons;
+    private UserRepository users;
     private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager,
                           JwtTokenProvider jwtTokenProvider,
-                          PersonRepository persons,
+                          UserRepository users,
                           CustomUserDetailsService customUserDetailsService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.persons = persons;
+        this.users = users;
         this.customUserDetailsService = customUserDetailsService;
     }
 
@@ -50,13 +51,12 @@ public class AuthController {
         try {
             String email = data.getEmail();
             String password = encryptPassword(data.getPassword());
-            //Se verifica automat parola dar nu inteleg cum
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-            PersonEntity personEntity = this.persons.findByEmail(email).
+            UserEntity userEntity = this.users.findByEmail(email).
                     orElseThrow(() -> new UsernameNotFoundException("Email " + email + "not found"));
-            CustomUserDetails customUserDetails = customUserDetailsService.buildCustomerUserDetails(personEntity);
+            CustomUserDetails customUserDetails = customUserDetailsService.buildCustomerUserDetails(userEntity);
             String token = jwtTokenProvider.createToken(email, customUserDetails.getAuthorities());
-            Map<Object, Object> model = createSigninResponseModel(personEntity, token);
+            Map<Object, Object> model = createSigninResponseModel(userEntity, token);
             return ok(model);
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username/password supplied");
@@ -67,10 +67,10 @@ public class AuthController {
         return password;
     }
 
-    private Map<Object, Object> createSigninResponseModel(PersonEntity personEntity, String token) {
+    private Map<Object, Object> createSigninResponseModel(UserEntity userEntity, String token) {
         Map<Object, Object> model = new HashMap<>();
-        model.put("email", personEntity.getEmail());
-        model.put("type", personEntity.getType());
+        model.put("email", userEntity.getEmail());
+        model.put("type", userEntity.getType());
         model.put("token", token);
         return model;
     }
