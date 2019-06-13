@@ -35,34 +35,34 @@
 .button-filters{
     display: block;
     font-size: 20px;
-    width: 100%;
-    margin-top: 15%;
-    /* margin: 0 auto; */
+    margin:25px auto;
+    width: calc(100% - 20px);
+    max-width: 500px;
 }
 
 
 .calendar-wrapper{
-    width:calc(100%-100px);
+   
     display: block;
     margin: 0 auto;
 }
 .filters-body{
-    width:calc(100%-100px);
+   
     display: block;
     margin: 0 auto;
 }
 
 .floor{
-    margin-left:20px;
+    margin-left:15px;
 }
 
 .hours{
-    margin-left:20px;
+    margin-left:15px;
     margin-top: 20px;
 }
 
 .people{
-    margin-left:20px;
+    margin-left:15px;
 }
 
 .mat-calendar {
@@ -160,6 +160,14 @@ mat-slider {
         margin-right: -10px;
         width: 100%;
     }
+
+    .button-filters{
+        display: block;
+        font-size: 20px;
+        margin:25px auto;
+        width: calc(100% - 20px);
+        max-width: 500px;
+    }
 }
 
 /* .example-custom-date-class {
@@ -196,7 +204,9 @@ mat-slider {
     .button-filters{
         display: block;
         font-size: 20px;
-        margin-left: 20%;
+        margin:25px auto;
+        width: calc(100% - 20px);
+        max-width: 500px;
     }
 }
 
