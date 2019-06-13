@@ -37,7 +37,7 @@ describe('Given a NavbarComponent', () => {
   });
 
   it('should not display right buttons when current user is null', () => {
-    component.authService.setCurrentUser(null);
+    component.authService.OnCurrentUserChanged(null);
     fixture.detectChanges();
 
     let rightButtons = getRightButtons();
@@ -46,7 +46,7 @@ describe('Given a NavbarComponent', () => {
   });
 
   it('should display right buttons when current user is not null', () => {
-    component.authService.setCurrentUser(new LoggedUser().create({
+    component.authService.OnCurrentUserChanged(new LoggedUser().create({
       email: "test@test.com",
       type: "user"
     }));
@@ -58,7 +58,7 @@ describe('Given a NavbarComponent', () => {
   });
 
   it('should display username when current user is not null', () => {
-    component.authService.setCurrentUser(new LoggedUser().create({
+    component.authService.OnCurrentUserChanged(new LoggedUser().create({
       email: "testname@test.com",
       type: "user"
     }));
@@ -70,7 +70,7 @@ describe('Given a NavbarComponent', () => {
   });
 
   it('should display admin buttons when current user is of type admin', () => {
-    component.authService.setCurrentUser(new LoggedUser().create({
+    component.authService.OnCurrentUserChanged(new LoggedUser().create({
       email: "test@test.com",
       type: "admin"
     }));
@@ -82,7 +82,7 @@ describe('Given a NavbarComponent', () => {
   });
 
   it('should not display admin buttons when current user is not of type admin', () => {
-    component.authService.setCurrentUser(new LoggedUser().create({
+    component.authService.OnCurrentUserChanged(new LoggedUser().create({
       email: "test@test.com",
       type: "user"
     }));
@@ -94,7 +94,7 @@ describe('Given a NavbarComponent', () => {
   });
 
   it('should open room password form when logout button is pressed and current user is of type room', () => {
-    component.authService.setCurrentUser(new LoggedUser().create({
+    component.authService.OnCurrentUserChanged(new LoggedUser().create({
       email: "test@test.com",
       type: "room"
     }));
@@ -107,7 +107,7 @@ describe('Given a NavbarComponent', () => {
   });
 
   it('should call logout function from auth service when current user is of type room, logoutroom button is pressed and passwoed is valid', async () => {
-    component.authService.setCurrentUser(new LoggedUser().create({
+    component.authService.OnCurrentUserChanged(new LoggedUser().create({
       email: "test@test.com",
       type: "room"
     }));
@@ -121,7 +121,7 @@ describe('Given a NavbarComponent', () => {
   });
 
   it('should not call logout function from auth service when current user is of type room, logoutroom button is pressed and passwoed is invalid', async () => {
-    component.authService.setCurrentUser(new LoggedUser().create({
+    component.authService.OnCurrentUserChanged(new LoggedUser().create({
       email: "test@test.com",
       type: "room"
     }));
@@ -135,7 +135,7 @@ describe('Given a NavbarComponent', () => {
   });
 
   it('should call logout function from auth service when logout button is pressed and current user is of type user', () => {
-    component.authService.setCurrentUser(new LoggedUser().create({
+    component.authService.OnCurrentUserChanged(new LoggedUser().create({
       email: "test@test.com",
       type: "user"
     }));
@@ -147,7 +147,7 @@ describe('Given a NavbarComponent', () => {
   });
 
   it('should call logout function from auth service when logout button is pressed and current user is of type admin', () => {
-    component.authService.setCurrentUser(new LoggedUser().create({
+    component.authService.OnCurrentUserChanged(new LoggedUser().create({
       email: "test@test.com",
       type: "admin"
     }));

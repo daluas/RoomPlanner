@@ -40,9 +40,6 @@ export class Interceptor implements HttpInterceptor {
     constructor(private _snackBar: MatSnackBar) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log("interceptor request");
-        console.log(request);
-
         let newRequest: HttpRequest<any>;
         if (!request.headers.has("Content-Type")) {
             newRequest = request.clone({
@@ -50,7 +47,7 @@ export class Interceptor implements HttpInterceptor {
             });
         }
 
-        if (request.url === '/auth/signin') {
+        if (newRequest.url === '/auth/signin') {
             // let user: LoggedUser = this.interceptLogin()
 
             let reqBody = newRequest.body;
@@ -93,6 +90,7 @@ export class Interceptor implements HttpInterceptor {
 
                 return of(new HttpResponse<LoggedUser>({
                     status: 200,
+                    statusText: "Ok",
                     body: loggedUser
                 }));
             }
@@ -104,21 +102,16 @@ export class Interceptor implements HttpInterceptor {
             // }));
         }
 
-        if (request.url === '/auth/refresh') {
+        if (newRequest.url === '/auth/refresh') {
             let reqBody = newRequest.body;
-            console.log(reqBody);
+
             return of(new HttpResponse({
                 status: 200,
+                statusText: "Ok",
                 body: {
                     token: this.refreshToken() //CHECK
                 }
             }));
-            // reqBody.refresh_token
-                // return of(new HttpResponse<LoggedUser>({
-                //     status: 200,
-                //     statusText: "Ok",
-                //     body: loggedUser
-                // }));
         }
 
         // if (request.url === '/logout') {
@@ -129,13 +122,14 @@ export class Interceptor implements HttpInterceptor {
         //     }));
         // }
 
-        let newrequest = this.addAuthenticationToken(newRequest);
-        return next.handle(newrequest).pipe(
+        // let newrequest = this.addAuthenticationToken(newRequest);
+        return next.handle(newRequest).pipe(
             // return next.handle(newRequest).pipe(
             tap({
                 next: (response: HttpResponse<any>) => {
                     if (response instanceof HttpResponse) {
-                        response = response.clone({ body: "" })
+                        console.log("backend responded");
+                        // response = response.clone({ body: "" })
                     }
                     if (response instanceof HttpErrorResponse) {
                         console.log("error response (never)");
@@ -149,7 +143,7 @@ export class Interceptor implements HttpInterceptor {
                         `Call to ${error.url} failed with ${error.status} - ${error.statusText}`,
                         'Close',
                         {
-                            duration: 10000
+                            duration: 7000
                         }
                     );
 
@@ -175,38 +169,57 @@ export class Interceptor implements HttpInterceptor {
 
     createToken(): LoginToken { // mock function; logic will be passed in refreshToken ?
         console.log("creating token");
+        let expDate = new Date(new Date(Date.now()).getTime() + 15 * 1000)
+        console.log(expDate);
         return new LoginToken().create({
             "value": "U-T-O-K-E-N",
-            "expirationDate": new Date(new Date(Date.now()).getTime() - 60 * 60 * 1 * 1000), // check
+            "expirationDate": expDate, // check
             "refreshToken": "REFRESH"
         })
     }
 
 
-    //add 24h to token duration (token stored in localstorage);
     refreshToken(): LoginToken {
-        console.log("Refreshing token");
-
-        if (localStorage.getItem('access-token') == null) {
-            console.log("no token available");
-            const newToken: LoginToken = this.createToken();
-            localStorage.setItem('access-token', JSON.stringify(newToken));
-            return newToken;
-        }
+        this._snackBar.open(
+            `Refreshing token (intercepted request)`,
+            'Close',
+            {
+                duration: 2000
+            }
+        );
 
         let tokenParsed = JSON.parse(localStorage.getItem('access-token'))
         let storedToken: LoginToken = new LoginToken().create(tokenParsed);
 
         let expirationDate: Date = new Date(storedToken.expirationDate)
         let now = new Date(Date.now());
+        console.log("expiration :", expirationDate);
+        console.log("now: ", now);
 
         if (expirationDate < now) {
-            alert('Token is expired');
+            this._snackBar.open(
+                `Token expired (interceptor)`,
+                'Close',
+                {
+                    duration: 2000
+                }
+            );
             // this.createToken()
-            storedToken.expirationDate = new Date(new Date(Date.now()).getTime() + 60 * 60 * 2 * 1000)
+            let newExpirationDate = new Date(new Date(Date.now()).getTime() + 60 * 1000) // 10 seconds
+            console.log("new expiration date: ", newExpirationDate);
+            storedToken.expirationDate = newExpirationDate;
             //call to backend to retrieve updated token  ||  go to login again
             localStorage.setItem('access-token', JSON.stringify(storedToken));
             // localStorage.setItem('access-token', JSON.stringify(this.createToken()))
+        }
+        else {
+            this._snackBar.open(
+                `Token alive`,
+                'Close',
+                {
+                    duration: 2000
+                }
+            );
         }
 
         return storedToken;

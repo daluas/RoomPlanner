@@ -46,11 +46,11 @@ describe('AuthService', () => {
   // it('should return false if not logged in', ()=> {
   //   spyOn(authService, 'checkIfLoggedIn').and.returnValue()
   // });
-  it('should return authenticated user when authenticating', () => {
-    spyOn(authService.httpClient, 'post').and.returnValue(new Promise((res, rej) => {
+  // it('should return authenticated user when authenticating', () => {
+  //   spyOn(authService.httpClient, 'post').and.returnValue(new Promise((res, rej) => {
 
-    }));
-  });
+  //   }));
+  // });
 
   // it('should return authenticated user when authenticating', ()=>{
   //   spyOn(authService.httpClient, 'post').and.returnValue(new Promise((res, rej)=>{
@@ -65,9 +65,9 @@ describe('AuthService', () => {
   // });
 
   // });
-  it('should return authenticated user when authenticating', () => {
-    spyOn(authService.httpClient, 'post').and.returnValue(new Promise((res, rej) => {
+  // it('should return authenticated user when authenticating', () => {
+  //   spyOn(authService.httpClient, 'post').and.returnValue(new Promise((res, rej) => {
 
-    }));
-  });
+  //   }));
+  // });
 });

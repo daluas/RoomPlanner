@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from "@angul
 import { LoginToken } from '../../models/LoginToken';
 import { Observable, of, Subject, Subscriber } from 'rxjs';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable({
 	providedIn: 'root'
@@ -20,59 +21,97 @@ export class AuthService {
 
 	constructor(
 		public httpClient: HttpClient,
-		public router: Router
+		public router: Router,
+		private _snackBar: MatSnackBar
 	) {
 		this.setInitialUserFromLocalStorage()
 	}
 
 	setInitialUserFromLocalStorage(): void {
+
 		if (localStorage.getItem('user-data') == null) {
+			console.log("no user in LS");
 			return;
 		}
 
 		if (localStorage.getItem('access-token') == null) {
+			console.log("no token in LS")
 			return;
 		}
-		let token = new LoginToken().create(JSON.parse(localStorage.getItem("access-token")))
-		console.log(token)
+		this.token = new LoginToken().create(JSON.parse(localStorage.getItem("access-token")))
+		// console.log("token from LS : ", this.token);
 
 		let userParsed = JSON.parse(localStorage.getItem('user-data'))
 		let user: LoggedUser = new LoggedUser().create(userParsed);
-		console.log(user);
+		// console.log("user from LS: ", user);
 
-
-		let expirationDate: Date = new Date(token.expirationDate)
+		let expirationDate: Date = new Date(this.token.expirationDate)
 		let now = new Date(Date.now());
 
-		if (expirationDate < now) {
-			// alert('Token is expired');
-			this.refreshToken(token.refresh_token)
-				.then(data => {
-					console.log("Refresh finished")
-					console.log(data);
+		console.log("now: ", now);
+		console.log("expiration date: ", expirationDate);
+
+		if (expirationDate.getTime() < now.getTime()) {
+			this._snackBar.open(
+				`Token is expired (auth)`,
+				'Close',
+				{
+					duration: 5000
+				}
+			);
+			console.log("token is old:")
+			console.log("using refresh token: ", this.token);
+
+			this.refreshToken(this.token)
+				.then((token: LoginToken) => {
+					let newExpDate = new Date(token.expirationDate);
+					this._snackBar.open(
+						'Refresh finished',
+						'Close',
+						{
+							duration: 5000
+						}
+					);
+					setTimeout(()=>{
+						console.log("REFRESHING TOKEN")
+						this.refreshToken(token)
+					}, (newExpDate.getTime() - now.getTime()))
+					// setInterval(()=>{
+					// 	console.log("REFRESHING TOKEN")
+					// 	console.log(this);
+					// 	this.refreshToken(token)
+					// }, 20000)
 				})
 				.catch(error=>{
-					console.log("refresh error");
-					console.log(error);
+					this._snackBar.open(
+						`refresh error: ${error}`,
+						'Close',
+						{
+							duration: 7000
+						}
+					);
+					this.logout();
 				})
-
-			// token.expirationDate = new Date(new Date(Date.now()).getTime() + 60 * 2 * 1000)
-			// //call to backend to retrieve updated token  ||  go to login again
-
-			// localStorage.setItem('access-token', JSON.stringify(token));
-			// setTimeout(this.refreshToken, 60 * 2 * 1000)
 		}
 		else{
+			this._snackBar.open(
+				`Token is alive (auth)`,
+				'Close',
+				{
+					duration: 2000
+				}
+			);
+
 			setTimeout(()=>{
-				console.log(token.refresh_token);
-				this.refreshToken(token.refresh_token)
+				this.refreshToken(new LoginToken().create({
+					value: "",
+					expirationDate: (Date.now()),
+					refresh_token: "REFRESH"
+				}))
 			}, (expirationDate.getTime() - now.getTime()))// * 1000)
 		}
 
-
-
 		// this.OnCurrentUserChanged(user);
-		this.token = token;
 		this.OnCurrentUserChanged(user);
 
 	}
@@ -83,8 +122,8 @@ export class AuthService {
 
 	}
 
-	refreshToken(refresh_token: string): Promise<Object> {
-		return this.httpClient.post(`${this.backendUrl}/auth/refresh`, {refresh_token: refresh_token}).toPromise();
+	refreshToken(token: LoginToken): Promise<Object> {
+		return this.httpClient.post(`${this.backendUrl}/auth/refresh`, {refresh_token: "REFRESH"}).toPromise();
 	}
 
 	authenticateUser(credentials: LoginModel): Promise<Object> {

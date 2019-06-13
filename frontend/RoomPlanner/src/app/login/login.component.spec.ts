@@ -10,9 +10,10 @@ import { By } from '@angular/platform-browser';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AuthGuard } from '../core/guards/auth.guard';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SpinnerComponent } from '../shared/spinner/spinner.component';
 
 
-fdescribe('LoginComponent', () => {
+describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let de: DebugElement;
@@ -23,7 +24,8 @@ fdescribe('LoginComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        LoginComponent
+        LoginComponent,
+        SpinnerComponent
       ],
       imports: [
         MaterialDesignModule,
@@ -55,14 +57,14 @@ fdescribe('LoginComponent', () => {
     component.loginForm.controls['password'].setValue('');
     fixture.detectChanges();
     expect(component.loginForm.valid).toBeFalsy();
-  }))
+  }));
 
   it(`form should be valid`, async(() => {
     component.loginForm.controls['email'].setValue('user1@cegeka.ro');
     component.loginForm.controls['password'].setValue('user.1');
     fixture.detectChanges();
     expect(component.loginForm.valid).toBeTruthy();
-  }))
+  }));
 
   it(`form should be invalid when email is invalid`, async(() => {
     component.loginForm.controls['email'].setValue('user1');

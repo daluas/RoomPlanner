@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SpinnerComponent } from './spinner.component';
+import { MaterialDesignModule } from '../../material-design/material-design.module';
 
 describe('SpinnerComponent', () => {
   let component: SpinnerComponent;
@@ -8,9 +9,10 @@ describe('SpinnerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SpinnerComponent ]
+      declarations: [SpinnerComponent],
+      imports: [MaterialDesignModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

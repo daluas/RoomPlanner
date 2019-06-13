@@ -8,7 +8,7 @@ import {
 import { AuthService } from './services/auth/auth.service';
 import { Interceptor } from './interceptor';
 import { HTTP_INTERCEPTORS, HttpClient, HttpInterceptor } from '@angular/common/http';
-import { LoginModel } from './models/LoginUser';
+import { LoginModel } from './models/LoginModel';
 import { AppRoutingModule } from '../app-routing.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';

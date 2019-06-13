@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import { MaterialDesignModule } from './material-design/material-design.module';
 import { SharedModule } from './shared/shared.module';
+import { NgModule } from '@angular/core';
 
 describe('AppComponent', () => {
 
@@ -30,7 +31,8 @@ describe('AppComponent', () => {
         CoreModule,
         MaterialDesignModule,
         SharedModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        FormsModule
       ]
       
     }).compileComponents();
@@ -41,12 +43,4 @@ describe('AppComponent', () => {
     app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });
- 
-  it(`should have as title 'RoomPlanner'`, () => {
-    fixture = TestBed.createComponent(AppComponent);
-    app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('RoomPlanner');
-  });
-
- 
 });
