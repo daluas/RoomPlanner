@@ -1,9 +1,9 @@
 package edu.roomplanner.service.impl;
 
 import edu.roomplanner.dto.CustomUserDetails;
-import edu.roomplanner.entity.PersonEntity;
 import edu.roomplanner.entity.RoleEntity;
-import edu.roomplanner.repository.PersonRepository;
+import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,28 +14,28 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Component("UserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private PersonRepository persons;
+    private UserRepository users;
 
-    public CustomUserDetailsService(PersonRepository persons) {
-        this.persons = persons;
+    public CustomUserDetailsService(UserRepository users) {
+        this.users = users;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        PersonEntity personEntity = persons.findByEmail(email)
+        UserEntity userEntity = users.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("email: " + email + " not found"));
-        return buildCustomerUserDetails(personEntity);
+        return buildCustomerUserDetails(userEntity);
     }
 
-    public CustomUserDetails buildCustomerUserDetails(PersonEntity personEntity) {
+    public CustomUserDetails buildCustomerUserDetails(UserEntity userEntity) {
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         return CustomUserDetails.builder()
-                .email(personEntity.getEmail())
-                .password(encoder.encode(personEntity.getPassword()))
-                .roles(transformEntityRolesToStringRoles(personEntity.getRoleEntityList()))
+                .email(userEntity.getEmail())
+                .password(encoder.encode(userEntity.getPassword()))
+                .roles(transformEntityRolesToStringRoles(userEntity.getRoles()))
                 .build();
     }
 
