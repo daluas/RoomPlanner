@@ -8,7 +8,7 @@ import edu.roomplanner.mappers.RoomDtoMapper;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.UserService;
 import edu.roomplanner.types.UserType;
-import edu.roomplanner.validation.validator.UserValidation;
+import edu.roomplanner.validation.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +18,13 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
-    private UserValidation userValidation;
+    private UserValidator userValidator;
     private RoomDtoMapper roomDtoMapper;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserValidation userValidation, RoomDtoMapper roomDtoMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserValidator userValidator, RoomDtoMapper roomDtoMapper) {
         this.userRepository = userRepository;
-        this.userValidation = userValidation;
+        this.userValidator = userValidator;
         this.roomDtoMapper = roomDtoMapper;
     }
 
@@ -37,16 +37,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public RoomDto getRoomById(Long id) {
         RoomDto roomDto = null;
-        if (userValidation.checkValidRoomId(id)) {
+        if (userValidator.checkValidRoomId(id)) {
             UserEntity userEntity = userRepository.findById(id).get();
             roomDto = roomDtoMapper.mapEntityToDto((RoomEntity) userEntity);
         }
         return roomDto;
-    }
-
-    @Override
-    public List<RoomDto> getFilteredRooms() {
-        return null;
     }
 
 }

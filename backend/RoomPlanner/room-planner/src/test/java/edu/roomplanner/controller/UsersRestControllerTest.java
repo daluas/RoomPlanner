@@ -2,12 +2,14 @@ package edu.roomplanner.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
+import edu.roomplanner.builders.PersonEntityBuilder;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.builders.RoomDtoBuilder;
 import edu.roomplanner.builders.RoomEntityBuilder;
+import edu.roomplanner.util.BuildersWrapper;
 import org.flywaydb.core.Flyway;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +33,7 @@ import java.util.List;
 )
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class UsersRestControllerTests {
+public class UsersRestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -51,41 +53,15 @@ public class UsersRestControllerTests {
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoListAndStatusFoundWhenGetAllRoomsIsCalled() throws Exception {
 
-        RoomDto roomDtoOne = new RoomDtoBuilder()
-                .withId(1L)
-                .withName("Wonderland")
-                .withFloor(5)
-                .withMaxPersons(14)
-                .build();
-        RoomDto roomDtoTwo = new RoomDtoBuilder()
-                .withId(2L)
-                .withName("Westeros")
-                .withFloor(8)
-                .withMaxPersons(21)
-                .build();
-
+        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14);
+        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(2L, "Westeros", 8, 21);
         List<RoomDto> roomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
         String jsonRoomDtoList = new ObjectMapper().writeValueAsString(roomDtoList);
 
-        UserEntity userEntityOne = new RoomEntityBuilder()
-                .withId(1L)
-                .withEmail("wonderland@yahoo.com")
-                .withPassword("4wonD2C%")
-                .withType(UserType.ROOM)
-                .withName("Wonderland")
-                .withFloor(5)
-                .withMaxPersons(14)
-                .build();
-
-        UserEntity userEntityTwo = new RoomEntityBuilder()
-                .withId(2L)
-                .withEmail("westeros@yahoo.com")
-                .withPassword("4westAD8%")
-                .withType(UserType.ROOM)
-                .withName("Westeros")
-                .withFloor(8)
-                .withMaxPersons(21)
-                .build();
+        UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com","4wonD2C%",
+                UserType.ROOM, "Wonderland", 5, 14);
+        UserEntity userEntityTwo =  BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com","4westAD8%",
+                UserType.ROOM, "Westeros", 8, 21);
 
         userRepository.save(userEntityOne);
         userRepository.save(userEntityTwo);
@@ -98,23 +74,11 @@ public class UsersRestControllerTests {
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoAndStatusFoundWhenGetRoomByIdIsCalled() throws Exception {
 
-        RoomDto roomDto = new RoomDtoBuilder()
-                .withId(1L)
-                .withName("Wonderland")
-                .withFloor(5)
-                .withMaxPersons(14)
-                .build();
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14);
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
 
-        UserEntity userEntity = new RoomEntityBuilder()
-                .withId(1L)
-                .withEmail("wonderland@yahoo.com")
-                .withPassword("4wonD2C%")
-                .withType(UserType.ROOM)
-                .withName("Wonderland")
-                .withFloor(5)
-                .withMaxPersons(14)
-                .build();
+        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com","4wonD2C%",
+                UserType.ROOM, "Wonderland", 5, 14);
         userRepository.save(userEntity);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 1))

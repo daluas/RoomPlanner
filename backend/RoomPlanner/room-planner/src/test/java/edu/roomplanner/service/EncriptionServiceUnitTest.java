@@ -1,4 +1,4 @@
-package edu.roomplanner;
+package edu.roomplanner.service;
 
 import edu.roomplanner.service.impl.EncryptionServiceImpl;
 import org.junit.After;

@@ -1,6 +1,7 @@
 package edu.roomplanner.rest;
 
 import edu.roomplanner.dto.RoomDto;
+import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.service.UserService;
 import lombok.EqualsAndHashCode;
 import org.apache.logging.log4j.LogManager;
@@ -8,14 +9,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Calendar;
 import java.util.List;
 
-@EqualsAndHashCode
 @RestController
 public class UserRestController {
 
@@ -45,5 +43,11 @@ public class UserRestController {
             return new ResponseEntity<>(new RoomDto(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(roomDto, HttpStatus.FOUND);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/tests")
+    ResponseEntity<ReservationEntity> test(@RequestBody ReservationEntity reservationEntity) {
+        reservationEntity.getStartDate().get((Calendar.MONTH));
+        return new ResponseEntity<>(reservationEntity, HttpStatus.FOUND);
     }
 }
