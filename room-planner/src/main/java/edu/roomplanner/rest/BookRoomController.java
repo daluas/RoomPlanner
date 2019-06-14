@@ -1,7 +1,5 @@
 package edu.roomplanner.rest;
 
-
-import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.service.BookRoomService;
 import lombok.EqualsAndHashCode;

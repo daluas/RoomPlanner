@@ -14,9 +14,9 @@ public class BookRoomServiceImpl implements BookRoomService {
 
 
     @Autowired
-    public BookRoomServiceImpl(ReservationDtoMapper mapperService,ReservationDto reservationDto) {
+    public BookRoomServiceImpl(ReservationDtoMapper mapperService, ReservationDto reservationDto) {
         this.mapperService = mapperService;
-        this.reservationDto=reservationDto;
+        this.reservationDto = reservationDto;
     }
 
     @Override
