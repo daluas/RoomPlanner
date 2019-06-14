@@ -1,9 +1,14 @@
 <div class="container">
   <div class="filters-container">
-    <app-filters></app-filters>
+    <app-filters [buildingLayout]="buildingLayout" (filterChange)="updateRoomsBasedOnFilters($event)"></app-filters>
+  </div>
+
+  <div class="booking-popup-container" [ngClass]="{'display-block' : bookingPopupOpen}">
+    <div class="booking-popup-close" (click)="closeBookingPopup()"></div>
+    <app-booking-popup [booking]="newBooking" (booked)="addCreatedBooking($event)"></app-booking-popup>
   </div>
 
   <div class="room-view-container">
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">user view</div>
+    <app-rooms-view [rooms]="rooms" (createBooking)="createBooking($event)"></app-rooms-view>
   </div>
 </div>

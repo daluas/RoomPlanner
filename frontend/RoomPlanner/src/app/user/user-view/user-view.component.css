@@ -28,80 +28,35 @@
     background: #f1f1f1;
 }
 
-.filters-header{
+.booking-popup-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000;
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 75px 0 10px 0;
+
     display: none;
 }
 
-.button-filters{
-    display: block;
-    font-size: 20px;
-    margin:25px auto;
-    width: calc(100% - 20px);
-    max-width: 500px;
+.app-booking-popup{
+    z-index: 1;
 }
 
-
-.calendar-wrapper{
-   
-    display: block;
-    margin: 0 auto;
-}
-.filters-body{
-   
-    display: block;
-    margin: 0 auto;
+.booking-popup-close{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(255,255,255,0.65);
 }
 
-.floor{
-    margin-left:15px;
-}
-
-.hours{
-    margin-left:15px;
-    margin-top: 20px;
-}
-
-.people{
-    margin-left:15px;
-}
-
-.mat-calendar {
-    display: block;
-    border-bottom-width: 1px;
-    border-bottom-style: ridge;
-    border-bottom-color:#bbbcbf;
-
-    /* -webkit-box-shadow: 5px 5px 10px 0px rgba(168,166,168,0.72);
-    -moz-box-shadow: 5px 5px 10px 0px rgba(168,166,168,0.72);
-    box-shadow: 5px 5px 10px 0px rgba(168,166,168,0.72); */
-}
-
-mat-slider {
-    width: 90%;
-    margin-left: 0px;
-}
-
-.text-small{
-    font-size: 15px;
-}
-
-.startHourText{
-    font-weight: bold;
-     margin-left: 40px;
-}
-.startHour{
-    width:40%;
-     margin-right: 20px;
-}
-
-.endHourText{
-    font-weight: bold;
-     margin-left: 130px;
-}
-
-.endHour{
-    width:40%;
-    margin-left: 20px;
+.display-block{
+    display: block !important;
 }
 
 @media screen and (max-width: 768px) {
@@ -126,106 +81,4 @@ mat-slider {
 
         height: 200px;
     }
-
-    .filters-header{
-        display: block;
-        font-weight: bold;
-        letter-spacing: 0.5px;
-    }
-
-    .button-filters{
-        display: block;
-        font-size: 15px;
-    }
-
-    .dropdown-button{
-        position: absolute;
-        top: 6px;
-        right: 5px;
-    }
-
-    .filters-elements{
-        display: none;
-    }
-
-    .filters-open{
-        display: block;
-    }
-    
-    .header-border-bottom{
-        border-bottom: 1px solid #ccc;
-        margin-bottom: 10px;
-        padding: 0 10px 10px 10px; 
-        margin-left: -10px;
-        margin-right: -10px;
-        width: 100%;
-    }
-
-    .button-filters{
-        display: block;
-        font-size: 20px;
-        margin:25px auto;
-        width: calc(100% - 20px);
-        max-width: 500px;
-    }
 }
-
-/* .example-custom-date-class {
-    background-color: orange;
-    border-radius: 50%;
-} */
-
-@media screen and (min-width : 500px) and (max-width : 768px) {
-    .calendar-wrapper{
-        width:70%;
-        display: block;
-        margin: 0 auto;
-    }
-
-    .floor{
-        width:60%;
-        display: block;
-        margin: 0 auto;
-    }
-
-    .hours{
-        width:60%;
-        display: block;
-        margin: 0 auto;
-        margin-top:10%;
-    }
-
-    .people{
-        width:60%;
-        display: block;
-        margin: 0 auto;
-    }
-
-    .button-filters{
-        display: block;
-        font-size: 20px;
-        margin:25px auto;
-        width: calc(100% - 20px);
-        max-width: 500px;
-    }
-}
-
-
- ::ng-deep .mat-slider-thumb-label{
-    background-color: #673ab7 !important;
-   
- }
-
- ::ng-deep .mat-accent .mat-slider-thumb-label-text{
-     color: white;
- }
-
-
- ::ng-deep .mat-slider-thumb{
-    background-color: #673ab7 !important;
- }
-
-
-::ng-deep .mat-accent .mat-slider-track-fill {
-    background-color: #673ab7 !important;
-} 

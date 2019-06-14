@@ -118,8 +118,8 @@ mat-slider {
 
     .dropdown-button{
         position: absolute;
-        top: 6px;
-        right: 5px;
+        top: -3px;
+        right: -5px;
     }
 
     .filters-elements{

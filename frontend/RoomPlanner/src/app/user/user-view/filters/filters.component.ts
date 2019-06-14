@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Time } from '@angular/common';
 import { Filters } from 'src/app/shared/models/Filters';
 import { DateAdapter } from '@angular/material';
@@ -10,6 +10,9 @@ import { RoomDataService } from 'src/app/core/services/room-data/room-data.servi
   styleUrls: ['./filters.component.css']
 })
 export class FiltersComponent implements OnInit {
+
+  @Input() buildingLayout: any;
+  @Output() filterChange: EventEmitter<any> = new EventEmitter();
 
   dropdownOpen: boolean = false;
   dateChanged: boolean = false;
@@ -54,6 +57,12 @@ export class FiltersComponent implements OnInit {
   }
 
   onApplyFilters() {
+
+    // !IMORTANT -> ASK Dorin
+    this.filterChange.emit("filter object");
+
+
+    
 
     if (this.dateChanged) {
       this.finalDate = this.selectedDate;
