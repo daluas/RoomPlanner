@@ -34,11 +34,11 @@ public class DefaultUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(userEntity.getEmail())
                 .password(userEntity.getPassword())
-                .authorities(transformEntityRolesToStringRoles(userEntity.getRoles()))
+                .authorities(transformEntityRolesToAuthorities(userEntity.getRoles()))
                 .build();
     }
 
-    private List<SimpleGrantedAuthority> transformEntityRolesToStringRoles(List<RoleEntity> roleEntities) {
+    private List<SimpleGrantedAuthority> transformEntityRolesToAuthorities(List<RoleEntity> roleEntities) {
         List<SimpleGrantedAuthority> result = new ArrayList<>();
         for(RoleEntity roleEntity:roleEntities) {
             result.add(new SimpleGrantedAuthority(roleEntity.getName()));
