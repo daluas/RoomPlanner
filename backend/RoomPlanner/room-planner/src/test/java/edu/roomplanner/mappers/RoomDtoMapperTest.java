@@ -6,7 +6,6 @@ import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.impl.RoomDtoMapperImpl;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -18,21 +17,9 @@ public class RoomDtoMapperTest {
 
     private RoomDtoMapperImpl sut = new RoomDtoMapperImpl();
 
-    /*
-    public RoomDto mapEntityToDto(RoomEntity roomEntity) {
-        RoomDto roomDto = new RoomDtoBuilder()
-                .withId(roomEntity.getId())
-                .withFloor(roomEntity.getFloor())
-                .withName(roomEntity.getName())
-                .withMaxPersons(roomEntity.getMaxPersons())
-                .build();
-        return roomDto;
-    }
-     */
-
     @Test
     public void shouldReturnRoomDtoWhenMapEntityToDtoIsCalledwithValidRoomEntity() {
-        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com","4wonD2C%",
+        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 UserType.ROOM, "Wonderland", 5, 14);
         RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14);
         RoomDto actualRoomDto = sut.mapEntityToDto((RoomEntity) userEntity);
@@ -52,9 +39,9 @@ public class RoomDtoMapperTest {
 
     @Test
     public void shouldReturnRoomDtoListWhenMapEntityListToDtoListIsCalledwithValidRoomEntityList() {
-        UserEntity roomEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com","4wonD2C%",
+        UserEntity roomEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 UserType.ROOM, "Wonderland", 5, 14);
-        UserEntity roomEntityTwo =  BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com","4westAD8%",
+        UserEntity roomEntityTwo = BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com", "4westAD8%",
                 UserType.ROOM, "Westeros", 8, 21);
         List<UserEntity> roomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
 
@@ -70,7 +57,7 @@ public class RoomDtoMapperTest {
     @Test
     public void shouldReturnEmptyObjectRoomDtoListWhenMapEntityListToDtoListIsCalledwithEmptyRoomEntityList() {
         UserEntity roomEntityOne = new RoomEntity();
-        UserEntity roomEntityTwo =  new RoomEntity();
+        UserEntity roomEntityTwo = new RoomEntity();
         List<UserEntity> roomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
 
         List<RoomDto> actualRoomDtoList = sut.mapEntityListToDtoList(roomEntityList);

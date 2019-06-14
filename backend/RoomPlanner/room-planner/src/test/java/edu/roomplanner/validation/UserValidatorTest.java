@@ -1,6 +1,7 @@
 package edu.roomplanner.validation;
 
-import edu.roomplanner.entity.*;
+import edu.roomplanner.entity.RoomEntity;
+import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
@@ -12,7 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringRunner;
-import java.util.*;
+
+import java.util.Optional;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -38,7 +40,7 @@ public class UserValidatorTest {
     @Test
     public void shouldReturnTrueWhenCheckValidRoomIdIsCalledWithInjectedRoomId() {
 
-        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com","4wonD2C%",
+        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 UserType.ROOM, "Wonderland", 5, 14);
 
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(userEntity));
@@ -56,7 +58,7 @@ public class UserValidatorTest {
         when(userRepository.findById(3L)).thenReturn(Optional.ofNullable(userEntity));
         boolean response = sut.checkValidRoomId(3L);
 
-       assertFalse(response);
+        assertFalse(response);
     }
 
     @Test
@@ -66,7 +68,7 @@ public class UserValidatorTest {
         when(userRepository.findById(3L)).thenReturn(Optional.ofNullable(userEntity));
         boolean response = sut.checkValidRoomId(7L);
 
-        assertFalse( response);
+        assertFalse(response);
     }
 
 }

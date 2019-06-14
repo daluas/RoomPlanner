@@ -48,9 +48,9 @@ public class UserServiceTest {
     public void shouldReturnRoomDtoListWhenGetAllRoomsIsCalled() {
 
 
-        UserEntity roomEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com","4wonD2C%",
+        UserEntity roomEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 UserType.ROOM, "Wonderland", 5, 14);
-        UserEntity roomEntityTwo =  BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com","4westAD8%",
+        UserEntity roomEntityTwo = BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com", "4westAD8%",
                 UserType.ROOM, "Westeros", 8, 21);
 
         List<UserEntity> RoomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
@@ -68,7 +68,7 @@ public class UserServiceTest {
     public void shouldReturnExpectedRoomDtoWhenGetRoomByIdIsCalled() {
 
         RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14);
-        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com","4wonD2C%",
+        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 UserType.ROOM, "Wonderland", 5, 14);
 
         when(userValidator.checkValidRoomId(1L)).thenReturn(true);

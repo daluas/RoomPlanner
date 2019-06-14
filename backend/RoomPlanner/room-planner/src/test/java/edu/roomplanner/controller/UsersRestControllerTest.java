@@ -2,13 +2,10 @@ package edu.roomplanner.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
-import edu.roomplanner.builders.PersonEntityBuilder;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
-import edu.roomplanner.builders.RoomDtoBuilder;
-import edu.roomplanner.builders.RoomEntityBuilder;
 import edu.roomplanner.util.BuildersWrapper;
 import org.flywaydb.core.Flyway;
 import org.junit.Before;
@@ -60,7 +57,7 @@ public class UsersRestControllerTest {
 
         UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com","4wonD2C%",
                 UserType.ROOM, "Wonderland", 5, 14);
-        UserEntity userEntityTwo =  BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com","4westAD8%",
+        UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com", "4westAD8%",
                 UserType.ROOM, "Westeros", 8, 21);
 
         userRepository.save(userEntityOne);
