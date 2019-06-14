@@ -22,14 +22,15 @@ public class AuthorizationServerConfig implements AuthorizationServerConfigurer 
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private DataSource dataSource;
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
     private DefaultUserDetailsService userDetailsService;
-
 
     @Bean
     TokenStore jdbcTokenStore() {
