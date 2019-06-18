@@ -1,6 +1,6 @@
 package edu.roomplanner.mappers.impl;
 
-import edu.roomplanner.builders.RoomDtoBuilder;
+import edu.roomplanner.builders.UserDtoBuilder;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
@@ -14,13 +14,14 @@ import java.util.List;
 public class RoomDtoMapperImpl implements RoomDtoMapper {
 
     public RoomDto mapEntityToDto(RoomEntity roomEntity) {
-        RoomDto roomDto = new RoomDtoBuilder()
+        return (RoomDto) UserDtoBuilder.builder()
                 .withId(roomEntity.getId())
+                .withEmail(roomEntity.getEmail())
+                .withType(roomEntity.getType())
                 .withFloor(roomEntity.getFloor())
                 .withName(roomEntity.getName())
                 .withMaxPersons(roomEntity.getMaxPersons())
                 .build();
-        return roomDto;
     }
 
     public List<RoomDto> mapEntityListToDtoList(List<UserEntity> roomEntityList) {
