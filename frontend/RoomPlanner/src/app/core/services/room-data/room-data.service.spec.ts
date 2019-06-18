@@ -13,12 +13,4 @@ describe('RoomDataService', () => {
     service = TestBed.get(RoomDataService);
     expect(service).toBeTruthy();
   });
-
-
-  it('should return the date given as parameter', () => {
-    service = TestBed.get(RoomDataService);
-    var date = new Date();
-    var dateReturned = service.getRoomsByDate(date);
-    expect(dateReturned).toBe(date);
-  });
 });

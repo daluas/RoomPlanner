@@ -13,43 +13,69 @@ export class UserViewComponent implements OnInit {
   bookingPopupOpen: boolean = false;
   newBooking: Booking;
   buildingLayout: any;
-  rooms: any[]
+  rooms: any[];
+  displayedRooms: any[];
+  previousFilters: any;
 
-  constructor(public roomDataService: RoomDataService){}
+  constructor(public roomDataService: RoomDataService) { }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.setDefaultData();
   }
 
-  closeBookingPopup(){
+  closeBookingPopup() {
     this.bookingPopupOpen = false;
   }
 
-  setDefaultData(){
-    this.roomDataService.getBuildingLayout().then((buildingLayout)=>{ 
-      this.buildingLayout = buildingLayout
+  setDefaultData() {
+    this.roomDataService.getBuildingLayout().then((buildingLayout) => {
+      this.buildingLayout = buildingLayout;
+
+      // set default filtes, now that we know the first floor
+      this.previousFilters = {}
     });
 
     this.roomDataService.getDefaultRooms().then((defaultRooms) => {
       this.rooms = defaultRooms;
+      this.displayedRooms = defaultRooms;
     })
   }
 
-  updateRoomsBasedOnFilters(filters: any){
+  updateRoomsBasedOnFilters(filters: any) {
     console.log("Filters component emited: ", filters);
 
-    this.roomDataService.getRooms(filters).then((rooms) => {
-      this.rooms = rooms;
-    })
+    if (this.filteredRoomsAlreadyExist(filters)){
+      this.setDisplayedRooms(filters);
+    } else {
+      this.roomDataService.getRooms(filters).then((rooms) => {
+        this.rooms = rooms;
+        this.setDisplayedRooms(filters);
+      })
+    }
+
+    this.previousFilters = filters;
   }
 
-  createBooking(booking: any){
+  filteredRoomsAlreadyExist(filters: any): boolean{
+    //if this.previousFilters date && floor is the same, than return true
+
+    return false;
+  }
+
+  setDisplayedRooms(filters: any){
+    // this.displayedRooms = this.rooms.map((room) => { if(filters conditions) return room});
+    // DELETE THIS
+    this.displayedRooms = this.rooms;
+  }
+
+  createBooking(booking: any) {
     this.newBooking = booking;
     this.bookingPopupOpen = true;
   }
 
-  addCreatedBooking(booking: any){
+  addCreatedBooking(booking: any) {
     // add to the list of bookings of the booked room the new booking 
     console.log("Rooms list must be updated with: ", booking);
+    // call setDisplayedRooms(this.previousFilters); after setting this.rooms with new booking
   }
 }

@@ -4,6 +4,8 @@ import { UserViewComponent } from './user-view.component';
 import { MaterialDesignModule } from '../../material-design/material-design.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FiltersComponent } from './filters/filters.component';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { RoomsViewComponent } from './rooms-view/rooms-view.component';
 
 describe('UserViewComponent', () => {
   let component: UserViewComponent;
@@ -13,11 +15,13 @@ describe('UserViewComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         UserViewComponent,
-        FiltersComponent
+        FiltersComponent,
+        RoomsViewComponent
       ],
       imports: [
         MaterialDesignModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        SharedModule
       ]
     })
       .compileComponents();
