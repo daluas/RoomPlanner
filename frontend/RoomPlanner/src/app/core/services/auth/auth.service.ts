@@ -14,10 +14,9 @@ import { MatSnackBar } from '@angular/material';
 export class AuthService {
 
 	private token: LoginToken;
-	// private backendUrl: string = 'localhost:8081';
-	private backendUrl: string = '';
+	private backendUrl: string = 'http://178.22.68.114:8081';
 	private currentUser: LoggedUser;
-	private currentUserSubject: Subscriber<LoggedUser> = new Subscriber<LoggedUser>();
+	private currentUserSubscriber: Subscriber<LoggedUser> = new Subscriber<LoggedUser>();
 
 	constructor(
 		public httpClient: HttpClient,
@@ -34,69 +33,19 @@ export class AuthService {
 		if (localStorage.getItem('access-token') == null) {
 			return;
 		}
+
 		this.token = new LoginToken().create(JSON.parse(localStorage.getItem("access-token")))
 		let userParsed = JSON.parse(localStorage.getItem('user-data'))
 		let user: LoggedUser = new LoggedUser().create(userParsed);
-		let expirationDate: Date = new Date(this.token.expirationDate)
-		let now = new Date(Date.now());
-		if (expirationDate.getTime() < now.getTime()) {
-			this._snackBar.open(
-				`Token is expired (auth)`,
-				'Close',
-				{
-					duration: 5000
-				}
-			);
-			console.log("token is old:")
-			console.log("using refresh token: ", this.token);
 
-			this.refreshToken(this.token)
-				.then((token: LoginToken) => {
-					let newExpDate = new Date(token.expirationDate);
-					this._snackBar.open(
-						'Refresh finished',
-						'Close',
-						{
-							duration: 5000
-						}
-					);
-					setTimeout(()=>{
-						console.log("REFRESHING TOKEN")
-						this.refreshToken(token)
-					}, (newExpDate.getTime() - now.getTime()))
-					// setInterval(()=>{
-					// 	console.log("REFRESHING TOKEN")
-					// 	console.log(this);
-					// 	this.refreshToken(token)
-					// }, 20000)
+		if (this.token.isExpired) {
+			this.refreshToken()
+				.then(data => {
+					console.log(data);
 				})
-				.catch(error=>{
-					this._snackBar.open(
-						`refresh error: ${error}`,
-						'Close',
-						{
-							duration: 7000
-						}
-					);
-					this.logout();
-				})
-		}
-		else{
-			this._snackBar.open(
-				`Token is alive (auth)`,
-				'Close',
-				{
-					duration: 2000
-				}
-			);
-
-			setTimeout(()=>{
-				this.refreshToken(new LoginToken().create({
-					value: "",
-					expirationDate: (Date.now()),
-					refresh_token: "REFRESH"
-				}))
-			}, (expirationDate.getTime() - now.getTime()))// * 1000)
+				.catch(error => {
+					console.log(error)
+				});
 		}
 		this.OnCurrentUserChanged(user);
 
@@ -104,15 +53,34 @@ export class AuthService {
 
 	OnCurrentUserChanged(loggedUserModel: LoggedUser): void {
 		this.currentUser = loggedUserModel;
-		this.currentUserSubject.next(this.currentUser);
+		this.currentUserSubscriber.next(this.currentUser);
 	}
 
-	refreshToken(token: LoginToken): Promise<Object> {
-		return this.httpClient.post(`${this.backendUrl}/auth/refresh`, {refresh_token: "REFRESH"}).toPromise();
+	refreshToken(): Promise<Object> {
+		return this.httpClient.post(`${this.backendUrl}/oauth/token`, {
+			grant_type: "refresh_token",
+			refresh_token: this.token.refresh_token
+		}).toPromise();
 	}
 
-	authenticateUser(credentials: LoginModel): Promise<Object> {
-		return this.httpClient.post(`${this.backendUrl}/auth/signin`, credentials).toPromise()
+	authenticateUser(loginModel: LoginModel): Promise<Object> {
+		return this.httpClient.post(`${this.backendUrl}/oauth/token`, {
+			grant_type: "password",
+			username: loginModel.email,
+			password: loginModel.password
+		}).toPromise()
+			// .then(data => {
+			// 	console.log(data)
+			// 	return new Promise((res, rej) => {
+			// 		res(true);
+			// 	})
+			// })
+			// .catch(error => {
+			// 	//this should go on .then
+			// 	return new Promise((res, rej) => {
+			// 		res(error);
+			// 	})
+			// })
 	}
 
 	async checkRoomPassword(password: string): Promise<Object> {
@@ -147,14 +115,14 @@ export class AuthService {
 	getCurrentUserObserver(): Observable<LoggedUser> {
 		return new Observable((observer) => {
 			observer.next(this.currentUser);
-			this.currentUserSubject = observer;
+			this.currentUserSubscriber = observer;
 		});
 	}
 
 	logout() {
 		localStorage.clear();
 		this.currentUser = null;
-		this.currentUserSubject.next(this.currentUser);
+		this.currentUserSubscriber.next(this.currentUser);
 		this.router.navigate(['/login']);
 	}
 
