@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @Getter
 @EqualsAndHashCode
-public class RoomDto extends UserDto{
+public class RoomDto{
     private Long id;
     private String name;
     private Integer floor;
