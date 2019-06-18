@@ -13,36 +13,37 @@ public class PersonEntityBuilder {
     private String firstName;
     private String lastName;
 
-    public PersonEntityBuilder withId(Long id){
+    public PersonEntityBuilder withId(Long id) {
         this.id = id;
         return this;
     }
 
-    public PersonEntityBuilder withEmail(String email){
+    public PersonEntityBuilder withEmail(String email) {
         this.email = email;
         return this;
     }
 
-    public PersonEntityBuilder withPassword(String password){
+    public PersonEntityBuilder withPassword(String password) {
         this.password = password;
         return this;
     }
 
-    public PersonEntityBuilder withType(UserType type){
+    public PersonEntityBuilder withType(UserType type) {
         this.type = type;
         return this;
     }
 
-    public PersonEntityBuilder withFirstName(String firstName){
+    public PersonEntityBuilder withFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
-    public PersonEntityBuilder withLastName(String lastName){
+
+    public PersonEntityBuilder withLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
 
-    public UserEntity build(){
+    public UserEntity build() {
         UserEntity userEntity = new PersonEntity();
         userEntity.setId(id);
         userEntity.setEmail(email);

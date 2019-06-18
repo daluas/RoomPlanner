@@ -9,7 +9,7 @@ import edu.roomplanner.types.UserType;
 
 public class BuildersWrapper {
 
-    public static RoomDto buildRoomDto(Long id, String name, Integer floor, Integer maxPersons){
+    public static RoomDto buildRoomDto(Long id, String name, Integer floor, Integer maxPersons) {
         return new RoomDtoBuilder()
                 .withId(id)
                 .withName(name)
@@ -18,7 +18,7 @@ public class BuildersWrapper {
                 .build();
     }
 
-    public static UserEntity buildRoomEntity(Long id, String email, String password, UserType type, String name, Integer floor, Integer maxPersons){
+    public static UserEntity buildRoomEntity(Long id, String email, String password, UserType type, String name, Integer floor, Integer maxPersons) {
         return new RoomEntityBuilder()
                 .withId(id)
                 .withEmail(email)
@@ -30,7 +30,7 @@ public class BuildersWrapper {
                 .build();
     }
 
-    public static UserEntity buildPersonEntiy(Long id, String email, String password, UserType type, String firstName, String lastName){
+    public static UserEntity buildPersonEntiy(Long id, String email, String password, UserType type, String firstName, String lastName) {
         return new PersonEntityBuilder()
                 .withId(id)
                 .withEmail(email)

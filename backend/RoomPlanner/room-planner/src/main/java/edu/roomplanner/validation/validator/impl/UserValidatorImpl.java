@@ -21,11 +21,11 @@ public class UserValidatorImpl implements UserValidator {
 
     @Override
     public boolean checkValidRoomId(Long id) {
-            Optional<UserEntity> userEntity = userRepository.findById(id);
-            if(userEntity.isPresent()) {
-                return UserType.ROOM.equals(userEntity.get().getType());
-            }
-            return false;
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        if (userEntity.isPresent()) {
+            return UserType.ROOM.equals(userEntity.get().getType());
+        }
+        return false;
 
     }
 }

@@ -55,7 +55,7 @@ public class UsersRestControllerTest {
         List<RoomDto> roomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
         String jsonRoomDtoList = new ObjectMapper().writeValueAsString(roomDtoList);
 
-        UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com","4wonD2C%",
+        UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 UserType.ROOM, "Wonderland", 5, 14);
         UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com", "4westAD8%",
                 UserType.ROOM, "Westeros", 8, 21);
@@ -74,7 +74,7 @@ public class UsersRestControllerTest {
         RoomDto roomDto = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14);
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
 
-        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com","4wonD2C%",
+        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 UserType.ROOM, "Wonderland", 5, 14);
         userRepository.save(userEntity);
 

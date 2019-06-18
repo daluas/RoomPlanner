@@ -9,27 +9,27 @@ public class RoomDtoBuilder {
     private Integer floor;
     private Integer maxPersons;
 
-    public RoomDtoBuilder withId(Long id){
+    public RoomDtoBuilder withId(Long id) {
         this.id = id;
         return this;
     }
 
-    public RoomDtoBuilder withName(String name){
+    public RoomDtoBuilder withName(String name) {
         this.name = name;
         return this;
     }
 
-    public RoomDtoBuilder withFloor(Integer floor){
+    public RoomDtoBuilder withFloor(Integer floor) {
         this.floor = floor;
         return this;
     }
 
-    public RoomDtoBuilder withMaxPersons(Integer maxPersons){
+    public RoomDtoBuilder withMaxPersons(Integer maxPersons) {
         this.maxPersons = maxPersons;
         return this;
     }
 
-    public RoomDto build(){
+    public RoomDto build() {
         RoomDto roomDto = new RoomDto();
         roomDto.setId(id);
         roomDto.setName(name);
