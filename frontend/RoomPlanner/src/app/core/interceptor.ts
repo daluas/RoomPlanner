@@ -114,6 +114,11 @@ export class Interceptor implements HttpInterceptor {
             }));
         }
 
+        if (newRequest.url === '/rooms/filter') {
+            console.log(newRequest.body);
+        }
+
+
         // if (request.url === '/logout') {
         //     let user : LoggedUser = this.interceptLogout()
         //     return of(new HttpResponse({

@@ -19,15 +19,15 @@ export class UserViewComponent implements OnInit {
 
 
   floors: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
-  startHour:Time;
-  endHour:Time;
+  startHour: Time;
+  endHour: Time;
   numberOfPeople: number;
   floorSelected: number;
 
   filters: Filters;
 
-  defaultDate: Date = new Date(new Date().setHours(0,0,0,0));
-  
+  defaultDate: Date = new Date(new Date().setHours(0, 0, 0, 0));
+
   selectedDate: Date;
   returnDate: Date;
   finalDate: Date;
@@ -48,10 +48,10 @@ export class UserViewComponent implements OnInit {
 
   onDateChanged(date) {
     this.dateChanged = true;
-    this.dateInThePastIn=false;
+    this.dateInThePastIn = false;
 
-    if(this.defaultDate.getTime()>date.getTime()){
-      this.dateInThePastIn=true;
+    if (this.defaultDate.getTime() > date.getTime()) {
+      this.dateInThePastIn = true;
     }
   }
 
@@ -70,25 +70,25 @@ export class UserViewComponent implements OnInit {
 
     console.log(`Selected date is: ${this.finalDate}`);
 
-    if(this.startHour!=null){
+    if (this.startHour != null) {
       console.log(`Start hour selected: ${this.startHour}`);
     }
-    if(this.endHour!=null){
+    if (this.endHour != null) {
       console.log(`End hour selected: ${this.endHour}`);
     }
-    if(this.numberOfPeople!=null){
+    if (this.numberOfPeople != null) {
       console.log(`Number of people selected: ${this.numberOfPeople}`);
     }
-    if(this.floorSelected!=null){
+    if (this.floorSelected != null) {
       console.log(`The floor selected: ${this.floorSelected}`);
     }
 
-    this.filters=new Filters().create({
-      date:this.finalDate,
-      startHour:this.startHour,
-      endHour:this.endHour,
-      floor:this.floorSelected,
-      numberOfPeople:this.numberOfPeople
+    this.filters = new Filters().create({
+      date: this.finalDate,
+      startHour: this.startHour,
+      endHour: this.endHour,
+      floor: this.floorSelected,
+      maxPersons: this.numberOfPeople
     });
 
     console.log(this.filters);
@@ -104,11 +104,11 @@ export class UserViewComponent implements OnInit {
   }
 
   onStartHourChange(event) {
-    this.startHour=event.target.value;
+    this.startHour = event.target.value;
   }
 
-  onEndHourChange(event){
-    this.endHour=event.target.value;
+  onEndHourChange(event) {
+    this.endHour = event.target.value;
   }
 
   onFloorChange(event) {
