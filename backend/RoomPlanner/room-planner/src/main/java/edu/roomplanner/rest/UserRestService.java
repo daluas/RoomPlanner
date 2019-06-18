@@ -1,16 +1,18 @@
 package edu.roomplanner.rest;
 
-import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.dto.UserDto;
 import edu.roomplanner.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
-@RestController("users")
+
+@RestController
+@RequestMapping("/users")
 public class UserRestService {
 
     private final UserService userService;
@@ -20,14 +22,13 @@ public class UserRestService {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/users", produces = "application/json")
-    public List<UserEntity> getUsers() {
-        return userService.getUsers();
-    }
-
-    @PostMapping
-    public UserEntity createUser(@RequestBody UserEntity userEntity) {
-        return userService.saveUser(userEntity);
+    @GetMapping(produces = "application/json")
+    @PreAuthorize("hasAuthority('person') or hasAuthority('room')")
+    public ResponseEntity<UserDto> getUserEmailType(@RequestParam(name = "email") String email) {
+        Optional<UserDto> userEmailTypeDtoOptional = userService.getUserDto(email);
+        return userEmailTypeDtoOptional.
+                map(userEmailTypeDto -> new ResponseEntity<>(userEmailTypeDto, HttpStatus.OK)).
+                orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 
