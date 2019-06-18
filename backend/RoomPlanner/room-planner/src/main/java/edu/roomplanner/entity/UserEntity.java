@@ -10,8 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Setter
 @Getter
+@Setter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(
         discriminatorType = DiscriminatorType.STRING,
