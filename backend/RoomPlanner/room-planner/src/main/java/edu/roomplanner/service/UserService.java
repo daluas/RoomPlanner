@@ -1,6 +1,6 @@
 package edu.roomplanner.service;
 
-import edu.roomplanner.dto.UserEmailTypeDto;
+import edu.roomplanner.dto.UserDto;
 import edu.roomplanner.entity.UserEntity;
 
 import java.util.List;
@@ -12,6 +12,6 @@ public interface UserService {
 
     UserEntity saveUser(UserEntity userEntity);
 
-    Optional<UserEmailTypeDto> getUserEmailTypeDto(String email);
+    Optional<UserDto> getUserDto(String email);
 
 }
