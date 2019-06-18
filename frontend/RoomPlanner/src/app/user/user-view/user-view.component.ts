@@ -30,11 +30,13 @@ export class UserViewComponent implements OnInit {
   }
 
   setDefaultData() {
+    // set default filtes, now that we know the first floor
+    this.previousFilters = {
+      date: new Date()
+    }
+
     this.roomDataService.getBuildingLayout().then((buildingLayout) => {
       this.buildingLayout = buildingLayout;
-
-      // set default filtes, now that we know the first floor
-      this.previousFilters = {}
     });
 
     this.roomDataService.getDefaultRooms().then((defaultRooms) => {
