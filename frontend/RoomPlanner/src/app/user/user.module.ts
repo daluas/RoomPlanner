@@ -10,7 +10,8 @@ import { RoomsViewComponent } from './user-view/rooms-view/rooms-view.component'
 @NgModule({
   declarations: [
     UserViewComponent, 
-    FiltersComponent, RoomsViewComponent,
+    FiltersComponent,
+    RoomsViewComponent
   ],
   imports: [
     CommonModule,

@@ -13,18 +13,15 @@
 
       <div class="hours" *ngIf="dateInThePastIn==false">
 
-        <div class="hours-header" >
-          <span class="startHourText" >From</span>
-          <span class="endHourText" >To</span>
-        </div>
-        <mat-form-field (change)="onStartHourChange($event)" class="startHour">
-          <input matInput type="time" min="180" step="1800" >
-        </mat-form-field>
-        <span ><b>-</b></span>
+        
+        <span><b>From: </b></span>
+        <app-hour-input (hourEmitter)="onStartHourEmit($event)"></app-hour-input>
 
-        <mat-form-field class="endHour" (change)="onEndHourChange($event)" >
-          <input matInput type="time" min="180" step="1800">
-        </mat-form-field>
+        <br/>
+        <span><b>To: </b></span>
+        <app-hour-input (hourEmitter)="onEndHourEmit($event)"></app-hour-input>
+
+
       </div>
 
       <div class="floor">

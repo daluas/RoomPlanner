@@ -1,0 +1,38 @@
+.hour-container{
+    width: 70%;
+}
+
+
+.hour{
+    width: 30%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 10%;
+}
+input{
+    text-align: center;
+}
+.minutes{
+    width: 30%;
+    margin-left: 10%;
+}
+
+.key_up_hours{
+    margin-left: 18%;
+    cursor: pointer;
+}
+
+.key_up_minutes{
+    margin-left: 38%;
+    cursor: pointer;
+}
+
+.key_down_hours{
+    margin-left: 18%;
+    cursor: pointer;
+}
+
+.key_down_minutes{
+    margin-left: 38%;
+    cursor: pointer;
+}
