@@ -1,0 +1,11 @@
+<div class="container">
+  <p style="text-align: center; margin: 0" *ngIf="booking">
+    START DATE: {{booking.startDate}} 
+    <br><br> 
+    END DATE: {{booking.endDate}}
+    <br><br>
+    ROOM ID: {{booking.roomId}}
+  </p>
+
+  <button (click)="createBookingTest()" id="testButton">book</button>
+</div>

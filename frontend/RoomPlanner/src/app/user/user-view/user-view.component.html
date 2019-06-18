@@ -1,56 +1,14 @@
 <div class="container">
   <div class="filters-container">
-    <div class="filters-header" [ngClass]="{'header-border-bottom': dropdownOpen}" (click)="toggleDropdown()">
-      FILTERS
-      <i class="material-icons dropdown-button">arrow_drop_down</i>
-    </div>
-    <div class="filters-elements" [ngClass]="{'filters-open': dropdownOpen}">
-      <div class="calendar">
-        <div class="calendar-wrapper">
-          <mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="onDateChanged($event)"></mat-calendar>
-        </div>
-      </div>
-      <div class="filters-body" >
+    <app-filters [buildingLayout]="buildingLayout" (filterChange)="updateRoomsBasedOnFilters($event)"></app-filters>
+  </div>
 
-        <div class="hours" *ngIf="dateInThePastIn==false">
-
-          <div class="hours-header" >
-            <span class="startHourText" >From</span>
-            <span class="endHourText" >To</span>
-          </div>
-          <mat-form-field (change)="onStartHourChange($event)" class="startHour">
-            <input matInput type="time" min="180" step="1800" >
-          </mat-form-field>
-          <span ><b>-</b></span>
-
-          <mat-form-field class="endHour" (change)="onEndHourChange($event)" >
-            <input matInput type="time" min="180" step="1800">
-          </mat-form-field>
-        </div>
-
-        <div class="floor">
-          <h4>Floor</h4>
-          <mat-form-field>
-            <mat-label>Select an option:</mat-label>
-            <mat-select (selectionChange)="onFloorChange($event)">
-              <mat-option *ngFor="let floor of floors" [value]="floor">{{floor}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <div class="people"> 
-          <h4>Number of people attending</h4>
-          <span class="text-small">1</span>
-          <mat-slider thumbLabel min="1" max="30" step="1" (change)="onSliderChange($event)"></mat-slider>
-          <span class="text-small">30</span>
-        </div>
-
-      </div>
-      <button mat-stroked-button class="button-filters" color="primary" (click)="onApplyFilters()">Apply filters</button>
-    </div>
+  <div class="booking-popup-container" [ngClass]="{'display-block' : bookingPopupOpen}">
+    <div class="booking-popup-close" (click)="closeBookingPopup()"></div>
+    <app-booking-popup [booking]="newBooking" (booked)="addCreatedBooking($event)"></app-booking-popup>
   </div>
 
   <div class="room-view-container">
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">user view</div>
+    <app-rooms-view [rooms]="rooms" (createBooking)="createBooking($event)"></app-rooms-view>
   </div>
 </div>

@@ -28,29 +28,17 @@ export class AuthService {
 	}
 
 	setInitialUserFromLocalStorage(): void {
-
 		if (localStorage.getItem('user-data') == null) {
-			console.log("no user in LS");
 			return;
 		}
-
 		if (localStorage.getItem('access-token') == null) {
-			console.log("no token in LS")
 			return;
 		}
 		this.token = new LoginToken().create(JSON.parse(localStorage.getItem("access-token")))
-		// console.log("token from LS : ", this.token);
-
 		let userParsed = JSON.parse(localStorage.getItem('user-data'))
 		let user: LoggedUser = new LoggedUser().create(userParsed);
-		// console.log("user from LS: ", user);
-
 		let expirationDate: Date = new Date(this.token.expirationDate)
 		let now = new Date(Date.now());
-
-		console.log("now: ", now);
-		console.log("expiration date: ", expirationDate);
-
 		if (expirationDate.getTime() < now.getTime()) {
 			this._snackBar.open(
 				`Token is expired (auth)`,
@@ -110,8 +98,6 @@ export class AuthService {
 				}))
 			}, (expirationDate.getTime() - now.getTime()))// * 1000)
 		}
-
-		// this.OnCurrentUserChanged(user);
 		this.OnCurrentUserChanged(user);
 
 	}
@@ -119,7 +105,6 @@ export class AuthService {
 	OnCurrentUserChanged(loggedUserModel: LoggedUser): void {
 		this.currentUser = loggedUserModel;
 		this.currentUserSubject.next(this.currentUser);
-
 	}
 
 	refreshToken(token: LoginToken): Promise<Object> {

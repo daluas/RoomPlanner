@@ -2,9 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth/auth.service';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http'
-import { Interceptor } from './interceptor';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { RoomDataService } from './services/room-data/room-data.service';
+import { BookingService } from './services/booking/booking.service';
 @NgModule({
   declarations: [],
   imports: [
@@ -14,7 +13,8 @@ import { RoomDataService } from './services/room-data/room-data.service';
   providers: [
     AuthService,
     HttpClient,
-    RoomDataService
+    RoomDataService,
+    BookingService
   ],
   exports: []
 })

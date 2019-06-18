@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatCalendar, DateAdapter } from '@angular/material';
-import { RoomDataService } from '../../core/services/room-data/room-data.service';
-import { RoomModel } from '../../core/models/RoomModel';
-import { Filters } from '../../shared/models/Filters';
-import { Time } from '@angular/common';
+import { Booking } from 'src/app/shared/models/Booking';
+import { RoomDataService } from 'src/app/core/services/room-data/room-data.service';
 
 
 @Component({
@@ -13,107 +10,73 @@ import { Time } from '@angular/common';
 })
 export class UserViewComponent implements OnInit {
 
-  dropdownOpen: boolean = false;
-  dateChanged: boolean = false;
+  bookingPopupOpen: boolean = false;
+  newBooking: Booking;
+  buildingLayout: any;
+  rooms: any[];
+  displayedRooms: any[];
+  previousFilters: any;
 
+  constructor(public roomDataService: RoomDataService) { }
 
-
-  floors: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
-  startHour: Time;
-  endHour: Time;
-  numberOfPeople: number;
-  floorSelected: number;
-
-  filters: Filters;
-
-  defaultDate: Date = new Date(new Date().setHours(0, 0, 0, 0));
-
-  selectedDate: Date;
-  returnDate: Date;
-  finalDate: Date;
-
-
-  dateInThePastIn: boolean = false;
-
-  constructor(
-    private _dateAdapter: DateAdapter<Date>,
-    private roomDataService: RoomDataService
-  ) { }
-
-  ngOnInit() { }
-
-  toggleDropdown() {
-    this.dropdownOpen = !this.dropdownOpen;
+  ngOnInit(): void {
+    this.setDefaultData();
+    // set interval for room update ~ each 1 min
   }
 
-  onDateChanged(date) {
-    this.dateChanged = true;
-    this.dateInThePastIn = false;
-
-    if (this.defaultDate.getTime() > date.getTime()) {
-      this.dateInThePastIn = true;
-    }
+  closeBookingPopup() {
+    this.bookingPopupOpen = false;
   }
 
-  onApplyFilters() {
+  setDefaultData() {
+    this.roomDataService.getBuildingLayout().then((buildingLayout) => {
+      this.buildingLayout = buildingLayout;
 
-    if (this.dateChanged) {
-      this.finalDate = this.selectedDate;
-    }
-    else {
-      this.finalDate = this.defaultDate;
-    }
-
-
-    /*let rooms: RoomModel[] = */
-    //this.returnDate = this.userdataService.getRoomsByDate(new Date(this.finalDate));
-
-    console.log(`Selected date is: ${this.finalDate}`);
-
-    if (this.startHour != null) {
-      console.log(`Start hour selected: ${this.startHour}`);
-    }
-    if (this.endHour != null) {
-      console.log(`End hour selected: ${this.endHour}`);
-    }
-    if (this.numberOfPeople != null) {
-      console.log(`Number of people selected: ${this.numberOfPeople}`);
-    }
-    if (this.floorSelected != null) {
-      console.log(`The floor selected: ${this.floorSelected}`);
-    }
-
-    this.filters = new Filters().create({
-      date: this.finalDate,
-      startHour: this.startHour,
-      endHour: this.endHour,
-      floor: this.floorSelected,
-      maxPersons: this.numberOfPeople
+      // set default filtes, now that we know the first floor
+      this.previousFilters = {}
     });
 
-    console.log(this.filters);
-
+    this.roomDataService.getDefaultRooms().then((defaultRooms) => {
+      this.rooms = defaultRooms;
+      this.displayedRooms = defaultRooms;
+    })
   }
 
-  getReturnDate() {
-    return this.returnDate;
+  updateRoomsBasedOnFilters(filters: any) {
+    console.log("Filters component emited: ", filters);
+
+    if (this.filteredRoomsAlreadyExist(filters)){
+      this.setDisplayedRooms(filters);
+    } else {
+      this.roomDataService.getRooms(filters).then((rooms) => {
+        this.rooms = rooms;
+        this.setDisplayedRooms(filters);
+      })
+    }
+
+    this.previousFilters = filters;
   }
 
-  onSliderChange(event) {
-    this.numberOfPeople = event.value;
+  filteredRoomsAlreadyExist(filters: any): boolean{
+    //if this.previousFilters date && floor is the same, than return true
+
+    return false;
   }
 
-  onStartHourChange(event) {
-    this.startHour = event.target.value;
+  setDisplayedRooms(filters: any){
+    // this.displayedRooms = this.rooms.map((room) => { if(filters conditions) return room});
+    // DELETE THIS
+    this.displayedRooms = this.rooms;
   }
 
-  onEndHourChange(event) {
-    this.endHour = event.target.value;
+  createBooking(booking: any) {
+    this.newBooking = booking;
+    this.bookingPopupOpen = true;
   }
 
-  onFloorChange(event) {
-    this.floorSelected = event.value;
+  addCreatedBooking(booking: any) {
+    // add to the list of bookings of the booked room the new booking 
+    console.log("Rooms list must be updated with: ", booking);
+    // call setDisplayedRooms(this.previousFilters); after setting this.rooms with new booking
   }
-
-
 }
