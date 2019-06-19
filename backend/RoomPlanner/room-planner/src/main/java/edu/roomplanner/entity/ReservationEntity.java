@@ -1,7 +1,6 @@
 package edu.roomplanner.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -10,6 +9,7 @@ import java.util.Calendar;
 @Table(name = "reservations")
 @Setter
 @Getter
+@EqualsAndHashCode
 public class ReservationEntity {
 
     @Id
@@ -36,5 +36,24 @@ public class ReservationEntity {
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
     private UserEntity room;
+
+    public ReservationEntity startDate(Calendar startDate){
+        this.startDate = startDate;
+        return this;
+    }
+    public ReservationEntity endDate(Calendar endDate){
+        this.endDate = endDate;
+        return this;
+    }
+    public ReservationEntity person(UserEntity person){
+        this.person = person;
+        return this;
+    }
+    public ReservationEntity room(UserEntity room){
+        this.room = room;
+        return this;
+    }
+
+
 
 }
