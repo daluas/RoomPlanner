@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LoginModel } from '../../models/LoginModel';
 import { LoggedUser } from '../../models/LoggedUser';
-import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse, HttpParams } from "@angular/common/http";
 
 import { LoginToken } from '../../models/LoginToken';
 import { Observable, of, Subject, Subscriber } from 'rxjs';
@@ -57,30 +57,32 @@ export class AuthService {
 	}
 
 	refreshToken(): Promise<Object> {
-		return this.httpClient.post(`${this.backendUrl}/oauth/token`, {
-			grant_type: "refresh_token",
-			refresh_token: this.token.refresh_token
-		}).toPromise();
+		let params = new HttpParams();
+		params.set("grant_type", "refresh_token")
+		params.set('refresh_token', this.token.refresh_token);
+		console.log(params);
+		return this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise();
 	}
 
 	authenticateUser(loginModel: LoginModel): Promise<Object> {
-		return this.httpClient.post(`${this.backendUrl}/oauth/token`, {
-			grant_type: "password",
-			username: loginModel.email,
-			password: loginModel.password
-		}).toPromise()
-			// .then(data => {
-			// 	console.log(data)
-			// 	return new Promise((res, rej) => {
-			// 		res(true);
-			// 	})
-			// })
-			// .catch(error => {
-			// 	//this should go on .then
-			// 	return new Promise((res, rej) => {
-			// 		res(error);
-			// 	})
-			// })
+
+		let params = new HttpParams();
+		params = params.set("grant_type", "password");
+		params = params.set('username', loginModel.email);
+		params = params.set('password', loginModel.password);
+		return this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise()
+		// .then(data => {
+		// 	console.log(data)
+		// 	return new Promise((res, rej) => {
+		// 		res(true);
+		// 	})
+		// })
+		// .catch(error => {
+		// 	//this should go on .then
+		// 	return new Promise((res, rej) => {
+		// 		res(error);
+		// 	})
+		// })
 	}
 
 	async checkRoomPassword(password: string): Promise<Object> {

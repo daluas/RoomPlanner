@@ -6,7 +6,9 @@ import {
     HttpInterceptor,
     HttpResponse,
     HttpErrorResponse,
-    HttpHeaders
+    HttpHeaders,
+    HttpUrlEncodingCodec,
+    HttpParams
 } from "@angular/common/http";
 
 import { Observable, of, throwError } from 'rxjs';
@@ -24,36 +26,37 @@ export class Interceptor implements HttpInterceptor {
     constructor(private _snackBar: MatSnackBar) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
         if (request.url === `${this.BASE_URL}/oauth/token`) {
+            console.log(request.body.get("grant_type"))
+            if (request.body.get("grant_type") === "password") {
+                console.log("Requesting password")
 
-            if (request.body.grant_type == "password") {
-                console.log("requesting token")                
-                let newRequest: HttpRequest<any> = this.addGetTokenHeaders(request);
-                console.log(newRequest);
+                request = this.addGetTokenHeaders(request);
+                return next.handle(request)
+                    .pipe(
+                        tap((event: HttpEvent<any>) => {
+                            if (event instanceof HttpResponse) {
+                                console.log('event--->>>', event);
+                            }
+                            console.log(event);
+                            return event;
+                        }),
+                        catchError((error: HttpErrorResponse) => {
+                            console.log(error);
+                            let data = {};
+                            data = {
+                                reason: error && error.error.reason ? error.error.reason : '',
+                                status: error.status
+                            };
 
-                return next.handle(newRequest).pipe(
-                    tap((event: HttpEvent<any>) => {
-                        if (event instanceof HttpResponse) {
-                            console.log('event--->>>', event);
-                        }
-                        console.log(event);
-                        return event;
-                    }),
-                    catchError((error: HttpErrorResponse) => {
-                        console.log(error);
-                        let data = {};
-                        data = {
-                            reason: error && error.error.reason ? error.error.reason : '',
-                            status: error.status
-                        };
-
-                        // this.errorDialogService.openDialog(data);
-                        return throwError(error);
-                    })
-                );
+                            // this.errorDialogService.openDialog(data);
+                            return throwError(error);
+                        })
+                    );
             }
 
-            if (request.body.grant_type == "refresh_token") {
+            if (request.body.get("grant_type") == "refresh_token") {
                 console.log("requesting refresh token")
                 return next.handle(request).pipe(
                     tap({
@@ -110,21 +113,17 @@ export class Interceptor implements HttpInterceptor {
     }
 
     addGetTokenHeaders(request: HttpRequest<any>): HttpRequest<any> {
-        let newRequest: HttpRequest<any>;
-
+        console.log("adding token headers");
         let client_id = "browser"
         let pass = "pin"
         let encoded = btoa(`${client_id}:${pass}`)
-
-        let getTokenHeaders = new HttpHeaders();
-        getTokenHeaders.set("Content-Type", "application/x-www-form-urlencoded")
-        getTokenHeaders.set("Authorization", `Basic ${encoded}`)
-        getTokenHeaders.set("Access-Control-Request-Headers", "Content-Type");
-
-        newRequest = request.clone({
-            headers: getTokenHeaders
+        return request.clone({
+            setHeaders: {
+                ContentType: 'application/x-www-form-urlencoded',
+                Authorization: `Basic ${encoded}`
+                // Access-Control-Request-Headers: "Content-Type"
+            }
         });
-        return newRequest;
     }
 
     addAuthenticationToken(request: HttpRequest<any>, next: HttpHandler): HttpRequest<any> {
