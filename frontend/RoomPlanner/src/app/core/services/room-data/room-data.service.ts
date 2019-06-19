@@ -118,7 +118,7 @@ export class RoomDataService {
   }
 
   // apelata doar din user view
-  getRooms(filters: any): Promise<any[]> {
+  getRooms(filter: Filters): Promise<any[]> {
     console.log("getRooms(filters: any) was called!");
 
     // fara returnare de erori, doar rooms, ori null
@@ -153,8 +153,8 @@ export class RoomDataService {
   // apelata doar din room view
   getRoom(date: Date): Promise<any> {
     console.log("getRoom(date: Date) was called!");
-
     // fara returnare de erori, doar room, ori null
+
     return new Promise((res) => {
       // vezi cu backend-ul cum iei programul camerei utilizatorului room logat
       // si va fi apelata la anumite intervale pentru a face refresh
@@ -177,8 +177,9 @@ export class RoomDataService {
     });
   }
 
-  getAllRooms(): Promise<Object> {
-    return this.http.get(`${this.backendUrl}/rooms`).toPromise();
+  getAllRooms(): Observable<Object> {
+    return this.http.get(`${this.backendUrl}/rooms`)
+    // .toPromise();
     // return new Observable();
   }
 
