@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class RoomPlannerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(RoomPlannerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(RoomPlannerApplication.class, args);
+    }
 
 }

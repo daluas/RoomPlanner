@@ -1,10 +1,17 @@
 package edu.roomplanner.repository;
 
 import edu.roomplanner.entity.UserEntity;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import edu.roomplanner.types.UserType;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface UserRepository extends PagingAndSortingRepository<UserEntity, Long> {
+import java.util.List;
+import java.util.Optional;
 
+@Repository
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+
+    Optional<UserEntity> findByEmail(String email);
+
+    List<UserEntity> findByType(UserType type);
 }

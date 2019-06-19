@@ -1,13 +1,17 @@
 package edu.roomplanner.service;
 
-import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.dto.RoomDto;
+import edu.roomplanner.dto.UserDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
-    List<UserEntity> getUsers();
+    List<RoomDto> getAllRooms();
 
-    UserEntity saveUser(UserEntity userEntity);
+    RoomDto getRoomById(Long id);
+
+    Optional<UserDto> getUserDto(String email);
 
 }

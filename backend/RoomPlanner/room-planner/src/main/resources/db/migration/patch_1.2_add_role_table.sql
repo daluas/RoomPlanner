@@ -23,6 +23,8 @@ create table roles
 );
 alter table roles add constraint roles_name_nn unique(name);
 
+alter table roles add constraint roles_name_nn unique(name);
+
 alter table roles alter column id set default nextval('seq_role_id');
 
 create table rights
