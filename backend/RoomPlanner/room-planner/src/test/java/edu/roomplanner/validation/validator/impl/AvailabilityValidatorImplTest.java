@@ -30,7 +30,7 @@ public class AvailabilityValidatorImplTest {
     @Test
     public void shouldFindAValidDate() {
         ValidationResult expectedResult = new ValidationResult();
-        ReservationEntity reservationEntity = getReservationEntityWithStartEndDate();
+        ReservationEntity reservationEntity = getReservationEntity();
         when(repository.findAvailableDate(reservationEntity.getStartDate().getTime(), reservationEntity.getEndDate().getTime(), reservationEntity.getRoom().getId()))
                 .thenReturn(new ArrayList<>());
 
@@ -42,7 +42,7 @@ public class AvailabilityValidatorImplTest {
     @Test
     public void shouldNotFindAValidDate() {
         ValidationResult expectedResult = new ValidationResult("The date is not available!");
-        ReservationEntity reservationEntity = getReservationEntityWithStartEndDate();
+        ReservationEntity reservationEntity = getReservationEntity();
         when(repository.findAvailableDate(reservationEntity.getStartDate().getTime(), reservationEntity.getEndDate().getTime(), reservationEntity.getRoom().getId()))
                 .thenReturn(Arrays.asList(reservationEntity));
 
@@ -51,7 +51,7 @@ public class AvailabilityValidatorImplTest {
         assertEquals(result.getError(), expectedResult.getError());
     }
 
-    private ReservationEntity getReservationEntityWithStartEndDate() {
+    private ReservationEntity getReservationEntity() {
 
         RoomEntity room = new RoomEntity();
         room.setId(1L);

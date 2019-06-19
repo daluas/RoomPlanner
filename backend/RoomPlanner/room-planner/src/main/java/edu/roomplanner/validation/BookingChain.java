@@ -3,15 +3,18 @@ package edu.roomplanner.validation;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.validation.validator.BookingValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class BookingChain {
 
-    @Autowired
+
     private List<BookingValidator> validatorChain;
 
+    @Autowired
     public BookingChain(List<BookingValidator> validatorChain) {
         this.validatorChain = validatorChain;
     }
