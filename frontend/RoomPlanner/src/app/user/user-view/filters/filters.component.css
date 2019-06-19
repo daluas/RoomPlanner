@@ -152,10 +152,6 @@ mat-slider {
     }
 }
 
-/* .example-custom-date-class {
-    background-color: orange;
-    border-radius: 50%;
-} */
 
 @media screen and (min-width : 500px) and (max-width : 768px) {
     .calendar-wrapper{

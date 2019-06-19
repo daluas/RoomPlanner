@@ -95,9 +95,7 @@ export class FiltersComponent implements OnInit, OnChanges {
       this.endHour.setHours(this.endHour.getHours()+1);
     }
 
-    /*let rooms: RoomModel[] = */
-    //this.returnDate = this.userdataService.getRoomsByDate(new Date(this.finalDate));
-
+   
     if (this.floorSelected == null){
       this.floorSelected = this.floorByDefault;
     }

@@ -119,9 +119,4 @@ export class HourInputComponent implements OnInit {
 
   }
 
-
-  // onClearClick(){
-  //   this.updateHours(' ');
-  //   this.updateMinutes(' ');
-  // }
 }
