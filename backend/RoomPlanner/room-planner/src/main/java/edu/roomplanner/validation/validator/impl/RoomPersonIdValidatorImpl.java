@@ -5,9 +5,11 @@ import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.validation.ValidationResult;
 import edu.roomplanner.validation.validator.BookingValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
+@Order(1)
 public class RoomPersonIdValidatorImpl implements BookingValidator {
 
     private UserRepository userRepository;

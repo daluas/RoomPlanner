@@ -6,12 +6,14 @@ import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.validation.ValidationResult;
 import edu.roomplanner.validation.validator.BookingValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.List;
 
 @Component("Validator")
+@Order(4)
 public class AvailabilityValidatorImpl implements BookingValidator {
 
     private ReservationRepository reservationRepository;

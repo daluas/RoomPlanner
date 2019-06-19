@@ -1,5 +1,6 @@
 package edu.roomplanner.validation.validator.impl;
 
+import edu.roomplanner.builders.ReservationEntityBuilder;
 import edu.roomplanner.entity.PersonEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
@@ -45,7 +46,9 @@ public class RoomPersonValidatorImplTest {
         UserEntity room = new RoomEntity();
         room.setType(UserType.ROOM);
 
-        return new ReservationEntity().person(room);
+        return new ReservationEntityBuilder()
+                .withPerson(room)
+                .build();
     }
 
     private ReservationEntity getRoomAsPerson() {
@@ -53,8 +56,10 @@ public class RoomPersonValidatorImplTest {
         UserEntity person = new PersonEntity();
         person.setType(UserType.PERSON);
 
-        return new ReservationEntity().person(person)
-                .room(person);
+        return new ReservationEntityBuilder()
+                .withPerson(person)
+                .withRoom(person)
+                .build();
     }
 
     private ReservationEntity getValidReservationEntity() {
@@ -65,9 +70,10 @@ public class RoomPersonValidatorImplTest {
         RoomEntity room = new RoomEntity();
         room.setType(UserType.ROOM);
 
-        return new ReservationEntity().person(person)
-                .room(room);
-
+        return new ReservationEntityBuilder()
+                .withRoom(room)
+                .withPerson(person)
+                .build();
     }
 
 

@@ -1,7 +1,14 @@
 package edu.roomplanner.rest;
 
+import edu.roomplanner.builders.ReservationEntityBuilder;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.dto.UserDto;
+import edu.roomplanner.entity.PersonEntity;
+import edu.roomplanner.entity.ReservationEntity;
+import edu.roomplanner.entity.RoomEntity;
+import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.repository.ReservationRepository;
+import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +28,11 @@ public class UserRestController {
     private static Logger LOGGER = LogManager.getLogger(UserRestController.class);
 
     private final UserService userService;
+
+    @Autowired
+    ReservationRepository repository;
+    @Autowired
+    UserRepository urepository;
 
     @Autowired
     public UserRestController(UserService userService) {
@@ -53,4 +66,5 @@ public class UserRestController {
                 map(userEmailTypeDto -> new ResponseEntity<>(userEmailTypeDto, HttpStatus.OK)).
                 orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
 }

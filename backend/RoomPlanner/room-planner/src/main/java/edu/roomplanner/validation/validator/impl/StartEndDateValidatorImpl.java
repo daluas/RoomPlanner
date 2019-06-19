@@ -3,12 +3,14 @@ package edu.roomplanner.validation.validator.impl;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.validation.ValidationResult;
 import edu.roomplanner.validation.validator.BookingValidator;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.Calendar;
 
 @Component
+@Order(3)
 public class StartEndDateValidatorImpl implements BookingValidator {
 
     private static final int MIN_MINUTES = 30;
@@ -27,20 +29,20 @@ public class StartEndDateValidatorImpl implements BookingValidator {
     }
 
     private Long getMinutesInFuture(Calendar startDate) {
-        startDate.set(Calendar.SECOND,0);
+        startDate.set(Calendar.SECOND, 0);
         return Duration.between(getSysDate().toInstant(), startDate.toInstant())
                 .toMinutes();
     }
 
     private Long getMinutesReservationTime(Calendar startDate, Calendar endDate) {
-        endDate.set(Calendar.SECOND,0);
+        endDate.set(Calendar.SECOND, 0);
         return Duration.between(startDate.toInstant(), endDate.toInstant())
                 .toMinutes();
     }
 
     private Calendar getSysDate() {
         Calendar sysDate = Calendar.getInstance();
-        sysDate.set(Calendar.SECOND,0);
+        sysDate.set(Calendar.SECOND, 0);
         return sysDate;
     }
 

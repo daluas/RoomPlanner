@@ -37,23 +37,4 @@ public class ReservationEntity {
     @JoinColumn(name = "room_id", nullable = false)
     private UserEntity room;
 
-    public ReservationEntity startDate(Calendar startDate){
-        this.startDate = startDate;
-        return this;
-    }
-    public ReservationEntity endDate(Calendar endDate){
-        this.endDate = endDate;
-        return this;
-    }
-    public ReservationEntity person(UserEntity person){
-        this.person = person;
-        return this;
-    }
-    public ReservationEntity room(UserEntity room){
-        this.room = room;
-        return this;
-    }
-
-
-
 }

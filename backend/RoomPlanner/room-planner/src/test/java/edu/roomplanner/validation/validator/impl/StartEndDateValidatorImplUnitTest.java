@@ -1,5 +1,6 @@
 package edu.roomplanner.validation.validator.impl;
 
+import edu.roomplanner.builders.ReservationEntityBuilder;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.validation.ValidationResult;
 import org.junit.Test;
@@ -69,7 +70,9 @@ public class StartEndDateValidatorImplUnitTest {
         Calendar startDate = Calendar.getInstance();
         startDate.set(startYear, startMonth, startDay, startHour, startMinute, 0);
 
-        return new ReservationEntity().startDate(startDate);
+        return new ReservationEntityBuilder()
+                .withStartDate(startDate)
+                .build();
     }
 
     private ReservationEntity createReservationEntityWithEndDate(int endYear, int endMonth, int endDay, int endHour, int endMinute) {
@@ -80,8 +83,10 @@ public class StartEndDateValidatorImplUnitTest {
                 , sysDate.get(Calendar.HOUR_OF_DAY), sysDate.get(Calendar.MINUTE), 0);
         endDate.set(endYear, endMonth, endDay, endHour, endMinute, 0);
 
-        return new ReservationEntity().startDate(startDate)
-                .endDate(endDate);
+        return new ReservationEntityBuilder()
+                .withStartDate(startDate)
+                .withEndDate(endDate)
+                .build();
     }
 
 }

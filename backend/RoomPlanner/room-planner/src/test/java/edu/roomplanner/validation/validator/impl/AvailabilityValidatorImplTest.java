@@ -1,5 +1,6 @@
 package edu.roomplanner.validation.validator.impl;
 
+import edu.roomplanner.builders.ReservationEntityBuilder;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.repository.ReservationRepository;
@@ -30,7 +31,8 @@ public class AvailabilityValidatorImplTest {
     public void shouldFindAValidDate() {
         ValidationResult expectedResult = new ValidationResult();
         ReservationEntity reservationEntity = getReservationEntityWithStartEndDate();
-        when(repository.findAvailableDate(reservationEntity.getStartDate().getTime(), reservationEntity.getEndDate().getTime(), reservationEntity.getRoom().getId())).thenReturn(new ArrayList<>());
+        when(repository.findAvailableDate(reservationEntity.getStartDate().getTime(), reservationEntity.getEndDate().getTime(), reservationEntity.getRoom().getId()))
+                .thenReturn(new ArrayList<>());
 
         ValidationResult result = sut.validate(reservationEntity);
 
@@ -41,7 +43,8 @@ public class AvailabilityValidatorImplTest {
     public void shouldNotFindAValidDate() {
         ValidationResult expectedResult = new ValidationResult("The date is not available!");
         ReservationEntity reservationEntity = getReservationEntityWithStartEndDate();
-        when(repository.findAvailableDate(reservationEntity.getStartDate().getTime(), reservationEntity.getEndDate().getTime(), reservationEntity.getRoom().getId())).thenReturn(Arrays.asList(reservationEntity));
+        when(repository.findAvailableDate(reservationEntity.getStartDate().getTime(), reservationEntity.getEndDate().getTime(), reservationEntity.getRoom().getId()))
+                .thenReturn(Arrays.asList(reservationEntity));
 
         ValidationResult result = sut.validate(reservationEntity);
 
@@ -58,9 +61,11 @@ public class AvailabilityValidatorImplTest {
         startDate.set(2007, Calendar.JANUARY, 6, 10, 10, 0);
         endDate.set(2007, Calendar.JANUARY, 6, 10, 45, 0);
 
-        return new ReservationEntity().startDate(startDate)
-                .endDate(endDate)
-                .room(room);
+        return new ReservationEntityBuilder()
+                .withStartDate(startDate)
+                .withEndDate(endDate)
+                .withRoom(room)
+                .build();
 
     }
 

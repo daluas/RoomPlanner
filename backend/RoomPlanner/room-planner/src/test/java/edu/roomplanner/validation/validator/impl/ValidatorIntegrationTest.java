@@ -1,20 +1,19 @@
 package edu.roomplanner.validation.validator.impl;
 
 import edu.roomplanner.RoomPlannerApplication;
+import edu.roomplanner.builders.ReservationEntityBuilder;
 import edu.roomplanner.entity.PersonEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
-import edu.roomplanner.validation.validator.BookingValidator;
 import org.flywaydb.core.Flyway;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -36,10 +35,11 @@ public class ValidatorIntegrationTest {
     private Flyway flyway;
 
     @Before
-    public void init() {
+    public void init() throws Exception {
         flyway.clean();
         flyway.migrate();
     }
+
 
     @Autowired
     private ReservationRepository reservationRepository;
@@ -49,11 +49,11 @@ public class ValidatorIntegrationTest {
 
     @Test
     public void shouldNotFindAValidEqualsDates() {
-        ReservationEntity reservation = getReservationEntity(2007,6,6,6,
-                2007,6,8,5);
+        ReservationEntity reservation = getReservationEntity(2007, 6, 6, 6,
+                2007, 7, 8, 5);
         reservationRepository.save(reservation);
 
-        System.out.println(reservationRepository.findAll());
+        List<ReservationEntity> bruh = reservationRepository.findAll();
 
         List<ReservationEntity> actualList = reservationRepository.findAvailableDate(reservation.getStartDate().getTime(), reservation.getEndDate().getTime(), reservation.getRoom().getId());
         List<ReservationEntity> expectedList = Arrays.asList(reservation);
@@ -64,10 +64,10 @@ public class ValidatorIntegrationTest {
 
     @Test
     public void shouldFindAValidDate() {
-        ReservationEntity reservation = getReservationEntity(2007,6,11,45,
-                2007,6,11,20);
-        ReservationEntity existReservation = getReservationEntity(2007,6,11,20,
-                2007,6,12,10);
+        ReservationEntity reservation = getReservationEntity(2007, 6, 11, 45,
+                2007, 6, 11, 20);
+        ReservationEntity existReservation = getReservationEntity(2007, 6, 11, 20,
+                2007, 6, 12, 10);
         reservationRepository.save(existReservation);
 
         List<ReservationEntity> actualList = reservationRepository.findAvailableDate(reservation.getStartDate().getTime(), reservation.getEndDate().getTime(), reservation.getRoom().getId());
@@ -76,11 +76,11 @@ public class ValidatorIntegrationTest {
 
     }
 
-    private ReservationEntity getReservationEntity(int startYear,int startDay,int startHour,int startMinute,
-                                                   int endYear,int endDay,int endHour, int endMinute) {
+    private ReservationEntity getReservationEntity(int startYear, int startDay, int startHour, int startMinute,
+                                                   int endYear, int endDay, int endHour, int endMinute) {
 
-        PersonEntity person = getPerson(1,"person1");
-        RoomEntity room = getRoom(2,"room1");
+        PersonEntity person = getPerson(1, "person1");
+        RoomEntity room = getRoom(2, "room1");
 
         userRepository.save(person);
         userRepository.save(room);
@@ -90,14 +90,16 @@ public class ValidatorIntegrationTest {
         startDate.set(startYear, Calendar.JANUARY, startDay, startHour, startMinute, 0);
         endDate.set(endYear, Calendar.JANUARY, endDay, endHour, endMinute, 0);
 
-        return new ReservationEntity().startDate(startDate)
-                .endDate(endDate)
-                .person(person)
-                .room(room);
+        return new ReservationEntityBuilder()
+                .withStartDate(startDate)
+                .withEndDate(endDate)
+                .withPerson(person)
+                .withRoom(room)
+                .build();
 
     }
 
-    private PersonEntity getPerson(long id,String email){
+    private PersonEntity getPerson(long id, String email) {
 
         PersonEntity person = new PersonEntity();
         person.setId(id);
@@ -108,7 +110,7 @@ public class ValidatorIntegrationTest {
         return person;
     }
 
-    private RoomEntity getRoom(long id,String email){
+    private RoomEntity getRoom(long id, String email) {
 
         RoomEntity room = new RoomEntity();
         room.setId(id);
