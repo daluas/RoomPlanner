@@ -43,7 +43,7 @@ CREATE TABLE oauth_refresh_token (
     authentication bytea
 );
 
-ALTER TABLE ONLY public.oauth_client_details
+ALTER TABLE oauth_client_details
     ADD CONSTRAINT oauth_client_details_pkey PRIMARY KEY (client_id);
 
 

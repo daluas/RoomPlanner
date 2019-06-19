@@ -86,10 +86,10 @@ public class UserEntityBuilder {
     public UserEntity build() {
         switch (type){
             case ROOM: {
-                return buildRoomDto();
+                return buildRoomEntity();
             }
             case PERSON:{
-                return buildPersonDto();
+                return buildPersonEntity();
             }
             default: {
                 LOGGER.error("Unknown user type: " + type);
@@ -98,10 +98,11 @@ public class UserEntityBuilder {
         }
     }
 
-    private RoomEntity buildRoomDto() {
+    private RoomEntity buildRoomEntity() {
         RoomEntity roomEntity = new RoomEntity();
         roomEntity.setId(id);
         roomEntity.setEmail(email);
+        roomEntity.setPassword(password);
         roomEntity.setType(type);
         roomEntity.setName(name);
         roomEntity.setFloor(floor);
@@ -110,10 +111,11 @@ public class UserEntityBuilder {
         return roomEntity;
     }
 
-    private PersonEntity buildPersonDto() {
+    private PersonEntity buildPersonEntity() {
         PersonEntity personEntity = new PersonEntity();
         personEntity.setId(id);
         personEntity.setEmail(email);
+        personEntity.setPassword(password);
         personEntity.setType(type);
         personEntity.setFirstName(firstName);
         personEntity.setLastName(lastName);

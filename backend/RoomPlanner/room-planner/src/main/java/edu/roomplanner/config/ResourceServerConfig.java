@@ -22,8 +22,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.
-                anonymous().disable()
+        http.cors().and()
+                .anonymous().disable()
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
