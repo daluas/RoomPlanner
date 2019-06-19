@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ɵConsole, Output, EventEmitter, Inject } from '@angular/core';
 import { Booking } from '../models/Booking';
 import { BookingService } from 'src/app/core/services/booking/booking.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 import { RoomsViewComponent } from '../../user/user-view/rooms-view/rooms-view.component';
 import { Data } from '@angular/router';
 import { FormControl } from '@angular/forms';
