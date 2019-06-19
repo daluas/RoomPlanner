@@ -67,7 +67,7 @@ public class UserServiceTest {
     @Test
     public void shouldReturnExpectedRoomDtoWhenGetRoomByIdIsCalled() {
 
-        RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14);
+        RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14, UserType.ROOM);
         UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 UserType.ROOM, "Wonderland", 5, 14);
 

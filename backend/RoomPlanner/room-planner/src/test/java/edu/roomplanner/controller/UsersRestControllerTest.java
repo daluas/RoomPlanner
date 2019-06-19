@@ -62,7 +62,7 @@ public class UsersRestControllerTest {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("oauth/token")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .header("Authorization", "Basic YnJvd3NlcjpwaW4=")
+               .header("Authorization", "Basic YnJvd3NlcjpwaW4=")
                 .params(params)).andReturn();
         loginContent = result.getResponse().getContentAsString();
     }
@@ -70,8 +70,8 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoListAndStatusFoundWhenGetAllRoomsIsCalled() throws Exception {
 
-        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14);
-        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(2L, "Westeros", 8, 21);
+        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14, UserType.ROOM);
+        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(2L, "Westeros", 8, 21, UserType.ROOM);
         List<RoomDto> roomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
         String jsonRoomDtoList = new ObjectMapper().writeValueAsString(roomDtoList);
 
@@ -91,7 +91,9 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoAndStatusFoundWhenGetRoomByIdIsCalled() throws Exception {
 
-        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "Wonderland", 5, 14);
+
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "Wonderland", 5, 14, UserType.ROOM);
+
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
 
        /* UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "wonderland",
