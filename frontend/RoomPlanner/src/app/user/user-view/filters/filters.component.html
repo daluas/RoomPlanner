@@ -9,18 +9,31 @@
         <mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="onDateChanged($event)"></mat-calendar>
       </div>
     </div>
-    <div class="filters-body" >
+    <div class="filters-body">
 
       <div class="hours" *ngIf="dateInThePastIn==false">
 
-        
-        <span><b>From: </b></span>
-        <app-hour-input (hourEmitter)="onStartHourEmit($event)"></app-hour-input>
+        <div class="hour-container">
+          <div class="hourText">
+            <b>From: </b>
+          </div>
+          <div class="hourInput">
+            <app-hour-input (hourEmitter)="onStartHourEmit($event)"></app-hour-input>
+          </div>
+        </div>
 
         <br/>
-        <span><b>To: </b></span>
-        <app-hour-input (hourEmitter)="onEndHourEmit($event)"></app-hour-input>
 
+        <div class="hour-container">
+          <div class="hourText">
+            <b>To: </b>
+          </div>
+          <div class="hourInput">
+            <app-hour-input (hourEmitter)="onEndHourEmit($event)"></app-hour-input>
+          </div>
+        </div>
+
+        <div class="invalidHoursContainer" *ngIf="invalidHours==true"><span>End hour has to be greater than Start hour!</span></div>
 
       </div>
 
@@ -28,13 +41,13 @@
         <h4>Floor</h4>
         <mat-form-field>
           <mat-label>Select an option:</mat-label>
-          <mat-select (selectionChange)="onFloorChange($event)">
+          <mat-select (selectionChange)="onFloorChange($event)" [value]='floorByDefault'>
             <mat-option *ngFor="let floor of floors" [value]="floor">{{floor}}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
 
-      <div class="people"> 
+      <div class="people">
         <h4>Number of people attending</h4>
         <span class="text-small">1</span>
         <mat-slider thumbLabel min="1" max="30" step="1" (change)="onSliderChange($event)"></mat-slider>

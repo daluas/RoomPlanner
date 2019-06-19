@@ -1,35 +1,46 @@
 <form [formGroup]="hourForm" class="hour-container">
 
-    <i class="material-icons key_up_hours" (click)="onKeyUpHours()">arrow_drop_up</i>
-    <i class="material-icons  key_up_minutes" (click)="onKeyUpMinutes()">arrow_drop_up</i>
-    <!-- <span mat-button class="clearButton" *ngIf="ora" mat-icon-button aria-label="Clear" (click)="onClearClick()">
-      <mat-icon>close</mat-icon>
-  </span> -->
+    <div class="hoursInputContainer">
+        <div class="key_up_hours">
+            <i class="material-icons" (click)="onKeyUpHours()">arrow_drop_up</i>
+        </div>
+        <div class="hoursInput">
+            <mat-form-field class="hour">
+                <input matInput formControlName="hour" (blur)="updateHours()">
+                <mat-error *ngIf="hourForm.controls.hour.invalid ">Format invalid!</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="key_down_hours">
+            <i class="material-icons" (click)="onKeyDownHours()">arrow_drop_down</i>
+        </div>
 
-    <div class="hour-input">
+    </div>
+    <div class="doubleContainer">
+        <b>:</b>
+    </div>
 
-        <mat-form-field class="hour">
-            <input matInput formControlName="hour"  (blur)="updateHours()" [value]="hourForm.value.hour">
-            <mat-error *ngIf="hourForm.controls.hour.invalid ">Format invalid!</mat-error>
-        </mat-form-field>
 
-        <label>
-            <b>:</b>
-        </label>
-
-        <mat-form-field class="minutes">
-            <input matInput formControlName="minutes" (blur)="updateMinutes()" [value]="hourForm.value.minutes">
-            <mat-error *ngIf="hourForm.controls.minutes.invalid ">Format invalid!</mat-error>
-        </mat-form-field>
-
+    <div class="minutesInputContainer">
+        <div class="key_up_minutes">
+            <i class="material-icons" (click)="onKeyUpMinutes()">arrow_drop_up</i>
+        </div>
+        <div class="minutesInput">
+            <mat-form-field class="minutes">
+                <input matInput formControlName="minutes" (blur)="updateMinutes()">
+                <mat-error *ngIf="hourForm.controls.minutes.invalid ">Format invalid!</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="key_down_minutes">
+            <i class="material-icons" (click)="onKeyDownMinutes()">arrow_drop_down</i>
+        </div>
 
     </div>
 
 
-    <i class="material-icons  key_down_hours" (click)="onKeyDownHours()">arrow_drop_down</i>
-    <i class="material-icons  key_down_minutes" (click)="onKeyDownMinutes()">arrow_drop_down</i>
 
 
-
+    <!-- <span mat-button class="clearButton" *ngIf="ora" mat-icon-button aria-label="Clear" (click)="onClearClick()">
+      <mat-icon>close</mat-icon>
+  </span> -->
 
 </form>

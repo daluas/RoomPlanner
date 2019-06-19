@@ -17,7 +17,6 @@ export class HourInputComponent implements OnInit {
   finalHour: Date;
   hourForm: FormGroup;
   ngOnInit() {
-
   }
 
 
@@ -26,39 +25,37 @@ export class HourInputComponent implements OnInit {
       hour: ['00', [Validators.pattern('^([0-1][0-9])$|^(2[0-3])$')]],
       minutes: ['00', [Validators.pattern('^([0-5][0-9])$')]]
     });
+
   }
 
   updateHours() {
-    console.log("--update hours ---")
-    console.log(this.hourForm.value.hour);
-    console.log(this.hourForm.value.minutes);
 
     this.finalHour = new Date(new Date().setHours(this.hourForm.value.hour, this.hourForm.value.minutes, 0, 0));
-    console.log(this.finalHour);
     this.hourEmitter.emit(this.finalHour);
   }
 
   updateMinutes() {
-    console.log("---update minutes---")
-    console.log(this.hourForm.value.hour);
-    console.log(this.hourForm.value.minutes);
-
     this.finalHour = new Date(new Date().setHours(this.hourForm.value.hour, this.hourForm.value.minutes, 0, 0));
-    console.log(this.finalHour);
     this.hourEmitter.emit(this.finalHour);
   }
 
   onKeyUpHours() {
+    if (this.hourForm.value.hour == undefined) {
+      this.hourForm.setValue({ hour: +'00', minutes: this.hourForm.value.minutes });
+    }
 
     if (this.hourForm.value.hour == 23) {
-      this.hourForm.value.hour = +'00';
+      this.hourForm.setValue({ hour: +'00', minutes: this.hourForm.value.minutes });
     } else {
       if (+this.hourForm.value.hour + 1 < 10) {
-        this.hourForm.value.hour = '0' + (+this.hourForm.value.hour + 1);
+        this.hourForm.setValue({ hour: '0' + (+this.hourForm.value.hour + 1), minutes: this.hourForm.value.minutes });
+
       } else {
-        this.hourForm.value.hour = +this.hourForm.value.hour + 1;
+        this.hourForm.setValue({ hour: +this.hourForm.value.hour + 1, minutes: this.hourForm.value.minutes });
+
       }
     }
+
 
     this.updateHours();
 
@@ -66,15 +63,20 @@ export class HourInputComponent implements OnInit {
 
   onKeyUpMinutes() {
 
+    if (this.hourForm.value.hour == undefined) {
+      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: +'00' });
+    }
+
+
     if (this.hourForm.value.minutes == 59) {
-      this.hourForm.value.minutes = +'00';
+      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: +'00' });
       this.onKeyUpHours();
     } else {
       if (+this.hourForm.value.minutes + 1 < 10) {
-        this.hourForm.value.minutes = '0' + (+this.hourForm.value.minutes + 1);
+        this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '0' + (+this.hourForm.value.minutes + 1) });
       }
       else {
-        this.hourForm.value.minutes = +this.hourForm.value.minutes + 1;
+        this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: +this.hourForm.value.minutes + 1 });
       }
     }
     this.updateMinutes();
@@ -82,36 +84,37 @@ export class HourInputComponent implements OnInit {
 
   onKeyDownHours() {
     if (this.hourForm.value.hour == undefined) {
-      this.hourForm.value.hour = 23;
+      this.hourForm.setValue({ hour: 23, minutes: this.hourForm.value.minutes });
     }
 
     if (this.hourForm.value.hour == 0) {
-      this.hourForm.value.hour = 23;
+      this.hourForm.setValue({ hour: 23, minutes: this.hourForm.value.minutes });
     } else
       if (+this.hourForm.value.hour - 1 < 10) {
-        this.hourForm.value.hour = '0' + (+this.hourForm.value.hour - 1);
+        this.hourForm.setValue({ hour: '0' + (+this.hourForm.value.hour - 1), minutes: this.hourForm.value.minutes });
       } else {
-        this.hourForm.value.hour = +this.hourForm.value.hour - 1;
+        this.hourForm.setValue({ hour: +this.hourForm.value.hour - 1, minutes: this.hourForm.value.minutes });
+
       }
     this.updateHours();
   }
 
   onKeyDownMinutes() {
     if (this.hourForm.value.minutes == undefined) {
-      this.hourForm.value.minutes = 30;
+      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: 30 });
     }
 
     if (this.hourForm.value.minutes == 0) {
-      this.hourForm.value.minutes = 59;
-      
+      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: 59 });
       this.onKeyDownHours();
 
     } else
       if (+this.hourForm.value.minutes - 1 < 10) {
-        this.hourForm.value.minutes = '0' + (+this.hourForm.value.minutes - 1);
+        this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '0' + (+this.hourForm.value.minutes - 1) });
       }
       else {
-        this.hourForm.value.minutes = +this.hourForm.value.minutes - 1;
+        this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: +this.hourForm.value.minutes - 1 });
+
       }
 
   }

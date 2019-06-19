@@ -75,20 +75,5 @@ describe('FiltersComponent', () => {
   });
 
   
-  it('should return the date picked by user when button "Apply Filters" is clicked ', () => {
-
-    var newDate=new Date(2019,6,16);
-
-    const calendarElem:DebugElement=getCalendar();
-    calendarElem.nativeElement.selected=newDate;
-
-    const elem: DebugElement = getButton();
-    elem.nativeElement.click();
-
-    spyOn(component, 'getReturnDate');
-
-    fixture.whenStable().then(() => {
-      expect(component.getReturnDate().valueOf).toEqual(newDate);
-    });
-  });
+  
 });

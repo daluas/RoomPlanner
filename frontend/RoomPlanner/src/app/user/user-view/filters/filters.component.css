@@ -52,15 +52,36 @@
     margin-left:15px;
 }
 
+.hour-container{
+    white-space: nowrap;
+}
+
+
+.hourText{
+    display: inline-block;
+    vertical-align: top;
+    text-align: left;
+    width: 60px;
+    line-height: 143px;
+}
+
+
+.hourInput{
+    display: inline-block;
+    vertical-align: top;
+    width: calc(100% - 60px);
+}
+
+.invalidHoursContainer{
+    color: red;
+}
+
+
 .mat-calendar {
     display: block;
     border-bottom-width: 1px;
     border-bottom-style: ridge;
     border-bottom-color:#bbbcbf;
-
-    /* -webkit-box-shadow: 5px 5px 10px 0px rgba(168,166,168,0.72);
-    -moz-box-shadow: 5px 5px 10px 0px rgba(168,166,168,0.72);
-    box-shadow: 5px 5px 10px 0px rgba(168,166,168,0.72); */
 }
 
 mat-slider {
