@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ɵConsole, Output, EventEmitter, Inject } from '@angular/core';
 import { Booking } from '../models/Booking';
 import { BookingService } from 'src/app/core/services/booking/booking.service';
-
 import { RoomsViewComponent } from '../../user/user-view/rooms-view/rooms-view.component';
 import { Data } from '@angular/router';
 import { FormControl } from '@angular/forms';
@@ -9,7 +8,7 @@ import { FormControl } from '@angular/forms';
 @Component({
   selector: 'app-booking-popup',
   templateUrl: './booking-popup.component.html',
-  styleUrls: ['./booking-popup.component.css']
+  styleUrls: ['./booking-popup.component.css'] 
 })
 export class BookingPopupComponent implements OnInit {
 
@@ -61,5 +60,4 @@ export class BookingPopupComponent implements OnInit {
     return resultTime;
   }
  
-
 }

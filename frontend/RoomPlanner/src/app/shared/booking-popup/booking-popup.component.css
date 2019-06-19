@@ -4,36 +4,51 @@
     padding: 25px 35px;
     width: calc(100% - 20px);
     max-width: 450px;
-    height: 400px;
+    height: 395px;
     margin: 0 auto;
-    background: white;
-    float:center;
-    
+    background: #ffffff;
+    border-radius: 4px;
+}
+
+.datePopup {
+    width: 150px;
+    text-align: center;
 }
 .startDate{
     margin-left: 20px;
-    width: 130px;
-    float:left;
-    text-align: center;
+    float:left;   
 }
 .endDate{
     margin-right: 20px;
-    width: 130px;
     float:right;
-    text-align: center;
 }
 ::ng-deep .cdk-overlay-container {
     position: fixed !important;
-    z-index: 100000 !important; /* set value you need */
+    z-index: 10000 !important; 
 }
 .datePicker{
     width: 130px;
 }
-.description {
-    margin-top: 30px;
-    margin-bottom: 30px;
+.dateTitle {
+    color: #673ab7;
+}
+.verticalLine {
+    border-left: 1px solid #bfbfbf;
+    height: 105px;
+    position: absolute;
+    left: 50%;
+    top: 25px;
+}
+.descriptionContent {
+    margin-top: 10px;
+    margin-bottom: 20px;
     width: 374px;
-    height: 150px;
+    height: 120px;
     resize: none;
-  }
-  
+}
+.descriptionBox {
+    margin-top: 130px;
+}
+.cancelButton {
+    float:right;
+}
