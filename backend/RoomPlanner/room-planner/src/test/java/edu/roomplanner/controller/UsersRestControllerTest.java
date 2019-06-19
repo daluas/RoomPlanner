@@ -14,11 +14,15 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +50,22 @@ public class UsersRestControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+    private String loginContent;
+
+    @Before
+    public void setup() throws Exception{
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "password");
+        params.add("username", "wonderland@yahoo.com");
+        params.add("password", "wonderland");
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("oauth/token")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .header("Authorization", "Basic YnJvd3NlcjpwaW4=")
+                .params(params)).andReturn();
+        loginContent = result.getResponse().getContentAsString();
+    }
 
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoListAndStatusFoundWhenGetAllRoomsIsCalled() throws Exception {
@@ -55,30 +75,30 @@ public class UsersRestControllerTest {
         List<RoomDto> roomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
         String jsonRoomDtoList = new ObjectMapper().writeValueAsString(roomDtoList);
 
-        UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
+        UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "wonderland",
                 UserType.ROOM, "Wonderland", 5, 14);
-        UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com", "4westAD8%",
+        UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com", "westeros",
                 UserType.ROOM, "Westeros", 8, 21);
 
         userRepository.save(userEntityOne);
         userRepository.save(userEntityTwo);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms"))
-                .andExpect(MockMvcResultMatchers.status().isFound())
-                .andExpect(MockMvcResultMatchers.content().string(jsonRoomDtoList));
+       //mockMvc.perform(MockMvcRequestBuilders.get("/rooms").header("Authorization", ))
+              //  .andExpect(MockMvcResultMatchers.status().isFound())
+              //  .andExpect(MockMvcResultMatchers.content().string(jsonRoomDtoList));
     }
 
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoAndStatusFoundWhenGetRoomByIdIsCalled() throws Exception {
 
-        RoomDto roomDto = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14);
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "Wonderland", 5, 14);
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
 
-        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
+       /* UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "wonderland",
                 UserType.ROOM, "Wonderland", 5, 14);
-        userRepository.save(userEntity);
+        userRepository.save(userEntity);*/
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 2).header("Authorization",loginContent))
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDto));
     }
