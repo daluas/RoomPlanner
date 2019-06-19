@@ -20,8 +20,25 @@ public class BookRoomServiceImpl implements BookRoomService {
     }
 
     @Override
-    public ReservationEntity save(Long id) {
+    public ReservationEntity createReservation(ReservationEntity reservationEntity) {
+        ReservationEntity newReservation = new ReservationEntity();
+        newReservation.setStartDate(reservationEntity.getStartDate());
+        newReservation.setEndDate(reservationEntity.getEndDate());
+        newReservation.setDescription(reservationEntity.getDescription());
+        newReservation.setRoom(reservationEntity.getRoom());
+        newReservation.setPerson(reservationEntity.getPerson());
+
+        return newReservation;
+
+    }
+    @Override
+    public ReservationEntity convertToEntity(ReservationDto reservationDto) {
         return mapperService.mapReservationDtoToEntity(reservationDto);
+    }
+
+    @Override
+    public ReservationDto convertToDto(ReservationEntity reservationEntity) {
+        return mapperService.mapReservationEntityToDto(reservationEntity);
     }
 
 }

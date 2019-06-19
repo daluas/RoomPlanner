@@ -1,5 +1,6 @@
 package edu.roomplanner.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,8 +15,11 @@ import java.util.Calendar;
 @EqualsAndHashCode
 @Component
 public class ReservationDto {
-    private Long id;
+
+    private Long personId;
     private Calendar startDate;
     private Calendar endDate;
     private String description;
+
+
 }

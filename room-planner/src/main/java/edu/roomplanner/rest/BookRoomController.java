@@ -1,5 +1,6 @@
 package edu.roomplanner.rest;
 
+import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.service.BookRoomService;
 import lombok.EqualsAndHashCode;
@@ -23,15 +24,33 @@ public class BookRoomController {
         this.bookRoomService = bookRoomService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/reservations/person{person_id}/room{room_id}")
-    ResponseEntity<ReservationEntity> getReservationCreated(@PathVariable Long id) {
+    @RequestMapping(method = RequestMethod.POST, value = "/reservations/{room_id}")
+    ResponseEntity<ReservationDto> getReservationCreated(@PathVariable(name = "room_id") Long roomId,
+                                                         @RequestBody ReservationDto reservationDto) {
+
         LOGGER.info("Method was called.");
-        ReservationEntity reservationEntity = bookRoomService.save(id);
+        ReservationEntity reservationEntity=bookRoomService.convertToEntity(reservationDto);
+        ReservationEntity postCreated= bookRoomService.createReservation(reservationEntity);
+        ReservationDto reservationDtoReturned = bookRoomService.convertToDto(postCreated);
+        LOGGER.info("The following object was returned: " + reservationDtoReturned);
+        if (reservationDto == null) {
+            return new ResponseEntity<>(new ReservationDto(), HttpStatus.METHOD_NOT_ALLOWED);
+        }
+        return new ResponseEntity<>(reservationDtoReturned, HttpStatus.CREATED);
+    }
+
+}
+/*
+@RequestMapping(method = RequestMethod.POST, value = "/reservations/{room_id}")
+    ResponseEntity<ReservationEntity> getReservationCreated(@PathVariable(name = "room_id") Long roomId,
+                                                            @RequestBody ReservationDto reservationDto) {
+
+        LOGGER.info("Method was called.");
+        ReservationEntity reservationEntity = bookRoomService.createReservation(roomId);
         LOGGER.info("The following object was returned: " + reservationEntity);
         if (reservationEntity == null) {
             return new ResponseEntity<>(new ReservationEntity(), HttpStatus.METHOD_NOT_ALLOWED);
         }
         return new ResponseEntity<>(reservationEntity, HttpStatus.CREATED);
     }
-
-}
+ */
