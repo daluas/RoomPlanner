@@ -119,6 +119,13 @@ export class FiltersComponent implements OnInit, OnChanges {
     this.floorSelected = event.value;
   }
 
+  onPeopleClear(){
+    this.numberOfPeople =1;
+  }
+  onFloorClear(){
+    this.floorSelected=this.floorByDefault;
+  }
+
   onStartHourEmit(event) {
     this.startHour = event;
 

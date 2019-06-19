@@ -93,7 +93,14 @@ mat-slider {
     font-size: 15px;
 }
 
-
+.x-button{
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 10%;
+}
+.peopleContainerHeader{
+    display: inline-block;
+}
 
 @media screen and (max-width: 768px) {
     .container{

@@ -51,19 +51,22 @@ input{
 
 .key_up_hours{
     text-align: center;
+    cursor: pointer;
 }
 
 .key_down_hours{
     text-align: center;
+    cursor: pointer;
 }
 
 
 .key_up_minutes{
     text-align: center;
+    cursor: pointer;
 
 }
 
 .key_down_minutes{
     text-align: center;
-    
+    cursor: pointer;
 }
