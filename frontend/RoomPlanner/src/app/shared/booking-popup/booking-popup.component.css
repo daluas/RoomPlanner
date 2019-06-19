@@ -4,8 +4,36 @@
     padding: 25px 35px;
     width: calc(100% - 20px);
     max-width: 450px;
+    height: 400px;
     margin: 0 auto;
-
-
-    background: gold;
+    background: white;
+    float:center;
+    
 }
+.startDate{
+    margin-left: 20px;
+    width: 130px;
+    float:left;
+    text-align: center;
+}
+.endDate{
+    margin-right: 20px;
+    width: 130px;
+    float:right;
+    text-align: center;
+}
+::ng-deep .cdk-overlay-container {
+    position: fixed !important;
+    z-index: 100000 !important; /* set value you need */
+}
+.datePicker{
+    width: 130px;
+}
+.description {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 374px;
+    height: 150px;
+    resize: none;
+  }
+  

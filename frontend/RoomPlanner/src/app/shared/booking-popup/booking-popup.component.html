@@ -1,11 +1,40 @@
 <div class="container">
-  <p style="text-align: center; margin: 0" *ngIf="booking">
-    START DATE: {{booking.startDate}} 
-    <br><br> 
-    END DATE: {{booking.endDate}}
-    <br><br>
-    ROOM ID: {{booking.roomId}}
-  </p>
-
-  <button (click)="createBookingTest()" id="testButton">book</button>
+  <!-- <p style="text-align: center; margin: 0" *ngIf="booking"> -->
+  <div>
+    <span class="startDate">
+      <div>Start Date</div>
+      <div>
+        <mat-form-field class="datePicker">
+          <input matInput [matDatepicker]="picker3" [(value)]="booking.startDate">
+          <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+          <mat-datepicker #picker3></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div>
+        {{ getTime(booking.startDate)}}
+      </div>
+      
+     
+    </span>
+    <span class="endDate">
+      <div>End Date</div>
+      <div>
+        <mat-form-field class="datePicker">
+          <input matInput [matDatepicker]="picker" [(value)]="booking.endDate">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div>
+          {{ getTime(booking.endDate)}}
+        </div>
+    </span>
+  </div>
+ 
+  <textarea class="description">{{booking.description}} </textarea>
+  <div>
+    <button *ngIf="booking.id"  mat-raised-button color="primary" (click)="createBookingTest()" >Book now</button>
+    <button *ngIf="!booking.id" mat-raised-button color="primary" (click)="createBookingTest()" >Update</button>
+  </div> 
+ 
 </div>

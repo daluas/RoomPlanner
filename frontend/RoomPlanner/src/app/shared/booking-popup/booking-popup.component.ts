@@ -1,6 +1,10 @@
-import { Component, OnInit, Input, ɵConsole, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ɵConsole, Output, EventEmitter, Inject } from '@angular/core';
 import { Booking } from '../models/Booking';
 import { BookingService } from 'src/app/core/services/booking/booking.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { RoomsViewComponent } from '../../user/user-view/rooms-view/rooms-view.component';
+import { Data } from '@angular/router';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-booking-popup',
@@ -14,26 +18,48 @@ export class BookingPopupComponent implements OnInit {
 
   constructor(public bookingService: BookingService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    
+    this.booking = new Booking().create({
+       startDate: new Date() ,
+       endDate: new Date()
+    });
+   
+  }
 
   createBookingTest() {
-    let booking = new Booking().create({
-      // complete all fields with valid data
-    });
-
-    this.bookingService.createNewBooking(booking).then((booked) => {
+    this.bookingService.createNewBooking(this.booking).then((booked) => {
 
       if (booked) {
         // succes, rezervarea a avut loc
-        document.getElementById('testButton').innerHTML = "SUCCESS!";
+        //document.getElementById('testButton').innerHTML = "Book now";
 
         // IMPORTANT!
-        this.booked.emit(booking);
+        this.booked.emit(this.booking);
       } else {
         // eroare, inseamna ca nu s-a putut face rezervarea
-        document.getElementById('testButton').innerHTML = "ERROR!";
+        //document.getElementById('testButton').innerHTML = "Update";
       }
 
     })
+    console.log(this.booking);
   }
+  // getDate(mydate: Data): string {
+  //   let day = mydate.getDay();
+  //   let month = mydate.getMonth();
+  //   let year = mydate.getFullYear();
+  //   let resultDate = day + "/" + month + "/" + year;
+  //   return resultDate;
+  // }
+  getTime( mytime: Data):string{
+    let hour=mytime.getHours();
+    let minutes=mytime.getMinutes();
+    if(minutes>=0 && minutes<=9){
+      minutes="0"+minutes;
+    }
+    let resultTime=hour+":"+minutes;
+    return resultTime;
+  }
+ 
+
 }
