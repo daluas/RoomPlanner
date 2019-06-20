@@ -21,8 +21,7 @@ export class UserViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.setDefaultData();
-
-    // set interval for room update ~ each 1 min or 30s
+    // set interval for room update ~ each 1 min
   }
 
   closeBookingPopup() {
@@ -30,11 +29,13 @@ export class UserViewComponent implements OnInit {
   }
 
   setDefaultData() {
+    // set default filtes, now that we know the first floor
+    this.previousFilters = {
+      date: new Date()
+    }
+
     this.roomDataService.getBuildingLayout().then((buildingLayout) => {
       this.buildingLayout = buildingLayout;
-
-      // set default filtes, now that we know the first floor
-      this.previousFilters = {}
     });
 
     this.roomDataService.getDefaultRooms().then((defaultRooms) => {
@@ -56,6 +57,11 @@ export class UserViewComponent implements OnInit {
     }
 
     this.previousFilters = filters;
+
+    // !!! IMPORTANT - make this work with filters date field;
+    this.previousFilters = {
+      date: new Date()
+    }
   }
 
   filteredRoomsAlreadyExist(filters: any): boolean{

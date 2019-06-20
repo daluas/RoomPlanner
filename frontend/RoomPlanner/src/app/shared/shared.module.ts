@@ -4,20 +4,27 @@ import { MaterialDesignModule } from '../material-design/material-design.module'
 import { SpinnerComponent } from './spinner/spinner.component';
 import { Filters } from './models/Filters';
 import { BookingPopupComponent } from './booking-popup/booking-popup.component';
+import { HourInputComponent } from './hour-input/hour-input.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
     SpinnerComponent, 
-    BookingPopupComponent
+    BookingPopupComponent, 
+    HourInputComponent
   ],
   imports: [
     CommonModule,
-    MaterialDesignModule
+    MaterialDesignModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers:[],
   exports:[
     SpinnerComponent,
-    BookingPopupComponent
+    BookingPopupComponent,
+    HourInputComponent
   ]
 })
 export class SharedModule { }

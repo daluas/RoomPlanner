@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage ('clean workspace'){
+            steps {
+                sh 'sudo rm -rf frontend'
+            }
+        }
+        stage ('clone'){
+            steps {
+                checkout([$class: 'GitSCM', 
+                branches: [[name: '*/develop_frontend']], 
+                doGenerateSubmoduleConfigurations: false, 
+                extensions: [], 
+                submoduleCfg: [], 
+                userRemoteConfigs: [[credentialsId: 'git credentials', 
+                url: 'https://github.com/daluas/RoomPlanner.git']]])
+            }
+        }
+        
+        stage ('install angular devkit') {
+            steps {
+                dir ('frontend/RoomPlanner') {
+                    sh 'sudo npm install --save-dev @angular-devkit/build-angular y'
+                }
+            }
+        }
+        stage ('build project') {
+            steps {
+                dir ('frontend/RoomPlanner') {
+                    sh 'ng build --output-hashing=all --prod --build-optimizer'
+                }
+            }
+        }
+        stage ('copy build to server') {
+            steps {
+                dir ('frontend/RoomPlanner/dist') {
+                    sh 'sudo cp -R RoomPlanner /var/www/html/'
+                }
+            }
+        }
+        stage ('restart server') {
+            steps {
+                sh 'sudo systemctl stop httpd'
+                sh 'sudo systemctl start httpd'
+            }
+        }
+    }
+}

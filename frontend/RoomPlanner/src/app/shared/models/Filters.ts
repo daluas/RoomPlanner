@@ -2,8 +2,8 @@ import { Time } from '@angular/common';
 
 export class Filters{
     date:Date;
-    startHour:Time;
-    endHour:Time;
+    startHour:Date;
+    endHour:Date;
     floor:number;
     numberOfPeople:number;
 

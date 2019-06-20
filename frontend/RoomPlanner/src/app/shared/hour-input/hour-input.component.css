@@ -1,0 +1,72 @@
+.hour-container{
+    width: 100%;
+}
+
+
+input{
+    text-align: center;
+}
+
+.doubleContainer{
+    width: 30px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    line-height: 121px;
+}
+
+
+
+.hoursInputContainer{
+    width: calc((100% - 30px)/2);
+    display: inline-block;
+    vertical-align: top;
+}
+
+.minutesInputContainer{
+    width: calc((100% - 30px)/2);
+    display: inline-block;
+    vertical-align: top;
+}
+.hoursInput{
+    text-align: center;
+}
+.minutesInput{
+    text-align: center;
+}
+
+.hour {
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    width: 80%;
+}
+
+.minutes{
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    width: 80%;
+}
+
+.key_up_hours{
+    text-align: center;
+    cursor: pointer;
+}
+
+.key_down_hours{
+    text-align: center;
+    cursor: pointer;
+}
+
+
+.key_up_minutes{
+    text-align: center;
+    cursor: pointer;
+
+}
+
+.key_down_minutes{
+    text-align: center;
+    cursor: pointer;
+}
