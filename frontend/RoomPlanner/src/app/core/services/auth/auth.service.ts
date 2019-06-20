@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material';
 })
 export class AuthService {
 	private token: LoginToken;
-	private backendUrl: string = 'http://localhost:8081';
+	private backendUrl: string = 'http://178.22.68.114:8081';
 	private currentUser: LoggedUser;
 	private currentUserSubscriber: Subscriber<LoggedUser> = new Subscriber<LoggedUser>();
 
@@ -72,6 +72,7 @@ export class AuthService {
 		this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise()
 			.then(token => {
 				console.log(token)
+				//if token is httpevent , then token.body
 				return this.getUser(loginModel)
 			})
 			.catch(error => {

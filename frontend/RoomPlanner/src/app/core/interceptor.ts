@@ -22,7 +22,8 @@ import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 @Injectable()
 export class Interceptor implements HttpInterceptor {
-    BASE_URL: string = 'http://localhost:8081';
+
+    BASE_URL: string = 'http://178.22.68.114:8081';
 
     constructor(private _snackBar: MatSnackBar) { }
 
@@ -78,7 +79,7 @@ export class Interceptor implements HttpInterceptor {
         }
 
         if (request.url === `${this.BASE_URL}/users`) {
-            request = this.addAuthenticationToken(request);
+            request = this.addAuthenticationToken(request, next);
             return next.handle(request)
                 .pipe(
                     tap((event: HttpEvent<any>) => {
@@ -92,6 +93,25 @@ export class Interceptor implements HttpInterceptor {
                     })
                 );
         }
+    }
+
+    getTokenLS(): LoginToken {
+        if (localStorage.getItem("access-token") != undefined) {
+            let token = JSON.parse(localStorage.getItem("access-token"));
+            let tokenLogin = new LoginToken().create(token);
+            return token;
+        }
+        return null;
+    }
+
+
+    getUserData(): LoggedUser {
+        if (localStorage.getItem("user-data") != undefined) {
+            let user = JSON.parse(localStorage.getItem("user-data"));
+            let userLogged = new LoggedUser().create(user);
+            return userLogged;
+        }
+        return null;
     }
 
     addGetTokenHeaders(request: HttpRequest<any>): HttpRequest<any> {
@@ -108,76 +128,81 @@ export class Interceptor implements HttpInterceptor {
         });
     }
 
-    addAuthenticationToken(request: HttpRequest<any>): HttpRequest<any> {
+    addAuthenticationToken(request: HttpRequest<any>, next: HttpHandler): HttpRequest<any> {
         // If you are calling an outside domain then do not add the token.
         // if (!request.url.match(/www.mydomain.com\//)) {
         //     return request;
         // }
-        let tokenParsed = JSON.parse(localStorage.getItem('access-token'))
-        let storedToken: LoginToken = new LoginToken().create(tokenParsed);
+        let token = this.getTokenLS();
+        let userData = this.getUserData();
+
+        if (token.isExpired) { //refresh token
+            console.log("token expired in interceptor");
+            let params = new HttpParams();
+            request = request.clone({
+                setParams: {
+                    "grant_type": "refresh_token",
+                    "refresh_token": token.refresh_token
+                },
+                setHeaders: {
+                    "Authorization": `${token.token_type} ${token.access_token}`
+                }
+            });
+
+            let refreshedToken = new LoginToken()
+            next.handle(request).toPromise()
+                .then((response: HttpEvent<any>) => {
+                    if (response instanceof HttpResponse) {
+                        console.log(response);
+                        refreshedToken = refreshedToken.create(response.body)
+                        localStorage.setItem("access-token", JSON.stringify(refreshedToken));
+                    }
+                    
+                })
+                .catch(error =>{
+                    console.log(error)
+                })
+            
+            if(refreshedToken){
+                token = refreshedToken
+            }
+        }
+
         return request.clone({
-            headers: request.headers.set("Authorization", `${storedToken.token_type} ${storedToken.access_token}`)
+            setHeaders: {
+                "Authorization": `${token.token_type} ${token.access_token}`
+            }
         });
-        // if (storedToken.isExpired) {
-        //     console.log("token expired in interceptor");
-        //     request = this.addGetTokenHeaders(request);
-        //     request.clone({
-        //         body: {
-        //             grant_type: "refresh_token",
-        //             refresh_token: storedToken.refresh_token
-        //         }
-        //     })
-        //     next.handle(request).toPromise()
-        //         .then(data => {
-        //             console.log(data)
-        //             // localStorage.setItem('access-token', JSON.stringify(data));
-        //             return request.clone({
-        //                 setHeaders: {
-        //                     "Authorization": `Bearer ${storedToken.access_token}`
-        //                 }
-        //             });
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-
-        //         })
-
-        //     next.handle(request).pipe(
-        //         // return next.handle(request).pipe(
-        //         tap({
-        //             next: (response: HttpEvent<any>) => {
-        //                 if (response instanceof HttpResponse) {
-        //                     console.log("backend responded");
-        //                     // response = response.clone({ body: "" })
-        //                 }
-        //                 if (response instanceof HttpErrorResponse) {
-        //                     console.log("error response (never)");
-        //                     console.log(response)
-        //                 }
-        //             },
-        //             error: (error: HttpErrorResponse) => {
-        //                 console.log(error.message);
-        //                 // status, statusText, name, headers, type, url, ok
-        //                 this._snackBar.open(
-        //                     `Call to ${error.url} failed with ${error.status} - ${error.statusText}`,
-        //                     'Close',
-        //                     {
-        //                         duration: 7000
-        //                     }
-        //                 );
-
-        //             },
-        //             complete: () => console.log('on complete')
-        //         })
-        //     )
-        // }
-        // else {
-        //     return request.clone({
-        //         headers: request.headers.set("Authorization", `Bearer ${storedToken.access_token}`)
-        //     });
-        // }
-
     }
+  
+    //         // return next.handle(request).pipe(
+    //         tap({
+    //             next: (response: HttpEvent<any>) => {
+    //                 if (response instanceof HttpResponse) {
+    //                     console.log("backend responded");
+    //                     // response = response.clone({ body: "" })
+    //                 }
+    //                 if (response instanceof HttpErrorResponse) {
+    //                     console.log("error response (never)");
+    //                     console.log(response)
+    //                 }
+    //             },
+    //             error: (error: HttpErrorResponse) => {
+    //                 console.log(error.message);
+    //                 // status, statusText, name, headers, type, url, ok
+    //                 this._snackBar.open(
+    //                     `Call to ${error.url} failed with ${error.status} - ${error.statusText}`,
+    //                     'Close',
+    //                     {
+    //                         duration: 7000
+    //                     }
+    //                 );
+
+    //             },
+    //             complete: () => console.log('on complete')
+    //         })
+    //     )
 
 }
+
 
