@@ -59,5 +59,10 @@ export class BookingPopupComponent implements OnInit {
     let resultTime=hour+":"+minutes;
     return resultTime;
   }
- 
+  updateBookingTest(){
+
+  }
+  deleteBooking(){
+    
+  }
 }
