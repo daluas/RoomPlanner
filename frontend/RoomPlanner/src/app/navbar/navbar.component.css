@@ -111,7 +111,7 @@ nav{
     z-index: 9;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1025px) {
     .menu-button{
         display: block;
         position: absolute;

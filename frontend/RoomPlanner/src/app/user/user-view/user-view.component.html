@@ -9,6 +9,6 @@
   </div>
 
   <div class="room-view-container">
-    <app-rooms-view [rooms]="rooms" (createBooking)="createBooking($event)"></app-rooms-view>
+    <app-rooms-view [rooms]="rooms" [forDate]="previousFilters.date" (createBooking)="createBooking($event)"></app-rooms-view>
   </div>
 </div>

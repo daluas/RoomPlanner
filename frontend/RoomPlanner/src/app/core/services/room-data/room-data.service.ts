@@ -93,7 +93,7 @@ export class RoomDataService {
               id: 1,
               startDate: new Date(new Date().setHours(10, 0, 0, 0)),
               endDate: new Date(new Date().setHours(10, 30, 0, 0)),
-              ownerEmail: "user1@geceka.ro",
+              ownerEmail: "user1@cegeka.ro",
               description: "this is a test description"
             },
             // this is a booking made by another user
@@ -101,7 +101,7 @@ export class RoomDataService {
             {
               startDate: new Date(new Date().setHours(12, 30, 0, 0)),
               endDate: new Date(new Date().setHours(15, 0, 0, 0)),
-              ownerEmail: "user10@geceka.ro"
+              ownerEmail: "user10@cegeka.ro"
             }
           ]
         },
@@ -139,7 +139,7 @@ export class RoomDataService {
               id: 3,
               startDate: new Date(new Date().setHours(13, 0, 0, 0)),
               endDate: new Date(new Date().setHours(14, 30, 0, 0)),
-              ownerEmail: "user1@geceka.ro",
+              ownerEmail: "user1@cegeka.ro",
               description: "this is a test description"
             },
           ]
@@ -169,7 +169,7 @@ export class RoomDataService {
               id: 3,
               startDate: new Date(new Date().setHours(11, 0, 0, 0)),
               endDate: new Date(new Date().setHours(13, 30, 0, 0)),
-              ownerEmail: "user1@geceka.ro",
+              ownerEmail: "user1@cegeka.ro",
             },
           ]
         }
