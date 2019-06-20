@@ -53,7 +53,7 @@ public class ValidatorIntegrationTest {
                 2007, 7, 8, 5);
         reservationRepository.save(reservation);
 
-        List<ReservationEntity> actualList = reservationRepository.findAvailableDate(reservation.getStartDate().getTime(), reservation.getEndDate().getTime(), reservation.getRoom().getId());
+        List<ReservationEntity> actualList = reservationRepository.findAvailableDate(reservation.getStartDate(), reservation.getEndDate(), reservation.getRoom().getId());
         List<ReservationEntity> expectedList = Arrays.asList(reservation);
 
         Assert.assertEquals(expectedList.isEmpty(), actualList.isEmpty());
@@ -68,7 +68,7 @@ public class ValidatorIntegrationTest {
                 2007, 6, 12, 10);
         reservationRepository.save(existReservation);
 
-        List<ReservationEntity> actualList = reservationRepository.findAvailableDate(reservation.getStartDate().getTime(), reservation.getEndDate().getTime(), reservation.getRoom().getId());
+        List<ReservationEntity> actualList = reservationRepository.findAvailableDate(reservation.getStartDate(), reservation.getEndDate(), reservation.getRoom().getId());
 
         Assert.assertEquals(new ArrayList<>().isEmpty(), actualList.isEmpty());
 

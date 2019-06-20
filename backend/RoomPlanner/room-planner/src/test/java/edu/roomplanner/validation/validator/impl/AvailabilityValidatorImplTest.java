@@ -31,7 +31,7 @@ public class AvailabilityValidatorImplTest {
     public void shouldFindAValidDate() {
         ValidationResult expectedResult = new ValidationResult();
         ReservationEntity reservationEntity = getReservationEntity();
-        when(repository.findAvailableDate(reservationEntity.getStartDate().getTime(), reservationEntity.getEndDate().getTime(), reservationEntity.getRoom().getId()))
+        when(repository.findAvailableDate(reservationEntity.getStartDate(), reservationEntity.getEndDate(), reservationEntity.getRoom().getId()))
                 .thenReturn(new ArrayList<>());
 
         ValidationResult result = sut.validate(reservationEntity);
@@ -43,7 +43,7 @@ public class AvailabilityValidatorImplTest {
     public void shouldNotFindAValidDate() {
         ValidationResult expectedResult = new ValidationResult("The date is not available!");
         ReservationEntity reservationEntity = getReservationEntity();
-        when(repository.findAvailableDate(reservationEntity.getStartDate().getTime(), reservationEntity.getEndDate().getTime(), reservationEntity.getRoom().getId()))
+        when(repository.findAvailableDate(reservationEntity.getStartDate(), reservationEntity.getEndDate(), reservationEntity.getRoom().getId()))
                 .thenReturn(Arrays.asList(reservationEntity));
 
         ValidationResult result = sut.validate(reservationEntity);

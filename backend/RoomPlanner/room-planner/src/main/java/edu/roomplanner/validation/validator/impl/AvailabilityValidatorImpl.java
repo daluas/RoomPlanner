@@ -28,7 +28,7 @@ public class AvailabilityValidatorImpl implements BookingValidator {
         Calendar endDate = reservationEntity.getEndDate();
         UserEntity room = reservationEntity.getRoom();
 
-        List<ReservationEntity> otherReservations = reservationRepository.findAvailableDate(startDate.getTime(), endDate.getTime(), room.getId());
+        List<ReservationEntity> otherReservations = reservationRepository.findAvailableDate(startDate, endDate, room.getId());
         if (otherReservations.isEmpty()) {
             return new ValidationResult();
         }
