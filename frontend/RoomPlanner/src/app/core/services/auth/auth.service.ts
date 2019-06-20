@@ -64,13 +64,13 @@ export class AuthService {
 		return this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise();
 	}
 
-	authenticateUser(loginModel: LoginModel) : Promise<Object> {
+	async authenticateUser(loginModel: LoginModel) : Promise<Object> {
 		let params = new HttpParams();
 		params = params.set("grant_type", "password");
 		params = params.set('username', loginModel.email);
 		params = params.set('password', loginModel.password);
 		let x: Promise<Object>
-		this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise()
+		await this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise()
 			.then(data => {
 				console.log(data)
 				let params = new HttpParams()
@@ -78,7 +78,6 @@ export class AuthService {
 				x = this.httpClient.get(`${this.backendUrl}/users`, { params: params }).toPromise()
 			})
 		return x
-		//this doesn t work
 	}
 
 	
