@@ -9,9 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule, MatInputModule, MatNativeDateModule } from '@angular/material';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-
 import { MatSliderModule } from '@angular/material/slider';
-
+import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
     declarations: [],
     imports: [
@@ -30,7 +29,8 @@ import { MatSliderModule } from '@angular/material/slider';
         MatDatepickerModule,
         MatNativeDateModule,
         MatProgressSpinnerModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatDialogModule
     ],
     exports: [
         MatToolbarModule,
