@@ -53,6 +53,7 @@ export class AuthService {
 
 	OnCurrentUserChanged(loggedUserModel: LoggedUser): void {
 		this.currentUser = loggedUserModel;
+		localStorage.setItem("user-data", JSON.stringify(this.currentUser));
 		this.currentUserSubscriber.next(this.currentUser);
 	}
 
@@ -71,8 +72,8 @@ export class AuthService {
 		params = params.set('password', loginModel.password);
 		let x: Promise<Object>
 		await this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise()
-			.then(data => {
-				console.log(data)
+			.then(token => {
+				console.log(token)
 				let params = new HttpParams()
 				params = params.append("email", loginModel.email)
 				x = this.httpClient.get(`${this.backendUrl}/users`, { params: params }).toPromise()
@@ -80,7 +81,7 @@ export class AuthService {
 		return x
 	}
 
-	
+
 	getUser(userModel: LoginModel) {
 		let params = new HttpParams()
 		params = params.append("email", userModel.email)
