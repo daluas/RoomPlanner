@@ -2,8 +2,6 @@ package edu.roomplanner.rest;
 
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.dto.UserDto;
-import edu.roomplanner.repository.ReservationRepository;
-import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,11 +20,6 @@ public class UserRestController {
     private static Logger LOGGER = LogManager.getLogger(UserRestController.class);
 
     private final UserService userService;
-
-    @Autowired
-    ReservationRepository repository;
-    @Autowired
-    UserRepository urepository;
 
     @Autowired
     public UserRestController(UserService userService) {
