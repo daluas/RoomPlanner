@@ -6,224 +6,203 @@ import {
     HttpInterceptor,
     HttpResponse,
     HttpErrorResponse,
-    HttpHeaders
+    HttpHeaders,
+    HttpUrlEncodingCodec,
+    HttpParams
 } from "@angular/common/http";
 
 import { Observable, of, throwError } from 'rxjs';
 import { LoginModel } from './models/LoginModel';
-import { tap, map } from 'rxjs/operators';
+import { tap, map, catchError } from 'rxjs/operators';
 import { LoginToken } from './models/LoginToken';
 import { LoggedUser } from './models/LoggedUser';
 import { MatSnackBar } from '@angular/material';
+import { ok } from 'assert';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 @Injectable()
 export class Interceptor implements HttpInterceptor {
-    BASE_URL: string;
 
-    interceptLogout(): boolean {
-        return true;
-    }
+    BASE_URL: string = 'http://178.22.68.114:8081';
 
-    interceptLogin(loggedUser: LoggedUser): void {
-        // const token = this.refreshToken();
-        // const loggedUserMock: LoggedUser = new LoggedUser().create({
-        //     "email": "room1@cegeka.ro",
-        //     "token": token,
-        //     "type": "room"
-        // })
-        let token: LoginToken = this.createToken();
-
-        localStorage.setItem('access-token', JSON.stringify(token));
-        localStorage.setItem('user-data', JSON.stringify(loggedUser));
-        // return loggedUserMock;
-    }
     constructor(private _snackBar: MatSnackBar) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        let newRequest: HttpRequest<any>;
-        if (!request.headers.has("Content-Type")) {
-            newRequest = request.clone({
-                headers: request.headers.set("Content-Type", "application/json")
-            });
-        }
+        if (request.url === `${this.BASE_URL}/oauth/token`) {
+            //request token
+            if (request.body.get("grant_type") === "password") {
+                console.log("requesting token")
+                request = this.addGetTokenHeaders(request);
 
-        if (newRequest.url === '/auth/signin') {
-            // let user: LoggedUser = this.interceptLogin()
+                return next.handle(request)
+                    .pipe(
+                        tap((event: HttpEvent<any>) => {
+                            if (event instanceof HttpResponse) {
+                                let token = new LoginToken().create({
+                                    access_token: event.body.access_token,
+                                    token_type: event.body.token_type,
+                                    refresh_Token: event.body.refresh_token,
+                                    expiration_timestamp: new Date().getTime() + event.body.expires_in
+                                })
 
-            let reqBody = newRequest.body;
-            if (reqBody.email === 'room1@cegeka.ro' && reqBody.password === 'room.1') {
-                let loggedUser: LoggedUser = new LoggedUser().create({
-                    type: "room",
-                    email: "room1@cegeka.ro"
-                })
-                this.interceptLogin(loggedUser);
+                                localStorage.setItem("access-token", JSON.stringify(token))
+                            }
+                        }),
+                        catchError((error: HttpErrorResponse) => {
+                            console.log(error);
+                            let data = {};
+                            data = {
+                                reason: error && error.error.reason ? error.error.reason : '',
+                                status: error.status
+                            };
 
-                return of(new HttpResponse<LoggedUser>({
-                    status: 200,
-                    statusText: "Ok",
-                    body: loggedUser
-                }));
-            }
-
-            if (reqBody.email === 'admin1@cegeka.ro' && reqBody.password === 'admin.1') {
-                let loggedUser: LoggedUser = new LoggedUser().create({
-                    type: "admin",
-                    email: "admin1@cegeka.ro"
-                });
-
-                this.interceptLogin(loggedUser);
-
-                return of(new HttpResponse<LoggedUser>({
-                    status: 200,
-                    statusText: "Ok",
-                    body: loggedUser
-                }));
-            }
-
-            if (reqBody.email === 'user1@cegeka.ro' && reqBody.password === 'user.1') {
-                let loggedUser: LoggedUser = new LoggedUser().create({
-                    type: "user",
-                    email: "user1@cegeka.ro"
-                })
-
-                this.interceptLogin(loggedUser);
-
-                return of(new HttpResponse<LoggedUser>({
-                    status: 200,
-                    statusText: "Ok",
-                    body: loggedUser
-                }));
-            }
-
-
-            // return throwError(new HttpResponse({
-            //     status: 404,
-            //     statusText: "Not Found"
-            // }));
-        }
-
-        if (newRequest.url === '/auth/refresh') {
-            let reqBody = newRequest.body;
-
-            return of(new HttpResponse({
-                status: 200,
-                statusText: "Ok",
-                body: {
-                    token: this.refreshToken() //CHECK
-                }
-            }));
-        }
-
-        // if (request.url === '/logout') {
-        //     let user : LoggedUser = this.interceptLogout()
-        //     return of(new HttpResponse({
-        //         status: 200,
-        //         body: user
-        //     }));
-        // }
-
-        // let newrequest = this.addAuthenticationToken(newRequest);
-        return next.handle(newRequest).pipe(
-            // return next.handle(newRequest).pipe(
-            tap({
-                next: (response: HttpResponse<any>) => {
-                    if (response instanceof HttpResponse) {
-                        console.log("backend responded");
-                        // response = response.clone({ body: "" })
-                    }
-                    if (response instanceof HttpErrorResponse) {
-                        console.log("error response (never)");
-                        console.log(response)
-                    }
-                },
-                error: (error: HttpErrorResponse) => {
-                    console.log(error.message);
-                    // status, statusText, name, headers, type, url, ok
-                    this._snackBar.open(
-                        `Call to ${error.url} failed with ${error.status} - ${error.statusText}`,
-                        'Close',
-                        {
-                            duration: 7000
-                        }
+                            // this.errorDialogService.openDialog(data);
+                            return throwError(error);
+                        })
                     );
+            }
 
-                },
-                complete: () => console.log('on complete')
-            })
-        );
+            //refresh token
+            if (request.body.get("grant_type") == "refresh_token") {
+                console.log("requesting refresh token")
+                return next.handle(request).pipe(
+                    tap({
+                        next: (response: HttpResponse<any>) => {
+                            console.log(response);
+                        },
+                        error: (error: HttpErrorResponse) => {
+                            console.log(error);
+                        }
+                    })
+                )
+            }
+        }
 
+        if (request.url === `${this.BASE_URL}/users`) {
+            request = this.addAuthenticationToken(request, next);
+            return next.handle(request)
+                .pipe(
+                    tap((event: HttpEvent<any>) => {
+                        if (event instanceof HttpResponse) {
+                            console.log(event.body)
+                        }
+                    }),
+                    catchError((error: HttpErrorResponse) => {
+                        console.log(error);
+                        return throwError(error);
+                    })
+                );
+        }
     }
 
-    addAuthenticationToken(request: HttpRequest<any>): HttpRequest<any> {
+    getTokenLS(): LoginToken {
+        if (localStorage.getItem("access-token") != undefined) {
+            let token = JSON.parse(localStorage.getItem("access-token"));
+            let tokenLogin = new LoginToken().create(token);
+            return token;
+        }
+        return null;
+    }
+
+
+    getUserData(): LoggedUser {
+        if (localStorage.getItem("user-data") != undefined) {
+            let user = JSON.parse(localStorage.getItem("user-data"));
+            let userLogged = new LoggedUser().create(user);
+            return userLogged;
+        }
+        return null;
+    }
+
+    addGetTokenHeaders(request: HttpRequest<any>): HttpRequest<any> {
+        console.log("adding headers for requesting token");
+        let client_id = "browser"
+        let pass = "pin"
+        let encoded = btoa(`${client_id}:${pass}`)
+        return request.clone({
+            setHeaders: {
+                "Content-Type": 'application/x-www-form-urlencoded',
+                "Authorization": `Basic ${encoded}`
+                // Access-Control-Request-Headers: "Content-Type"
+            }
+        });
+    }
+
+    addAuthenticationToken(request: HttpRequest<any>, next: HttpHandler): HttpRequest<any> {
         // If you are calling an outside domain then do not add the token.
         // if (!request.url.match(/www.mydomain.com\//)) {
         //     return request;
         // }
+        let token = this.getTokenLS();
+        let userData = this.getUserData();
 
-        let token: LoginToken = this.refreshToken();
-        console.log("adding authorization token", token, "to ", request)
+        if (token.isExpired) { //refresh token
+            console.log("token expired in interceptor");
+            let params = new HttpParams();
+            request = request.clone({
+                setParams: {
+                    "grant_type": "refresh_token",
+                    "refresh_token": token.refresh_token
+                },
+                setHeaders: {
+                    "Authorization": `${token.token_type} ${token.access_token}`
+                }
+            });
+
+            let refreshedToken = new LoginToken()
+            next.handle(request).toPromise()
+                .then((response: HttpEvent<any>) => {
+                    if (response instanceof HttpResponse) {
+                        console.log(response);
+                        refreshedToken = refreshedToken.create(response.body)
+                        localStorage.setItem("access-token", JSON.stringify(refreshedToken));
+                    }
+                    
+                })
+                .catch(error =>{
+                    console.log(error)
+                })
+            
+            if(refreshedToken){
+                token = refreshedToken
+            }
+        }
+
         return request.clone({
-            headers: request.headers.set("Authorization", `Bearer ${token.value}`)
+            setHeaders: {
+                "Authorization": `${token.token_type} ${token.access_token}`
+            }
         });
     }
+  
+    //         // return next.handle(request).pipe(
+    //         tap({
+    //             next: (response: HttpEvent<any>) => {
+    //                 if (response instanceof HttpResponse) {
+    //                     console.log("backend responded");
+    //                     // response = response.clone({ body: "" })
+    //                 }
+    //                 if (response instanceof HttpErrorResponse) {
+    //                     console.log("error response (never)");
+    //                     console.log(response)
+    //                 }
+    //             },
+    //             error: (error: HttpErrorResponse) => {
+    //                 console.log(error.message);
+    //                 // status, statusText, name, headers, type, url, ok
+    //                 this._snackBar.open(
+    //                     `Call to ${error.url} failed with ${error.status} - ${error.statusText}`,
+    //                     'Close',
+    //                     {
+    //                         duration: 7000
+    //                     }
+    //                 );
 
-    createToken(): LoginToken { // mock function; logic will be passed in refreshToken ?
-        console.log("creating token");
-        let expDate = new Date(new Date(Date.now()).getTime() + 15 * 1000)
-        console.log(expDate);
-        return new LoginToken().create({
-            "value": "U-T-O-K-E-N",
-            "expirationDate": expDate, // check
-            "refreshToken": "REFRESH"
-        })
-    }
-
-
-    refreshToken(): LoginToken {
-        this._snackBar.open(
-            `Refreshing token (intercepted request)`,
-            'Close',
-            {
-                duration: 2000
-            }
-        );
-
-        let tokenParsed = JSON.parse(localStorage.getItem('access-token'))
-        let storedToken: LoginToken = new LoginToken().create(tokenParsed);
-
-        let expirationDate: Date = new Date(storedToken.expirationDate)
-        let now = new Date(Date.now());
-        console.log("expiration :", expirationDate);
-        console.log("now: ", now);
-
-        if (expirationDate < now) {
-            this._snackBar.open(
-                `Token expired (interceptor)`,
-                'Close',
-                {
-                    duration: 2000
-                }
-            );
-            // this.createToken()
-            let newExpirationDate = new Date(new Date(Date.now()).getTime() + 60 * 1000) // 10 seconds
-            console.log("new expiration date: ", newExpirationDate);
-            storedToken.expirationDate = newExpirationDate;
-            //call to backend to retrieve updated token  ||  go to login again
-            localStorage.setItem('access-token', JSON.stringify(storedToken));
-            // localStorage.setItem('access-token', JSON.stringify(this.createToken()))
-        }
-        else {
-            this._snackBar.open(
-                `Token alive`,
-                'Close',
-                {
-                    duration: 2000
-                }
-            );
-        }
-
-        return storedToken;
-    }
+    //             },
+    //             complete: () => console.log('on complete')
+    //         })
+    //     )
 
 }
+
 

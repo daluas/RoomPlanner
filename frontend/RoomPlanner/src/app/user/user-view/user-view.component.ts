@@ -21,8 +21,7 @@ export class UserViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.setDefaultData();
-
-    // set interval for room update ~ each 1 min or 30s
+    // set interval for room update ~ each 1 min
   }
 
   closeBookingPopup() {

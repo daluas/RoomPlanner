@@ -1,11 +1,11 @@
 import { Time } from '@angular/common';
 
-export class Filters{
-    date:Date;
-    startHour:Time;
-    endHour:Time;
-    floor:number;
-    numberOfPeople:number;
+export class Filters {
+    date: Date;
+    startHour?: Time;
+    endHour?: Time;
+    floor?: number;
+    maxPersons?: number;
 
 
     constructor() { }
