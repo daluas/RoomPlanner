@@ -98,10 +98,10 @@ export class RoomDataService {
             },
             // this is a booking made by another user
             // this one shouldn't have ID or Description
-            {
+            {             
               startDate: new Date(new Date().setHours(12, 30, 0, 0)),
               endDate: new Date(new Date().setHours(15, 0, 0, 0)),
-              ownerEmail: "user10@cegeka.ro"
+              ownerEmail: "user10@geceka.ro"            
             }
           ]
         },

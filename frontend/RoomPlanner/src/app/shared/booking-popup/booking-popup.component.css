@@ -4,8 +4,56 @@
     padding: 25px 35px;
     width: calc(100% - 20px);
     max-width: 450px;
+    height: 395px;
     margin: 0 auto;
+    background: #ffffff;
+    border-radius: 4px;
+}
 
-
-    background: gold;
+.datePopup {
+    width: 150px;
+    text-align: center;
+}
+.startDate{
+    margin-left: 20px;
+    float:left;   
+}
+.endDate{
+    margin-right: 20px;
+    float:right;
+}
+::ng-deep .cdk-overlay-container {
+    position: fixed !important;
+    z-index: 10000 !important; 
+}
+.datePicker{
+    width: 130px;
+}
+.dateTitle {
+    color: #673ab7;
+}
+.verticalLine {
+    border-left: 1px solid #bfbfbf;
+    height: 105px;
+    position: absolute;
+    left: 50%;
+    top: 25px;
+}
+.descriptionContent {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 374px;
+    height: 120px;
+    resize: none;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.descriptionBox {
+    margin-top: 130px;
+}
+.cancelButton {
+    float:right;
+}
+.deleteBtn{
+    margin-left: 20px;
+    float: right;
 }
