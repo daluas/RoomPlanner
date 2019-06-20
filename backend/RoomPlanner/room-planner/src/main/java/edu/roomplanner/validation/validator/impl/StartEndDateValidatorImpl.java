@@ -8,16 +8,17 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Order(3)
 public class StartEndDateValidatorImpl implements BookingValidator {
 
-    private static final int MIN_MINUTES = 30;
-
     @Override
     public ValidationResult validate(ReservationEntity reservationEntity) {
         Calendar startDate = reservationEntity.getStartDate();
+        System.out.println();
+        System.out.println(getMinutesInFuture(startDate));
         if (getMinutesInFuture(startDate) < 0) {
             return new ValidationResult("Start date is in past!");
         }
@@ -30,20 +31,22 @@ public class StartEndDateValidatorImpl implements BookingValidator {
 
     private Long getMinutesInFuture(Calendar startDate) {
         startDate.set(Calendar.SECOND, 0);
-        return Duration.between(getSysDate().toInstant(), startDate.toInstant())
-                .toMinutes();
+        return durationBetween(getSysDate(), startDate);
     }
 
     private Long getMinutesReservationTime(Calendar startDate, Calendar endDate) {
         endDate.set(Calendar.SECOND, 0);
-        return Duration.between(startDate.toInstant(), endDate.toInstant())
-                .toMinutes();
+        return durationBetween(startDate, endDate);
     }
 
     private Calendar getSysDate() {
         Calendar sysDate = Calendar.getInstance();
         sysDate.set(Calendar.SECOND, 0);
         return sysDate;
+    }
+
+    private Long durationBetween(Calendar startDate, Calendar endDate) {
+        return TimeUnit.MINUTES.convert(endDate.getTime().getTime() - startDate.getTime().getTime(), TimeUnit.MILLISECONDS);
     }
 
 

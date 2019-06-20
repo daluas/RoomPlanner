@@ -1,10 +1,6 @@
 package edu.roomplanner.validation;
 
-import edu.roomplanner.builders.ReservationEntityBuilder;
-import edu.roomplanner.entity.PersonEntity;
 import edu.roomplanner.entity.ReservationEntity;
-import edu.roomplanner.entity.RoomEntity;
-import edu.roomplanner.types.UserType;
 import edu.roomplanner.validation.validator.BookingValidator;
 import edu.roomplanner.validation.validator.impl.AvailabilityValidatorImpl;
 import edu.roomplanner.validation.validator.impl.RoomPersonIdValidatorImpl;
@@ -15,14 +11,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.mockito.Mockito.when;
 

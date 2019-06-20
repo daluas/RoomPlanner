@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static edu.roomplanner.validation.validator.BookingValidator.MIN_MINUTES;
+
 import java.util.Calendar;
 
 import static org.junit.Assert.*;
@@ -16,7 +18,6 @@ public class StartEndDateValidatorImplUnitTest {
 
     private StartEndDateValidatorImpl sut = new StartEndDateValidatorImpl();
     private Calendar sysDate = Calendar.getInstance();
-    private final int MIN_MINUTES = 30;
 
     @Test
     public void shouldVerifyThatStartDateIsInPast() {
@@ -51,7 +52,7 @@ public class StartEndDateValidatorImplUnitTest {
     @Test
     public void shouldVerifyThatNearEndDateIsFine() {
         ReservationEntity reservationEntity = createReservationEntityWithEndDate(sysDate.get(Calendar.YEAR), sysDate.get(Calendar.MONTH), sysDate.get(Calendar.DAY_OF_MONTH)
-                , sysDate.get(Calendar.HOUR_OF_DAY), sysDate.get(Calendar.MINUTE) + MIN_MINUTES + 1);
+                , sysDate.get(Calendar.HOUR_OF_DAY), sysDate.get(Calendar.MINUTE) + MIN_MINUTES);
         ValidationResult result = sut.validate(reservationEntity);
         assertNull(result.getError());
     }

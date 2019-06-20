@@ -53,8 +53,6 @@ public class ValidatorIntegrationTest {
                 2007, 7, 8, 5);
         reservationRepository.save(reservation);
 
-        List<ReservationEntity> bruh = reservationRepository.findAll();
-
         List<ReservationEntity> actualList = reservationRepository.findAvailableDate(reservation.getStartDate().getTime(), reservation.getEndDate().getTime(), reservation.getRoom().getId());
         List<ReservationEntity> expectedList = Arrays.asList(reservation);
 
