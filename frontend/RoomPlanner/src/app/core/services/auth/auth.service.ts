@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material';
 })
 export class AuthService {
 	private token: LoginToken;
-	private backendUrl: string = 'http://178.22.68.114:8081';
+	private backendUrl: string = 'http://localhost:8081';
 	private currentUser: LoggedUser;
 	private currentUserSubscriber: Subscriber<LoggedUser> = new Subscriber<LoggedUser>();
 
@@ -53,6 +53,7 @@ export class AuthService {
 
 	OnCurrentUserChanged(loggedUserModel: LoggedUser): void {
 		this.currentUser = loggedUserModel;
+		localStorage.setItem("user-data", JSON.stringify(this.currentUser));
 		this.currentUserSubscriber.next(this.currentUser);
 	}
 
@@ -64,28 +65,26 @@ export class AuthService {
 		return this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise();
 	}
 
-	authenticateUser(loginModel: LoginModel): Promise<Object> {
+	async authenticateUser(loginModel: LoginModel) : Promise<Object> {
 		let params = new HttpParams();
 		params = params.set("grant_type", "password");
-		params = params.set('email', loginModel.email);
+		params = params.set('username', loginModel.email);
 		params = params.set('password', loginModel.password);
-		this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise()
+		let x: Promise<Object>
+		await this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise()
 			.then(token => {
 				console.log(token)
-				//if token is httpevent , then token.body
-				return this.getUser(loginModel)
+				let params = new HttpParams()
+				params = params.append("email", loginModel.email)
+				x = this.httpClient.get(`${this.backendUrl}/users`, { params: params }).toPromise()
 			})
-			.catch(error => {
-				//this should go on .then
-				return new Promise((res, rej) => {
-					res(null);
-				})
-			})
-		return new Promise((res, rej) => res(true))
+		return x
 	}
+
+
 	getUser(userModel: LoginModel) {
 		let params = new HttpParams()
-		params = params.append("value", "userModel.email")
+		params = params.append("email", userModel.email)
 		return this.httpClient.get(`${this.backendUrl}/users`, { params: params }).toPromise()
 	}
 

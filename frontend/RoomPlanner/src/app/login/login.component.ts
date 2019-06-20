@@ -69,20 +69,21 @@ export class LoginComponent implements OnInit {
 
     this.authService.authenticateUser(user)
       .then((user: LoggedUser) => {
+        console.log("got user: ", user);
         this.authService.OnCurrentUserChanged(user)
         switch (user.type) {
 
-          case "user":
+          case "PERSON":
             this.loginSuccessfully();
             this.router.navigate(["/user"]);
             break;
 
-          case "room":
+          case "ROOM":
             this.loginSuccessfully();
             this.router.navigate(["/room"]);
             break;
 
-          case "admin":
+          case "ADMIN":
             this.loginSuccessfully();
             this.router.navigate(["/admin"]);
             break;
