@@ -45,6 +45,7 @@
     width: 374px;
     height: 120px;
     resize: none;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 .descriptionBox {
     margin-top: 130px;

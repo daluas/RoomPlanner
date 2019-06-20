@@ -35,8 +35,8 @@
   </div>
 
   <div>
-    <button *ngIf="booking.id" mat-raised-button color="primary" (click)="createBookingTest()">Book now</button>
-    <button *ngIf="!booking.id" mat-raised-button color="primary" (click)="createBookingTest()">Update</button>
+    <button *ngIf="booking.id" mat-raised-button color="primary" id="bookBtn" (click)="createBookingTest()">Book now</button>
+    <button *ngIf="!booking.id" mat-raised-button color="primary" id="updateBtn" (click)="createBookingTest()">Update</button>
     <!-- <button mat-button color="primary" class="cancelButton">Cancel</button> -->
   </div>
  
