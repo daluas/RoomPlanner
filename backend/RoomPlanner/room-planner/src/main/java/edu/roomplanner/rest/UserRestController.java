@@ -1,12 +1,7 @@
 package edu.roomplanner.rest;
 
-import edu.roomplanner.builders.ReservationEntityBuilder;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.dto.UserDto;
-import edu.roomplanner.entity.PersonEntity;
-import edu.roomplanner.entity.ReservationEntity;
-import edu.roomplanner.entity.RoomEntity;
-import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.UserService;
@@ -18,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
