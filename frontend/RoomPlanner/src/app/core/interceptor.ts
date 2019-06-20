@@ -23,7 +23,7 @@ import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 @Injectable()
 export class Interceptor implements HttpInterceptor {
 
-    BASE_URL: string = 'http://localhost:8081';
+    BASE_URL: string = 'http://178.22.68.114/RoomPlanner';
 
     constructor(private _snackBar: MatSnackBar) { }
 
