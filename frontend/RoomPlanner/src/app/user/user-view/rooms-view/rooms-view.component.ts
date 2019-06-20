@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Booking } from 'src/app/shared/models/Booking';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BookingPopupComponent } from '../../../shared/booking-popup/booking-popup.component';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { AuthService } from 'src/app/core/core.module';
@@ -13,17 +13,8 @@ import { LoggedUser } from 'src/app/core/models/LoggedUser';
 })
 export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
 
-  rooms: any;
-  @Input('rooms') set newRooms(value: any) {
-    this.rooms = value;
-    this.resetNewBooking();
-  }
-
-  forDate: Date;
-  @Input('forDate') set newForDate(value: any) {
-    this.forDate = value;
-    this.resetNewBooking();
-  }
+  @Input('rooms') rooms: any;
+  @Input() forDate: Date;
 
   @Output() createBooking: EventEmitter<any> = new EventEmitter();
 
@@ -57,6 +48,8 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     this.setStyleForPastTime();
+
+    this.resetNewBooking();
   }
 
   setCalendarIntervals() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ɵConsole, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, OnInit, Input, ɵConsole, Output, EventEmitter, Inject, ViewChild, ElementRef } from '@angular/core';
 import { Booking } from '../models/Booking';
 import { BookingService } from 'src/app/core/services/booking/booking.service';
 import { RoomsViewComponent } from '../../user/user-view/rooms-view/rooms-view.component';
@@ -14,6 +14,8 @@ export class BookingPopupComponent implements OnInit {
 
   @Input() booking: Booking;
   @Output() booked: EventEmitter<Booking> = new EventEmitter();
+  
+  @ViewChild('description', {static: false}) description: ElementRef;
 
   constructor(public bookingService: BookingService) { }
 
@@ -34,6 +36,9 @@ export class BookingPopupComponent implements OnInit {
         //document.getElementById('testButton').innerHTML = "Book now";
 
         // IMPORTANT!
+        this.booking.id = 10;
+        this.booking.ownerEmail = "user1@cegeka.ro",
+        this.booking.description = this.description.nativeElement.value;
         this.booked.emit(this.booking);
       } else {
         // eroare, inseamna ca nu s-a putut face rezervarea

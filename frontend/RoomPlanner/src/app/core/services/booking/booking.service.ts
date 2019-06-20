@@ -14,17 +14,8 @@ export class BookingService {
     // fara returnare de erori, doar true in caz de succes, ori false in caz de eroare
     return new Promise((res)=>{
       //use booking fields for http request
-      let startDate=booking.startDate;
-      let endDate=booking.endDate;
-      let id=booking.id ;
-      let roomId=booking.roomId;
-      let ownerEmail=booking.ownerEmail; 
-      let description=booking.description;
-      const request = new XMLHttpRequest();
       
       res(true);
-
-      //if error, res(false)
     });
   }
 }

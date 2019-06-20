@@ -54,6 +54,7 @@
     float:right;
 }
 .deleteBtn{
+    width: 76px;
     margin-left: 20px;
     float: right;
 }

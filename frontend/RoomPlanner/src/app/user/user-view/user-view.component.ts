@@ -85,5 +85,13 @@ export class UserViewComponent implements OnInit {
     // add to the list of bookings of the booked room the new booking 
     console.log("Rooms list must be updated with: ", booking);
     // call setDisplayedRooms(this.previousFilters); after setting this.rooms with new booking
+
+    this.closeBookingPopup();
+
+    this.rooms.forEach(room=>{
+      if(room.id === booking.roomId){
+        room.bookings.push(booking);
+      }
+    });
   }
 }
