@@ -2,12 +2,16 @@ package edu.roomplanner.service;
 
 import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.entity.ReservationEntity;
+import edu.roomplanner.entity.UserEntity;
+
+import java.util.Optional;
 
 public interface BookRoomService {
-    ReservationEntity createReservation(ReservationEntity reservationEntity);
 
-    ReservationEntity convertToEntity(ReservationDto reservationDto);
+    Optional<ReservationDto>  createReservation(Long roomId, ReservationDto reservationDto);
 
-    ReservationDto convertToDto(ReservationEntity reservationEntity);
+    ReservationEntity convertToEntity(ReservationDto reservationDto, UserEntity personEntity, UserEntity roomEntity);
+
+    ReservationDto convertToDto(ReservationEntity reservationEntity, String personEmail);
 
 }

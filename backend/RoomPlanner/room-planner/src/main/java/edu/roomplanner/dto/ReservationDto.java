@@ -15,7 +15,8 @@ import java.util.Calendar;
 @Component
 public class ReservationDto {
 
-    private Long personId;
+    private Long id;
+    private String personEmail;
     private Calendar startDate;
     private Calendar endDate;
     private String description;
