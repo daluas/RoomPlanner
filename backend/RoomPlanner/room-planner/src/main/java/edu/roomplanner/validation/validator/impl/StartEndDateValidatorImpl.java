@@ -17,8 +17,6 @@ public class StartEndDateValidatorImpl implements BookingValidator {
     @Override
     public ValidationResult validate(ReservationEntity reservationEntity) {
         Calendar startDate = reservationEntity.getStartDate();
-        System.out.println();
-        System.out.println(getMinutesInFuture(startDate));
         if (getMinutesInFuture(startDate) < 0) {
             return new ValidationResult("Start date is in past!");
         }
