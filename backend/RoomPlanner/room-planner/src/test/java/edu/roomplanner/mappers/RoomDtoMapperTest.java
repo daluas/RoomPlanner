@@ -21,7 +21,7 @@ public class RoomDtoMapperTest {
     public void shouldReturnRoomDtoWhenMapEntityToDtoIsCalledwithValidRoomEntity() {
         UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 UserType.ROOM, "Wonderland", 5, 14);
-        RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14, UserType.ROOM);
+        RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
         RoomDto actualRoomDto = sut.mapEntityToDto((RoomEntity) userEntity);
 
         assertEquals(expectedRoomDto, actualRoomDto);
@@ -44,13 +44,13 @@ public class RoomDtoMapperTest {
         UserEntity roomEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 UserType.ROOM, "Wonderland", 5, 14);
         UserEntity roomEntityTwo = BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com", "4westAD8%",
-                UserType.ROOM, "Westeros", 8, 21);
+                UserType.ROOM, "Westeros", 8, 20);
         List<UserEntity> roomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
 
         List<RoomDto> actualRoomDtoList = sut.mapEntityListToDtoList(roomEntityList);
 
-        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14, UserType.ROOM);
-        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(2L, "Westeros", 8, 21, UserType.ROOM);
+        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
+        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros", null, 8, 20, UserType.ROOM);
         List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
 
         assertEquals(expectedRoomDtoList, actualRoomDtoList);
