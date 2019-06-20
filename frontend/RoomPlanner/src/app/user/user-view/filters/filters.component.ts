@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Time } from '@angular/common';
 import { Filters } from 'src/app/shared/models/Filters';
 import { DateAdapter } from '@angular/material';
@@ -9,39 +9,54 @@ import { RoomDataService } from 'src/app/core/services/room-data/room-data.servi
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.css']
 })
-export class FiltersComponent implements OnInit {
+export class FiltersComponent implements OnInit, OnChanges {
 
-  @Input() buildingLayout: any;
   @Output() filterChange: EventEmitter<any> = new EventEmitter();
 
   dropdownOpen: boolean = false;
   dateChanged: boolean = false;
 
+  floors: number[] = [];
+  floorByDefault: number;
 
-
-  floors: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
-  startHour:Time;
-  endHour:Time;
+  startHour: Date = new Date(new Date().setHours(0, 0, 0, 0));
+  endHour: Date = new Date(new Date().setHours(0, 0, 0, 0));
   numberOfPeople: number;
   floorSelected: number;
 
   filters: Filters;
+  defaultDate: Date = new Date(new Date().setHours(0, 0, 0, 0));
 
-  defaultDate: Date = new Date(new Date().setHours(0,0,0,0));
-  
   selectedDate: Date;
-  returnDate: Date;
   finalDate: Date;
 
+  invalidHours:boolean=false;
 
   dateInThePastIn: boolean = false;
 
   constructor(
     private _dateAdapter: DateAdapter<Date>,
     private roomDataService: RoomDataService
-  ) { }
+  ) {
+  }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
+
+  @Input() buildingLayout: any;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['buildingLayout']) {
+      if (this.buildingLayout !== undefined) {
+        this.buildingLayout.forEach(element => {
+          this.floors.push(element.floor);
+        });
+      }
+      let copyArray=[...this.floors];
+      copyArray.reverse();
+      this.floorByDefault = copyArray.pop();
+    }
+  }
 
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
@@ -49,20 +64,14 @@ export class FiltersComponent implements OnInit {
 
   onDateChanged(date) {
     this.dateChanged = true;
-    this.dateInThePastIn=false;
+    this.dateInThePastIn = false;
 
-    if(this.defaultDate.getTime()>date.getTime()){
-      this.dateInThePastIn=true;
+    if (this.defaultDate.getTime() > date.getTime()) {
+      this.dateInThePastIn = true;
     }
   }
 
   onApplyFilters() {
-
-    // !IMORTANT -> ASK Dorin
-    this.filterChange.emit("filter object");
-
-
-    
 
     if (this.dateChanged) {
       this.finalDate = this.selectedDate;
@@ -71,55 +80,72 @@ export class FiltersComponent implements OnInit {
       this.finalDate = this.defaultDate;
     }
 
-
-    /*let rooms: RoomModel[] = */
-    //this.returnDate = this.userdataService.getRoomsByDate(new Date(this.finalDate));
-
-    console.log(`Selected date is: ${this.finalDate}`);
-
-    if(this.startHour!=null){
-      console.log(`Start hour selected: ${this.startHour}`);
+    if(this.startHour.getMinutes()<30){
+      this.startHour.setMinutes(0);
     }
-    if(this.endHour!=null){
-      console.log(`End hour selected: ${this.endHour}`);
-    }
-    if(this.numberOfPeople!=null){
-      console.log(`Number of people selected: ${this.numberOfPeople}`);
-    }
-    if(this.floorSelected!=null){
-      console.log(`The floor selected: ${this.floorSelected}`);
+    else if(this.startHour.getMinutes()>30){
+      this.startHour.setMinutes(30);
     }
 
-    this.filters=new Filters().create({
-      date:this.finalDate,
-      startHour:this.startHour,
-      endHour:this.endHour,
-      floor:this.floorSelected,
-      numberOfPeople:this.numberOfPeople
+    if(this.endHour.getMinutes()<30 && this.endHour.getMinutes()>0){
+      this.endHour.setMinutes(30);
+    }
+    else if(this.endHour.getMinutes()>30){
+      this.endHour.setMinutes(0);
+      this.endHour.setHours(this.endHour.getHours()+1);
+    }
+
+   
+    if (this.floorSelected == null){
+      this.floorSelected = this.floorByDefault;
+    }
+    this.filters = new Filters().create({
+      date: this.finalDate,
+      startHour: this.startHour,
+      endHour: this.endHour,
+      floor: this.floorSelected,
+      numberOfPeople: this.numberOfPeople
     });
 
-    console.log(this.filters);
-
-  }
-
-  getReturnDate() {
-    return this.returnDate;
+    
+    this.filterChange.emit(this.filters);
   }
 
   onSliderChange(event) {
     this.numberOfPeople = event.value;
   }
 
-  onStartHourChange(event) {
-    this.startHour=event.target.value;
-  }
-
-  onEndHourChange(event){
-    this.endHour=event.target.value;
-  }
-
   onFloorChange(event) {
     this.floorSelected = event.value;
+  }
+
+  onPeopleClear(){
+    this.numberOfPeople =undefined;
+  }
+  onFloorClear(){
+    this.floorSelected=this.floorByDefault;
+  }
+
+  onStartHourEmit(event) {
+    this.startHour = event;
+
+    if(this.startHour.getTime()>=this.endHour.getTime()){
+      this.invalidHours=true;
+    } 
+    else{
+      this.invalidHours=false;
+    }
+  }
+
+  onEndHourEmit(event) {
+    this.endHour = event;
+
+    if(this.startHour.getTime()>=this.endHour.getTime()){
+      this.invalidHours=true;
+    } 
+    else{
+      this.invalidHours=false;
+    }
   }
 
 }

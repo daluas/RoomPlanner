@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FiltersComponent } from './filters/filters.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { RoomsViewComponent } from './rooms-view/rooms-view.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('UserViewComponent', () => {
   let component: UserViewComponent;
@@ -21,7 +22,9 @@ describe('UserViewComponent', () => {
       imports: [
         MaterialDesignModule,
         BrowserAnimationsModule,
-        SharedModule
+        SharedModule,
+        HttpClientTestingModule
+        
       ]
     })
       .compileComponents();
