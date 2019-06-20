@@ -44,8 +44,8 @@ export class Interceptor implements HttpInterceptor {
                                     refresh_Token: event.body.refresh_token,
                                     expiration_timestamp: new Date().getTime() + event.body.expires_in
                                 })
-
                                 localStorage.setItem("access-token", JSON.stringify(token))
+                                return event;
                             }
                         }),
                         catchError((error: HttpErrorResponse) => {
@@ -85,6 +85,7 @@ export class Interceptor implements HttpInterceptor {
                     tap((event: HttpEvent<any>) => {
                         if (event instanceof HttpResponse) {
                             console.log(event.body)
+                            // goes here
                         }
                     }),
                     catchError((error: HttpErrorResponse) => {

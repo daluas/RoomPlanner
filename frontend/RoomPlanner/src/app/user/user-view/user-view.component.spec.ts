@@ -7,10 +7,13 @@ import { FiltersComponent } from './filters/filters.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { RoomsViewComponent } from './rooms-view/rooms-view.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AuthGuard } from 'src/app/core/guards/auth.guard';
+import { Router } from '@angular/router';
 
 describe('UserViewComponent', () => {
   let component: UserViewComponent;
   let fixture: ComponentFixture<UserViewComponent>;
+  let routerMock = {navigate: (path: string) => {}}
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -24,8 +27,8 @@ describe('UserViewComponent', () => {
         BrowserAnimationsModule,
         SharedModule,
         HttpClientTestingModule
-        
-      ]
+      ],
+      providers: [AuthGuard, { provide: Router, useValue: routerMock},]
     })
       .compileComponents();
   }));

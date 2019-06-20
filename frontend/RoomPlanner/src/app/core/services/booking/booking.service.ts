@@ -14,10 +14,8 @@ export class BookingService {
     // fara returnare de erori, doar true in caz de succes, ori false in caz de eroare
     return new Promise((res)=>{
       //use booking fields for http request
-
+      
       res(true);
-
-      //if error, res(false)
     });
   }
 }

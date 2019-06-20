@@ -40,12 +40,12 @@
       </div>
 
       <div class="floor">
-        <div>
+        <!-- <div>
           <h4 class="peopleContainerHeader">Floor</h4>
             <i *ngIf="floorSelected!=null && floorSelected!=floorByDefault" class="material-icons x-button" (click)="onFloorClear()">
               cancel
             </i>
-        </div>
+        </div> -->
         <mat-form-field>
           <mat-label>Select an option:</mat-label>
           <mat-select (selectionChange)="onFloorChange($event)" [value]='floorByDefault'>

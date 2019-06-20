@@ -29,11 +29,13 @@ export class UserViewComponent implements OnInit {
   }
 
   setDefaultData() {
+    // set default filtes, now that we know the first floor
+    this.previousFilters = {
+      date: new Date()
+    }
+
     this.roomDataService.getBuildingLayout().then((buildingLayout) => {
       this.buildingLayout = buildingLayout;
-
-      // set default filtes, now that we know the first floor
-      this.previousFilters = {}
     });
 
     this.roomDataService.getDefaultRooms().then((defaultRooms) => {
@@ -55,6 +57,11 @@ export class UserViewComponent implements OnInit {
     }
 
     this.previousFilters = filters;
+
+    // !!! IMPORTANT - make this work with filters date field;
+    this.previousFilters = {
+      date: new Date()
+    }
   }
 
   filteredRoomsAlreadyExist(filters: any): boolean{
@@ -78,5 +85,13 @@ export class UserViewComponent implements OnInit {
     // add to the list of bookings of the booked room the new booking 
     console.log("Rooms list must be updated with: ", booking);
     // call setDisplayedRooms(this.previousFilters); after setting this.rooms with new booking
+
+    this.closeBookingPopup();
+
+    this.rooms.forEach(room=>{
+      if(room.id === booking.roomId){
+        room.bookings.push(booking);
+      }
+    });
   }
 }
