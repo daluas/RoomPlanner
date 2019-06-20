@@ -21,6 +21,9 @@ export class RoomDataService {
   getRoomsByFilter(filter: Filters) {
     return this.http.post(`${this.backendUrl}/rooms/filter`, { body: filter }).toPromise();
   }
+
+  //getFloors():FloorModel
+
   getBuildingLayout(): Promise<any[]> {
     console.log("getBuildingLayout() was called!");
 
