@@ -120,7 +120,7 @@ export class FiltersComponent implements OnInit, OnChanges {
   }
 
   onPeopleClear(){
-    this.numberOfPeople =1;
+    this.numberOfPeople =undefined;
   }
   onFloorClear(){
     this.floorSelected=this.floorByDefault;
