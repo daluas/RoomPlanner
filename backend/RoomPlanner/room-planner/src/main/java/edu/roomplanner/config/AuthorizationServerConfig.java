@@ -72,6 +72,7 @@ public class AuthorizationServerConfig implements AuthorizationServerConfigurer 
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+
         return bean;
     }
 
