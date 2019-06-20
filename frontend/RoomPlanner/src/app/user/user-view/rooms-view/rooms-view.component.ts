@@ -11,8 +11,18 @@ import { LoggedUser } from 'src/app/core/models/LoggedUser';
 })
 export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
 
-  @Input() rooms: any;
-  @Input() forDate: Date;
+  rooms: any;
+  @Input('rooms') set newRooms(value: any) {
+    this.rooms = value;
+    this.resetNewBooking();
+  }
+
+  forDate: Date;
+  @Input('forDate') set newForDate(value: any) {
+    this.forDate = value;
+    this.resetNewBooking();
+  }
+
   @Output() createBooking: EventEmitter<any> = new EventEmitter();
 
   intervals: string[];
@@ -59,12 +69,20 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
     this.intervals.push("00.00");
   }
 
-  bookRoomTest() {
+  bookRoom() {
     this.createBooking.emit(new Booking().create({
-      startDate: new Date(new Date().setHours(12, 30, 0, 0)),
-      endDate: new Date(new Date().setHours(15, 0, 0, 0)),
-      roomId: 1
+      startDate: this.newBookingStartDate,
+      endDate: this.newBookingEndDate,
+      roomId: this.rooms[this.newBookingRoomIndex].id
     }));
+  }
+
+  openBooking(roomIndex, bookingIndex) {
+    if (this.rooms[roomIndex].bookings[bookingIndex].id) {
+      let booking = new Booking().create(this.rooms[roomIndex].bookings[bookingIndex]);
+      booking.roomId = this.rooms[roomIndex].id;
+      this.createBooking.emit(booking);
+    }
   }
 
   scrollCalendarToEightOClock() {
@@ -104,24 +122,30 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   setStyleForPastTime() {
-    let forDate = new Date(this.forDate.setHours(0,0,0,0)).getTime();
-    let today = new Date(new Date().setHours(0,0,0,0)).getTime();
-    let style = "height: 0px";
+    if (this.forDate) {
+      let forDate = new Date(this.forDate.setHours(0, 0, 0, 0)).getTime();
+      let today = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
+      let style = "height: 0px";
 
-    if(forDate < today){
-      style = "height: 2400px";
+      if (forDate < today) {
+        style = "height: 2400px";
+      }
+
+      if (forDate === today) {
+        let now = new Date();
+        style = `height: ${now.getHours() * 100 + now.getMinutes() * 10 / 6}px`
+      }
+
+      this.styleForPastTime = this.sanitizer.bypassSecurityTrustStyle(style);
     }
-
-    if(forDate === today){
-      let now = new Date();
-      style = `height: ${now.getHours() * 100 + now.getMinutes() * 10 / 6}px`
-    }
-
-    this.styleForPastTime = this.sanitizer.bypassSecurityTrustStyle(style);
   }
 
-  newBooking(roomIndex, intervalIndex){
-    if(intervalIndex < 48){
+  newBooking(roomIndex, intervalIndex) {
+    let forDate = new Date(this.forDate.setHours(0, 0, 0, 0)).getTime();
+    let today = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
+    let nowIntervals = new Date().getHours() * 2 + (new Date().getMinutes() < 30 ? 0 : 1);
+
+    if (intervalIndex < 48 && (forDate > today || forDate === today && intervalIndex >= nowIntervals)) {
       this.newBookingRoomIndex = roomIndex;
 
       let newDate = new Date(this.forDate.getTime());
@@ -143,62 +167,229 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   arrow: string;
-  mouseMove(event){
-    if(this.arrow === "up"){
-      console.log("up: " + event.movementY);
+  mouseMove(event) {
+    if (!this.arrow) {
+      return;
+    }
 
-      let newDate = this.newBookingArrowsStartDate.getTime() + event.movementY * 60 * 60 * 10;
+    let arrowsStartTime, arrowsEndTime;
 
-      if(this.newBookingArrowsEndDate.getTime() - newDate < 1000 * 60 * 30){
-        this.newBookingArrowsEndDate = new Date(newDate + 1000 * 60 * 30);
+    let forDate = new Date(this.forDate.setHours(0, 0, 0, 0)).getTime();
+    let today = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
+    let now = new Date().setHours(new Date().getHours(), (new Date().getMinutes() < 30 ? 0 : 30), 0, 0);
+
+    if (this.arrow === "up") {
+      arrowsStartTime = this.newBookingArrowsStartDate.getTime() + event.movementY * 60 * 60 * 10;
+      arrowsEndTime = this.newBookingArrowsEndDate.getTime();
+
+      if (arrowsStartTime < forDate) {
+        arrowsStartTime = forDate;
       }
 
-      this.newBookingArrowsStartDate = new Date(newDate);
+      if (arrowsStartTime < now) {
+        arrowsStartTime = now;
+      }
 
-      this.newBookingArrowsStyle = this.getStyleForBooking({
-        startDate: this.newBookingArrowsStartDate,
-        endDate: this.newBookingArrowsEndDate
-      });
+      if (arrowsStartTime > forDate + 23 * 60 * 60 * 1000 + 1000 * 60 * 30) {
+        arrowsStartTime = forDate + 23 * 60 * 60 * 1000 + 1000 * 60 * 30;
+      }
+
+      if (arrowsEndTime - arrowsStartTime < 1000 * 60 * 30) {
+        arrowsEndTime = arrowsStartTime + 1000 * 60 * 30;
+      }
+
+      if (arrowsEndTime > forDate + 24 * 60 * 60 * 1000) {
+        arrowsEndTime = forDate + 24 * 60 * 60 * 1000;
+      }
     }
 
-    if(this.arrow === "down"){
-      console.log("down: " + event.movementY);
+    if (this.arrow === "down") {
+      arrowsStartTime = this.newBookingArrowsStartDate.getTime();
+      arrowsEndTime = this.newBookingArrowsEndDate.getTime() + event.movementY * 60 * 60 * 10;
 
-      let newDate = this.newBookingArrowsEndDate.getTime() + event.movementY * 60 * 60 * 10;
+      if (arrowsEndTime > forDate + 24 * 60 * 60 * 1000) {
+        arrowsEndTime = forDate + 24 * 60 * 60 * 1000;
+      }
 
-      if(newDate - this.newBookingStartDate.getTime() < 1000 * 60 * 30){
-        this.newBookingArrowsStartDate = new Date(newDate - 1000 * 60 * 30);
-      } 
+      if (arrowsEndTime < forDate + 30 * 60 * 1000) {
+        arrowsEndTime = forDate + 30 * 60 * 1000;
+      }
 
-      this.newBookingArrowsEndDate = new Date(newDate);
+      if (arrowsEndTime - arrowsStartTime < 1000 * 60 * 30) {
+        arrowsStartTime = arrowsEndTime - 1000 * 60 * 30;
+      }
 
-      this.newBookingArrowsStyle = this.getStyleForBooking({
-        startDate: this.newBookingArrowsStartDate,
-        endDate: this.newBookingArrowsEndDate
-      });
+      if (arrowsStartTime < forDate) {
+        arrowsStartTime = forDate;
+      }
+
+      if (arrowsStartTime < now) {
+        arrowsStartTime = now;
+      }
+
+      if (arrowsStartTime > forDate + 23 * 60 * 60 * 1000 + 1000 * 60 * 30) {
+        arrowsStartTime = forDate + 23 * 60 * 60 * 1000 + 1000 * 60 * 30;
+      }
+
+      if (arrowsEndTime - arrowsStartTime < 1000 * 60 * 30) {
+        arrowsEndTime = arrowsStartTime + 1000 * 60 * 30;
+      }
+
+      if (arrowsEndTime > forDate + 24 * 60 * 60 * 1000) {
+        arrowsEndTime = forDate + 24 * 60 * 60 * 1000;
+      }
     }
 
-    if(this.arrow === "both"){
-      console.log("both: " + event.movementY);
+    if (this.arrow === "both") {
+      arrowsStartTime = this.newBookingArrowsStartDate.getTime() + event.movementY * 60 * 60 * 10;
+      arrowsEndTime = this.newBookingArrowsEndDate.getTime() + event.movementY * 60 * 60 * 10;
 
-      let newDate = this.newBookingArrowsStartDate.getTime() + event.movementY * 60 * 60 * 10;
-      this.newBookingArrowsStartDate = new Date(newDate);
+      if (arrowsStartTime < forDate) {
+        arrowsStartTime = forDate;
+      }
 
-      newDate = this.newBookingArrowsEndDate.getTime() + event.movementY * 60 * 60 * 10;
-      this.newBookingArrowsEndDate = new Date(newDate);
+      if (arrowsStartTime < now) {
+        arrowsStartTime = now;
+      }
+
+      if (arrowsStartTime > forDate + 23 * 60 * 60 * 1000 + 1000 * 60 * 30) {
+        arrowsStartTime = forDate + 23 * 60 * 60 * 1000 + 1000 * 60 * 30;
+      }
+
+      if (arrowsEndTime - arrowsStartTime < 1000 * 60 * 30) {
+        arrowsEndTime = arrowsStartTime + 1000 * 60 * 30;
+      }
+
+      if (arrowsEndTime > forDate + 24 * 60 * 60 * 1000) {
+        arrowsEndTime = forDate + 24 * 60 * 60 * 1000;
+      }
+    }
+
+    if (this.arrow) {
+      this.newBookingArrowsStartDate = new Date(arrowsStartTime);
+      this.newBookingArrowsEndDate = new Date(arrowsEndTime);
 
       this.newBookingArrowsStyle = this.getStyleForBooking({
         startDate: this.newBookingArrowsStartDate,
         endDate: this.newBookingArrowsEndDate
       });
+
+      this.updateNewBookingTime();
     }
   }
 
-  resetBookingDragEvents(){
+  finishBookingDragEvents() {
+    if (this.arrow) {
+      this.newBookingArrowsStartDate = new Date(this.newBookingStartDate.getTime());
+      this.newBookingArrowsEndDate = new Date(this.newBookingEndDate.getTime());
+      this.newBookingArrowsStyle = this.getStyleForBooking({
+        startDate: this.newBookingArrowsStartDate,
+        endDate: this.newBookingArrowsEndDate
+      });
+    }
+
     this.arrow = null;
   }
 
-  followMouse(arrow){
+  followMouse(arrow) {
     this.arrow = arrow;
+  }
+
+  updateNewBookingTime() {
+    let roundedHoursStart = this.newBookingArrowsStartDate.getHours();
+    let roundedMinutesStart = this.newBookingArrowsStartDate.getMinutes();
+    if (this.isValueInInterval(roundedMinutesStart, 15, 45)) {
+      roundedMinutesStart = 30;
+    } else {
+      if (roundedMinutesStart > 45) {
+        roundedHoursStart++;
+      }
+      roundedMinutesStart = 0;
+    }
+
+    let roundedHoursEnd = this.newBookingArrowsEndDate.getHours();
+    let roundedMinutesEnd = this.newBookingArrowsEndDate.getMinutes();
+    if (this.isValueInInterval(roundedMinutesEnd, 15, 45)) {
+      roundedMinutesEnd = 30;
+    } else {
+      if (roundedMinutesEnd > 45) {
+        roundedHoursEnd++;
+      }
+      roundedMinutesEnd = 0;
+    }
+
+    let arrowsStartDateCopy = new Date(this.newBookingArrowsStartDate.getTime());
+    let arrowsStartTime = arrowsStartDateCopy.setHours(roundedHoursStart, roundedMinutesStart, 0, 0);
+    let arrowsEndDateCopy = new Date(this.newBookingArrowsEndDate.getTime());
+    let arrowsEndTime = arrowsEndDateCopy.setHours(roundedHoursEnd, roundedMinutesEnd, 0, 0);
+
+    if (arrowsEndTime - arrowsStartTime < 1000 * 60 * 30) {
+      arrowsEndTime = arrowsStartTime + 1000 * 60 * 30;
+    }
+
+    let bookings = this.rooms[this.newBookingRoomIndex].bookings;
+
+    let bookingStartTime, bookingEndTime;
+    let bookingCanBePerformed = true;
+    if (bookings) {
+      bookings.forEach(booking => {
+        bookingStartTime = booking.startDate.getTime();
+        bookingEndTime = booking.endDate.getTime();
+
+        if (this.isValueInInterval(arrowsStartTime, bookingStartTime, bookingEndTime) &&
+          this.isValueInInterval(arrowsEndTime, bookingStartTime, bookingEndTime)) {
+          bookingCanBePerformed = false;
+          return;
+        }
+
+        if (!this.isValueInInterval(arrowsStartTime, bookingStartTime, bookingEndTime) &&
+          !this.isValueInInterval(arrowsEndTime, bookingStartTime, bookingEndTime) &&
+          this.isValueInInterval(bookingStartTime, arrowsStartTime, arrowsEndTime)) {
+          bookingCanBePerformed = false;
+          return;
+        }
+
+        if (this.isValueInInterval(arrowsStartTime, bookingStartTime, bookingEndTime) &&
+          !this.isValueInInterval(arrowsEndTime, bookingStartTime, bookingEndTime)) {
+          arrowsStartTime = bookingEndTime;
+        }
+
+        if (!this.isValueInInterval(arrowsStartTime, bookingStartTime, bookingEndTime) &&
+          this.isValueInInterval(arrowsEndTime, bookingStartTime, bookingEndTime)) {
+          arrowsEndTime = bookingStartTime;
+        }
+      });
+    }
+
+
+
+    if (bookingCanBePerformed) {
+      this.newBookingStartDate = new Date(arrowsStartTime);
+      this.newBookingEndDate = new Date(arrowsEndTime);
+
+      this.newBookingStyle = this.getStyleForBooking({
+        startDate: this.newBookingStartDate,
+        endDate: this.newBookingEndDate
+      });
+    }
+  }
+
+  isValueInInterval(value, start, end) {
+    if (value >= start && value <= end) {
+      return true;
+    }
+
+    return false;
+  }
+
+  resetNewBooking() {
+    this.newBookingStartDate = null;
+    this.newBookingEndDate = null;
+    this.newBookingStyle = null;
+    this.newBookingRoomIndex = null;
+
+    this.newBookingArrowsStartDate = null;
+    this.newBookingArrowsEndDate = null;
+    this.newBookingArrowsStyle = null;
   }
 }

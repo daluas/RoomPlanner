@@ -124,6 +124,7 @@
 }
 
 .booking-both{
+    position: relative;
     top: 5px;
     height: calc(100% - 10px);
     cursor: move;
@@ -135,6 +136,37 @@
     line-height: 5px;
     position: relative;
     top: 0;
+}
+
+.new-booking-buttons{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 25px;
+}
+
+.continue-button, .delete-button{
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.delete-button{
+    color: rgb(194, 56, 36);;
+    margin-left: 10px;
+}
+
+.continue-button{
+    font-size: 12px;
+    padding: 2px 10px;
+    background: #71c422;
+    border-radius: 5px;
+    margin-top: 3px;
+    color: #2d2d2d;
+    font-weight: bold;
+    letter-spacing: 0.6px;
+    border: 1px solid #888;
 }
 
 @media screen and (min-width: 1025px) {

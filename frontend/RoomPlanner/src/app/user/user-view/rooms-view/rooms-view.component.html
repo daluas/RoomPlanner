@@ -1,4 +1,4 @@
-<div class="container" (mousemove)="mouseMove($event)" (mouseup)="resetBookingDragEvents()">
+<div class="container" (mousemove)="mouseMove($event)" (mouseup)="finishBookingDragEvents()">
   <div class="room-header">
     <div class="header-element element-width" *ngFor="let room of rooms">
       <span class="bold">{{room.name}}</span>, <span class="small-font">capacity: <span
@@ -15,23 +15,28 @@
 
       <div class="past-time" [style]="styleForPastTime"></div>
 
-      <div class="booking" [style]="getStyleForBooking(booking)" *ngFor="let booking of room.bookings"
-        [ngClass]="getBookingColorClass(booking)">
+      <div class="booking" [style]="getStyleForBooking(booking)" 
+        *ngFor="let booking of room.bookings; let bookingIndex = index"
+        [ngClass]="getBookingColorClass(booking)"
+        (click)="openBooking(roomIndex, bookingIndex)">
         <div class="booking-owner">{{getUsernameFromEmail(booking.ownerEmail)}}</div>
         <div *ngIf="isBookingCreatedByCurrentUser(booking)">
           {{booking.description.length > 33 ? booking.description.substr(0, 33) + "..." : booking.description}}</div>
       </div>
 
       <div class="booking booking-new" [style]="newBookingStyle" *ngIf="roomIndex === newBookingRoomIndex"></div>
-      <div class="booking booking-arrows" [style]="newBookingArrowsStyle" *ngIf="roomIndex === newBookingRoomIndex">
+      <div class="booking" [style]="newBookingArrowsStyle" *ngIf="roomIndex === newBookingRoomIndex">
         <div class="booking-top-arrow" (mousedown)="followMouse('up')">
             <i class="material-icons arrow-icon"> arrow_drop_up </i>
         </div>
-        <div class="booking-both" (mousedown)="followMouse('both')">
-
-        </div>
+        <div class="booking-both" (mousedown)="followMouse('both')"></div>
         <div class="booking-bottom-arrow" (mousedown)="followMouse('down')">
             <i class="material-icons arrow-icon"> arrow_drop_down </i>
+        </div>
+
+        <div class="new-booking-buttons" *ngIf="!arrow">
+          <div class="continue-button" (click)="bookRoom()">CONTINUE</div>
+          <div class="delete-button" (click)="resetNewBooking()"><i class="material-icons"> delete_forever </i></div>
         </div>
       </div>
     </div>

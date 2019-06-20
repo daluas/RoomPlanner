@@ -58,6 +58,11 @@ export class UserViewComponent implements OnInit {
     }
 
     this.previousFilters = filters;
+
+    // !!! IMPORTANT - make this work with filters date field;
+    this.previousFilters = {
+      date: new Date()
+    }
   }
 
   filteredRoomsAlreadyExist(filters: any): boolean{
