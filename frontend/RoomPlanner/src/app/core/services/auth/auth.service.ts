@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material';
 })
 export class AuthService {
 	private token: LoginToken;
-	private backendUrl: string = 'http://178.22.68.114:8081';
+	private backendUrl: string = 'http://localhost:8081';
 	private currentUser: LoggedUser;
 	private currentUserSubscriber: Subscriber<LoggedUser> = new Subscriber<LoggedUser>();
 
@@ -64,28 +64,27 @@ export class AuthService {
 		return this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise();
 	}
 
-	authenticateUser(loginModel: LoginModel): Promise<Object> {
+	authenticateUser(loginModel: LoginModel) : Promise<Object> {
 		let params = new HttpParams();
 		params = params.set("grant_type", "password");
-		params = params.set('email', loginModel.email);
+		params = params.set('username', loginModel.email);
 		params = params.set('password', loginModel.password);
+		let x: Promise<Object>
 		this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise()
-			.then(token => {
-				console.log(token)
-				//if token is httpevent , then token.body
-				return this.getUser(loginModel)
+			.then(data => {
+				console.log(data)
+				let params = new HttpParams()
+				params = params.append("email", loginModel.email)
+				x = this.httpClient.get(`${this.backendUrl}/users`, { params: params }).toPromise()
 			})
-			.catch(error => {
-				//this should go on .then
-				return new Promise((res, rej) => {
-					res(null);
-				})
-			})
-		return new Promise((res, rej) => res(true))
+		return x
+		//this doesn t work
 	}
+
+	
 	getUser(userModel: LoginModel) {
 		let params = new HttpParams()
-		params = params.append("value", "userModel.email")
+		params = params.append("email", userModel.email)
 		return this.httpClient.get(`${this.backendUrl}/users`, { params: params }).toPromise()
 	}
 

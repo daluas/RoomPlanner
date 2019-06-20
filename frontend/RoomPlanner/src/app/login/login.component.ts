@@ -69,6 +69,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.authenticateUser(user)
       .then((user: LoggedUser) => {
+        console.log(user);
         this.authService.OnCurrentUserChanged(user)
         switch (user.type) {
 
