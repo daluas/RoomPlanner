@@ -1,10 +1,10 @@
 package edu.roomplanner.dto;
 
-import lombok.*;
+import lombok.Data;
 
 
 @Data
-public class RoomDto extends UserDto{
+public class RoomDto extends UserDto {
 
     private String name;
     private Integer floor;

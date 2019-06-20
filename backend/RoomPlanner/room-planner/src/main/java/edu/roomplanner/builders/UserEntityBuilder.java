@@ -1,9 +1,5 @@
 package edu.roomplanner.builders;
 
-import edu.roomplanner.dto.PersonDto;
-import edu.roomplanner.dto.ReservationDto;
-import edu.roomplanner.dto.RoomDto;
-import edu.roomplanner.dto.UserDto;
 import edu.roomplanner.entity.PersonEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
@@ -84,11 +80,11 @@ public class UserEntityBuilder {
     }
 
     public UserEntity build() {
-        switch (type){
+        switch (type) {
             case ROOM: {
                 return buildRoomEntity();
             }
-            case PERSON:{
+            case PERSON: {
                 return buildPersonEntity();
             }
             default: {
