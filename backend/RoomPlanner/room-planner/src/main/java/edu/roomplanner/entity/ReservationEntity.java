@@ -1,7 +1,6 @@
 package edu.roomplanner.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -10,6 +9,7 @@ import java.util.Calendar;
 @Table(name = "reservations")
 @Setter
 @Getter
+@EqualsAndHashCode
 public class ReservationEntity {
 
     @Id
