@@ -43,7 +43,5 @@ CREATE TABLE oauth_refresh_token (
     authentication bytea
 );
 
-
-
 -- Needed because I encode the password using bcrypt
 ALTER TABLE users ALTER COLUMN password TYPE VARCHAR(100);
