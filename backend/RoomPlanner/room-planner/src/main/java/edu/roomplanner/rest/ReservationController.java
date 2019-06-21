@@ -2,7 +2,6 @@ package edu.roomplanner.rest;
 
 import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.service.ReservationService;
-import lombok.EqualsAndHashCode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@EqualsAndHashCode
 @RestController
 public class ReservationController {
 
@@ -28,9 +26,6 @@ public class ReservationController {
     @RequestMapping(method = RequestMethod.POST, value = "/reservations/{room_id}")
     ResponseEntity<ReservationDto> getReservationCreated(@PathVariable(name = "room_id") Long roomId,
                                                          @RequestBody ReservationDto reservationDto) {
-        if (reservationDto == null) {
-            return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
-        }
 
         LOGGER.info("Method was called.");
         Optional<ReservationDto> reservationDtoOptional = bookRoomService.createReservation(roomId, reservationDto);
