@@ -2,7 +2,11 @@ package edu.roomplanner.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
+import edu.roomplanner.builders.FloorDtoBuilder;
+import edu.roomplanner.builders.FloorEntityBuilder;
+import edu.roomplanner.dto.FloorDto;
 import edu.roomplanner.dto.RoomDto;
+import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
@@ -50,15 +54,15 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoListAndStatusFoundWhenGetAllRoomsIsCalled() throws Exception {
 
-        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14);
-        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(2L, "Westeros", 8, 21);
+        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(1L, "Wonderland", getFloorDto(5), 14);
+        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(2L, "Westeros", getFloorDto(8), 21);
         List<RoomDto> roomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
         String jsonRoomDtoList = new ObjectMapper().writeValueAsString(roomDtoList);
 
         UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                UserType.ROOM, "Wonderland", 5, 14);
+                UserType.ROOM, "Wonderland", getFloorEntity(5), 14);
         UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com", "4westAD8%",
-                UserType.ROOM, "Westeros", 8, 21);
+                UserType.ROOM, "Westeros", getFloorEntity(8), 21);
 
         userRepository.save(userEntityOne);
         userRepository.save(userEntityTwo);
@@ -71,11 +75,11 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoAndStatusFoundWhenGetRoomByIdIsCalled() throws Exception {
 
-        RoomDto roomDto = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14);
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(1L, "Wonderland", getFloorDto(5), 14);
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
 
         UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                UserType.ROOM, "Wonderland", 5, 14);
+                UserType.ROOM, "Wonderland", getFloorEntity(5), 14);
         userRepository.save(userEntity);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 1))
@@ -95,5 +99,18 @@ public class UsersRestControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 1))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    private FloorEntity getFloorEntity(int floor) {
+        return new FloorEntityBuilder()
+                .withFloor(floor)
+                .build();
+    }
+
+    private FloorDto getFloorDto(int floor) {
+        return new FloorDtoBuilder()
+                .withFloor(floor)
+                .build();
+
     }
 }

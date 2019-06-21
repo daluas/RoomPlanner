@@ -17,18 +17,21 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
 
     public RoomDto mapEntityToDto(RoomEntity roomEntity) {
 
+        if(roomEntity.getFloor() == null){
+            return new RoomDtoBuilder().build();
+        }
+
         FloorDto floorDto = new FloorDtoBuilder()
                 .withId(roomEntity.getFloor().getId())
                 .withFloor(roomEntity.getFloor().getFloor())
                 .build();
 
-        RoomDto roomDto = new RoomDtoBuilder()
+        return new RoomDtoBuilder()
                 .withId(roomEntity.getId())
                 .withFloor(floorDto)
                 .withName(roomEntity.getName())
                 .withMaxPersons(roomEntity.getMaxPersons())
                 .build();
-        return roomDto;
     }
 
     public List<RoomDto> mapEntityListToDtoList(List<UserEntity> roomEntityList) {

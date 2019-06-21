@@ -1,7 +1,7 @@
 package edu.roomplanner.builders;
 
 import edu.roomplanner.dto.FloorDto;
-import edu.roomplanner.entity.RoomEntity;
+import edu.roomplanner.dto.RoomDto;
 
 import java.util.Set;
 
@@ -9,7 +9,7 @@ public class FloorDtoBuilder {
 
     private Long id;
     private Integer floor;
-    private Set<RoomEntity> rooms;
+    private Set<RoomDto> rooms;
 
 
     public FloorDtoBuilder withId(Long id) {
@@ -22,7 +22,7 @@ public class FloorDtoBuilder {
         return this;
     }
 
-    public FloorDtoBuilder withRooms(Set<RoomEntity> rooms) {
+    public FloorDtoBuilder withRooms(Set<RoomDto> rooms) {
         this.rooms = rooms;
         return this;
     }
