@@ -13,6 +13,7 @@ import java.util.Set;
 
 public class UserDtoBuilder {
 
+    private final static Logger LOGGER = LogManager.getLogger(UserDtoBuilder.class);
     private Long id;
     private String email;
     private String name;
@@ -22,7 +23,6 @@ public class UserDtoBuilder {
     private String firstName;
     private String lastName;
     private Set<ReservationDto> reservations;
-    private static Logger LOGGER = LogManager.getLogger(UserDtoBuilder.class);
 
     public static UserDtoBuilder builder() {
         return new UserDtoBuilder();

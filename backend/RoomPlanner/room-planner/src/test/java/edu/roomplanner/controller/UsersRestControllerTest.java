@@ -3,6 +3,7 @@ package edu.roomplanner.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
 import edu.roomplanner.dto.RoomDto;
+import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -35,6 +37,7 @@ import java.util.List;
 @AutoConfigureMockMvc(secure = false)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
+@Sql(scripts = "classpath:clean-up.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class UsersRestControllerTest {
 
     @Autowired
@@ -42,6 +45,12 @@ public class UsersRestControllerTest {
 
     @Autowired
     private Flyway flyway;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private OAuthHelper oAuthHelper;
 
     private RequestPostProcessor bearerToken;
 
@@ -51,16 +60,12 @@ public class UsersRestControllerTest {
         flyway.migrate();
 
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
+
     }
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    OAuthHelper oAuthHelper;
 
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoListAndStatusFoundWhenGetAllRoomsIsCalled() throws Exception {
+
 
         RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
         RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros", null, 8, 20, UserType.ROOM);
@@ -79,6 +84,7 @@ public class UsersRestControllerTest {
 
         RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
+
 
 
         mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 2).with(bearerToken))
