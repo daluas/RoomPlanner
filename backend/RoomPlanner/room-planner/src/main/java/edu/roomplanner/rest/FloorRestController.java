@@ -19,7 +19,7 @@ public class FloorRestController {
 
     private FloorService floorService;
 
-    private static Logger LOGGER = LogManager.getLogger(UserRestController.class);
+    private static Logger LOGGER = LogManager.getLogger(FloorRestController.class);
 
     @Autowired
     public FloorRestController(FloorService floorService) {
