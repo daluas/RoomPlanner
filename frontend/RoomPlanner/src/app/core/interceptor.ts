@@ -23,14 +23,30 @@ import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 @Injectable()
 export class Interceptor implements HttpInterceptor {
 
-    BASE_URL: string = 'http://localhost:8081';
+    BASE_URL: string = 'http://178.22.68.114/RoomPlanner';
 
     constructor(private _snackBar: MatSnackBar) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        console.log(request);
         if (request.url === `${this.BASE_URL}/oauth/token`) {
             //request token
             if (request.body.get("grant_type") === "password") {
+
+
+                let token = new LoginToken().create({
+                    access_token: "access",
+                    token_type: "bearer",
+                    refresh_Token: "refreshh",
+                    expiration_timestamp: 1561102598
+                })
+                localStorage.setItem("access-token", JSON.stringify(token))
+                return of(new HttpResponse({
+                    body: token
+                }))
+
+
+
                 console.log("requesting token")
                 request = this.addGetTokenHeaders(request);
 
@@ -79,6 +95,17 @@ export class Interceptor implements HttpInterceptor {
         }
 
         if (request.url === `${this.BASE_URL}/users`) {
+            console.log(request);
+            let userdata = new LoggedUser().create({
+                email: request.params.get("email"),
+                type: "PERSON"
+            })
+            console.log(userdata);
+
+            return of(new HttpResponse({
+                body: userdata
+            }))
+
             request = this.addAuthenticationToken(request, next);
             return next.handle(request)
                 .pipe(
@@ -132,7 +159,7 @@ export class Interceptor implements HttpInterceptor {
     addAuthenticationToken(request: HttpRequest<any>, next: HttpHandler): HttpRequest<any> {
         // If you are calling an outside domain then do not add the token.
         // if (!request.url.match(/www.mydomain.com\//)) {
-        //     return request;
+        // return request;
         // }
         let token = this.getTokenLS();
         let userData = this.getUserData();
@@ -158,13 +185,13 @@ export class Interceptor implements HttpInterceptor {
                         refreshedToken = refreshedToken.create(response.body)
                         localStorage.setItem("access-token", JSON.stringify(refreshedToken));
                     }
-                    
+
                 })
-                .catch(error =>{
+                .catch(error => {
                     console.log(error)
                 })
-            
-            if(refreshedToken){
+
+            if (refreshedToken) {
                 token = refreshedToken
             }
         }
@@ -175,35 +202,33 @@ export class Interceptor implements HttpInterceptor {
             }
         });
     }
-  
-    //         // return next.handle(request).pipe(
-    //         tap({
-    //             next: (response: HttpEvent<any>) => {
-    //                 if (response instanceof HttpResponse) {
-    //                     console.log("backend responded");
-    //                     // response = response.clone({ body: "" })
-    //                 }
-    //                 if (response instanceof HttpErrorResponse) {
-    //                     console.log("error response (never)");
-    //                     console.log(response)
-    //                 }
-    //             },
-    //             error: (error: HttpErrorResponse) => {
-    //                 console.log(error.message);
-    //                 // status, statusText, name, headers, type, url, ok
-    //                 this._snackBar.open(
-    //                     `Call to ${error.url} failed with ${error.status} - ${error.statusText}`,
-    //                     'Close',
-    //                     {
-    //                         duration: 7000
-    //                     }
-    //                 );
 
-    //             },
-    //             complete: () => console.log('on complete')
-    //         })
-    //     )
+    // // return next.handle(request).pipe(
+    // tap({
+    // next: (response: HttpEvent<any>) => {
+    // if (response instanceof HttpResponse) {
+    // console.log("backend responded");
+    // // response = response.clone({ body: "" })
+    // }
+    // if (response instanceof HttpErrorResponse) {
+    // console.log("error response (never)");
+    // console.log(response)
+    // }
+    // },
+    // error: (error: HttpErrorResponse) => {
+    // console.log(error.message);
+    // // status, statusText, name, headers, type, url, ok
+    // this._snackBar.open(
+    // `Call to ${error.url} failed with ${error.status} - ${error.statusText}`,
+    // 'Close',
+    // {
+    // duration: 7000
+    // }
+    // );
+
+    // },
+    // complete: () => console.log('on complete')
+    // })
+    // )
 
 }
-
-

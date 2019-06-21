@@ -25,17 +25,17 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    if (state.url === '/room' && currentUser.type !== 'room'){
+    if (state.url === '/ROOM' && currentUser.type !== 'ROOM'){
       this.router.navigate([currentUser.type]);
       return false;
     }
 
-    if (state.url === '/user' && ['user', 'admin'].indexOf(currentUser.type) === -1){
+    if (state.url === '/PERSON' && ['PERSON', 'ADMIN'].indexOf(currentUser.type) === -1){
       this.router.navigate([currentUser.type]);
       return false;
     }
 
-    if(state.url === '/admin' && currentUser.type !== 'admin'){
+    if(state.url === '/ADMIN' && currentUser.type !== 'ADMIN'){
       this.router.navigate([currentUser.type]);
       return false;
     }

@@ -17,6 +17,7 @@ export class UserViewComponent implements OnInit {
   displayedRooms: any[];
   previousFilters: any;
 
+ 
   constructor(public roomDataService: RoomDataService) { }
 
   ngOnInit(): void {

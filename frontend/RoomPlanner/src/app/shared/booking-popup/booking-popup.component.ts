@@ -4,7 +4,7 @@ import { BookingService } from 'src/app/core/services/booking/booking.service';
 import { RoomsViewComponent } from '../../user/user-view/rooms-view/rooms-view.component';
 import { Data } from '@angular/router';
 import { FormControl } from '@angular/forms';
-
+import { UserViewComponent } from 'use'
 @Component({
   selector: 'app-booking-popup',
   templateUrl: './booking-popup.component.html',
@@ -14,7 +14,7 @@ export class BookingPopupComponent implements OnInit {
 
   @Input() booking: Booking;
   @Output() booked: EventEmitter<Booking> = new EventEmitter();
-
+ // @Input() closeBookingPopup: closeBookingPopup = new this.closeBookingPopup();
   constructor(public bookingService: BookingService) { }
 
   ngOnInit() {
@@ -64,5 +64,8 @@ export class BookingPopupComponent implements OnInit {
   }
   deleteBooking(){
     
+  }
+  closePopup(){
+
   }
 }
