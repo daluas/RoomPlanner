@@ -9,7 +9,7 @@ CREATE TABLE oauth_access_token (
 );
 
 CREATE TABLE oauth_client_details (
-    client_id character varying(256) NOT NULL,
+    client_id character varying(256) primary key NOT NULL,
     resource_ids character varying(256),
     client_secret character varying(256),
     scope character varying(256),
@@ -42,10 +42,6 @@ CREATE TABLE oauth_refresh_token (
     token bytea,
     authentication bytea
 );
-
-ALTER TABLE oauth_client_details
-    ADD CONSTRAINT oauth_client_details_pkey PRIMARY KEY (client_id);
-
 
 -- Needed because I encode the password using bcrypt
 ALTER TABLE users ALTER COLUMN password TYPE VARCHAR(100);

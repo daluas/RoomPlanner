@@ -19,7 +19,6 @@
         <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
         <jasypt.version>1.9.2</jasypt.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.jasypt</groupId>
