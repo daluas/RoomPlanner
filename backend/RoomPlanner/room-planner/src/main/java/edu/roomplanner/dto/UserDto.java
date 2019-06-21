@@ -14,7 +14,7 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String roomName;
-    private Integer floor;
+    private FloorDto floor;
     private Integer maxPersons;
 
 }

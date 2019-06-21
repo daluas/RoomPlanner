@@ -14,7 +14,7 @@ import java.util.List;
 public class RoomDto{
     private Long id;
     private String name;
-    private Integer floor;
+    private FloorDto floor;
     private Integer maxPersons;
     private List<ReservationDto> reservation;
 }

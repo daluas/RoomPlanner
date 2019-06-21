@@ -1,5 +1,6 @@
 package edu.roomplanner.builders;
 
+import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.types.UserType;
@@ -11,7 +12,7 @@ public class RoomEntityBuilder {
     private String password;
     private UserType type;
     private String name;
-    private Integer floor;
+    private FloorEntity floor;
     private Integer maxPersons;
 
     public RoomEntityBuilder withId(Long id) {
@@ -39,7 +40,7 @@ public class RoomEntityBuilder {
         return this;
     }
 
-    public RoomEntityBuilder withFloor(Integer floor) {
+    public RoomEntityBuilder withFloor(FloorEntity floor) {
         this.floor = floor;
         return this;
     }

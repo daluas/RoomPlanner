@@ -1,12 +1,13 @@
 package edu.roomplanner.builders;
 
+import edu.roomplanner.dto.FloorDto;
 import edu.roomplanner.dto.RoomDto;
 
 public class RoomDtoBuilder {
 
     private Long id;
     private String name;
-    private Integer floor;
+    private FloorDto floor;
     private Integer maxPersons;
 
     public RoomDtoBuilder withId(Long id) {
@@ -19,7 +20,7 @@ public class RoomDtoBuilder {
         return this;
     }
 
-    public RoomDtoBuilder withFloor(Integer floor) {
+    public RoomDtoBuilder withFloor(FloorDto floor) {
         this.floor = floor;
         return this;
     }
