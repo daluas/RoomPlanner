@@ -15,30 +15,30 @@ export class AuthGuard implements CanActivate {
 
     let currentUser = this.authService.getCurrentUser();
     console.log(currentUser);
-    if (state.url !== '/login' && !currentUser) {
-      this.router.navigate(['login']);
-      return false;
-    }
+    // if (state.url !== '/login' && !currentUser) {
+    //   this.router.navigate(['login']);
+    //   return false;
+    // }
     
-    if (state.url === '/login' && currentUser) {
-      this.router.navigate([currentUser.type]);
-      return false;
-    }
+    // if (state.url === '/login' && currentUser) {
+    //   this.router.navigate([currentUser.type]);
+    //   return false;
+    // }
 
-    if (state.url === '/room' && currentUser.type !== 'room'){
-      this.router.navigate([currentUser.type]);
-      return false;
-    }
+    // if (state.url === '/room' && currentUser.type !== 'room'){
+    //   this.router.navigate([currentUser.type]);
+    //   return false;
+    // }
 
-    if (state.url === '/user' && ['user', 'admin'].indexOf(currentUser.type) === -1){
-      this.router.navigate([currentUser.type]);
-      return false;
-    }
+    // if (state.url === '/user' && ['user', 'admin'].indexOf(currentUser.type) === -1){
+    //   this.router.navigate([currentUser.type]);
+    //   return false;
+    // }
 
-    if(state.url === '/admin' && currentUser.type !== 'admin'){
-      this.router.navigate([currentUser.type]);
-      return false;
-    }
+    // if(state.url === '/admin' && currentUser.type !== 'admin'){
+    //   this.router.navigate([currentUser.type]);
+    //   return false;
+    // }
 
     return true;
   }

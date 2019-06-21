@@ -3,7 +3,7 @@
     width: 100%;
 }
 
-.room-view-container{
+/* .room-view-container{
     position: absolute;
     top: 10px;
     left: 350px;
@@ -13,7 +13,7 @@
     padding: 10px;
 
     background: #f1f1f1;
-}
+} */
 
 .filters-header{
     display: none;
@@ -29,18 +29,18 @@
 
 
 .calendar-wrapper{
-   
     display: block;
     margin: 0 auto;
 }
+
 .filters-body{
-   
     display: block;
     margin: 0 auto;
 }
 
 .floor{
     margin-left:15px;
+    margin-top: 15px;
 }
 
 .hours{
@@ -52,25 +52,45 @@
     margin-left:15px;
 }
 
-.hour-container{
+/* .hour-container{
     white-space: nowrap;
-}
-
-
-.hourText{
+} */
+.startHourContainer{
     display: inline-block;
     vertical-align: top;
-    text-align: left;
-    width: 60px;
-    line-height: 143px;
+    /* width: calc((100% - 30px)/2); */
+    width: 50%;
+    border-right: 1px #ccc solid;
 }
 
+.endHourContainer{
+    display: inline-block;
+    vertical-align: top;
+    /* width: calc((100% - 30px)/2); */
+    width: 48%;
+}
 
+.startHourText{
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.endHourText{
+    text-align: center;
+    margin-bottom: 15px;
+}
 .hourInput{
+    text-align: center;
+}
+
+/* .separator{
     display: inline-block;
     vertical-align: top;
-    width: calc(100% - 60px);
+    width: 30px;
 }
+ */
+
+
 
 .invalidHoursContainer{
     color: red;
@@ -100,6 +120,15 @@ mat-slider {
 }
 .peopleContainerHeader{
     display: inline-block;
+}
+.floorContainerHeader{
+    display: inline-block;
+    vertical-align: top;
+}
+.floorSelectContainer{
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 8%;
 }
 
 @media screen and (max-width: 768px) {
@@ -213,4 +242,16 @@ mat-slider {
 
 ::ng-deep .mat-accent .mat-slider-track-fill {
     background-color: #673ab7 !important;
-} 
+}
+
+::ng-deep .mat-calendar-body-cell-content.mat-calendar-body-today {
+    background-color:#673ab7;
+}
+
+::ng-deep .mat-calendar-body-cell-content.beforeActualDate {
+    background-color:red;
+}
+
+::ng-deep .mat-calendar-body-cell-content.afterActualDate {
+    background-color:yellow;
+}

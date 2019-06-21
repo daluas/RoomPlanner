@@ -7,7 +7,6 @@
         <div class="hoursInput">
             <mat-form-field class="hour">
                 <input matInput formControlName="hour" (blur)="updateHours()">
-                <mat-error *ngIf="hourForm.controls.hour.invalid ">Format invalid!</mat-error>
             </mat-form-field>
         </div>
         <div class="key_down_hours">
@@ -27,7 +26,6 @@
         <div class="minutesInput">
             <mat-form-field class="minutes">
                 <input matInput formControlName="minutes" (blur)="updateMinutes()">
-                <mat-error *ngIf="hourForm.controls.minutes.invalid ">Format invalid!</mat-error>
             </mat-form-field>
         </div>
         <div class="key_down_minutes">
@@ -35,6 +33,9 @@
         </div>
 
     </div>
+    <div *ngIf="hourForm.controls.minutes.invalid" class="errorText">Format invalid for minutes!</div> 
+    <div *ngIf="hourForm.controls.hour.invalid " class="errorText">Format invalid for hours !</div> 
+    
 
 
 </form>

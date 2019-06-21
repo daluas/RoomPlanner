@@ -6,27 +6,27 @@
   <div class="filters-elements" [ngClass]="{'filters-open': dropdownOpen}">
     <div class="calendar">
       <div class="calendar-wrapper">
-        <mat-calendar #calendar [(selected)]="selectedDate" (selectedChange)="onDateChanged($event)"></mat-calendar>
+        <mat-calendar matCalendarHeader #calendar [(selected)]="selectedDate" (selectedChange)="onDateChanged($event)"></mat-calendar>
       </div>
     </div>
     <div class="filters-body">
 
       <div class="hours" *ngIf="dateInThePastIn==false">
 
-        <div class="hour-container">
-          <div class="hourText">
-            <b>From: </b>
+        <div class="startHourContainer">
+          <div class="startHourText">
+            <b>From</b>
           </div>
           <div class="hourInput">
             <app-hour-input (hourEmitter)="onStartHourEmit($event)"></app-hour-input>
           </div>
         </div>
 
-        <br/>
+        <!-- <div class="separator"></div> -->
 
-        <div class="hour-container">
-          <div class="hourText">
-            <b>To: </b>
+        <div class="endHourContainer">
+          <div class="endHourText">
+            <b>To</b>
           </div>
           <div class="hourInput">
             <app-hour-input (hourEmitter)="onEndHourEmit($event)"></app-hour-input>
@@ -40,13 +40,14 @@
       </div>
 
       <div class="floor">
+
+        <h4 class="floorContainerHeader">Floor/Room:</h4>
         <!-- <div>
-          <h4 class="peopleContainerHeader">Floor</h4>
-            <i *ngIf="floorSelected!=null && floorSelected!=floorByDefault" class="material-icons x-button" (click)="onFloorClear()">
-              cancel
-            </i>
+          <i *ngIf="floorSelected!=null && floorSelected!=floorByDefault" class="material-icons x-button" (click)="onFloorClear()">
+            cancel
+          </i>
         </div> -->
-        <mat-form-field>
+        <mat-form-field class="floorSelectContainer">
           <mat-label>Select an option:</mat-label>
           <mat-select (selectionChange)="onFloorChange($event)" [value]='floorByDefault'>
             <mat-option *ngFor="let floor of floors" [value]="floor">{{floor}}</mat-option>
@@ -54,7 +55,7 @@
         </mat-form-field>
       </div>
 
-      <div class="people">
+      <div class="people" *ngIf="dateInThePastIn==false">
         <div>
           <h4 class="peopleContainerHeader"> Number of people attending</h4>
           <i *ngIf="numberOfPeople!=1 && numberOfPeople!=null" class="material-icons x-button" (click)="onPeopleClear()">

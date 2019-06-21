@@ -28,26 +28,33 @@ export class UserViewComponent implements OnInit {
     this.bookingPopupOpen = false;
   }
 
-  setDefaultData() {
+  async setDefaultData() {
     // set default filtes, now that we know the first floor
     this.previousFilters = {
       date: new Date()
     }
 
-    this.roomDataService.getBuildingLayout().then((buildingLayout) => {
+    await this.roomDataService.getBuildingLayout().then((buildingLayout) => {
       this.buildingLayout = buildingLayout;
     });
 
-    this.roomDataService.getDefaultRooms().then((defaultRooms) => {
-      this.rooms = defaultRooms;
-      this.displayedRooms = defaultRooms;
-    })
+    // this.roomDataService.getDefaultRooms().then((defaultRooms) => {
+    //   this.rooms = defaultRooms;
+    //   this.displayedRooms = defaultRooms;
+    // })
+
+    // sort floors
+    // this.previousFilters.floor = this.buildingLayout[0].floor;
+    // this.roomDataService.getRooms(this.previousFilters).then((defaultRooms) => {
+    //   this.rooms = defaultRooms;
+    //   this.displayedRooms = defaultRooms;
+    // })
   }
 
   updateRoomsBasedOnFilters(filters: any) {
     console.log("Filters component emited: ", filters);
 
-    if (this.filteredRoomsAlreadyExist(filters)){
+    if (this.filteredRoomsAlreadyExist(filters)) {
       this.setDisplayedRooms(filters);
     } else {
       this.roomDataService.getRooms(filters).then((rooms) => {
@@ -64,13 +71,13 @@ export class UserViewComponent implements OnInit {
     }
   }
 
-  filteredRoomsAlreadyExist(filters: any): boolean{
+  filteredRoomsAlreadyExist(filters: any): boolean {
     //if this.previousFilters date && floor is the same, than return true
 
     return false;
   }
 
-  setDisplayedRooms(filters: any){
+  setDisplayedRooms(filters: any) {
     // this.displayedRooms = this.rooms.map((room) => { if(filters conditions) return room});
     // DELETE THIS
     this.displayedRooms = this.rooms;
@@ -88,8 +95,8 @@ export class UserViewComponent implements OnInit {
 
     this.closeBookingPopup();
 
-    this.rooms.forEach(room=>{
-      if(room.id === booking.roomId){
+    this.rooms.forEach(room => {
+      if (room.id === booking.roomId) {
         room.bookings.push(booking);
       }
     });
