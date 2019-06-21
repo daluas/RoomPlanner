@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({UnknownUserTypeException.class})
-    public ResponseEntity<String> handleException(Exception exception) {
-        UnknownUserTypeException unknownUserTypeException = (UnknownUserTypeException) exception;
+    public ResponseEntity<String> handleException(UnknownUserTypeException exception) {
 
-        return new ResponseEntity<>(unknownUserTypeException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
