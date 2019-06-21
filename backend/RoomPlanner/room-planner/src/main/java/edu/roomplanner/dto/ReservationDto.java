@@ -16,10 +16,10 @@ import java.util.Calendar;
 public class ReservationDto {
 
     private Long id;
+    private Long roomId;
     private String personEmail;
     private Calendar startDate;
     private Calendar endDate;
     private String description;
-
 
 }

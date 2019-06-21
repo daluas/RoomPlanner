@@ -1,7 +1,7 @@
 package edu.roomplanner.rest;
 
 import edu.roomplanner.dto.ReservationDto;
-import edu.roomplanner.service.BookRoomService;
+import edu.roomplanner.service.ReservationService;
 import lombok.EqualsAndHashCode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,14 +14,14 @@ import java.util.Optional;
 
 @EqualsAndHashCode
 @RestController
-public class BookRoomController {
+public class ReservationController {
 
-    private static Logger LOGGER = LogManager.getLogger(BookRoomController.class);
+    private static final Logger LOGGER = LogManager.getLogger(ReservationController.class);
 
-    private final BookRoomService bookRoomService;
+    private final ReservationService bookRoomService;
 
     @Autowired
-    public BookRoomController(BookRoomService bookRoomService) {
+    public ReservationController(ReservationService bookRoomService) {
         this.bookRoomService = bookRoomService;
     }
 
@@ -38,7 +38,7 @@ public class BookRoomController {
 
         return reservationDtoOptional
                 .map(reservationEntity -> new ResponseEntity<>(reservationDtoOptional.get(), HttpStatus.CREATED))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+                .orElseGet(() -> new ResponseEntity("Room or person not found", HttpStatus.NOT_FOUND));
     }
 
 }
