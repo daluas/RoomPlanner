@@ -81,16 +81,16 @@
 }
 
 .booking-other{
-    background: rgb(194, 56, 36, 0.8);
+    background: rgb(255,92,69, 0.8);
 }
 
 .booking-personal{
-    background: rgb(0, 152, 195, 0.8);
+    background: rgb(31,170,255, 0.8);
     cursor: pointer;
 }
 
 .booking-new{
-    background: rgb(107, 198, 196, 0.8);
+    background: rgb(113,196,34, 0.8);
 }
 
 .booking-owner{
@@ -160,13 +160,12 @@
 .continue-button{
     font-size: 12px;
     padding: 2px 10px;
-    background: #71c422;
+    background: #fff;
     border-radius: 5px;
-    margin-top: 3px;
+    margin-top: 4px;
     color: #2d2d2d;
     font-weight: bold;
     letter-spacing: 0.6px;
-    border: 1px solid #888;
 }
 
 @media screen and (min-width: 1025px) {
