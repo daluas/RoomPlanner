@@ -93,5 +93,7 @@ export class UserViewComponent implements OnInit {
         room.bookings.push(booking);
       }
     });
+
+    this.rooms = [...this.rooms];
   }
 }

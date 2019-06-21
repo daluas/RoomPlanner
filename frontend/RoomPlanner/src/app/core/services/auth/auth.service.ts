@@ -65,18 +65,21 @@ export class AuthService {
 		return this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise();
 	}
 
-	async authenticateUser(loginModel: LoginModel) : Promise<Object> {
+	authenticateUser(loginModel: LoginModel) : Promise<Object> {
 		let params = new HttpParams();
 		params = params.set("grant_type", "password");
 		params = params.set('username', loginModel.email);
 		params = params.set('password', loginModel.password);
 		let x: Promise<Object>
-		await this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise()
+	
+	
+		return this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise()
 			.then(token => {
 				console.log(token)
 				let params = new HttpParams()
 				params = params.append("email", loginModel.email)
-				x = this.httpClient.get(`${this.backendUrl}/users`, { params: params }).toPromise()
+				// x = 
+				return this.httpClient.get(`${this.backendUrl}/users`, { params: params }).toPromise()
 			})
 		return x
 	}

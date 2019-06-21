@@ -5,6 +5,7 @@ import { AuthService } from '../core.module';
 import { Router } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material';
+import { UserType } from '../enums/enums';
 
 describe('Given a AuthGuard', () => {
   describe('with canActivate', () => {
@@ -39,7 +40,7 @@ describe('Given a AuthGuard', () => {
       let routeStateMock: any = { snapshot: {}, url: '/login' };
       spyOn(authService, 'getCurrentUser').and.returnValue({
         email: "test@test.com",
-        type: 'user'
+        type: UserType.PERSON
       });
 
       expect(guard.canActivate(routeMock, routeStateMock)).toBeFalsy();
@@ -49,88 +50,88 @@ describe('Given a AuthGuard', () => {
       let routeStateMock: any = { snapshot: {}, url: '/login' };
       spyOn(authService, 'getCurrentUser').and.returnValue({
         email: "test@test.com",
-        type: 'user'
+        type: UserType.PERSON
       });
 
       guard.canActivate(routeMock, routeStateMock);
 
-      expect(routerMock.navigate).toHaveBeenCalledWith(['user']);
+      expect(routerMock.navigate).toHaveBeenCalledWith([UserType.PERSON.toLowerCase()]);
     }));
 
     it('should return true when access /room and type of current user is room', inject([AuthGuard], (guard: AuthGuard) => {
-      let routeStateMock: any = { snapshot: {}, url: '/room' };
+      let routeStateMock: any = { snapshot: {}, url: '/' + UserType.ROOM.toLowerCase()};
       spyOn(authService, 'getCurrentUser').and.returnValue({
         email: "test@test.com",
-        type: 'room'
+        type: UserType.ROOM
       });
 
       expect(guard.canActivate(routeMock, routeStateMock)).toBeTruthy();
     }));
 
     it('should return true when access /user and type of current user is user', inject([AuthGuard], (guard: AuthGuard) => {
-      let routeStateMock: any = { snapshot: {}, url: '/user' };
+      let routeStateMock: any = { snapshot: {}, url: '/' + UserType.PERSON.toLowerCase() };
       spyOn(authService, 'getCurrentUser').and.returnValue({
         email: "test@test.com",
-        type: 'user'
+        type: UserType.PERSON
       });
 
       expect(guard.canActivate(routeMock, routeStateMock)).toBeTruthy();
     }));
 
     it('should return true when access /user and type of current user is admin', inject([AuthGuard], (guard: AuthGuard) => {
-      let routeStateMock: any = { snapshot: {}, url: '/user' };
+      let routeStateMock: any = { snapshot: {}, url: '/' + UserType.PERSON.toLowerCase() };
       spyOn(authService, 'getCurrentUser').and.returnValue({
         email: "test@test.com",
-        type: 'admin'
+        type: UserType.ADMIN
       });
 
       expect(guard.canActivate(routeMock, routeStateMock)).toBeTruthy();
     }));
 
     it('should return true when access /admin and type of current user is admin', inject([AuthGuard], (guard: AuthGuard) => {
-      let routeStateMock: any = { snapshot: {}, url: '/admin' };
+      let routeStateMock: any = { snapshot: {}, url: '/' + UserType.ADMIN.toLowerCase() };
       spyOn(authService, 'getCurrentUser').and.returnValue({
         email: "test@test.com",
-        type: 'admin'
+        type: UserType.ADMIN
       });
 
       expect(guard.canActivate(routeMock, routeStateMock)).toBeTruthy();
     }));
 
     it('should redirect to /[userType] when access /room and type of current user is not room', inject([AuthGuard], (guard: AuthGuard) => {
-      let routeStateMock: any = { snapshot: {}, url: '/room' };
+      let routeStateMock: any = { snapshot: {}, url: '/' + UserType.ROOM.toLowerCase() };
       spyOn(authService, 'getCurrentUser').and.returnValue({
         email: "test@test.com",
-        type: 'user'
+        type: UserType.PERSON
       });
 
       guard.canActivate(routeMock, routeStateMock);
 
-      expect(routerMock.navigate).toHaveBeenCalledWith(['user']);
+      expect(routerMock.navigate).toHaveBeenCalledWith([UserType.PERSON.toLowerCase()]);
     }));
 
     it('should redirect to /[userType] when access /user and type of current user is not user or admin', inject([AuthGuard], (guard: AuthGuard) => {
-      let routeStateMock: any = { snapshot: {}, url: '/user' };
+      let routeStateMock: any = { snapshot: {}, url: '/' + UserType.PERSON.toLowerCase() };
       spyOn(authService, 'getCurrentUser').and.returnValue({
         email: "test@test.com",
-        type: 'room'
+        type: UserType.ROOM
       });
 
       guard.canActivate(routeMock, routeStateMock);
 
-      expect(routerMock.navigate).toHaveBeenCalledWith(['room']);
+      expect(routerMock.navigate).toHaveBeenCalledWith([UserType.ROOM.toLowerCase()]);
     }));
 
     it('should redirect to /[userType] when access /admin and type of current user is not admin', inject([AuthGuard], (guard: AuthGuard) => {
-      let routeStateMock: any = { snapshot: {}, url: '/admin' };
+      let routeStateMock: any = { snapshot: {}, url: '/' + UserType.ADMIN.toLowerCase() };
       spyOn(authService, 'getCurrentUser').and.returnValue({
         email: "test@test.com",
-        type: 'room'
+        type: UserType.ROOM
       });
 
       guard.canActivate(routeMock, routeStateMock);
 
-      expect(routerMock.navigate).toHaveBeenCalledWith(['room']);
+      expect(routerMock.navigate).toHaveBeenCalledWith([UserType.ROOM.toLowerCase()]);
     }));
   });
 });
