@@ -2,10 +2,10 @@ package edu.roomplanner.validation;
 
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.validation.validator.BookingValidator;
-import edu.roomplanner.validation.validator.impl.AvailabilityValidatorImpl;
-import edu.roomplanner.validation.validator.impl.RoomPersonIdValidatorImpl;
-import edu.roomplanner.validation.validator.impl.RoomPersonValidatorImpl;
-import edu.roomplanner.validation.validator.impl.StartEndDateValidatorImpl;
+import edu.roomplanner.validation.validator.impl.AvailabilityValidator;
+import edu.roomplanner.validation.validator.impl.RoomPersonIdValidator;
+import edu.roomplanner.validation.validator.impl.RoomPersonValidator;
+import edu.roomplanner.validation.validator.impl.StartEndDateValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,16 +28,16 @@ public class BookingChainTest {
     private List<BookingValidator> validators = new ArrayList<>();
 
     @Mock
-    private AvailabilityValidatorImpl availabilityValidator;
+    private AvailabilityValidator availabilityValidator;
 
     @Mock
-    private RoomPersonIdValidatorImpl roomPersonIdValidator;
+    private RoomPersonIdValidator roomPersonIdValidator;
 
     @Mock
-    private RoomPersonValidatorImpl roomPersonValidator;
+    private RoomPersonValidator roomPersonValidator;
 
     @Mock
-    private StartEndDateValidatorImpl startEndDateValidator;
+    private StartEndDateValidator startEndDateValidator;
 
 
     @InjectMocks

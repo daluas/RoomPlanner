@@ -19,13 +19,13 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-public class AvailabilityValidatorImplTest {
+public class AvailabilityValidatorTest {
 
     @Mock
     private ReservationRepository repository;
 
     @InjectMocks
-    private AvailabilityValidatorImpl sut;
+    private AvailabilityValidator sut;
 
     @Test
     public void shouldFindAValidDate() {

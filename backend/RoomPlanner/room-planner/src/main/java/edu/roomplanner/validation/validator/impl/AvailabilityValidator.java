@@ -14,12 +14,12 @@ import java.util.List;
 
 @Component("Validator")
 @Order(4)
-public class AvailabilityValidatorImpl implements BookingValidator {
+public class AvailabilityValidator implements BookingValidator {
 
     private ReservationRepository reservationRepository;
 
     @Autowired
-    public AvailabilityValidatorImpl(ReservationRepository reservationRepository) {
+    public AvailabilityValidator(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
     }
 

@@ -6,13 +6,12 @@ import edu.roomplanner.validation.validator.BookingValidator;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 @Component
 @Order(3)
-public class StartEndDateValidatorImpl implements BookingValidator {
+public class StartEndDateValidator implements BookingValidator {
 
     @Override
     public ValidationResult validate(ReservationEntity reservationEntity) {

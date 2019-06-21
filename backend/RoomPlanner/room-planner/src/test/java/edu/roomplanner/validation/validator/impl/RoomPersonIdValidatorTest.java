@@ -19,13 +19,13 @@ import static org.mockito.Mockito.when;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
-public class RoomPersonIdValidatorImplTest {
+public class RoomPersonIdValidatorTest {
 
     @Mock
     private UserRepository userRepository;
 
     @InjectMocks
-    private RoomPersonIdValidatorImpl sut;
+    private RoomPersonIdValidator sut;
 
     @Test
     public void shouldNotFindAValidUser() {

@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Order(1)
-public class RoomPersonIdValidatorImpl implements BookingValidator {
+public class RoomPersonIdValidator implements BookingValidator {
 
     private UserRepository userRepository;
 
     @Autowired
-    public RoomPersonIdValidatorImpl(UserRepository userRepository) {
+    public RoomPersonIdValidator(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

@@ -14,9 +14,9 @@ import java.util.Calendar;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
-public class StartEndDateValidatorImplUnitTest {
+public class StartEndDateValidatorUnitTest {
 
-    private StartEndDateValidatorImpl sut = new StartEndDateValidatorImpl();
+    private StartEndDateValidator sut = new StartEndDateValidator();
     private Calendar sysDate = Calendar.getInstance();
 
     @Test

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Order(2)
-public class RoomPersonValidatorImpl implements BookingValidator {
+public class RoomPersonValidator implements BookingValidator {
 
     @Override
     public ValidationResult validate(ReservationEntity reservationEntity) {

@@ -14,9 +14,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
-public class RoomPersonValidatorImplTest {
+public class RoomPersonValidatorTest {
 
-    private RoomPersonValidatorImpl sut = new RoomPersonValidatorImpl();
+    private RoomPersonValidator sut = new RoomPersonValidator();
 
     @Test
     public void shouldVerifyThatPersonWhoWantsToBookIsRoom() {
