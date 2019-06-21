@@ -3,43 +3,65 @@
     <span class="datePopup startDate">
       <div class="dateTitle">Start Date</div>
       <div>
-        <mat-form-field class="datePicker">
-          <input matInput [matDatepicker]="picker3" [(value)]="booking.startDate">
+        <mat-form-field class="datePicker" >
+          <input matInput [min]="minDate" [matDatepicker]="picker3" [(value)]="booking.startDate" (change)="getErrorForDate()">
           <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
           <mat-datepicker #picker3></mat-datepicker>
         </mat-form-field>
       </div>
-      <div>
+      <!-- <div>
         {{ getTime(booking.startDate)}}
+      </div> -->
+
+
+      <div class="startHourContainer">
+        <div class="hourInput">
+          <app-hour-input-booking  (startTime)="getTime(booking)" ></app-hour-input-booking>
+        </div>
       </div>
       <span class="verticalLine"></span>
     </span>
+
+
     <span class="datePopup endDate">
       <div class="dateTitle">End Date</div>
       <div>
-        <mat-form-field class="datePicker">
-          <input matInput [matDatepicker]="picker" [(value)]="booking.endDate">
+        <mat-form-field class="datePicker" >
+          <input matInput [min]="minDate" [matDatepicker]="picker" [(value)]="booking.endDate" (change)="getErrorForDate()">
+          <mat-error *ngIf="status">Start date is bigger than end date</mat-error>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </div>
-      <div>
+
+      <!-- <div>
         {{ getTime(booking.endDate)}}
+      </div> -->
+      <div class="endHourContainer">
+        <div class="hourInput">
+          <app-hour-input-booking (hourEmitter)="onEndHourEmit($event)"></app-hour-input-booking>
+        </div>
       </div>
+      <div class="invalidHoursContainer" *ngIf="invalidHours==true">
+        <span style="font-size: 9px; color: red">End hour has to be greater than Start hour!</span>
+      </div>
+
     </span>
+
   </div>
+
 
   <div class="descriptionBox">
     <div class="dateTitle">Notes:</div>
-    <textarea class="descriptionContent">{{booking.description}} </textarea>
+    <textarea class="descriptionContent" [value]="booking.description"> </textarea>
   </div>
 
+
   <div>
-    <button *ngIf="booking.id" mat-raised-button color="primary" id="bookBtn" (click)="createBookingTest()">Book now</button>
-    <button *ngIf="!booking.id" mat-raised-button color="primary" id="updateBtn" (click)="updateBookingTest()">Update</button>
-   
-    <button mat-raised-button color="primary" class="deleteBtn" (click)="deleteBooking()">Delete</button>
-     <button mat-button color="primary" class="cancelButton" (click)="closePopup()">Cancel</button>
+    <button *ngIf="!booking.id" mat-raised-button color="primary" class="bookBtn" (click)="createBookingTest()">Book now</button>
+    <button *ngIf="booking.id" mat-raised-button color="primary" class="updateBtn" (click)="updateBookingTest()">Update</button>
+    <button *ngIf="booking.id" mat-raised-button color="primary" class="deleteBtn" (click)="deleteBooking()">Delete</button>
+    <button mat-button color="primary" class="cancelBtn" (click)="cancelBooking()">Cancel</button>
   </div>
- 
+
 </div>

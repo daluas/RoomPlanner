@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Booking } from 'src/app/shared/models/Booking';
+
 import { RoomDataService } from 'src/app/core/services/room-data/room-data.service';
+import { Booking } from '../../core/models/BookingModel';
 
 
 @Component({

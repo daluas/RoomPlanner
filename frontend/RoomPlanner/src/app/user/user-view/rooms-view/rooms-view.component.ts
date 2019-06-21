@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
-import { Booking } from 'src/app/shared/models/Booking';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { BookingPopupComponent } from '../../../shared/booking-popup/booking-popup.component';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { AuthService } from 'src/app/core/core.module';
 import { LoggedUser } from 'src/app/core/models/LoggedUser';
+import { Booking } from '../../../core/models/BookingModel';
 
 @Component({
   selector: 'app-rooms-view',

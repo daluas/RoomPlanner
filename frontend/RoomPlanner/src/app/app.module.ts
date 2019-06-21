@@ -12,6 +12,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FormsModule, ReactiveFormsModule, FormGroupName } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Interceptor } from './core/interceptor';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+
 
 
 @NgModule({
@@ -30,6 +32,7 @@ import { Interceptor } from './core/interceptor';
     SharedModule,
     FormsModule, 
     ReactiveFormsModule,
+    NgxMaterialTimepickerModule
   ],
   providers: [
     {

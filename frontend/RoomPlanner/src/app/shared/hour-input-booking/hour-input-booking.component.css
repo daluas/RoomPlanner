@@ -1,0 +1,96 @@
+.hour-container{
+    width: 100%;
+}
+
+input{
+    text-align: center;
+}
+
+.doubleContainer{
+    width: 30px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    line-height: 65px;
+}
+
+.hoursInputContainer{
+    width: calc((100% - 30px)/2);
+    display: inline-block;
+    vertical-align: top;
+}
+
+.minutesInputContainer{
+    width: calc((100% - 30px)/2);
+    display: inline-block;
+    vertical-align: top;
+}
+
+.hoursInput{
+    text-align: center;
+}
+
+.minutesInput{
+    text-align: center;
+}
+
+.errorText{
+    color:red;
+    font-size: 9px;
+}
+
+.hour {
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    width: 80%;
+}
+
+.minutes{
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    width: 80%;
+}
+
+.key_up_hours{
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: -25px;
+    padding-bottom: 10px;
+    
+}
+
+.key_down_hours{
+    text-align: center;
+    cursor: pointer;
+    margin-top: -16px;
+    padding-top: 10px;
+}
+
+
+.key_up_minutes{
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: -25px;
+    padding-bottom: 10px;
+}
+
+.key_down_minutes{
+    text-align: center;
+    cursor: pointer;
+    margin-top: -16px;
+    padding-top: 10px;
+}
+.material-icons{
+    width: 30px;
+    height: 30px;
+}
+::ng-deep .mat-form-field-infix{
+    padding:0;
+    border:0;
+}
+::ng-deep .mat-form-field-wrapper{
+    padding-bottom: 0px;
+  
+}

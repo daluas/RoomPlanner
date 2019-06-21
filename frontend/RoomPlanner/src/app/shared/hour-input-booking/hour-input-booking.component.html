@@ -1,0 +1,39 @@
+<form [formGroup]="hourForm" class="hour-container">
+
+  <div class="hoursInputContainer">
+      <div class="key_up_hours" (click)="onKeyUpHours()">
+          <i class="material-icons">arrow_drop_up</i>
+      </div>
+      <div class="hoursInput">
+          <mat-form-field class="hour">
+              <input matInput formControlName="hour" (blur)="updateHours()">
+          </mat-form-field>
+      </div>
+      <div class="key_down_hours" (click)="onKeyDownHours()">
+          <i class="material-icons" >arrow_drop_down</i>
+      </div>
+
+  </div>
+  <div class="doubleContainer">
+      <b>:</b>
+  </div>
+
+
+  <div class="minutesInputContainer" (click)="onKeyUpMinutes()">
+      <div class="key_up_minutes">
+          <i class="material-icons" >arrow_drop_up</i>
+      </div>
+      <div class="minutesInput">
+          <mat-form-field class="minutes">
+              <input matInput formControlName="minutes" (blur)="updateMinutes()">
+          </mat-form-field>
+      </div>
+      <div class="key_down_minutes" (click)="onKeyDownMinutes()">
+          <i class="material-icons" >arrow_drop_down</i>
+      </div>
+
+  </div>
+  <div *ngIf="hourForm.controls.minutes.invalid" class="errorText">Format invalid for minutes!</div> 
+  <div *ngIf="hourForm.controls.hour.invalid " class="errorText">Format invalid for hours !</div> 
+  
+</form>

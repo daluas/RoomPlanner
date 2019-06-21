@@ -2,7 +2,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BookingPopupComponent } from './booking-popup.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Component, OnInit, Input, ɵConsole, Output, EventEmitter, Inject, DebugElement } from '@angular/core';
-import { Booking } from '../models/Booking';
 import { BookingService } from 'src/app/core/services/booking/booking.service';
 import { MatDatepickerModule, MatFormFieldModule, MatNativeDateModule, MatInputModule } from '@angular/material';
 import { RoomsViewComponent } from '../../user/user-view/rooms-view/rooms-view.component';
