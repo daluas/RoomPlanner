@@ -12,24 +12,22 @@
     <div class="filters-body">
 
       <div class="hours" *ngIf="dateInThePastIn==false">
-
         <div class="startHourContainer">
           <div class="startHourText">
             <b>From</b>
           </div>
           <div class="hourInput">
-            <app-hour-input (hourEmitter)="onStartHourEmit($event)"></app-hour-input>
+            <app-hour-input [hoursRecieved]="startHoursToSend" [minutesRecieved]="startMinutesToSend" (hourEmitter)="onStartHourEmit($event)"></app-hour-input>
           </div>
         </div>
 
-        <!-- <div class="separator"></div> -->
 
         <div class="endHourContainer">
           <div class="endHourText">
             <b>To</b>
           </div>
           <div class="hourInput">
-            <app-hour-input (hourEmitter)="onEndHourEmit($event)"></app-hour-input>
+            <app-hour-input [hoursRecieved]="endHoursToSend" [minutesRecieved]="endMinutesToSend" (hourEmitter)="onEndHourEmit($event)"></app-hour-input>
           </div>
         </div>
 
@@ -42,11 +40,7 @@
       <div class="floor">
 
         <h4 class="floorContainerHeader">Floor/Room:</h4>
-        <!-- <div>
-          <i *ngIf="floorSelected!=null && floorSelected!=floorByDefault" class="material-icons x-button" (click)="onFloorClear()">
-            cancel
-          </i>
-        </div> -->
+
         <mat-form-field class="floorSelectContainer">
           <mat-label>Select an option:</mat-label>
           <mat-select (selectionChange)="onFloorChange($event)" [value]='floorByDefault'>
