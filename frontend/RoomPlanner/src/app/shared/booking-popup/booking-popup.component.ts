@@ -22,13 +22,12 @@ export class BookingPopupComponent implements OnInit {
   minDate = new Date(2019, 0, 1);
   invalidHours: boolean = false;
   status: boolean;
-  ngOnInit() {
 
+  ngOnInit() {
     this.booking = new Booking().create({
       startDate: new Date(),
       endDate: new Date()
-    });
-   
+    });   
   }
 
   getTime(booking): Date {

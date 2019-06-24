@@ -34,7 +34,6 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   updateHours() {
-
     this.finalHour = new Date(new Date().setHours(this.hourForm.value.hour, this.hourForm.value.minutes, 0, 0));
     this.hourEmitter.emit(this.finalHour);
   }
@@ -46,11 +45,11 @@ export class HourInputBookingComponent implements OnInit {
 
   onKeyUpHours() {
     if (this.hourForm.value.hour == undefined) {
-      this.hourForm.setValue({ hour: +'00', minutes: this.hourForm.value.minutes });
+      this.hourForm.setValue({ hour: '00', minutes: this.hourForm.value.minutes });
     }
 
     if (this.hourForm.value.hour == 23) {
-      this.hourForm.setValue({ hour: +'00', minutes: this.hourForm.value.minutes });
+      this.hourForm.setValue({ hour: '00', minutes: this.hourForm.value.minutes });
     } else {
       if (+this.hourForm.value.hour + 1 < 10) {
         this.hourForm.setValue({ hour: '0' + (+this.hourForm.value.hour + 1), minutes: this.hourForm.value.minutes });
@@ -61,7 +60,6 @@ export class HourInputBookingComponent implements OnInit {
       }
     }
 
-
     this.updateHours();
 
   }
@@ -69,20 +67,14 @@ export class HourInputBookingComponent implements OnInit {
   onKeyUpMinutes() {
 
     if (this.hourForm.value.hour == undefined) {
-      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: +'00' });
+      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '00' });
     }
 
-
-    if (this.hourForm.value.minutes == 59) {
-      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: +'00' });
+    if (this.hourForm.value.minutes == 30) {
+      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '00' });
       this.onKeyUpHours();
     } else {
-      if (+this.hourForm.value.minutes + 1 < 10) {
-        this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '0' + (+this.hourForm.value.minutes + 1) });
-      }
-      else {
-        this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: +this.hourForm.value.minutes + 1 });
-      }
+      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '30' });     
     }
     this.updateMinutes();
   }
@@ -106,22 +98,15 @@ export class HourInputBookingComponent implements OnInit {
 
   onKeyDownMinutes() {
     if (this.hourForm.value.minutes == undefined) {
-      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: 30 });
+      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '00' });
     }
 
     if (this.hourForm.value.minutes == 0) {
-      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: 59 });
+      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '30' });
       this.onKeyDownHours();
 
     } else
-      if (+this.hourForm.value.minutes - 1 < 10) {
-        this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '0' + (+this.hourForm.value.minutes - 1) });
-      }
-      else {
-        this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: +this.hourForm.value.minutes - 1 });
-
-      }
-
+        this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '00' });
   }
 
 }

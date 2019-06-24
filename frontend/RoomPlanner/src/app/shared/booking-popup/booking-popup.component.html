@@ -9,19 +9,19 @@
           <mat-datepicker #picker3></mat-datepicker>
         </mat-form-field>
       </div>
+
       <!-- <div>
         {{ getTime(booking.startDate)}}
       </div> -->
 
-
       <div class="startHourContainer">
         <div class="hourInput">
-          <app-hour-input-booking  (startTime)="getTime(booking)" ></app-hour-input-booking>
+          <app-hour-input-booking  (hourEmitter)="onStartHourEmit($event)"></app-hour-input-booking>
         </div>
       </div>
       <span class="verticalLine"></span>
     </span>
-
+    
 
     <span class="datePopup endDate">
       <div class="dateTitle">End Date</div>
@@ -37,17 +37,18 @@
       <!-- <div>
         {{ getTime(booking.endDate)}}
       </div> -->
+
       <div class="endHourContainer">
         <div class="hourInput">
           <app-hour-input-booking (hourEmitter)="onEndHourEmit($event)"></app-hour-input-booking>
         </div>
       </div>
-      <div class="invalidHoursContainer" *ngIf="invalidHours==true">
-        <span style="font-size: 9px; color: red">End hour has to be greater than Start hour!</span>
-      </div>
-
+      
     </span>
-
+  </div>
+  
+  <div class="invalidHoursContainer" *ngIf="invalidHours==true">
+    <p>End hour has to be greater than start hour!</p>
   </div>
 
 
