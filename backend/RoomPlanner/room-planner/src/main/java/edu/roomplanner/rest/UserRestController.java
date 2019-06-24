@@ -17,7 +17,7 @@ import java.util.Optional;
 @RestController
 public class UserRestController {
 
-    private static Logger LOGGER = LogManager.getLogger(UserRestController.class);
+    private final static Logger LOGGER = LogManager.getLogger(UserRestController.class);
 
     private final UserService userService;
 

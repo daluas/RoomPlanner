@@ -1,5 +1,6 @@
 package edu.roomplanner.service.impl;
 
+import edu.roomplanner.builders.UserDtoBuilder;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.dto.UserDto;
 import edu.roomplanner.entity.PersonEntity;
@@ -10,6 +11,7 @@ import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.UserService;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.validation.validator.UserValidator;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 
 @Service
+@Builder
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
@@ -65,23 +68,23 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserDto buildUserDtoByPersonEntity(PersonEntity personEntity) {
-        return UserDto.builder()
-                .id(personEntity.getId())
-                .email(personEntity.getEmail())
-                .type(personEntity.getType())
-                .firstName(personEntity.getFirstName())
-                .lastName(personEntity.getLastName())
+        return UserDtoBuilder.builder()
+                .withId(personEntity.getId())
+                .withEmail(personEntity.getEmail())
+                .withType(personEntity.getType())
+                .withFirstName(personEntity.getFirstName())
+                .withLastName(personEntity.getLastName())
                 .build();
     }
 
     private UserDto buildUserDtoByRoomEntity(RoomEntity roomEntity) {
-        return UserDto.builder()
-                .id(roomEntity.getId())
-                .email(roomEntity.getEmail())
-                .type(roomEntity.getType())
-                .roomName(roomEntity.getName())
-                .floor(roomEntity.getFloor())
-                .maxPersons(roomEntity.getMaxPersons())
+        return UserDtoBuilder.builder()
+                .withId(roomEntity.getId())
+                .withEmail(roomEntity.getEmail())
+                .withType(roomEntity.getType())
+                .withName(roomEntity.getName())
+                .withFloor(roomEntity.getFloor())
+                .withMaxPersons(roomEntity.getMaxPersons())
                 .build();
     }
 
