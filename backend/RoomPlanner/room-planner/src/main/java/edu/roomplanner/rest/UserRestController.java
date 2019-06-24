@@ -71,7 +71,7 @@ public class UserRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/filters")
-    public List getReservationFilters(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Calendar startDate , @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Calendar endDate, @RequestParam Integer minPersons, @RequestParam Integer floor){
+    public List getReservationFilters(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Calendar startDate , @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Calendar endDate, @RequestParam(required=false) Integer minPersons, @RequestParam(required=false) Integer floor){
         List userEntityList =  userRepository.filterByFields(startDate,endDate,minPersons,floor);
         return roomDtoMapper.mapEntityListToDtoList(userEntityList);
     }
