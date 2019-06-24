@@ -28,6 +28,9 @@ public class AvailabilityValidator implements BookingValidator {
         Calendar endDate = reservationEntity.getEndDate();
         UserEntity room = reservationEntity.getRoom();
 
+        startDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 1);
+        endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) - 1);
+
         List<ReservationEntity> nonAvailableReservations = reservationRepository.findNonAvailableDate(startDate, endDate, room.getId());
 
         Boolean areNonAvailableReservationForSameUser = areNonAvailableReservationForSameUser(nonAvailableReservations, reservationEntity);

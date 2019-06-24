@@ -12,8 +12,11 @@ import java.util.List;
 @Repository
 public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
 
-    @Query(value = "SELECT * FROM reservations p WHERE p.room_id = :room_id and ((p.start_date >= :start_date and p.end_date <= :end_date ) or (p.end_date >= start_date and p.end_date <= :end_date)" +
-            "or (p.start_date >= :start_date and p.end_date >= :end_date) or (p.start_date <= :start_date and p.end_date <= :end_date))", nativeQuery = true)
+    @Query(value = "SELECT * FROM reservations p WHERE p.room_id = :room_id and (" +
+            "(p.start_date >= :start_date and p.end_date <= :end_date and p.start_date <= :end_date)" +
+            "or (p.start_date >= :start_date and p.end_date >= :end_date and p.start_date <= :end_date)" +
+            "or (p.start_date <= :start_date and p.end_date <= :end_date and p.end_date >= :start_date)" +
+            "or (p.start_date <= :start_date and p.end_date >= :start_date))", nativeQuery = true)
     List<ReservationEntity> findNonAvailableDate(@Param("start_date") Calendar startDate, @Param("end_date") Calendar endDate, @Param("room_id") Long roomId);
 
 }
