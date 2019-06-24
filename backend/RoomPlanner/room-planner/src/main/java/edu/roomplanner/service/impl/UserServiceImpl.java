@@ -4,6 +4,7 @@ import edu.roomplanner.builders.UserDtoBuilder;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.dto.UserDto;
 import edu.roomplanner.entity.PersonEntity;
+import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.RoomDtoMapper;
@@ -15,8 +16,10 @@ import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -45,6 +48,8 @@ public class UserServiceImpl implements UserService {
         RoomDto roomDto = null;
         if (userValidator.checkValidRoomId(id)) {
             UserEntity userEntity = userRepository.findById(id).get();
+            Set<ReservationEntity> updatedReservationEntities = updateReservationDescription(userEntity);
+            userEntity.setReservations(updatedReservationEntities);
             roomDto = roomDtoMapper.mapEntityToDto((RoomEntity) userEntity);
         }
         return roomDto;
@@ -58,6 +63,16 @@ public class UserServiceImpl implements UserService {
             return Optional.of(userDto);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Set<ReservationEntity> updateReservationDescription(UserEntity userEntity) {
+        Set<ReservationEntity> result = new HashSet<>();
+        for(ReservationEntity reservationEntity:userEntity.getReservations()) {
+            if(!reservationEntity.getPerson().getId().equals(userEntity.getId())) reservationEntity.setDescription(null);
+            result.add(reservationEntity);
+        }
+        return result;
     }
 
     private UserDto buildUserDto(UserEntity userEntity) {

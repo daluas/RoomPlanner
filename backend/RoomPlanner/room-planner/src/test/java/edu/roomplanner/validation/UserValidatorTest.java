@@ -41,7 +41,7 @@ public class UserValidatorTest {
     public void shouldReturnTrueWhenCheckValidRoomIdIsCalledWithInjectedRoomId() {
 
         UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", 5, 14);
+                null, UserType.ROOM, "Wonderland", 5, 14);
 
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(userEntity));
 
@@ -52,8 +52,8 @@ public class UserValidatorTest {
 
     @Test
     public void shouldReturnFalseWhenCheckValidRoomIdIsCalledWithInjectedPersonId() {
-        UserEntity userEntity = BuildersWrapper.buildPersonEntiy(3L, "sghitun@yahoo.com",
-                "sghitun", UserType.PERSON, "Git", "Mast");
+        UserEntity userEntity = BuildersWrapper.buildPersonEntity(3L, "sghitun@yahoo.com",
+                "sghitun", null, UserType.PERSON, "Git", "Mast");
 
         when(userRepository.findById(3L)).thenReturn(Optional.ofNullable(userEntity));
         boolean response = sut.checkValidRoomId(3L);

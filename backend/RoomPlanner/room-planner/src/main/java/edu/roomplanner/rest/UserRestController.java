@@ -40,7 +40,7 @@ public class UserRestController {
         RoomDto roomDto = userService.getRoomById(id);
         LOGGER.info("The following object was returned: " + roomDto);
         if (roomDto == null) {
-            return new ResponseEntity<>(new RoomDto(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(roomDto, HttpStatus.FOUND);
     }

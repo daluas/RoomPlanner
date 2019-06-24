@@ -58,17 +58,18 @@ public class UsersRestControllerTest {
         flyway.clean();
         flyway.migrate();
 
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntiy(1L,"sghitun@yahoo.com","sghitun",UserType.PERSON,"Stefania","Ghitun");
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun",
+                null, UserType.PERSON,"Stefania","Ghitun");
         userRepository.save(userEntityPerson);
 
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
 
         UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", 5, 14);
+                null, UserType.ROOM, "Wonderland", 5, 14);
         UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "westeros",
-                UserType.ROOM, "Westeros", 8, 20);
+                null, UserType.ROOM, "Westeros", 8, 20);
         UserEntity userEntityThree = BuildersWrapper.buildRoomEntity(4L, "neverland@yahoo.com", "neverland",
-                UserType.ROOM, "Neverland", 4, 5);
+                null, UserType.ROOM, "Neverland", 4, 5);
 
         userRepository.save(userEntityOne);
         userRepository.save(userEntityTwo);
