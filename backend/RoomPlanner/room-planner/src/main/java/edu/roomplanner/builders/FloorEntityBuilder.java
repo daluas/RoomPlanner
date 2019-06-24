@@ -11,6 +11,10 @@ public class FloorEntityBuilder {
     private Integer floor;
     private Set<RoomEntity> rooms;
 
+    public static FloorEntityBuilder builder() {
+        return new FloorEntityBuilder();
+    }
+
     public FloorEntityBuilder withId(Long id) {
         this.id = id;
         return this;

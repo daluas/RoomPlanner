@@ -4,12 +4,11 @@ import edu.roomplanner.builders.FloorDtoBuilder;
 import edu.roomplanner.dto.FloorDto;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.entity.FloorEntity;
+import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.mappers.FloorDtoMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -18,12 +17,7 @@ public class FloorDtoMapperImpl implements FloorDtoMapper {
     @Override
     public FloorDto mapEntityToDto(FloorEntity floorEntity) {
 
-        RoomDtoMapperImpl roomMapper = new RoomDtoMapperImpl();
-
-        Set<RoomDto> roomsDto = floorEntity.getRooms()
-                .stream()
-                .map(roomMapper::mapEntityToDto)
-                .collect(Collectors.toSet());
+        Set<RoomDto> roomsDto = mapRoomEntityListToRoomDtoList(floorEntity.getRooms());
 
         return new FloorDtoBuilder()
                 .withId(floorEntity.getId())
@@ -39,6 +33,20 @@ public class FloorDtoMapperImpl implements FloorDtoMapper {
             floorsDto.add(mapEntityToDto(floorEntity));
         }
         return floorsDto;
+
+    }
+
+    private Set<RoomDto> mapRoomEntityListToRoomDtoList(Set<RoomEntity> rooms) {
+        return Optional.ofNullable(rooms)
+                .map(this::processRoomDtoStream)
+                .orElse(null);
+    }
+
+    private Set<RoomDto> processRoomDtoStream(Set<RoomEntity> rooms) {
+        RoomDtoMapperImpl roomMapper = new RoomDtoMapperImpl();
+        return rooms.stream()
+                .map(roomMapper::mapEntityToDto)
+                .collect(Collectors.toSet());
 
     }
 

@@ -2,26 +2,27 @@ package edu.roomplanner.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
-import edu.roomplanner.builders.FloorDtoBuilder;
-import edu.roomplanner.builders.FloorEntityBuilder;
-import edu.roomplanner.dto.FloorDto;
 import edu.roomplanner.dto.RoomDto;
-import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
+import edu.roomplanner.util.OAuthHelper;
 import org.flywaydb.core.Flyway;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
@@ -32,8 +33,10 @@ import java.util.List;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = RoomPlannerApplication.class
 )
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(secure = false)
 @TestPropertySource(locations = "classpath:application-test.properties")
+@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
+@Sql(scripts = "classpath:scripts/clean-up.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class UsersRestControllerTest {
 
     @Autowired
@@ -42,32 +45,47 @@ public class UsersRestControllerTest {
     @Autowired
     private Flyway flyway;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private OAuthHelper oAuthHelper;
+
+    private RequestPostProcessor bearerToken;
+
     @Before
     public void init() {
         flyway.clean();
         flyway.migrate();
-    }
 
-    @Autowired
-    private UserRepository userRepository;
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntiy(1L, "sghitun@yahoo.com", "sghitun", UserType.PERSON, "Stefania", "Ghitun");
+        userRepository.save(userEntityPerson);
+
+        bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
+
+        UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
+                UserType.ROOM, "Wonderland", BuildersWrapper.buildFloorEntity(1L, 5), 14);
+        UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "westeros",
+                UserType.ROOM, "Westeros", BuildersWrapper.buildFloorEntity(2L, 8), 20);
+        UserEntity userEntityThree = BuildersWrapper.buildRoomEntity(4L, "neverland@yahoo.com", "neverland",
+                UserType.ROOM, "Neverland", BuildersWrapper.buildFloorEntity(3L, 4), 5);
+
+        userRepository.save(userEntityOne);
+        userRepository.save(userEntityTwo);
+        userRepository.save(userEntityThree);
+
+    }
 
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoListAndStatusFoundWhenGetAllRoomsIsCalled() throws Exception {
 
-        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(1L, "Wonderland", getFloorDto(5), 14);
-        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(2L, "Westeros", getFloorDto(8), 21);
-        List<RoomDto> roomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
+        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, BuildersWrapper.buildFloorDto(1L, 5), 14, UserType.ROOM);
+        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros", null, BuildersWrapper.buildFloorDto(2L, 8), 20, UserType.ROOM);
+        RoomDto roomDtoThree = BuildersWrapper.buildRoomDto(4L, "neverland@yahoo.com", "Neverland", null, BuildersWrapper.buildFloorDto(3L, 4), 5, UserType.ROOM);
+        List<RoomDto> roomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo, roomDtoThree);
         String jsonRoomDtoList = new ObjectMapper().writeValueAsString(roomDtoList);
 
-        UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                UserType.ROOM, "Wonderland", getFloorEntity(5), 14);
-        UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com", "4westAD8%",
-                UserType.ROOM, "Westeros", getFloorEntity(8), 21);
-
-        userRepository.save(userEntityOne);
-        userRepository.save(userEntityTwo);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/rooms").with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDtoList));
     }
@@ -75,14 +93,10 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoAndStatusFoundWhenGetRoomByIdIsCalled() throws Exception {
 
-        RoomDto roomDto = BuildersWrapper.buildRoomDto(1L, "Wonderland", getFloorDto(5), 14);
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, BuildersWrapper.buildFloorDto(1L, 5), 14, UserType.ROOM);
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
 
-        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                UserType.ROOM, "Wonderland", getFloorEntity(5), 14);
-        userRepository.save(userEntity);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 2).with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDto));
     }
@@ -90,27 +104,15 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithStatusNotFoundWhenGetRoomByIdIsCalledWithNonexistentID() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 7))
+        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 7).with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
     public void shouldReturnResponseEntityWithStatusNotFoundWhenGetRoomByIdIsCalledWithPersonID() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 1).with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
-    private FloorEntity getFloorEntity(int floor) {
-        return new FloorEntityBuilder()
-                .withFloor(floor)
-                .build();
-    }
-
-    private FloorDto getFloorDto(int floor) {
-        return new FloorDtoBuilder()
-                .withFloor(floor)
-                .build();
-
-    }
 }

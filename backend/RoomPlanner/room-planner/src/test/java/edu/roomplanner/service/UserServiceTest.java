@@ -1,10 +1,6 @@
 package edu.roomplanner.service;
 
-import edu.roomplanner.builders.FloorDtoBuilder;
-import edu.roomplanner.builders.FloorEntityBuilder;
-import edu.roomplanner.dto.FloorDto;
 import edu.roomplanner.dto.RoomDto;
-import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.RoomDtoMapper;
@@ -51,11 +47,10 @@ public class UserServiceTest {
     @Test
     public void shouldReturnRoomDtoListWhenGetAllRoomsIsCalled() {
 
-
-        UserEntity roomEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                UserType.ROOM, "Wonderland", getFloorEntity(5), 14);
-        UserEntity roomEntityTwo = BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com", "4westAD8%",
-                UserType.ROOM, "Westeros", getFloorEntity(8), 21);
+        UserEntity roomEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "4wonD2C%",
+                UserType.ROOM, "Wonderland", BuildersWrapper.buildFloorEntity(1L, 5), 14);
+        UserEntity roomEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "4westAD8%",
+                UserType.ROOM, "Westeros", BuildersWrapper.buildFloorEntity(1L, 5), 20);
 
         List<UserEntity> RoomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
         List<RoomDto> expectedRoomDtoList = roomDtoMapper.mapEntityListToDtoList(RoomEntityList);
@@ -71,9 +66,9 @@ public class UserServiceTest {
     @Test
     public void shouldReturnExpectedRoomDtoWhenGetRoomByIdIsCalled() {
 
-        RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(1L, "Wonderland", getFloorDto(5), 14);
+        RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, BuildersWrapper.buildFloorDto(1L, 5), 14, UserType.ROOM);
         UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                UserType.ROOM, "Wonderland", getFloorEntity(5), 14);
+                UserType.ROOM, "Wonderland", BuildersWrapper.buildFloorEntity(1L, 5), 14);
 
         when(userValidator.checkValidRoomId(1L)).thenReturn(true);
         when(roomDtoMapper.mapEntityToDto((RoomEntity) userEntity)).thenReturn(expectedRoomDto);
@@ -83,17 +78,5 @@ public class UserServiceTest {
         RoomDto actualRoomDto = sut.getRoomById(1L);
 
         Assert.assertEquals(expectedRoomDto, actualRoomDto);
-    }
-
-    private FloorEntity getFloorEntity(int floor) {
-        return new FloorEntityBuilder()
-                .withFloor(floor)
-                .build();
-    }
-    private FloorDto getFloorDto(int floor) {
-        return new FloorDtoBuilder()
-                .withFloor(floor)
-                .build();
-
     }
 }

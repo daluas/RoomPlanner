@@ -11,6 +11,9 @@ public class FloorDtoBuilder {
     private Integer floor;
     private Set<RoomDto> rooms;
 
+    public static FloorDtoBuilder builder() {
+        return new FloorDtoBuilder();
+    }
 
     public FloorDtoBuilder withId(Long id) {
         this.id = id;
