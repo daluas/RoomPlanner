@@ -13,32 +13,29 @@ import { Time } from '@angular/common';
 })
 export class BookingPopupComponent implements OnInit {
 
+  
   @Input() booking: Booking;
+
   @Output() booked: EventEmitter<Booking> = new EventEmitter();
   @Output() closePopup: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(public bookingService: BookingService) { }
+  constructor(public bookingService: BookingService) {
+    console.log("on constructor"+this.booking);
+   }
   
   minDate = new Date(2019, 0, 1);
   invalidHours: boolean = false;
   status: boolean;
 
   ngOnInit() {
+   
     this.booking = new Booking().create({
       startDate: new Date(),
       endDate: new Date()
     });   
+    // console.log("on init"+this.booking);
   }
-
-  getTime(booking): Date {
-    // let hour = mytime.getHours();
-    // let minutes = mytime.getMinutes();
-    // if (minutes >= 0 && minutes <= 9) {
-    //   minutes = "0" + minutes;
-    // }
-    // let resultTime = hour + ":" + minutes;
-    return this.booking.startDate;
-  }
+ 
 
   createBookingTest() {
     this.bookingService.createNewBooking(this.booking).then((booked) => {
@@ -67,7 +64,8 @@ export class BookingPopupComponent implements OnInit {
     this.closePopup.emit(true);
   }
 
-  onStartHourEmit(event) {
+  onHourEmit(event) {
+
     this.booking.startDate = event;
 
     if (this.booking.startDate.getTime() >= this.booking.endDate.getTime()) {
@@ -76,17 +74,7 @@ export class BookingPopupComponent implements OnInit {
     else {
       this.invalidHours = false;
     }
-  }
-
-  onEndHourEmit(event) {
-    this.booking.endDate = event;
-
-    if (this.booking.startDate.getTime() >= this.booking.endDate.getTime()) {
-      this.invalidHours = true;
-    }
-    else {
-      this.invalidHours = false;
-    }
+    
   }
 
  getErrorForDate(){

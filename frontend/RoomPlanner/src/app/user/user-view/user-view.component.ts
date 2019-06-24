@@ -12,7 +12,7 @@ import { Booking } from '../../core/models/BookingModel';
 export class UserViewComponent implements OnInit {
 
   bookingPopupOpen: boolean = false;
-  newBooking: Booking;
+  booking: Booking;
   buildingLayout: any;
   rooms: any[];
   displayedRooms: any[];
@@ -79,7 +79,7 @@ export class UserViewComponent implements OnInit {
   }
 
   createBooking(booking: any) {
-    this.newBooking = booking;
+    this.booking = booking;
     this.bookingPopupOpen = true;
   }
 

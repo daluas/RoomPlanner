@@ -1,40 +1,95 @@
-<form [formGroup]="hourForm" class="hour-container">
 
-    <div class="hoursInputContainer">
-        <div class="key_up_hours">
-            <i class="material-icons" (click)="onKeyUpHours()">arrow_drop_up</i>
-        </div>
-        <div class="hoursInput">
-            <mat-form-field class="hour">
-                <input matInput formControlName="hour" (blur)="updateHours()">
-            </mat-form-field>
-        </div>
-        <div class="key_down_hours">
-            <i class="material-icons" (click)="onKeyDownHours()">arrow_drop_down</i>
-        </div>
-    </div>
+<div class="bookingHoursContainer">
+    
+    <span class="hourContainer">
 
-    <div class="doubleContainer">
-        <b>:</b>
-    </div>
+        <form [formGroup]="startHourForm" class="formStyle">
+            
+            <span class="hoursInputContainer">
+                <div class="key_up_hours">
+                    <i class="material-icons" (click)="onKeyUpHoursStartDate()">arrow_drop_up</i>
+                </div>
+                <div class="hoursInput">
+                    <mat-form-field class="hour">
+                        <input matInput formControlName="hour" (blur)="updateHours()" >
+                    </mat-form-field>
+                </div>
+                <div class="key_down_hours">
+                    <i class="material-icons" (click)="onKeyDownHoursStartDate()">arrow_drop_down</i>
+                </div>
+            </span>
+            
+            <span class="doubleContainer">
+                <b>:</b>
+            </span>
+            
+ <h2>Hour: {{booking.startDate}}</h2>
+            <span class="minutesInputContainer">
+                <div class="key_up_minutes">
+                    <i class="material-icons" (click)="onKeyUpMinutesStartDate()">arrow_drop_up</i>
+                </div>
+                <div class="minutesInput">
+                    <mat-form-field class="minutes">
+                        <input matInput formControlName="minutes" (blur)="updateMinutes()">
+                    </mat-form-field>
+                </div>
+                <div class="key_down_minutes">
+                    <i class="material-icons" (click)="onKeyDownMinutesStartDate()">arrow_drop_down</i>
+                </div>
+            </span>
 
-    <div class="minutesInputContainer">
-        <div class="key_up_minutes">
-            <i class="material-icons" (click)="onKeyUpMinutes()">arrow_drop_up</i>
-        </div>
-        <div class="minutesInput">
-            <mat-form-field class="minutes">
-                <input matInput formControlName="minutes" (blur)="updateMinutes()">
-            </mat-form-field>
-        </div>
-        <div class="key_down_minutes">
-            <i class="material-icons" (click)="onKeyDownMinutes()">arrow_drop_down</i>
-        </div>
-    </div>
-
-    <div class="errorText">
+            <!-- <div class="errorText">
         <div *ngIf="hourForm.controls.minutes.invalid">Format invalid for minutes!</div>
         <div *ngIf="hourForm.controls.hour.invalid">Format invalid for hours !</div>
-    </div>
+    </div> -->
 
-</form>
+        </form>
+    </span>
+
+    <span class="verticalLine"></span>
+
+    <span class="hourContainer">
+
+        <form [formGroup]="endHourForm" class="formStyle">
+
+            <span class="hoursInputContainer">
+                <div class="key_up_hours">
+                    <i class="material-icons" (click)="onKeyUpHoursEndDate()">arrow_drop_up</i>
+                </div>
+                <div class="hoursInput">
+                    <mat-form-field class="hour">
+                        <input matInput formControlName="hour" (blur)="updateHours()">
+                    </mat-form-field>
+                </div>
+                <div class="key_down_hours">
+                    <i class="material-icons" (click)="onKeyDownHoursEndDate()">arrow_drop_down</i>
+                </div>
+            </span>
+
+            <span class="doubleContainer">
+                <b>:</b>
+            </span>
+
+            <span class="minutesInputContainer">
+                <div class="key_up_minutes">
+                    <i class="material-icons" (click)="onKeyUpMinutesEndDate()">arrow_drop_up</i>
+                </div>
+                <div class="minutesInput">
+                    <mat-form-field class="minutes">
+                        <input matInput formControlName="minutes" (blur)="updateMinutesEndDate()">
+                    </mat-form-field>
+                </div>
+                <div class="key_down_minutes">
+                    <i class="material-icons" (click)="onKeyDownMinutesEndDate()">arrow_drop_down</i>
+                </div>
+            </span>
+
+            <!-- <div class="errorText">
+        <div *ngIf="hourForm.controls.minutes.invalid">Format invalid for minutes!</div>
+        <div *ngIf="hourForm.controls.hour.invalid">Format invalid for hours !</div>
+    </div> -->
+
+        </form>
+    </span>
+
+</div>

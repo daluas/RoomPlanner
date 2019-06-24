@@ -7,6 +7,7 @@
     margin: 0 auto;
     background: #ffffff;
     border-radius: 4px;
+    z-index: 100;
 }
 
 .datePopup {

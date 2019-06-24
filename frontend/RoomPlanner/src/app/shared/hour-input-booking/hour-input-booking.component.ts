@@ -4,6 +4,7 @@ import { Time } from '@angular/common';
 import { Timeouts } from 'selenium-webdriver';
 import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 import { Booking } from '../../core/models/BookingModel';
+import { BookingPopupComponent } from '../booking-popup/booking-popup.component';
 
 
 @Component({
@@ -13,20 +14,38 @@ import { Booking } from '../../core/models/BookingModel';
 })
 export class HourInputBookingComponent implements OnInit {
 
-  @Output() hourEmitter: EventEmitter<any> = new EventEmitter()
-  @Input() startTime : Date;
-  @Input() endTime: Time;
-  finalHour: Date;
-  hourForm: FormGroup;
+  @Output() hourEmitter: EventEmitter<any> = new EventEmitter();
+
+
+  @Input() booking: Booking;
+
+  finalStartHour: Date;
+  finalEndHour: Date;
+  startHourForm: FormGroup;
+  endHourForm: FormGroup;
+
   ngOnInit() {
-    
-    this.hourForm.value.hour=this.startTime.getHours();
-    this.hourForm.value.hour=this.startTime.getMinutes();
+
+   
+    console.log(this.booking);
+    if (this.booking) {
+      this.startHourForm.setValue({ hour: this.booking.startDate.getHours(), minutes: this.booking.startDate.getMinutes() });
+      this.endHourForm.setValue({ hour: this.booking.endDate.getHours(), minutes: this.booking.endDate.getMinutes() });
+
+      this.startHourForm.markAsDirty();
+      this.endHourForm.markAsDirty();
+    }
+    this.finalStartHour=new Date();
+    this.finalEndHour=new Date();
   }
 
-
   constructor(private fb: FormBuilder) {
-    this.hourForm = this.fb.group({
+    this.startHourForm = this.fb.group({
+      hour: ['00', [Validators.pattern('^([0-1][0-9])$|^(2[0-3])$')]],
+      minutes: ['00', [Validators.pattern('^([0-5][0-9])$')]]
+    });
+
+    this.endHourForm = this.fb.group({
       hour: ['00', [Validators.pattern('^([0-1][0-9])$|^(2[0-3])$')]],
       minutes: ['00', [Validators.pattern('^([0-5][0-9])$')]]
     });
@@ -34,79 +53,159 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   updateHours() {
-    this.finalHour = new Date(new Date().setHours(this.hourForm.value.hour, this.hourForm.value.minutes, 0, 0));
-    this.hourEmitter.emit(this.finalHour);
+
+    // this.startHourForm.value.hour=this.startHourForm.value.hour;
+    // this.endHourForm.value.minutes=this.startHourForm.value.minutes;
+
+    this.finalStartHour.setHours(this.startHourForm.value.hour, this.startHourForm.value.minutes, 0, 0);
+    this.finalEndHour.setHours(this.endHourForm.value.hour, this.endHourForm.value.minutes, 0, 0);
+
+    var d=new Date();
+    d.setHours(this.startHourForm.value.hour);
+    d.setMinutes(this.startHourForm.value.minutes);
+
+    this.finalStartHour = new Date(d);
+
+    this.finalEndHour = new Date(new Date().setHours(this.endHourForm.value.hour, this.endHourForm.value.minutes, 0, 0));
+
+    this.hourEmitter.emit(this.finalStartHour);
+    this.hourEmitter.emit(this.finalEndHour);
   }
 
   updateMinutes() {
-    this.finalHour = new Date(new Date().setHours(this.hourForm.value.hour, this.hourForm.value.minutes, 0, 0));
-    this.hourEmitter.emit(this.finalHour);
+    this.finalStartHour = new Date(new Date().setHours(this.startHourForm.value.hour, this.startHourForm.value.minutes, 0, 0));
+    this.finalEndHour = new Date(new Date().setHours(this.endHourForm.value.hour, this.endHourForm.value.minutes, 0, 0));
+
+    this.hourEmitter.emit(this.finalStartHour);
+    this.hourEmitter.emit(this.finalEndHour);
   }
 
-  onKeyUpHours() {
-    if (this.hourForm.value.hour == undefined) {
-      this.hourForm.setValue({ hour: '00', minutes: this.hourForm.value.minutes });
+  onKeyUpHoursStartDate() {
+    if (this.startHourForm.value.hour == undefined) {
+      this.startHourForm.setValue({ hour: '00', minutes: this.startHourForm.value.minutes });
     }
 
-    if (this.hourForm.value.hour == 23) {
-      this.hourForm.setValue({ hour: '00', minutes: this.hourForm.value.minutes });
+    if (this.startHourForm.value.hour == 23) {
+      this.startHourForm.setValue({ hour: '00', minutes: this.startHourForm.value.minutes });
     } else {
-      if (+this.hourForm.value.hour + 1 < 10) {
-        this.hourForm.setValue({ hour: '0' + (+this.hourForm.value.hour + 1), minutes: this.hourForm.value.minutes });
+      if (+this.startHourForm.value.hour + 1 < 10) {
+        this.startHourForm.setValue({ hour: '0' + (+this.startHourForm.value.hour + 1), minutes: this.startHourForm.value.minutes });
 
       } else {
-        this.hourForm.setValue({ hour: +this.hourForm.value.hour + 1, minutes: this.hourForm.value.minutes });
+        this.startHourForm.setValue({ hour: +this.startHourForm.value.hour + 1, minutes: this.startHourForm.value.minutes });
 
       }
     }
+    this.updateHours();
+  }
+  onKeyUpHoursEndDate() {
+    if (this.endHourForm.value.hour == undefined) {
+      this.endHourForm.setValue({ hour: '00', minutes: this.endHourForm.value.minutes });
+    }
 
+    if (this.endHourForm.value.hour == 23) {
+      this.endHourForm.setValue({ hour: '00', minutes: this.endHourForm.value.minutes });
+    } else {
+      if (+this.endHourForm.value.hour + 1 < 10) {
+        this.endHourForm.setValue({ hour: '0' + (+this.endHourForm.value.hour + 1), minutes: this.endHourForm.value.minutes });
+
+      } else {
+        this.endHourForm.setValue({ hour: +this.endHourForm.value.hour + 1, minutes: this.endHourForm.value.minutes });
+
+      }
+    }
     this.updateHours();
 
   }
 
-  onKeyUpMinutes() {
+  onKeyUpMinutesStartDate() {
 
-    if (this.hourForm.value.hour == undefined) {
-      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '00' });
+    if (this.startHourForm.value.hour == undefined) {
+      this.startHourForm.setValue({ hour: this.startHourForm.value.hour, minutes: '00' });
     }
 
-    if (this.hourForm.value.minutes == 30) {
-      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '00' });
-      this.onKeyUpHours();
+    if (this.startHourForm.value.minutes == 30) {
+      this.startHourForm.setValue({ hour: this.startHourForm.value.hour, minutes: '00' });
+      this.onKeyUpHoursStartDate();
     } else {
-      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '30' });     
+      this.startHourForm.setValue({ hour: this.startHourForm.value.hour, minutes: '30' });
+    }
+
+  }
+
+  onKeyUpMinutesEndDate() {
+
+    if (this.endHourForm.value.hour == undefined) {
+      this.endHourForm.setValue({ hour: this.endHourForm.value.hour, minutes: '00' });
+    }
+
+    if (this.endHourForm.value.minutes == 30) {
+      this.endHourForm.setValue({ hour: this.endHourForm.value.hour, minutes: '00' });
+      this.onKeyUpHoursEndDate();
+    } else {
+      this.endHourForm.setValue({ hour: this.endHourForm.value.hour, minutes: '30' });
     }
     this.updateMinutes();
   }
 
-  onKeyDownHours() {
-    if (this.hourForm.value.hour == undefined) {
-      this.hourForm.setValue({ hour: 23, minutes: this.hourForm.value.minutes });
+  onKeyDownHoursStartDate() {
+    if (this.startHourForm.value.hour == undefined) {
+      this.startHourForm.setValue({ hour: 23, minutes: this.startHourForm.value.minutes });
     }
 
-    if (this.hourForm.value.hour == 0) {
-      this.hourForm.setValue({ hour: 23, minutes: this.hourForm.value.minutes });
+    if (this.startHourForm.value.hour == 0) {
+      this.startHourForm.setValue({ hour: 23, minutes: this.startHourForm.value.minutes });
     } else
-      if (+this.hourForm.value.hour - 1 < 10) {
-        this.hourForm.setValue({ hour: '0' + (+this.hourForm.value.hour - 1), minutes: this.hourForm.value.minutes });
+      if (+this.startHourForm.value.hour - 1 < 10) {
+        this.startHourForm.setValue({ hour: '0' + (+this.startHourForm.value.hour - 1), minutes: this.startHourForm.value.minutes });
       } else {
-        this.hourForm.setValue({ hour: +this.hourForm.value.hour - 1, minutes: this.hourForm.value.minutes });
+        this.startHourForm.setValue({ hour: +this.startHourForm.value.hour - 1, minutes: this.startHourForm.value.minutes });
 
       }
     this.updateHours();
   }
 
-  onKeyDownMinutes() {
-    if (this.hourForm.value.minutes == undefined) {
-      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '00' });
+  onKeyDownMinutesStartDate() {
+    if (this.startHourForm.value.minutes == undefined) {
+      this.startHourForm.setValue({ hour: this.startHourForm.value.hour, minutes: '00' });
     }
 
-    if (this.hourForm.value.minutes == 0) {
-      this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '30' });
-      this.onKeyDownHours();
+    if (this.startHourForm.value.minutes == 0) {
+      this.startHourForm.setValue({ hour: this.startHourForm.value.hour, minutes: '30' });
+      this.onKeyDownHoursStartDate();
 
     } else
-        this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '00' });
+      this.startHourForm.setValue({ hour: this.startHourForm.value.hour, minutes: '00' });
+  }
+
+  onKeyDownHoursEndDate() {
+    if (this.endHourForm.value.hour == undefined) {
+      this.endHourForm.setValue({ hour: 23, minutes: this.endHourForm.value.minutes });
+    }
+
+    if (this.endHourForm.value.hour == 0) {
+      this.endHourForm.setValue({ hour: 23, minutes: this.endHourForm.value.minutes });
+    } else
+      if (+this.endHourForm.value.hour - 1 < 10) {
+        this.endHourForm.setValue({ hour: '0' + (+this.endHourForm.value.hour - 1), minutes: this.endHourForm.value.minutes });
+      } else {
+        this.endHourForm.setValue({ hour: +this.endHourForm.value.hour - 1, minutes: this.endHourForm.value.minutes });
+
+      }
+    this.updateHours();
+  }
+
+  onKeyDownMinutesEndDate() {
+    if (this.endHourForm.value.minutes == undefined) {
+      this.endHourForm.setValue({ hour: this.endHourForm.value.hour, minutes: '00' });
+    }
+
+    if (this.endHourForm.value.minutes == 0) {
+      this.endHourForm.setValue({ hour: this.endHourForm.value.hour, minutes: '30' });
+      this.onKeyDownHoursStartDate();
+
+    } else
+      this.endHourForm.setValue({ hour: this.endHourForm.value.hour, minutes: '00' });
   }
 
 }
