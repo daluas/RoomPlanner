@@ -129,7 +129,7 @@ public class FloorRestControllerTest {
         List<FloorDto> floorDtoList = Arrays.asList(floorDtoOne, floorDtoTwo, floorDtoThree);
         String jsonFloorDtoList = new ObjectMapper().writeValueAsString(floorDtoList);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/floors").with(bearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/floors").with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andExpect(MockMvcResultMatchers.content().string(jsonFloorDtoList));
 

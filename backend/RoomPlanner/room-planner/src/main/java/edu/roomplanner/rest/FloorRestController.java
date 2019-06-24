@@ -26,7 +26,7 @@ public class FloorRestController {
         this.floorService = floorService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/floors")
+    @RequestMapping(method = RequestMethod.GET, value = "/api/floors")
     @PreAuthorize("hasAuthority('person')")
     ResponseEntity<List<FloorDto>> getAllFloors() {
 
