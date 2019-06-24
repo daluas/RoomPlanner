@@ -23,7 +23,7 @@ public class ReservationController {
         this.bookRoomService = bookRoomService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/reservations/{room_id}")
+    @RequestMapping(method = RequestMethod.POST, value = "/api/reservations/{room_id}")
     ResponseEntity<ReservationDto> getReservationCreated(@PathVariable(name = "room_id") Long roomId,
                                                          @RequestBody ReservationDto reservationDto) {
 
