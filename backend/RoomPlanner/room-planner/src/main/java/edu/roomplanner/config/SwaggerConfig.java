@@ -9,8 +9,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.nio.file.Path;
-
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
@@ -21,8 +19,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(oauthError-> !PathSelectors.regex("/oauth/error").apply(oauthError) &&
-                        PathSelectors.any().apply(oauthError))
+                .paths(PathSelectors.any())
                 .build();
     }
 }
