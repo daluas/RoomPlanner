@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<RoomDto> getAllRooms() {
         List<UserEntity> roomEntities = userRepository.findByType(UserType.ROOM);
+        roomEntities = updateUserEntitiesReservation(roomEntities);
         return roomDtoMapper.mapEntityListToDtoList(roomEntities);
     }
 
@@ -73,6 +74,15 @@ public class UserServiceImpl implements UserService {
             result.add(reservationEntity);
         }
         return result;
+    }
+
+    @Override
+    public List<UserEntity> updateUserEntitiesReservation(List<UserEntity> userEntities) {
+        for(UserEntity userEntity: userEntities) {
+            Set<ReservationEntity> updatedReservationEntities = updateReservationDescription(userEntity);
+            userEntity.setReservations(updatedReservationEntities);
+        }
+        return userEntities;
     }
 
     private UserDto buildUserDto(UserEntity userEntity) {

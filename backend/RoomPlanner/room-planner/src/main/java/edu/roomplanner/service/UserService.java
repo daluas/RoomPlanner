@@ -19,4 +19,6 @@ public interface UserService {
 
     Set<ReservationEntity> updateReservationDescription(UserEntity userEntity);
 
+    List<UserEntity> updateUserEntitiesReservation(List<UserEntity> userEntities);
+
 }
