@@ -104,4 +104,10 @@ export class BookingPopupComponent implements OnInit {
     this.isLogged = event;
   }
 
+  closeLoginPopup(event) {
+    if(event) {
+      this.closePopup.emit(true);
+    }
+  }
+
 }

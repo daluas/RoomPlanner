@@ -1,26 +1,5 @@
-<!-- <div class="authBox">
 
-  <div *ngIf="this.logged==false && this.usertype=='ROOM'">
-    <form [formGroup]="loginBookingForm" class="loginBooking">
-      <mat-form-field>
-        <input matInput placeholder="Enter your email" formControlName="email">
-       
-      </mat-form-field>
-      <br/>
-      <mat-form-field>
-        <input matInput placeholder="Enter your password" type="password" formControlName="password" name="email">
-      </mat-form-field>
-    </form>
-  </div>
-
-  <div *ngIf="this.logged==true && this.usertype=='ROOM'">
-    Automatic logout after 60 seconds
-    <button mat-raised-button color="primary" (click)="logoutBooking()">Logout</button>
-  </div>
-
-</div> -->
-
-<app-login-booking *ngIf="this.usertype=='ROOM'" [isLogged]="this.isLogged" (logged)="loggedChange($event)"></app-login-booking>
+<app-login-booking *ngIf="this.usertype=='ROOM'" [isLogged]="this.isLogged" (logged)="loggedChange($event)" (closeLogin)="closeLoginPopup($event)"></app-login-booking>
 
 <div class="container" *ngIf="this.isLogged==true">
 

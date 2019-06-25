@@ -16,6 +16,7 @@ export class LoginBookingComponent implements OnInit {
 
   @Input() isLogged:boolean;
   @Output() logged: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() closeLogin: EventEmitter<boolean> = new EventEmitter();
   
   loginBookingForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -104,4 +105,7 @@ export class LoginBookingComponent implements OnInit {
     setTimeout(this.logoutAutomatticaly, 5*1000);    
   }  
 
+  cancelLogin() {
+    this.closeLogin.emit(true);
+  }
 }
