@@ -32,7 +32,7 @@ public class ReservationController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/api/reservations/{room_id}")
     @ApiOperation("Books a reservation for a room with a specific id.")
-    @ApiResponses(value = {@ApiResponse(code = 302, message = "FOUND", response = RoomDto.class)
+    @ApiResponses(value = {@ApiResponse(code = 201, message = "Reservation was booked successfully.")
             ,@ApiResponse(code = 404, message = "This room was not found.")
             ,@ApiResponse(code = 401, message = "You are not authenticated.")
             ,@ApiResponse(code = 500, message = "Internal server error.")})
