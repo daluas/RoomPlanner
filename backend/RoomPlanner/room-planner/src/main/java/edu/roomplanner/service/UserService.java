@@ -12,6 +12,8 @@ public interface UserService {
 
     RoomDto getRoomById(Long id);
 
+    RoomDto getRoomByEmail(String email);
+
     Optional<UserDto> getUserDto(String email);
 
 }

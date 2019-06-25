@@ -51,6 +51,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public RoomDto getRoomByEmail(String email) {
+        RoomDto roomDto = null;
+        if (userValidator.checkValidRoomEmail(email)){
+            UserEntity userEntity = userRepository.findByEmail(email).get();
+            roomDto = roomDtoMapper.mapEntityToDto((RoomEntity) userEntity);
+        }
+        return roomDto;
+    }
+
+    @Override
     public Optional<UserDto> getUserDto(String email) {
         Optional<UserEntity> userEntity = userRepository.findByEmail(email);
         if (userEntity.isPresent()) {
