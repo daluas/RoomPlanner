@@ -2,6 +2,7 @@ package edu.roomplanner.service;
 
 import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.dto.RoomDto;
+import edu.roomplanner.entity.PersonEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
@@ -43,6 +44,9 @@ public class UserServiceTest {
     @Mock
     private RoomRepository roomRepository;
 
+    @Mock
+    private TokenParserService tokenParserService;
+
     @InjectMocks
     private UserServiceImpl sut;
 
@@ -57,16 +61,29 @@ public class UserServiceTest {
 
     @Test
     public void shouldReturnRoomDtoListWhenGetAllRoomsIsCalled() {
-        UserEntity roomEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "4wonD2C%",
-                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
+        RoomEntity roomEntityOne = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
+                null,BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland",14);
+        Set<ReservationEntity> reservationEntitySet = buildReservationEntitySet(roomEntityOne);
+        roomEntityOne.setReservations(reservationEntitySet);
         UserEntity roomEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "4westAD8%",
-                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Westeros",20);
+                reservationEntitySet, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Westeros",20);
 
-        List<UserEntity> RoomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
-        List<RoomDto> expectedRoomDtoList = roomDtoMapper.mapEntityListToDtoList(RoomEntityList);
+        List<UserEntity> roomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
 
-        when(userRepository.findByType(UserType.ROOM)).thenReturn(RoomEntityList);
-        when(roomDtoMapper.mapEntityListToDtoList(RoomEntityList)).thenReturn(expectedRoomDtoList);
+        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(1L, "wonderland@yahoo.com", "Wonderland",
+                buildReservationDtoSet(reservationEntitySet), 5, 14, UserType.ROOM);
+        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "wonderland@yahoo.com", "Wonderland",
+                buildReservationDtoSet(reservationEntitySet), 5, 14, UserType.ROOM);
+
+        PersonEntity personEntity = (PersonEntity) BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "sghitun",
+                null, UserType.PERSON, "Ghitun", "Stefania");
+
+       List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
+
+        when(userRepository.findByType(UserType.ROOM)).thenReturn(roomEntityList);
+        when(roomDtoMapper.mapEntityListToDtoList(roomEntityList)).thenReturn(expectedRoomDtoList);
+        when(tokenParserService.getEmailFromToken()).thenReturn("sghitun@yahoo.com");
+        when(userRepository.findByEmail("sghitun@yahoo.com")).thenReturn(Optional.of(personEntity));
 
         List<RoomDto> actualRoomDtoList = sut.getAllRooms();
 
@@ -75,7 +92,7 @@ public class UserServiceTest {
 
     @Test
     public void shouldReturnExpectedRoomDtoWhenGetRoomByIdIsCalled() {
-        UserEntity roomEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
+        RoomEntity roomEntity = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 null,BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland",14);
         Set<ReservationEntity> reservationEntitySet = buildReservationEntitySet(roomEntity);
         roomEntity.setReservations(reservationEntitySet);
@@ -84,10 +101,15 @@ public class UserServiceTest {
         UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
 
+        PersonEntity personEntity = (PersonEntity) BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "sghitun",
+                null, UserType.PERSON, "Ghitun", "Stefania");
+
         when(userValidator.checkValidRoomId(1L)).thenReturn(true);
         when(roomDtoMapper.mapEntityToDto((RoomEntity) roomEntity)).thenReturn(expectedRoomDto);
         when(userRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(roomEntity));
         when(userRepository.findByType(UserType.ROOM)).thenReturn(Collections.singletonList(roomEntity));
+        when(tokenParserService.getEmailFromToken()).thenReturn("sghitun@yahoo.com");
+        when(userRepository.findByEmail("sghitun@yahoo.com")).thenReturn(Optional.of(personEntity));
 
         RoomDto actualRoomDto = sut.getRoomById(1L);
 
@@ -95,7 +117,7 @@ public class UserServiceTest {
     }
 
     private Set<ReservationEntity> buildReservationEntitySet(UserEntity roomEntity) {
-        UserEntity personEntity = BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "sghitun",
+        PersonEntity personEntity = (PersonEntity) BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "sghitun",
                 null, UserType.PERSON, "Ghitun", "Stefania");
         ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, new GregorianCalendar(), new GregorianCalendar(),
                 "reservation1", personEntity, roomEntity);

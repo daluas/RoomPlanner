@@ -41,7 +41,7 @@ public class UserValidatorTest {
     public void shouldReturnTrueWhenCheckValidRoomIdIsCalledWithInjectedRoomId() {
 
         UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "wonderland",
-                null, UserType.ROOM, "Wonderland", 5, 14);
+                null, null, UserType.ROOM, "Wonderland", 14);
 
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(userEntity));
 

@@ -1,7 +1,5 @@
 package edu.roomplanner.service.impl;
 
-import edu.roomplanner.builders.FloorDtoBuilder;
-import edu.roomplanner.dto.FloorDto;
 import edu.roomplanner.builders.UserDtoBuilder;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.dto.UserDto;
@@ -11,6 +9,7 @@ import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.RoomDtoMapper;
 import edu.roomplanner.repository.UserRepository;
+import edu.roomplanner.service.TokenParserService;
 import edu.roomplanner.service.UserService;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.validation.validator.UserValidator;
@@ -31,12 +30,15 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private UserValidator userValidator;
     private RoomDtoMapper roomDtoMapper;
+    private TokenParserService tokenParserService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserValidator userValidator, RoomDtoMapper roomDtoMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserValidator userValidator,
+                           RoomDtoMapper roomDtoMapper, TokenParserService tokenParserService) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.roomDtoMapper = roomDtoMapper;
+        this.tokenParserService = tokenParserService;
     }
 
     @Override
@@ -50,7 +52,7 @@ public class UserServiceImpl implements UserService {
     public RoomDto getRoomById(Long id) {
         RoomDto roomDto = null;
         if (userValidator.checkValidRoomId(id)) {
-            UserEntity userEntity = userRepository.findById(id).get();
+            RoomEntity userEntity = (RoomEntity) userRepository.findById(id).get();
             Set<ReservationEntity> updatedReservationEntities = updateReservationDescription(userEntity);
             userEntity.setReservations(updatedReservationEntities);
             roomDto = roomDtoMapper.mapEntityToDto((RoomEntity) userEntity);
@@ -71,8 +73,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<ReservationEntity> updateReservationDescription(UserEntity userEntity) {
         Set<ReservationEntity> result = new HashSet<>();
-        for(ReservationEntity reservationEntity:userEntity.getReservations()) {
-            if(!reservationEntity.getPerson().getId().equals(userEntity.getId())) reservationEntity.setDescription(null);
+        Long userId = getLoggedUserId();
+        for (ReservationEntity reservationEntity : ((RoomEntity) userEntity).getReservations()) {
+            if (!reservationEntity.getPerson().getId().equals(userId))
+                reservationEntity.setDescription(null);
             result.add(reservationEntity);
         }
         return result;
@@ -80,11 +84,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserEntity> updateUserEntitiesReservation(List<UserEntity> userEntities) {
-        for(UserEntity userEntity: userEntities) {
+        for (UserEntity userEntity : userEntities) {
             Set<ReservationEntity> updatedReservationEntities = updateReservationDescription(userEntity);
-            userEntity.setReservations(updatedReservationEntities);
+            ((RoomEntity) userEntity).setReservations(updatedReservationEntities);
         }
         return userEntities;
+    }
+
+    private Long getLoggedUserId() {
+        Optional<UserEntity> loggedPersonOptional = userRepository.findByEmail(tokenParserService.getEmailFromToken());
+        return loggedPersonOptional
+                .map(UserEntity::getId)
+                .orElse(-1L);
     }
 
     private UserDto buildUserDto(UserEntity userEntity) {
