@@ -1,9 +1,6 @@
 package edu.roomplanner.builders;
 
-import edu.roomplanner.entity.PersonEntity;
-import edu.roomplanner.entity.ReservationEntity;
-import edu.roomplanner.entity.RoomEntity;
-import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.entity.*;
 import edu.roomplanner.exception.UnknownUserTypeException;
 import edu.roomplanner.types.UserType;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +18,7 @@ public class UserEntityBuilder {
     private String firstName;
     private String lastName;
     private String name;
-    private Integer floor;
+    private FloorEntity floor;
     private Integer maxPersons;
     private Set<ReservationEntity> reservations;
 
@@ -64,7 +61,7 @@ public class UserEntityBuilder {
         return this;
     }
 
-    public UserEntityBuilder withFloor(Integer floor) {
+    public UserEntityBuilder withFloor(FloorEntity floor) {
         this.floor = floor;
         return this;
     }
