@@ -29,10 +29,10 @@ export class BookingPopupComponent implements OnInit {
 
   ngOnInit() {
    
-    this.booking = new Booking().create({
-      startDate: new Date(),
-      endDate: new Date()
-    });   
+    // this.booking = new Booking().create({
+    //   startDate: new Date(),
+    //   endDate: new Date()
+    // });   
     // console.log("on init"+this.booking);
   }
  

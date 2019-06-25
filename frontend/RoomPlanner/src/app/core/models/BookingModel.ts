@@ -8,7 +8,14 @@ export class Booking {
     description: string;
     personalEmail: string;
   
-    constructor() { }
+    constructor() {
+        this.startDate=new Date();
+        this.endDate=new Date();
+        this.id=null;
+        this.roomId=null;
+        this.description=null;
+        this.personalEmail=null;
+     }
 
     create(bookingModel: any): Booking {
         return Object.assign(new Booking(), bookingModel);

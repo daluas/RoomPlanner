@@ -18,7 +18,7 @@
       <app-filters [buildingLayout]="buildingLayout" (filterChange)="updateRoomsBasedOnFilters($event)"></app-filters>
     </div>
   
-    <div class="booking-popup-container" [ngClass]="{'display-block' : bookingPopupOpen}">
+    <div class="booking-popup-container"  *ngIf="bookingPopupOpen" [ngClass]="{'display-block' : bookingPopupOpen}">
       <div class="booking-popup-close"></div>
       <app-booking-popup [(booking)]="booking" (booked)="addCreatedBooking($event)" (closePopup)="closeBookingPopup()"></app-booking-popup>
     </div>
