@@ -15,8 +15,10 @@ import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -60,7 +62,19 @@ public class UserServiceImpl implements UserService {
         return Optional.empty();
     }
 
-    private UserDto buildUserDto(UserEntity userEntity) {
+    @Override
+    public List<RoomDto> getRoomsByFilters(Calendar startDate, Calendar endDate, Integer minPersons, Integer floor) {
+        Calendar currentDate = Calendar.getInstance();
+        List<UserEntity> userEntityList;
+        if(startDate.compareTo(currentDate) <0)
+            userEntityList =  userRepository.viewByFields(startDate,endDate);
+        else
+            userEntityList =  userRepository.filterByFields(startDate,endDate,minPersons,floor);
+        userEntityList = userEntityList.stream().distinct().collect(Collectors.toList());
+        return roomDtoMapper.mapEntityListToDtoList(userEntityList);
+    }
+
+   private UserDto buildUserDto(UserEntity userEntity) {
         if (userEntity.getType() == UserType.PERSON) {
             return buildUserDtoByPersonEntity((PersonEntity) userEntity);
         }
