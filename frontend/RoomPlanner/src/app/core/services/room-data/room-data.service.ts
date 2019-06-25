@@ -2,72 +2,60 @@ import { Injectable } from '@angular/core';
 import { Filters } from '../../../shared/models/Filters';
 import { Observable } from 'rxjs';
 import { RoomModel } from '../../models/RoomModel';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { FloorModel } from '../../models/FloorModel';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoomDataService {
 
-  backendUrl: "";
-  constructor(private http: HttpClient) { }
+  private backendUrl: string = 'http://178.22.68.114/RoomPlanner/api';
 
-  getRoomsByDate(date: Date): Date /*: RoomModel[]*/ {
-    console.log(`Selected date is: ${date}`);
-    //return [new RoomModel().create({})];
-    return date;
+  constructor(private httpClient: HttpClient) { }
+
+  // getRoomsByDate(date: Date): Date /*: RoomModel[]*/ {
+  //   console.log(`Selected date is: ${date}`);
+  //   //return [new RoomModel().create({})];
+  //   return date;
+  // }
+
+  getRoomById(room:RoomModel){
+
+    var roomId:number=room.id;
+    return this.httpClient.get(`${this.backendUrl}/rooms/${roomId}`).toPromise();
   }
 
+
   getRoomsByFilter(filter: Filters) {
-    return this.http.post(`${this.backendUrl}/rooms/filter`, { body: filter }).toPromise();
+
+    let params = new HttpParams()
+    params = params.append("startDate", filter.startDate.toUTCString());
+    params = params.append("endDate", filter.endDate.toUTCString());
+    params = params.append("floor", filter.floor.toString());
+    params = params.append("minPersons", filter.minPersons.toString());
+
+    return this.httpClient.get(`${this.backendUrl}/rooms/filters`, {params: params }).toPromise();
   }
 
   //getFloors():FloorModel
 
-  getBuildingLayout(): Promise<any[]> {
-    console.log("getBuildingLayout() was called!");
+  getFloors(): Promise<FloorModel[]> {
+    console.log("getFloors() was called!");
+
+    var r1 = new RoomModel().create({ name: '101' });
+    var r2 = new RoomModel().create({ name: '102' });
+    var r3 = new RoomModel().create({ name: '201' });
+    var r4 = new RoomModel().create({ name: '202' });
+
+    var f1 = new FloorModel().create({ floor: 1, rooms: new Array<RoomModel>(r1, r2) });
+    var f2 = new FloorModel().create({ floor: 2, rooms: new Array<RoomModel>(r3, r4) });
+    //return this.httpClient.get(`${this.backendUrl}/floors`).toPromise();
 
     // fara returnare de erori, doar building layout, ori null
     return new Promise((res) => {
       //http request to backend
-
-      res([
-        {
-          floor: 4,
-          rooms: [
-            {
-              id: 1,
-              name: "401"
-            },
-            {
-              id: 2,
-              name: "405"
-            }
-          ]
-        },
-        {
-          floor: 5,
-          rooms: [
-            {
-              id: 3,
-              name: "501"
-            },
-            {
-              id: 4,
-              name: "506"
-            }
-          ]
-        },
-        {
-          floor: 8,
-          rooms: [
-            {
-              id: 5,
-              name: "813"
-            }
-          ]
-        }
-      ])
+      res([f1, f2]);
 
       // if error, res(null)
     });
@@ -101,10 +89,10 @@ export class RoomDataService {
             },
             // this is a booking made by another user
             // this one shouldn't have ID or Description
-            {             
+            {
               startDate: new Date(new Date().setHours(12, 30, 0, 0)),
               endDate: new Date(new Date().setHours(15, 0, 0, 0)),
-              ownerEmail: "user10@geceka.ro"            
+              ownerEmail: "user10@geceka.ro"
             }
           ]
         },
@@ -180,11 +168,11 @@ export class RoomDataService {
     });
   }
 
-  getAllRooms(): Observable<Object> {
-    return this.http.get(`${this.backendUrl}/rooms`)
-    // .toPromise();
-    // return new Observable();
-  }
+  // getAllRooms(): Observable<Object> {
+  //   return this.http.get(`${this.backendUrl}/rooms`)
+  //   // .toPromise();
+  //   // return new Observable();
+  // }
 
 
 }

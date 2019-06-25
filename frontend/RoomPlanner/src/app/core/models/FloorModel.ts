@@ -2,8 +2,9 @@ import { RoomModel } from '../../core/models/RoomModel';
 
 export class FloorModel{
 
-    name:number; //{4, 5, 8}
-    rooms: RoomModel[];
+    id?: number;
+    floor:number; //{4, 5, 8}
+    rooms: RoomModel[]; 
 
     constructor() { }
 

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Booking } from 'src/app/shared/models/Booking';
 import { RoomDataService } from 'src/app/core/services/room-data/room-data.service';
+import { FloorModel } from '../../core/models/FloorModel';
 
 
 @Component({
@@ -12,7 +13,7 @@ export class UserViewComponent implements OnInit {
 
   bookingPopupOpen: boolean = false;
   newBooking: Booking;
-  buildingLayout: any;
+  buildingLayout: FloorModel[]=new Array<FloorModel>();
   rooms: any[];
   displayedRooms: any[];
   previousFilters: any;
@@ -34,8 +35,8 @@ export class UserViewComponent implements OnInit {
       date: new Date()
     }
 
-    await this.roomDataService.getBuildingLayout().then((buildingLayout) => {
-      this.buildingLayout = buildingLayout;
+    await this.roomDataService.getFloors().then((floors) => {
+      this.buildingLayout = floors;
     });
 
     // this.roomDataService.getDefaultRooms().then((defaultRooms) => {

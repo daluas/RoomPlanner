@@ -39,17 +39,38 @@
 
       <div class="floor">
 
-        <h4 class="floorContainerHeader">Floor/Room:</h4>
+        <h4 class="floorContainerHeader">Floor</h4>
 
         <mat-form-field class="floorSelectContainer">
           <mat-label>Select an option:</mat-label>
-          <mat-select (selectionChange)="onFloorChange($event)" [value]='floorByDefault'>
-            <mat-option *ngFor="let floor of floors" [value]="floor">{{floor}}</mat-option>
+
+          <mat-select [value]="floorByDefault.floor" (selectionChange)="onFloorChange($event)" >
+            <mat-option *ngFor="let floor of floors" [value]="floor">{{floor.floor}}
+            </mat-option>
+
           </mat-select>
+
         </mat-form-field>
       </div>
 
-      <div class="people" *ngIf="dateInThePastIn==false">
+      <div class="room" *ngIf="floorSelected!=null">
+
+        <h4 class="roomContainerHeader">Room</h4>
+
+        <mat-form-field class="roomSelectContainer">
+          <mat-label>Select an option:</mat-label>
+
+          <mat-select (selectionChange)="onRoomChange($event)" value="all">
+            <mat-option value="all">All rooms</mat-option>
+            <mat-option *ngFor="let room of floorSelected.rooms" [value]="room.name">{{room.name}}
+            </mat-option>
+
+          </mat-select>
+
+        </mat-form-field>
+      </div>
+
+      <div class="people" *ngIf="dateInThePastIn==false && roomIsSelected==false">
         <div>
           <h4 class="peopleContainerHeader"> Number of people attending</h4>
           <i *ngIf="numberOfPeople!=1 && numberOfPeople!=null" class="material-icons x-button" (click)="onPeopleClear()">

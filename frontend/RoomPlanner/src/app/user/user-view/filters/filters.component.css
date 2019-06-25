@@ -3,14 +3,6 @@
     width: 100%;
 }
 
-.inputCalendar{
-    display: none;
-    z-index: 0;
-} 
-
- .calendarButton{
-    /* display: none; */
-}
 
 /* .room-view-container{
     position: absolute;
@@ -48,6 +40,10 @@
 }
 
 .floor{
+    margin-left:15px;
+    margin-top: 15px;
+}
+.room{
     margin-left:15px;
     margin-top: 15px;
 }
@@ -133,12 +129,25 @@ mat-slider {
 .floorContainerHeader{
     display: inline-block;
     vertical-align: top;
+
 }
 .floorSelectContainer{
     display: inline-block;
     vertical-align: top;
     margin-left: 8%;
 }
+
+.roomContainerHeader{
+    display: inline-block;
+    vertical-align: top;
+}
+
+.roomSelectContainer{
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 8%;
+}
+
 
 @media screen and (max-width: 768px) {
     .container{
@@ -208,7 +217,13 @@ mat-slider {
     .floor{
         width:60%;
         display: block;
-        margin: 0 auto;
+        margin: 15px auto;
+        
+    }
+    .room{
+        width:60%;
+        display: block;
+        margin: 15px auto;
     }
 
     .hours{

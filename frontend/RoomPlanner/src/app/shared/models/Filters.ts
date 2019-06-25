@@ -5,7 +5,7 @@ export class Filters{
     startDate:Date;
     endDate:Date;
     floor:number;
-    numberOfPeople:number;
+    minPersons:number;
 
 
     constructor() { }
