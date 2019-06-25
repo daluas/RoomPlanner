@@ -19,9 +19,11 @@ public class RoomDtoMapperTest {
 
     @Test
     public void shouldReturnRoomDtoWhenMapEntityToDtoIsCalledwithValidRoomEntity() {
+
         UserEntity userEntity = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", 5, 14);
+                UserType.ROOM, "Wonderland", BuildersWrapper.buildFloorEntity(1L, 5), 14);
         RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
+
         RoomDto actualRoomDto = sut.mapEntityToDto((RoomEntity) userEntity);
 
         assertEquals(expectedRoomDto, actualRoomDto);
@@ -41,16 +43,19 @@ public class RoomDtoMapperTest {
 
     @Test
     public void shouldReturnRoomDtoListWhenMapEntityListToDtoListIsCalledwithValidRoomEntityList() {
+
         UserEntity roomEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "4wonD2C%",
-                UserType.ROOM, "Wonderland", 5, 14);
+                UserType.ROOM, "Wonderland", BuildersWrapper.buildFloorEntity(1L, 5), 14);
         UserEntity roomEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "4westAD8%",
-                UserType.ROOM, "Westeros", 8, 20);
+                UserType.ROOM, "Westeros", BuildersWrapper.buildFloorEntity(2L, 8), 20);
+
         List<UserEntity> roomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
 
         List<RoomDto> actualRoomDtoList = sut.mapEntityListToDtoList(roomEntityList);
 
         RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
         RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros", null, 8, 20, UserType.ROOM);
+
         List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
 
         assertEquals(expectedRoomDtoList, actualRoomDtoList);
@@ -74,5 +79,4 @@ public class RoomDtoMapperTest {
 
         assertEquals(expectedRoomDtoList, actualRoomDtoList);
     }
-
 }
