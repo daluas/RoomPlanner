@@ -1,4 +1,29 @@
-<div class="container">
+<!-- <div class="authBox">
+
+  <div *ngIf="this.logged==false && this.usertype=='ROOM'">
+    <form [formGroup]="loginBookingForm" class="loginBooking">
+      <mat-form-field>
+        <input matInput placeholder="Enter your email" formControlName="email">
+       
+      </mat-form-field>
+      <br/>
+      <mat-form-field>
+        <input matInput placeholder="Enter your password" type="password" formControlName="password" name="email">
+      </mat-form-field>
+    </form>
+  </div>
+
+  <div *ngIf="this.logged==true && this.usertype=='ROOM'">
+    Automatic logout after 60 seconds
+    <button mat-raised-button color="primary" (click)="logoutBooking()">Logout</button>
+  </div>
+
+</div> -->
+
+<app-login-booking *ngIf="this.usertype=='ROOM'"></app-login-booking>
+
+<div class="container" *ngIf="this.logged==true">
+
   <div>
     <span class="datePopup startDate">
       <div class="dateTitle">Start Date</div>
@@ -26,9 +51,9 @@
   </div>
 
   <!-- {{booking.startDate}} -->
- <!-- <h2>Hour: {{booking.startDate}}</h2> -->
+  <!-- <h2>Hour: {{booking.startDate}}</h2> -->
   <app-hour-input-booking [booking]="booking" (hourEmitter)="onHourEmit($event)"></app-hour-input-booking>
- 
+
   <div class="invalidHoursContainer" *ngIf="invalidHours==true">
     <p>End hour has to be greater than start hour!</p>
   </div>
@@ -41,9 +66,9 @@
 
 
   <div>
-    <button *ngIf="!booking.id" mat-raised-button color="primary" class="bookBtn" (click)="createBookingTest()">Book now</button>
-    <button *ngIf="booking.id" mat-raised-button color="primary" class="updateBtn" (click)="updateBookingTest()">Update</button>
-    <button *ngIf="booking.id" mat-raised-button color="primary" class="deleteBtn" (click)="deleteBooking()">Delete</button>
+    <button *ngIf="!booking.id" mat-raised-button color="primary" class="bookBtn" [disabled]="this.isButtonDisabled()" (click)="createBookingTest()">Book now</button>
+    <button *ngIf="booking.id" mat-raised-button color="primary" class="updateBtn" [disabled]="this.isButtonDisabled()" (click)="updateBookingTest()">Update</button>
+    <button *ngIf="booking.id" mat-raised-button color="primary" class="deleteBtn" [disabled]="this.isButtonDisabled()" (click)="deleteBooking()">Delete</button>
     <button mat-button color="primary" class="cancelBtn" (click)="cancelBooking()">Cancel</button>
   </div>
 

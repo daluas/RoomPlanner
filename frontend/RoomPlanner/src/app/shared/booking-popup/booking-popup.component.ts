@@ -2,9 +2,13 @@ import { Component, OnInit, Input, ɵConsole, Output, EventEmitter, Inject } fro
 import { BookingService } from 'src/app/core/services/booking/booking.service';
 import { RoomsViewComponent } from '../../user/user-view/rooms-view/rooms-view.component';
 import { Data } from '@angular/router';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Booking } from '../../core/models/BookingModel';
 import { Time } from '@angular/common';
+import { LoginModel } from '../../core/models/LoginModel';
+import { AuthService } from '../../core/services/auth/auth.service';
+import { LoggedUser } from '../../core/models/LoggedUser';
+import { LoginBookingComponent } from '../login-booking/login-booking.component'
 
 @Component({
   selector: 'app-booking-popup',
@@ -13,33 +17,42 @@ import { Time } from '@angular/common';
 })
 export class BookingPopupComponent implements OnInit {
 
-  
-  @Input() booking: Booking;
 
+  @Input() booking: Booking;
+    
   @Output() booked: EventEmitter<Booking> = new EventEmitter();
   @Output() closePopup: EventEmitter<boolean> = new EventEmitter();
-
-  constructor(public bookingService: BookingService) {
-    console.log("on constructor"+this.booking);
-   }
   
+
+  constructor(public bookingService: BookingService, private fb: FormBuilder, private authService: AuthService) {
+    console.log("on constructor" + this.booking);
+  }
+
   minDate = new Date(2019, 0, 1);
   invalidHours: boolean = false;
+
   status: boolean;
+  usertype: string;
+
+  // (logged)=onLogged($event);
+  
 
   ngOnInit() {
-   
-    // this.booking = new Booking().create({
-    //   startDate: new Date(),
-    //   endDate: new Date()
-    // });   
-    // console.log("on init"+this.booking);
+    this.status = false;
+       
+    let item = JSON.parse(localStorage.getItem("user-data"));
+
+    // this.usertype = item.type;
+    this.usertype = "ROOM";
+
+    // if(this.usertype == "PERSON") {
+    //  this.logged = true;
+    // }
   }
- 
 
   createBookingTest() {
     this.bookingService.createNewBooking(this.booking).then((booked) => {
-      //de unde vine booked??????????
+
       if (booked) {
         // succes, rezervarea a avut loc
         this.booked.emit(this.booking);
@@ -54,13 +67,14 @@ export class BookingPopupComponent implements OnInit {
   }
 
   updateBookingTest() {
-
-  }
-  deleteBooking() {
     
   }
-  cancelBooking() { 
-    this.booking.description="";
+
+  deleteBooking() {
+
+  }
+  cancelBooking() {
+    this.booking.description = "";
     this.closePopup.emit(true);
   }
 
@@ -74,13 +88,14 @@ export class BookingPopupComponent implements OnInit {
     else {
       this.invalidHours = false;
     }
-    
+
   }
 
- getErrorForDate(){
-   if(this.booking.startDate > this.booking.endDate){
-    this.status=true;
-   }
-   
- }
+  getErrorForDate() {
+    if (this.booking.startDate > this.booking.endDate) {
+      this.status = true;
+    }
+  }
+
+
 }
