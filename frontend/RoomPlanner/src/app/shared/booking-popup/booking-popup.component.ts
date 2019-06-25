@@ -15,14 +15,14 @@ import { LoginBookingComponent } from '../login-booking/login-booking.component'
   templateUrl: './booking-popup.component.html',
   styleUrls: ['./booking-popup.component.css']
 })
+
 export class BookingPopupComponent implements OnInit {
 
-
   @Input() booking: Booking;
-    
+
   @Output() booked: EventEmitter<Booking> = new EventEmitter();
   @Output() closePopup: EventEmitter<boolean> = new EventEmitter();
-  
+
 
   constructor(public bookingService: BookingService, private fb: FormBuilder, private authService: AuthService) {
     console.log("on constructor" + this.booking);
@@ -34,20 +34,23 @@ export class BookingPopupComponent implements OnInit {
   status: boolean;
   usertype: string;
 
-  // (logged)=onLogged($event);
-  
+  isLogged: boolean;
 
   ngOnInit() {
     this.status = false;
-       
+
     let item = JSON.parse(localStorage.getItem("user-data"));
 
-    // this.usertype = item.type;
+    //this.usertype = item.type;
     this.usertype = "ROOM";
 
-    // if(this.usertype == "PERSON") {
-    //  this.logged = true;
-    // }
+    if (this.usertype == "ROOM") {
+      this.isLogged = false;
+    }
+
+    if (this.usertype == "PERSON") {
+      this.isLogged = true;
+    }
   }
 
   createBookingTest() {
@@ -67,7 +70,7 @@ export class BookingPopupComponent implements OnInit {
   }
 
   updateBookingTest() {
-    
+
   }
 
   deleteBooking() {
@@ -97,5 +100,8 @@ export class BookingPopupComponent implements OnInit {
     }
   }
 
+  loggedChange(event) {
+    this.isLogged = event;
+  }
 
 }

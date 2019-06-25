@@ -20,9 +20,9 @@
 
 </div> -->
 
-<app-login-booking *ngIf="this.usertype=='ROOM'"></app-login-booking>
+<app-login-booking *ngIf="this.usertype=='ROOM'" [isLogged]="this.isLogged" (logged)="loggedChange($event)"></app-login-booking>
 
-<div class="container" *ngIf="this.logged==true">
+<div class="container" *ngIf="this.isLogged==true">
 
   <div>
     <span class="datePopup startDate">
@@ -66,9 +66,9 @@
 
 
   <div>
-    <button *ngIf="!booking.id" mat-raised-button color="primary" class="bookBtn" [disabled]="this.isButtonDisabled()" (click)="createBookingTest()">Book now</button>
-    <button *ngIf="booking.id" mat-raised-button color="primary" class="updateBtn" [disabled]="this.isButtonDisabled()" (click)="updateBookingTest()">Update</button>
-    <button *ngIf="booking.id" mat-raised-button color="primary" class="deleteBtn" [disabled]="this.isButtonDisabled()" (click)="deleteBooking()">Delete</button>
+    <button *ngIf="!booking.id" mat-raised-button color="primary" class="bookBtn" (click)="createBookingTest()">Book now</button>
+    <button *ngIf="booking.id" mat-raised-button color="primary" class="updateBtn" (click)="updateBookingTest()">Update</button>
+    <button *ngIf="booking.id" mat-raised-button color="primary" class="deleteBtn" (click)="deleteBooking()">Delete</button>
     <button mat-button color="primary" class="cancelBtn" (click)="cancelBooking()">Cancel</button>
   </div>
 

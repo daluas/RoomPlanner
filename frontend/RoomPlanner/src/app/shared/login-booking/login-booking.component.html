@@ -1,6 +1,6 @@
 <div class="loginContainer">
 
-    <div *ngIf="this.logged==false">
+    <div *ngIf="this.isLogged==false">
       <form [formGroup]="loginBookingForm" class="loginBooking">
         <mat-form-field>
           <input matInput placeholder="Enter your email" formControlName="email">
@@ -15,9 +15,9 @@
       </form>
     </div>
   
-    <div *ngIf="this.logged==true">
-      Automatic logout after 60 seconds
-      <button mat-raised-button color="primary" [disabled]="this.isButtonDisabled()" (click)="logoutBooking()">Logout</button>
+    <div *ngIf="this.isLogged==true">
+      Logout automatically after 60 seconds
+      <button mat-raised-button color="primary" (click)="logoutBooking()">Logout</button>
     </div>
   
   </div>

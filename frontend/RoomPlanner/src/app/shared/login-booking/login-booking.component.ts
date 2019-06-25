@@ -14,7 +14,8 @@ import { BookingPopupComponent } from '../booking-popup/booking-popup.component'
 
 export class LoginBookingComponent implements OnInit {
 
-  @Output() logged = new EventEmitter<boolean>();
+  @Input() isLogged:boolean;
+  @Output() logged: EventEmitter<boolean> = new EventEmitter<boolean>();
   
   loginBookingForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -30,7 +31,6 @@ export class LoginBookingComponent implements OnInit {
   
   ngOnInit() {
     this.status = false;
-    this.logged.emit(false);
   }
 
   getErrorMessage() {
@@ -88,20 +88,20 @@ export class LoginBookingComponent implements OnInit {
       });
   }
 
-  isButtonDisabled() {
-    if(!this.loginBookingForm.valid){
-      return true;
-    }
-    return false;
-  }
-
   logoutBooking() {
     this.logged.emit(false);
     this.loginBookingForm.reset();
   }
-  countdownTimer () {
-    setTimeout(function(){ this.logged.emit(false);; location.reload(); }, 10*1000);    
+
+  logoutAutomatticaly() {
+    if(this.isLogged == true) {
+      this.logged.emit(false); 
+      location.reload();   
+    }  
   }
-  
+
+  countdownTimer() {
+    setTimeout(this.logoutAutomatticaly, 5*1000);    
+  }  
 
 }
