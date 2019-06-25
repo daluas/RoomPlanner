@@ -3,6 +3,7 @@ package edu.roomplanner.rest;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.dto.UserDto;
 import edu.roomplanner.service.UserService;
+import edu.roomplanner.validation.validator.RightsValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,16 @@ public class UserRestController {
     private final static Logger LOGGER = LogManager.getLogger(UserRestController.class);
 
     private final UserService userService;
+    private final RightsValidator rightsValidator;
 
     @Autowired
-    public UserRestController(UserService userService) {
+    public UserRestController(UserService userService, RightsValidator rightsValidator) {
         this.userService = userService;
+        this.rightsValidator = rightsValidator;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/rooms")
-    ResponseEntity<List<RoomDto>> getAllRooms() {
+    ResponseEntity<List<RoomDto>> getAllRooms(@RequestHeader(name = "email") String email) {
         LOGGER.info("Method was called.");
         List<RoomDto> allRooms = userService.getAllRooms();
         LOGGER.info("The following object was returned:" + allRooms);
