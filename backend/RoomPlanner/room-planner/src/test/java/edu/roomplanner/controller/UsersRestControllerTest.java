@@ -58,18 +58,17 @@ public class UsersRestControllerTest {
         flyway.clean();
         flyway.migrate();
 
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun",
-                null, UserType.PERSON,"Stefania","Ghitun");
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntiy(1L,"sghitun@yahoo.com","sghitun", null, null, UserType.PERSON,"Stefania","Ghitun");
         userRepository.save(userEntityPerson);
 
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
 
         UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-                null, UserType.ROOM, "Wonderland", 5, 14);
+                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 514);
         UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "westeros",
-                null, UserType.ROOM, "Westeros", 8, 20);
+                null, BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros",20);
         UserEntity userEntityThree = BuildersWrapper.buildRoomEntity(4L, "neverland@yahoo.com", "neverland",
-                null, UserType.ROOM, "Neverland", 4, 5);
+                null, BuildersWrapper.buildFloorEntity(3L, 4), UserType.ROOM, "Neverland", 5);
 
         userRepository.save(userEntityOne);
         userRepository.save(userEntityTwo);
@@ -79,7 +78,6 @@ public class UsersRestControllerTest {
 
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoListAndStatusFoundWhenGetAllRoomsIsCalled() throws Exception {
-
 
         RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
         RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros", null, 8, 20, UserType.ROOM);
@@ -95,11 +93,8 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoAndStatusFoundWhenGetRoomByIdIsCalled() throws Exception {
 
-
         RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
-
-
 
         mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 2).with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound())
@@ -119,4 +114,5 @@ public class UsersRestControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 1).with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
+
 }

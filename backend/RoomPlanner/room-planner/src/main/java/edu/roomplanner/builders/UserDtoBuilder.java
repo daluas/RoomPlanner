@@ -1,9 +1,6 @@
 package edu.roomplanner.builders;
 
-import edu.roomplanner.dto.PersonDto;
-import edu.roomplanner.dto.ReservationDto;
-import edu.roomplanner.dto.RoomDto;
-import edu.roomplanner.dto.UserDto;
+import edu.roomplanner.dto.*;
 import edu.roomplanner.exception.UnknownUserTypeException;
 import edu.roomplanner.types.UserType;
 import org.apache.logging.log4j.LogManager;
