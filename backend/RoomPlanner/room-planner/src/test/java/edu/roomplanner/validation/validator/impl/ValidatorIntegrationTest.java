@@ -62,8 +62,8 @@ public class ValidatorIntegrationTest {
 
     @Test
     public void shouldNotFindAValidDateCaseOne() {
-        ReservationEntity reservation = getReservationEntity(2007, 6, 11, 1
-                , 2007, 6, 12, 59);
+        ReservationEntity reservation = getReservationEntity(2007, 6, 11, 0
+                , 2007, 6, 13, 0);
         ReservationEntity existReservation = getReservationEntity(2007, 6, 11, 30,
                 2007, 6, 12, 0);
         reservationRepository.save(existReservation);
@@ -77,8 +77,8 @@ public class ValidatorIntegrationTest {
 
     @Test
     public void shouldNotFindAValidDateCaseTwo() {
-        ReservationEntity reservation = getReservationEntity(2007, 6, 11, 1
-                , 2007, 6, 11, 59);
+        ReservationEntity reservation = getReservationEntity(2007, 6, 11, 0
+                , 2007, 6, 12, 0);
         ReservationEntity existReservation = getReservationEntity(2007, 6, 11, 30,
                 2007, 6, 13, 0);
         reservationRepository.save(existReservation);
@@ -92,8 +92,8 @@ public class ValidatorIntegrationTest {
 
     @Test
     public void shouldNotFindAValidDateCaseThree() {
-        ReservationEntity reservation = getReservationEntity(2007, 6, 10, 59
-                , 2007, 6, 12, 29);
+        ReservationEntity reservation = getReservationEntity(2007, 6, 11, 0
+                , 2007, 6, 12, 30);
         ReservationEntity existReservation = getReservationEntity(2007, 6, 10, 30,
                 2007, 6, 12, 0);
         reservationRepository.save(existReservation);
@@ -107,8 +107,8 @@ public class ValidatorIntegrationTest {
 
     @Test
     public void shouldNotFindAValidDateCaseFour() {
-        ReservationEntity reservation = getReservationEntity(2007, 6, 10, 59
-                , 2007, 6, 11, 29);
+        ReservationEntity reservation = getReservationEntity(2007, 6, 11, 0
+                , 2007, 6, 11, 30);
         ReservationEntity existReservation = getReservationEntity(2007, 6, 10, 30,
                 2007, 6, 12, 0);
         reservationRepository.save(existReservation);
@@ -121,9 +121,24 @@ public class ValidatorIntegrationTest {
     }
 
     @Test
+    public void shouldNotFindAValidDateCaseFive() {
+        ReservationEntity reservation = getReservationEntity(2007, 6, 10, 0,
+                2007, 6, 10, 30);
+        ReservationEntity existReservation = getReservationEntity(2007, 6, 10, 0,
+                2007, 6, 10, 30);
+        reservationRepository.save(existReservation);
+
+        List<ReservationEntity> actualList = reservationRepository.findNonAvailableDate(reservation.getStartDate(), reservation.getEndDate(), reservation.getRoom().getId());
+        List<ReservationEntity> expectedList = Arrays.asList(existReservation);
+
+        Assert.assertEquals(expectedList.isEmpty(), actualList.isEmpty());
+
+    }
+
+    @Test
     public void shouldFindAValidDateCaseOne() {
-        ReservationEntity reservation = getReservationEntity(2007, 6, 10, 1,
-                2007, 6, 10, 29);
+        ReservationEntity reservation = getReservationEntity(2007, 6, 10, 0,
+                2007, 6, 10, 30);
         ReservationEntity existReservation = getReservationEntity(2007, 6, 10, 30,
                 2007, 6, 12, 0);
         reservationRepository.save(existReservation);
@@ -136,8 +151,8 @@ public class ValidatorIntegrationTest {
 
     @Test
     public void shouldFindAValidDateCaseTwo() {
-        ReservationEntity reservation = getReservationEntity(2007, 6, 12, 1,
-                2007, 6, 12, 59);
+        ReservationEntity reservation = getReservationEntity(2007, 6, 12, 0,
+                2007, 6, 13, 0);
         ReservationEntity existReservation = getReservationEntity(2007, 6, 10, 30,
                 2007, 6, 12, 0);
         reservationRepository.save(existReservation);
@@ -160,7 +175,9 @@ public class ValidatorIntegrationTest {
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
         startDate.set(startYear, Calendar.JANUARY, startDay, startHour, startMinute, 0);
+        startDate.set(Calendar.MILLISECOND,0);
         endDate.set(endYear, Calendar.JANUARY, endDay, endHour, endMinute, 0);
+        endDate.set(Calendar.MILLISECOND,0);
 
         return new ReservationEntityBuilder()
                 .withStartDate(startDate)

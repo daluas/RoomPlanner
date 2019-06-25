@@ -28,13 +28,10 @@ public class AvailabilityValidator implements BookingValidator {
         Calendar endDate = reservationEntity.getEndDate();
         UserEntity room = reservationEntity.getRoom();
 
-        startDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 1);
-        endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) - 1);
-
         List<ReservationEntity> nonAvailableReservations = reservationRepository.findNonAvailableDate(startDate, endDate, room.getId());
 
         Boolean areNonAvailableReservationForSameUser = areNonAvailableReservationForSameUser(nonAvailableReservations, reservationEntity);
-        
+
         if (areNonAvailableReservationForSameUser) {
             return new ValidationResult();
         }
@@ -44,11 +41,11 @@ public class AvailabilityValidator implements BookingValidator {
 
 
     private Boolean areNonAvailableReservationForSameUser(List<ReservationEntity> nonAvailableReservations,
-                                                        ReservationEntity currentReservationEntity) {
-        for(ReservationEntity nonAvailableReservation:nonAvailableReservations) {
+                                                          ReservationEntity currentReservationEntity) {
+        for (ReservationEntity nonAvailableReservation : nonAvailableReservations) {
             Long nonAvailableReservationPersonId = nonAvailableReservation.getPerson().getId();
             Long currentReservationPersonId = currentReservationEntity.getPerson().getId();
-            if(!nonAvailableReservationPersonId.equals(currentReservationPersonId)) {
+            if (!nonAvailableReservationPersonId.equals(currentReservationPersonId)) {
                 return false;
             }
         }
