@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiResponses;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +35,9 @@ public class UserRestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/rooms")
     @ApiOperation("Gets a list with all the rooms in our database")
-    @ApiResponses(value = {@ApiResponse(code = 302, message = "FOUND", response = RoomDto.class)
-            ,@ApiResponse(code = 401, message = "You are not authenticated.")
-            ,@ApiResponse(code = 500, message = "Internal server error")})
+    @ApiResponses(value = {@ApiResponse(code = 302, message = "FOUND", response = RoomDto.class),
+            @ApiResponse(code = 401, message = "You are not authenticated."),
+            @ApiResponse(code = 500, message = "Internal server error")})
     ResponseEntity<List<RoomDto>> getAllRooms() {
         LOGGER.info("Method was called.");
         List<RoomDto> allRooms = userService.getAllRooms();
@@ -48,10 +47,10 @@ public class UserRestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/rooms/{id}")
     @ApiOperation("Gets a room with an specific id")
-    @ApiResponses(value = {@ApiResponse(code = 302, message = "FOUND", response = RoomDto.class)
-            ,@ApiResponse(code = 404, message = "This room was not found.")
-            ,@ApiResponse(code = 401, message = "You are not authenticated.")
-            ,@ApiResponse(code = 500, message = "Internal server error.")})
+    @ApiResponses(value = {@ApiResponse(code = 302, message = "FOUND", response = RoomDto.class),
+            @ApiResponse(code = 404, message = "This room was not found."),
+            @ApiResponse(code = 401, message = "You are not authenticated."),
+            @ApiResponse(code = 500, message = "Internal server error.")})
     ResponseEntity<RoomDto> getRoomById(@PathVariable Long id) {
         LOGGER.info("Method was called.");
         RoomDto roomDto = userService.getRoomById(id);
@@ -64,9 +63,9 @@ public class UserRestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/users")
     @ApiOperation("Gets a user with an specific email")
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "This user was not found.", response = PersonDto.class)
-            ,@ApiResponse(code = 401, message = "You are not authenticated.")
-            ,@ApiResponse(code = 500, message = "Internal server error.")})
+    @ApiResponses(value = {@ApiResponse(code = 404, message = "This user was not found.", response = PersonDto.class),
+            @ApiResponse(code = 401, message = "You are not authenticated."),
+            @ApiResponse(code = 500, message = "Internal server error.")})
     @PreAuthorize("hasAuthority('person') or hasAuthority('room')")
     public ResponseEntity<UserDto> getUserEmailType(@RequestParam(name = "email") String email) {
         Optional<UserDto> userEmailTypeDtoOptional = userService.getUserDto(email);
