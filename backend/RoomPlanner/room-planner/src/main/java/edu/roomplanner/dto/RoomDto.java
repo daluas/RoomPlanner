@@ -7,7 +7,7 @@ import lombok.Data;
 public class RoomDto extends UserDto {
 
     private String name;
-    private FloorDto floor;
+    private Integer floor;
     private Integer maxPersons;
 
 }

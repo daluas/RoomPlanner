@@ -18,7 +18,7 @@ import java.util.Set;
 public class BuildersWrapper {
 
 
-    public static RoomDto buildRoomDto(Long id, String email, String name, Set<ReservationDto> reservationDtos, FloorDto floor, Integer maxPersons, UserType type) {
+    public static RoomDto buildRoomDto(Long id, String email, String name, Set<ReservationDto> reservationDtos, Integer floor, Integer maxPersons, UserType type) {
         return (RoomDto) UserDtoBuilder.builder()
                 .withId(id)
                 .withName(name)

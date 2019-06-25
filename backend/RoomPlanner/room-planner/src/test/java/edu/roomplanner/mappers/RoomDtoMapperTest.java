@@ -22,7 +22,7 @@ public class RoomDtoMapperTest {
 
         UserEntity userEntity = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
                 UserType.ROOM, "Wonderland", BuildersWrapper.buildFloorEntity(1L, 5), 14);
-        RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, BuildersWrapper.buildFloorDto(1L, 5), 14, UserType.ROOM);
+        RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
 
         RoomDto actualRoomDto = sut.mapEntityToDto((RoomEntity) userEntity);
 
@@ -53,8 +53,8 @@ public class RoomDtoMapperTest {
 
         List<RoomDto> actualRoomDtoList = sut.mapEntityListToDtoList(roomEntityList);
 
-        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, BuildersWrapper.buildFloorDto(1L, 5), 14, UserType.ROOM);
-        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros", null, BuildersWrapper.buildFloorDto(2L, 8), 20, UserType.ROOM);
+        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
+        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros", null, 8, 20, UserType.ROOM);
 
         List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
 

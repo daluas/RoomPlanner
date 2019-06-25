@@ -14,7 +14,7 @@ public class UserDtoBuilder {
     private Long id;
     private String email;
     private String name;
-    private FloorDto floor;
+    private Integer floor;
     private Integer maxPersons;
     private UserType type;
     private String firstName;
@@ -40,7 +40,7 @@ public class UserDtoBuilder {
         return this;
     }
 
-    public UserDtoBuilder withFloor(FloorDto floor) {
+    public UserDtoBuilder withFloor(Integer floor) {
         this.floor = floor;
         return this;
     }

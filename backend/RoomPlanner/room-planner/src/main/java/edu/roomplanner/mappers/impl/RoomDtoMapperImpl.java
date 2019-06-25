@@ -1,7 +1,5 @@
 package edu.roomplanner.mappers.impl;
 
-import edu.roomplanner.builders.FloorDtoBuilder;
-import edu.roomplanner.dto.FloorDto;
 import edu.roomplanner.builders.UserDtoBuilder;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.entity.RoomEntity;
@@ -23,16 +21,11 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
                     .build();
         }
 
-        FloorDto floorDto = FloorDtoBuilder.builder()
-                .withId(roomEntity.getFloor().getId())
-                .withFloor(roomEntity.getFloor().getFloor())
-                .build();
-
         return (RoomDto) UserDtoBuilder.builder()
                 .withId(roomEntity.getId())
                 .withEmail(roomEntity.getEmail())
                 .withType(roomEntity.getType())
-                .withFloor(floorDto)
+                .withFloor(roomEntity.getFloor().getFloor())
                 .withName(roomEntity.getName())
                 .withMaxPersons(roomEntity.getMaxPersons())
                 .build();

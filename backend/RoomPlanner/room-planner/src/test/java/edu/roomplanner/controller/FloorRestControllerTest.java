@@ -106,12 +106,12 @@ public class FloorRestControllerTest {
     public void shouldReturnResponseEntityWithValidFloorDtoListAndStatusFoundWhenGetAllFloorsIsCalled() throws Exception {
 
         UserDto userEntityOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
-                null, BuildersWrapper.buildFloorDto(1L, 5), 14, UserType.ROOM);
+                null, 5, 14, UserType.ROOM);
         UserDto userEntityTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros",
-                null, BuildersWrapper.buildFloorDto(2L, 8), 20, UserType.ROOM);
+                null, 8, 20, UserType.ROOM);
 
         UserDto userEntityThree = BuildersWrapper.buildRoomDto(4L, "neverland@yahoo.com", "Neverland",
-                null, BuildersWrapper.buildFloorDto(3L, 4), 5, UserType.ROOM);
+                null, 4, 5, UserType.ROOM);
 
         Set<RoomDto> firstRoom = new HashSet<>();
         Set<RoomDto> secondRoom = new HashSet<>();

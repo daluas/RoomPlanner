@@ -81,17 +81,12 @@ public class UserServiceImpl implements UserService {
 
     private UserDto buildUserDtoByRoomEntity(RoomEntity roomEntity) {
 
-        FloorDto floorDto = new FloorDtoBuilder()
-                .withId(roomEntity.getFloor().getId())
-                .withFloor(roomEntity.getFloor().getFloor())
-                .build();
-
         return UserDtoBuilder.builder()
                 .withId(roomEntity.getId())
                 .withEmail(roomEntity.getEmail())
                 .withType(roomEntity.getType())
                 .withName(roomEntity.getName())
-                .withFloor(floorDto)
+                .withFloor(roomEntity.getFloor().getFloor())
                 .withMaxPersons(roomEntity.getMaxPersons())
                 .build();
     }
