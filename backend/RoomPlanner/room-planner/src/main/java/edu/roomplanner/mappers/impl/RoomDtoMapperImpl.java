@@ -14,11 +14,18 @@ import java.util.List;
 public class RoomDtoMapperImpl implements RoomDtoMapper {
 
     public RoomDto mapEntityToDto(RoomEntity roomEntity) {
+
+        if (roomEntity.getFloor() == null) {
+            return (RoomDto) UserDtoBuilder.builder()
+                    .withType(roomEntity.getType())
+                    .build();
+        }
+
         return (RoomDto) UserDtoBuilder.builder()
                 .withId(roomEntity.getId())
                 .withEmail(roomEntity.getEmail())
                 .withType(roomEntity.getType())
-                .withFloor(roomEntity.getFloor())
+                .withFloor(roomEntity.getFloor().getFloor())
                 .withName(roomEntity.getName())
                 .withMaxPersons(roomEntity.getMaxPersons())
                 .build();
