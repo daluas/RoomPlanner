@@ -15,8 +15,8 @@ export class BookingPopupComponent implements OnInit {
 
   
   @Input() booking: Booking;
-
-  @Output() booked: EventEmitter<Booking> = new EventEmitter();
+  
+  //@Output() booked: EventEmitter<Booking> = new EventEmitter();
   @Output() closePopup: EventEmitter<boolean> = new EventEmitter();
 
   constructor(public bookingService: BookingService) {
@@ -24,22 +24,42 @@ export class BookingPopupComponent implements OnInit {
    }
   
   minDate = new Date(2019, 0, 1);
-  invalidHours: boolean = false;
-  status: boolean;
-
+ 
+  status: boolean =false;
+  booked : any;
   ngOnInit() {
+   this.booked=true;
    
-    // this.booking = new Booking().create({
-    //   startDate: new Date(),
-    //   endDate: new Date()
-    // });   
-    // console.log("on init"+this.booking);
   }
  
+  startDateValidation(val){ 
+    if(val.value.getDate()> this.booking.endDate.getDate()){
+      this.status=true;
+    }
+    else{
+      this.status=false;
+    }
+  }
+
+
+  endDateValidation(val){
+    if(val.value.getDate() < this.booking.startDate.getDate()){
+      this.status=true;
+    }
+    else{
+      this.status=false;
+    }
+  }
+
+  prevalidation(){
+
+  }
 
   createBookingTest() {
+    
     this.bookingService.createNewBooking(this.booking).then((booked) => {
-      //de unde vine booked??????????
+      console.log(booked);
+    
       if (booked) {
         // succes, rezervarea a avut loc
         this.booked.emit(this.booking);
@@ -50,7 +70,7 @@ export class BookingPopupComponent implements OnInit {
       }
 
     })
-    console.log(this.booking);
+    
   }
 
   updateBookingTest() {
@@ -69,18 +89,13 @@ export class BookingPopupComponent implements OnInit {
     this.booking.startDate = event;
 
     if (this.booking.startDate.getTime() >= this.booking.endDate.getTime()) {
-      this.invalidHours = true;
+      //this.invalidHours = true;
     }
     else {
-      this.invalidHours = false;
+     // this.invalidHours = false;
     }
     
   }
+  
 
- getErrorForDate(){
-   if(this.booking.startDate > this.booking.endDate){
-    this.status=true;
-   }
-   
- }
 }

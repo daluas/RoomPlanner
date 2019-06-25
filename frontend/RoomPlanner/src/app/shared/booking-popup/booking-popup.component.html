@@ -4,36 +4,33 @@
       <div class="dateTitle">Start Date</div>
       <div>
         <mat-form-field class="datePicker">
-          <input matInput [min]="minDate" [matDatepicker]="picker3" [(value)]="booking.startDate" (change)="getErrorForDate()">
+          <input matInput [min]="minDate" [matDatepicker]="picker3" [(value)]="booking.startDate" (dateChange)="startDateValidation($event)">
           <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
           <mat-datepicker #picker3></mat-datepicker>
         </mat-form-field>
+        <!-- <span class="errorMessage" *ngIf="status">Start date is bigger than end date</span> -->
       </div>
     </span>
-
-
+    
     <span class="datePopup endDate">
       <div class="dateTitle">End Date</div>
       <div>
         <mat-form-field class="datePicker">
-          <input matInput [min]="minDate" [matDatepicker]="picker" [(value)]="booking.endDate" (change)="getErrorForDate()">
-          <mat-error *ngIf="status">Start date is bigger than end date</mat-error>
+          <input matInput [min]="minDate" [matDatepicker]="picker" [(value)]="booking.endDate" (dateChange)="endDateValidation($event)">
+           
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
+        
       </div>
     </span>
+
   </div>
 
-  <!-- {{booking.startDate}} -->
- <!-- <h2>Hour: {{booking.startDate}}</h2> -->
-  <app-hour-input-booking [booking]="booking" (hourEmitter)="onHourEmit($event)"></app-hour-input-booking>
- 
-  <div class="invalidHoursContainer" *ngIf="invalidHours==true">
-    <p>End hour has to be greater than start hour!</p>
+  <div class="hours">
+      <app-hour-input-booking [(booking)]="booking" (hourEmitter)="onHourEmit($event)"></app-hour-input-booking>
   </div>
-
-
+  <mat-error class="errorMessage" *ngIf="status">Start date is bigger than end date</mat-error> 
   <div class="descriptionBox">
     <div class="dateTitle">Notes:</div>
     <textarea class="descriptionContent" [value]="booking.description"> </textarea>
@@ -41,7 +38,7 @@
 
 
   <div>
-    <button *ngIf="!booking.id" mat-raised-button color="primary" class="bookBtn" (click)="createBookingTest()">Book now</button>
+    <button *ngIf="!booking.id" mat-raised-button color="primary" class="bookBtn" (click)="createBookingTest()" [disabled]="!booked">Book now</button>
     <button *ngIf="booking.id" mat-raised-button color="primary" class="updateBtn" (click)="updateBookingTest()">Update</button>
     <button *ngIf="booking.id" mat-raised-button color="primary" class="deleteBtn" (click)="deleteBooking()">Delete</button>
     <button mat-button color="primary" class="cancelBtn" (click)="cancelBooking()">Cancel</button>

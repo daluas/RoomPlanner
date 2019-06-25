@@ -104,12 +104,6 @@ input{
     top: 25px;
 }
 
-.bookingHoursContainer {
-    
-}
-/* .hourContainer {
-    width: 150px;
-} */
 .formStyle{
     margin:0;
     display: inline;
@@ -117,5 +111,11 @@ input{
 .hourContainer{
     padding-left:30px;
     padding-right: 30px;
+    text-align: center;
+}
+.invalidHoursContainer {
+    margin-top: 10px;
+    font-size: 9px; 
+    color: red;
     text-align: center;
 }

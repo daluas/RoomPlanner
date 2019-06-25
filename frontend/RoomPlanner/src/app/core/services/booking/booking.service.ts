@@ -15,7 +15,25 @@ export class BookingService {
   createNewBooking(booking: Booking): Promise<Object> {
     console.log("createNewBooking(booking: Booking) was called!");
     let roomID: number = booking.roomId;
-    return this.httpClient.post(`${this.backendUrl}/reservations/${roomID}`, booking).toPromise();
+
+    let params = {
+      email: booking.personalEmail,
+      startDate: booking.startDate.toJSON(),
+      endDate: booking.endDate.toJSON(),
+      description: booking.description,
+    }
+
+    return this.httpClient.post(`${this.backendUrl}/api/reservations/${roomID}`, params).toPromise();
+  }
+
+  prevalidation(booking: Booking): Promise<Object> {
+    console.log("prevalidation(booking: Booking) was called!");
+    let roomID: number = booking.roomId;
+    let startDate= booking.startDate.toUTCString();
+    let endDate= booking.endDate.toUTCString();
+    let email= booking.personalEmail;
+    
+    return this.httpClient.get(`${this.backendUrl}/api/prevalidation?roomId=${roomID}&startDate=${startDate}&endDate=${startDate}&email=${email}`).toPromise();
   }
 }
 

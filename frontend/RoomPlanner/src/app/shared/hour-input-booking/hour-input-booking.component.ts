@@ -5,6 +5,7 @@ import { Timeouts } from 'selenium-webdriver';
 import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 import { Booking } from '../../core/models/BookingModel';
 import { BookingPopupComponent } from '../booking-popup/booking-popup.component';
+import { BookingService } from '../../core/services/booking/booking.service';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class HourInputBookingComponent implements OnInit {
   finalEndHour: Date;
   startHourForm: FormGroup;
   endHourForm: FormGroup;
-
+  invalidHours: boolean;
   ngOnInit() {
 
     console.log(this.booking);
@@ -40,7 +41,7 @@ export class HourInputBookingComponent implements OnInit {
 
   }
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, public bookingService: BookingService) {
     this.startHourForm = this.fb.group({
       hour: ['00', [Validators.pattern('^([0-1][0-9])$|^(2[0-3])$')]],
       minutes: ['00', [Validators.pattern('^([0-5][0-9])$')]]
@@ -52,6 +53,28 @@ export class HourInputBookingComponent implements OnInit {
     });
 
   }
+  validateHours() {
+
+    if (this.startHourForm.value.hour > this.endHourForm.value.hour) {
+      this.invalidHours = true;
+    }
+    else {
+      this.invalidHours = false;
+    }
+  }
+  prevalidation() {
+    this.bookingService.createNewBooking(this.booking).then((prevalidationStatus) => {
+      console.log(prevalidationStatus);
+      if (prevalidationStatus) {
+        // succes, orele sunt disponibile
+
+      } else {
+        // eroare, orele nu sunt dispobinile ( afisez mesaj de eroare)
+      }
+
+    })
+  }
+
 
   updateHours() {
     if ((this.startHourForm.value.hour == this.endHourForm.value.hour) && (this.startHourForm.value.minutes == this.endHourForm.value.minutes)) {
@@ -68,6 +91,7 @@ export class HourInputBookingComponent implements OnInit {
 
     this.hourEmitter.emit(this.finalStartHour);
     this.hourEmitter.emit(this.finalEndHour);
+    this.validateHours();
   }
 
   updateMinutes() {
@@ -85,6 +109,7 @@ export class HourInputBookingComponent implements OnInit {
 
     this.hourEmitter.emit(this.finalStartHour);
     this.hourEmitter.emit(this.finalEndHour);
+    this.validateHours();
   }
 
   onKeyUpHoursStartDate() {
@@ -208,5 +233,7 @@ export class HourInputBookingComponent implements OnInit {
     }
     this.updateMinutes();
   }
+
+
 
 }

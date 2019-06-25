@@ -60,9 +60,14 @@
 .cancelBtn {
     float:right;
 }
-.invalidHoursContainer {
-    margin-top: 10px;
-    font-size: 12px; 
+.errorMessage{
     color: red;
-    text-align: center;
+    font-size:9px;
+    text-align:center;
+}
+.error{
+    width:100%;
+}
+.hours{
+    margin-top: 10px;
 }

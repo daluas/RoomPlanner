@@ -47,7 +47,7 @@ export class Interceptor implements HttpInterceptor {
 
 
 
-                console.log("requesting token")
+                console.log("requesting token");
                 request = this.addGetTokenHeaders(request);
 
                 return next.handle(request)
