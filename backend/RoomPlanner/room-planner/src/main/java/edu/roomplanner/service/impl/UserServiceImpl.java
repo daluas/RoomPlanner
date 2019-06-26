@@ -7,6 +7,7 @@ import edu.roomplanner.entity.PersonEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.exception.UserNotFoundException;
 import edu.roomplanner.mappers.RoomDtoMapper;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.TokenParserService;
@@ -17,7 +18,6 @@ import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -52,10 +52,11 @@ public class UserServiceImpl implements UserService {
     public RoomDto getRoomById(Long id) {
         RoomDto roomDto = null;
         if (userValidator.checkValidRoomId(id)) {
-            RoomEntity userEntity = (RoomEntity) userRepository.findById(id).get();
-            Set<ReservationEntity> updatedReservationEntities = updateReservationDescription(userEntity);
+            RoomEntity userEntity = (RoomEntity) userRepository.findById(id)
+                    .orElseThrow(() -> new UserNotFoundException("User not found"));
+            Set<ReservationEntity> updatedReservationEntities = updateReservationDescription(userEntity.getReservations());
             userEntity.setReservations(updatedReservationEntities);
-            roomDto = roomDtoMapper.mapEntityToDto((RoomEntity) userEntity);
+            roomDto = roomDtoMapper.mapEntityToDto(userEntity);
         }
         return roomDto;
     }
@@ -71,21 +72,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<ReservationEntity> updateReservationDescription(UserEntity userEntity) {
-        Set<ReservationEntity> result = new HashSet<>();
+    public Set<ReservationEntity> updateReservationDescription(Set<ReservationEntity> reservationEntities) {
         Long userId = getLoggedUserId();
-        for (ReservationEntity reservationEntity : ((RoomEntity) userEntity).getReservations()) {
-            if (!reservationEntity.getPerson().getId().equals(userId))
-                reservationEntity.setDescription(null);
-            result.add(reservationEntity);
-        }
-        return result;
+        reservationEntities.stream()
+                .filter(reservationEntity -> !reservationEntity.getPerson().getId().equals(userId))
+                .forEach((reservationEntity) -> reservationEntity.setDescription(null));
+        return reservationEntities;
     }
 
     @Override
     public List<UserEntity> updateUserEntitiesReservation(List<UserEntity> userEntities) {
         for (UserEntity userEntity : userEntities) {
-            Set<ReservationEntity> updatedReservationEntities = updateReservationDescription(userEntity);
+            Set<ReservationEntity> updatedReservationEntities = updateReservationDescription(((RoomEntity) userEntity).getReservations());
             ((RoomEntity) userEntity).setReservations(updatedReservationEntities);
         }
         return userEntities;
@@ -95,7 +93,7 @@ public class UserServiceImpl implements UserService {
         Optional<UserEntity> loggedPersonOptional = userRepository.findByEmail(tokenParserService.getEmailFromToken());
         return loggedPersonOptional
                 .map(UserEntity::getId)
-                .orElse(-1L);
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
     private UserDto buildUserDto(UserEntity userEntity) {

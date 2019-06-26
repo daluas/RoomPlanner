@@ -17,7 +17,7 @@ public interface UserService {
 
     Optional<UserDto> getUserDto(String email);
 
-    Set<ReservationEntity> updateReservationDescription(UserEntity userEntity);
+    Set<ReservationEntity> updateReservationDescription(Set<ReservationEntity> reservationEntities);
 
     List<UserEntity> updateUserEntitiesReservation(List<UserEntity> userEntities);
 
