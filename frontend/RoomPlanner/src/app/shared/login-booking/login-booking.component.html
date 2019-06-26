@@ -23,7 +23,7 @@
   </div>
 
   <div *ngIf="this.isLogged==true" class="logoutBox">
-    <p class="logoutText">Logout automatically after 60 seconds</p>
+    <p class="logoutText">Logout automatically after {{this.counter}} seconds</p>
     <button mat-raised-button color="primary" class="logoutBtn" (click)="logoutBooking()">Logout</button>
   </div>
 

@@ -33,16 +33,18 @@ export class LoginBookingComponent implements OnInit {
   status: boolean;
   statusMessage: string;
   isLogout: boolean;
+  counter: number;
 
   ngOnInit() {
     this.status = false;
     this.statusMessage = "";
     this.isNewBooking = false;
     this.isLogout = false;
+    this.counter = 60;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.countdownTimer();
+    this.logoutTimer();
   }
 
   getErrorMessage() {
@@ -108,10 +110,29 @@ export class LoginBookingComponent implements OnInit {
   }
 
   countdownTimer() {
+    var countdownInterval = setInterval(() => {
+      if (this.isLogout == false) {
+        this.counter = this.counter - 1;
+        //console.log(this.counter)
+        if (this.counter === 0) {
+          this.counter = 60;
+          clearInterval(countdownInterval);
+        }
+      }
+      else {
+        this.counter = 60;
+        clearInterval(countdownInterval);
+      }
+    }, 1000)
+
+  }
+
+  logoutTimer() {
     let scope = this;
     if (this.isLogout == false) {
 
       if (this.isNewBooking == false) {
+        this.countdownTimer();
         var startTimeout = setTimeout(() => {
           scope.logoutBooking()
         }, 60 * 1000);
@@ -119,6 +140,7 @@ export class LoginBookingComponent implements OnInit {
 
       if (this.isNewBooking == true) {
         clearTimeout(startTimeout);
+        this.countdownTimer();
         var startTimeout = setTimeout(() => {
           scope.logoutBooking()
         }, 60 * 1000);
