@@ -1,5 +1,5 @@
 
-<app-login-booking *ngIf="this.usertype=='ROOM'" [isLogged]="this.isLogged" (logged)="loggedChange($event)" (closeLogin)="closeLoginPopup($event)"></app-login-booking>
+<app-login-booking *ngIf="this.usertype=='ROOM'" [isLogged]="this.isLogged" [isNewBooking]="this.isNewBooking" (logged)="loggedChange($event)" (closeLogin)="closeLoginPopup($event)"></app-login-booking>
 
 <div class="container" *ngIf="this.isLogged==true">
 
@@ -31,6 +31,7 @@
 
   <!-- {{booking.startDate}} -->
   <!-- <h2>Hour: {{booking.startDate}}</h2> -->
+
   <app-hour-input-booking [booking]="booking" (hourEmitter)="onHourEmit($event)"></app-hour-input-booking>
 
   <div class="invalidHoursContainer" *ngIf="invalidHours==true">

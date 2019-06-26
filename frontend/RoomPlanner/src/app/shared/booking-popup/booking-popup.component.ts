@@ -35,9 +35,11 @@ export class BookingPopupComponent implements OnInit {
   usertype: string;
 
   isLogged: boolean;
+  isNewBooking: boolean;
 
   ngOnInit() {
     this.status = false;
+    this.isNewBooking = false;
 
     let item = JSON.parse(localStorage.getItem("user-data"));
 
@@ -53,12 +55,15 @@ export class BookingPopupComponent implements OnInit {
     }
   }
 
+  //isNewBooking = true; !!!!!
+  
   createBookingTest() {
     this.bookingService.createNewBooking(this.booking).then((booked) => {
 
       if (booked) {
         // succes, rezervarea a avut loc
         this.booked.emit(this.booking);
+        this.isNewBooking = true;
       } else {
         // eroare, inseamna ca nu s-a putut face rezervarea
         //document.getElementById('testButton').innerHTML = "Update";

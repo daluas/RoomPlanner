@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { BookingService } from '../../core/services/booking/booking.service';
 import { AuthService } from '../../core/services/auth/auth.service';
@@ -14,10 +14,12 @@ import { BookingPopupComponent } from '../booking-popup/booking-popup.component'
 
 export class LoginBookingComponent implements OnInit {
 
-  @Input() isLogged:boolean;
+  @Input() isLogged: boolean;
+  @Input() isNewBooking: boolean;
+
   @Output() logged: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() closeLogin: EventEmitter<boolean> = new EventEmitter();
-  
+  @Output() closeLogin: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   loginBookingForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]]
@@ -30,10 +32,17 @@ export class LoginBookingComponent implements OnInit {
 
   status: boolean;
   statusMessage: string;
-  
+  isLogout: boolean;
+
   ngOnInit() {
     this.status = false;
     this.statusMessage = "";
+    this.isNewBooking = false;
+    this.isLogout = false;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.countdownTimer();
   }
 
   getErrorMessage() {
@@ -41,11 +50,10 @@ export class LoginBookingComponent implements OnInit {
       this.loginBookingForm.controls.email.hasError('email') ? 'Not a valid email' :
         '';
   }
-  
+
   loginBookingSuccessfully() {
     this.status = true;
     this.logged.emit(true);
-    this.countdownTimer();
   }
 
   loginBookingFailed() {
@@ -65,7 +73,7 @@ export class LoginBookingComponent implements OnInit {
     this.authService.authenticateUser(user)
       .then((user: LoggedUser) => {
         console.log("got user: ", user);
-         this.authService.OnCurrentUserChanged(user)
+        this.authService.OnCurrentUserChanged(user)
 
         switch (user.type) {
 
@@ -93,24 +101,31 @@ export class LoginBookingComponent implements OnInit {
   }
 
   logoutBooking() {
+    console.log("logout");
+    this.isLogout = true;
     this.logged.emit(false);
     this.loginBookingForm.reset();
   }
 
-  logoutAutomatticaly() {
-    console.log("logout")
-    if(this.isLogged == true) {
-      this.logged.emit(false); 
-      this.loginBookingForm.reset();
-    }  
-  }
-
   countdownTimer() {
     let scope = this;
-    setTimeout(() => {
-      scope.logoutAutomatticaly()
-    }, 60*1000);    
-  }  
+    if (this.isLogout == false) {
+
+      if (this.isNewBooking == false) {
+        var startTimeout = setTimeout(() => {
+          scope.logoutBooking()
+        }, 60 * 1000);
+      }
+
+      if (this.isNewBooking == true) {
+        clearTimeout(startTimeout);
+        var startTimeout = setTimeout(() => {
+          scope.logoutBooking()
+        }, 60 * 1000);
+      }
+
+    }
+  }
 
   cancelLogin() {
     this.closeLogin.emit(true);
