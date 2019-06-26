@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Component
 public class UserRightsValidatorImpl implements UserRightsValidator {
+    
     private TokenParserService tokenParserService;
     private UserRepository userRepository;
 
@@ -24,9 +25,9 @@ public class UserRightsValidatorImpl implements UserRightsValidator {
     @Override
     public boolean checkIfUserIsRoom() {
         String email = tokenParserService.getEmailFromToken();
-        Optional<UserEntity> roomEntity = userRepository.findByEmail(email);
-        if (roomEntity.isPresent()) {
-            return (roomEntity.get().getType() == UserType.ROOM);
+        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
+        if (userEntity.isPresent()) {
+            return (userEntity.get().getType() == UserType.ROOM);
         }
         return false;
     }
@@ -34,9 +35,9 @@ public class UserRightsValidatorImpl implements UserRightsValidator {
     @Override
     public boolean checkIfLoggedRoomIsRequestedRoom(Long id) {
         String email = tokenParserService.getEmailFromToken();
-        Optional<UserEntity> roomEntity = userRepository.findByEmail(email);
-        if (roomEntity.isPresent()) {
-            return (roomEntity.get().getId().equals(id));
+        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
+        if (userEntity.isPresent()) {
+            return (userEntity.get().getId().equals(id));
         }
         return false;
     }

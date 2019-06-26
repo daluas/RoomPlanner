@@ -52,7 +52,7 @@ public class UserRestController {
         RoomDto roomDto = userService.getRoomById(id);
         LOGGER.info("The following object was returned: " + roomDto);
         if(userRightsValidator.checkIfUserIsRoom() && !userRightsValidator.checkIfLoggedRoomIsRequestedRoom(id)){
-            return new ResponseEntity<>(new RoomDto(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new RoomDto(), HttpStatus.UNAUTHORIZED);
         }
         if (roomDto == null) {
             return new ResponseEntity<>(new RoomDto(), HttpStatus.NOT_FOUND);
