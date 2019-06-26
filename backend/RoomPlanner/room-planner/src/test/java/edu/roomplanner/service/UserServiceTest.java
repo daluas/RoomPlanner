@@ -1,6 +1,7 @@
 package edu.roomplanner.service;
 
 import edu.roomplanner.dto.RoomDto;
+import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.RoomDtoMapper;
@@ -19,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -79,5 +81,80 @@ public class UserServiceTest {
         RoomDto actualRoomDto = sut.getRoomById(1L);
 
         Assert.assertEquals(expectedRoomDto, actualRoomDto);
+    }
+
+    @Test
+    public void shouldReturnRoomListWithReservationsInTimePeriodWhenGetRoomByFiltersIsCalledWithPastDates(){
+
+        UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
+                UserType.ROOM, "Wonderland", 5, 14);
+        List<UserEntity> userEntityList = Arrays.asList(userEntityRoom);
+
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
+        List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDto);
+
+         Calendar startDate = Calendar.getInstance();
+        startDate.set(2019,Calendar.JUNE,22,10,0,0);
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(2019,Calendar.JUNE,22,11,30,0);
+
+        when(userRepository.viewByFields(startDate,endDate)).thenReturn(userEntityList);
+        when(roomDtoMapper.mapEntityListToDtoList(userEntityList)).thenReturn(expectedRoomDtoList);
+
+        List<RoomDto> actualRoomDtoList = sut.getRoomsByFilters(startDate,endDate,null,null);
+
+        Assert.assertEquals(expectedRoomDtoList, actualRoomDtoList);
+
+    }
+
+    @Test
+    public void shouldReturnRoomListWithNoReservationsInTimePeriodWhenGetRoomByFiltersIsCalledWithPresentOrFutureDates(){
+
+        UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
+                UserType.ROOM, "Wonderland", 5, 14);
+        List<UserEntity> userEntityList = Arrays.asList(userEntityRoom);
+
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
+        List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDto);
+
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.MINUTE,10);
+        Calendar endDate = Calendar.getInstance();
+        endDate.add(Calendar.MINUTE,10);
+
+        when(userRepository.filterByFields(startDate,endDate,null,null)).thenReturn(userEntityList);
+        when(roomDtoMapper.mapEntityListToDtoList(userEntityList)).thenReturn(expectedRoomDtoList);
+
+        List<RoomDto> actualRoomDtoList = sut.getRoomsByFilters(startDate,endDate,null,null);
+
+        Assert.assertEquals(expectedRoomDtoList, actualRoomDtoList);
+    }
+
+    @Test
+    public void shouldReturnRoomListWithNoDuplicatesWhenGetRoomByFiltersIsCalledWithPresentOrFutureDatesAndRepositoryReturnsDuplicateData(){
+
+        UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
+                UserType.ROOM, "Wonderland", 5, 14);
+        UserEntity userEntityRoomUnique = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "westeros",
+                UserType.ROOM, "Westeros", 8, 20);
+        List<UserEntity> userEntityList = Arrays.asList(userEntityRoom, userEntityRoom, userEntityRoom, userEntityRoomUnique);
+
+        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
+        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros",  Collections.EMPTY_SET, 8, 20, UserType.ROOM);
+        List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDtoOne,roomDtoTwo);
+
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.MINUTE,10);
+        Calendar endDate = Calendar.getInstance();
+        endDate.add(Calendar.MINUTE,10);
+
+        List<UserEntity> filteredUserEntityList = Arrays.asList(userEntityRoom,userEntityRoomUnique);
+
+        when(userRepository.filterByFields(startDate,endDate,null,null)).thenReturn(userEntityList);
+        when(roomDtoMapper.mapEntityListToDtoList(filteredUserEntityList)).thenReturn(expectedRoomDtoList);
+
+        List<RoomDto> actualRoomDtoList = sut.getRoomsByFilters(startDate,endDate,null,null);
+
+        Assert.assertEquals(expectedRoomDtoList, actualRoomDtoList);
     }
 }

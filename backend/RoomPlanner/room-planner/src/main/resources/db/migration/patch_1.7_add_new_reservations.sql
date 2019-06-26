@@ -28,4 +28,5 @@ insert into reservations (start_date, end_date, description, user_id, room_id) v
 insert into reservations (start_date, end_date, description, user_id, room_id) values (TO_TIMESTAMP('2019-06-28 10:30:00','YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2019-06-28 11:30:00','YYYY-MM-DD HH24:MI:SS'), 'Daily', 1, 8);
 insert into reservations (start_date, end_date, description, user_id, room_id) values (TO_TIMESTAMP('2019-06-28 11:30:00','YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2019-06-28 13:30:00','YYYY-MM-DD HH24:MI:SS'), 'Training Agile', 1, 8);
 insert into reservations (start_date, end_date, description, user_id, room_id) values (TO_TIMESTAMP('2019-06-28 14:00:00','YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2019-06-28 16:30:00','YYYY-MM-DD HH24:MI:SS'), 'Demo', 1, 8);
+ insert into reservations (start_date, end_date, description, user_id, room_id) values (TO_TIMESTAMP('2019-06-29 09:00:00','YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2019-06-29 09:30:00','YYYY-MM-DD HH24:MI:SS'), 'Daily', 1, 5);
 

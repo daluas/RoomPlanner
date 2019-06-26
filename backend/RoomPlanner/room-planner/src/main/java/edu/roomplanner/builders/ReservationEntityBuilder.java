@@ -14,7 +14,11 @@ public class ReservationEntityBuilder {
     private UserEntity person;
     private UserEntity room;
 
-    public ReservationEntityBuilder withId(Long id) {
+    public static ReservationEntityBuilder builder() {
+        return new ReservationEntityBuilder();
+    }
+
+    public  ReservationEntityBuilder withId(Long id) {
         this.id = id;
         return this;
     }

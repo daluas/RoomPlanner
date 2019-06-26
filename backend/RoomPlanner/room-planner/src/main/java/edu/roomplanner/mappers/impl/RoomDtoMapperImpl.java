@@ -50,6 +50,8 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
 
     public Set<ReservationDto> mapRoomEntitySetToDtoSet(Set<ReservationEntity> reservationEntitySet){
         Set<ReservationDto> reservationDtoSet = new HashSet<>();
+        if(reservationEntitySet == null)
+            return reservationDtoSet;
         for(ReservationEntity entity : reservationEntitySet){
             reservationDtoSet.add(reservationDtoMapper.mapReservationEntityToDto(entity));
         }

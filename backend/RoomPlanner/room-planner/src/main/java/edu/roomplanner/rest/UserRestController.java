@@ -1,6 +1,5 @@
 package edu.roomplanner.rest;
 
-import edu.roomplanner.dto.FilterDto;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.dto.UserDto;
 import edu.roomplanner.mappers.RoomDtoMapper;
@@ -16,9 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,8 +68,8 @@ public class UserRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "rooms/filters")
-    public ResponseEntity<List<RoomDto>> getRoomsByFilters(@RequestParam @DateTimeFormat(pattern="EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar startDate , @RequestParam @DateTimeFormat(pattern="EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar endDate, @RequestParam(required=false) Integer minPersons, @RequestParam(required=false) Integer floor){
+    public ResponseEntity<List<RoomDto>> getRoomsByFilters(@RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar startDate, @RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar endDate, @RequestParam(required = false) Integer minPersons, @RequestParam(required = false) Integer floor) {
         List<RoomDto> filteredRooms = userService.getRoomsByFilters(startDate, endDate, minPersons, floor);
-        return new ResponseEntity<>(filteredRooms,HttpStatus.FOUND);
+        return new ResponseEntity<>(filteredRooms, HttpStatus.FOUND);
     }
 }

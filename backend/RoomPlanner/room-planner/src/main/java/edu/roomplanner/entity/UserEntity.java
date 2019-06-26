@@ -1,6 +1,7 @@
 package edu.roomplanner.entity;
 
 import edu.roomplanner.types.UserType;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@EqualsAndHashCode
 @DiscriminatorColumn(
         discriminatorType = DiscriminatorType.STRING,
         name = "type",
