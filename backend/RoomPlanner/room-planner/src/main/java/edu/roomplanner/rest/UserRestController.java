@@ -55,7 +55,7 @@ public class UserRestController {
             return new ResponseEntity<>(new RoomDto(), HttpStatus.UNAUTHORIZED);
         }
         if (roomDto == null) {
-            return new ResponseEntity<>(new RoomDto(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(roomDto, HttpStatus.FOUND);
     }

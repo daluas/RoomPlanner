@@ -6,6 +6,8 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.Set;
 
 
 @Entity
@@ -19,4 +21,8 @@ public class PersonEntity extends UserEntity {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @OneToMany(mappedBy = "person")
+    private Set<ReservationEntity> reservations;
+
 }
