@@ -42,13 +42,10 @@ public class AvailabilityValidator implements BookingValidator {
 
     private Boolean areNonAvailableReservationForSameUser(List<ReservationEntity> nonAvailableReservations,
                                                           ReservationEntity currentReservationEntity) {
-        for (ReservationEntity nonAvailableReservation : nonAvailableReservations) {
-            Long nonAvailableReservationPersonId = nonAvailableReservation.getPerson().getId();
-            Long currentReservationPersonId = currentReservationEntity.getPerson().getId();
-            if (!nonAvailableReservationPersonId.equals(currentReservationPersonId)) {
-                return false;
-            }
-        }
-        return true;
+        Long currentReservationPersonId = currentReservationEntity.getPerson().getId();
+        return nonAvailableReservations.stream()
+                .map(ReservationEntity::getPerson)
+                .allMatch((person) -> person.getId().equals(currentReservationPersonId));
     }
+
 }

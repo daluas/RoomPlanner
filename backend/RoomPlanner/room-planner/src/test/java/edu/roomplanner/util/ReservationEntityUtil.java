@@ -12,6 +12,8 @@ public class ReservationEntityUtil {
     public Calendar createDate(int year, int month, int date, int hourOfDay, int minute, int second) {
         Calendar calendarDate = Calendar.getInstance();
         calendarDate.set(year, month, date, hourOfDay, minute, second);
+        calendarDate.set(Calendar.SECOND, 0);
+        calendarDate.set(Calendar.MILLISECOND, 0);
         return calendarDate;
     }
 
