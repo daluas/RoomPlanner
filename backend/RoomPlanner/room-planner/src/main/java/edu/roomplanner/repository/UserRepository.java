@@ -20,10 +20,11 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     List<UserEntity> findByType(UserType type);
 
-   @Query(value="select * from users u LEFT OUTER JOIN reservations r ON r.room_id=u.id where u.type='ROOM' and " +
-           "(((:end_date < r.start_date and :end_date > current_timestamp) or (:start_date > r.end_date)) or r is null) and " +
-            "(u.floor = (CAST (CAST(:floor AS character varying) AS integer)) or :floor is null) and " +
-            "(u.max_persons > (CAST (CAST(:min_persons AS character varying) AS integer)) or :min_persons is null)", nativeQuery = true)
+  @Query(value=" select * from users u where u.type='ROOM' and (u.id not in " +
+          " (select r.room_id from reservations r where " +
+          " ( r.start_date > :start_date and r.start_date < :end_date ))) "+
+          " and (u.floor = (CAST (CAST(:floor AS character varying) AS integer)) or :floor is null) and " +
+          " (u.max_persons >= (CAST (CAST(:min_persons AS character varying) AS integer)) or :min_persons is null);", nativeQuery=true)
     List<UserEntity> filterByFields(@Param("start_date") Calendar startDate, @Param("end_date") Calendar endDate,
                                     @Param("min_persons") Integer minPersons, @Param("floor") Integer floor);
 

@@ -69,10 +69,11 @@ public class UserServiceImpl implements UserService {
         if(startDate.compareTo(currentDate) <0)
             userEntityList =  userRepository.viewByFields(startDate,endDate);
         else
-            userEntityList =  userRepository.filterByFields(startDate,endDate,minPersons,floor);
+            userEntityList = userRepository.filterByFields(startDate, endDate, minPersons, floor);
         userEntityList = userEntityList.stream().distinct().collect(Collectors.toList());
         return roomDtoMapper.mapEntityListToDtoList(userEntityList);
     }
+
 
    private UserDto buildUserDto(UserEntity userEntity) {
         if (userEntity.getType() == UserType.PERSON) {
