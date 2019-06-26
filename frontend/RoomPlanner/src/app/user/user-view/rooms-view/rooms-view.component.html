@@ -5,6 +5,7 @@
           class="bold">{{room.capacity}}</span></span>
     </div>
   </div>
+
   <div id="room-panel">
     <div class="auto-scroll-fix"></div>
 
@@ -17,21 +18,24 @@
       <div class="past-time" [style]="styleForPastTime"></div>
 
       <div *ngFor="let group of groupedBookings[roomIndex]; let groupIndex = index">
-        <div class="booking booking-group" [style]="getStyleForGroup(group)"
+        <div class="booking group" [style]="getStyleForGroup(group)"
           [ngClass]="{'booking-half-left': personalBookingsDisplayedHalf && roomIndex === newBookingRoomIndex}">
           <div class="booking-hover-frame" *ngIf="group.bookings.length > 1 && group.personal">
+            <div class="booking-hover-reset" (mouseover)="group.focus = null">
+                <i class="material-icons group-refresh"> remove </i>
+            </div>
             <div class="booking-hover-element" *ngFor="let booking of group.bookings; let hoverIndex = index"
               [ngClass]="{'booking-hover-element-active' : hoverIndex === group.focus}"
-              (mouseover)="group.focus = hoverIndex">{{hoverIndex}}</div>
+              (mouseover)="group.focus = hoverIndex">{{hoverIndex + 1}}</div>
           </div>
         </div>
 
         <div *ngFor="let booking of group.bookings; let bookingIndex = index;">
-          <div class="booking booking-personal" *ngIf="bookingIndex === group.focus && group.personal"
-            (click)="openBooking(roomIndex, groupIndex, bookingIndex)" [style]="getStyleForBooking(booking)"
-            [ngClass]="{'booking-half-left': personalBookingsDisplayedHalf && roomIndex === newBookingRoomIndex}">
+          <div class="booking booking-personal" *ngIf="group.personal"
+            (click)="openBooking(bookingIndex === group.focus, roomIndex, groupIndex, bookingIndex)" [style]="getStyleForBooking(booking)"
+            [ngClass]="{'booking-half-left': personalBookingsDisplayedHalf && roomIndex === newBookingRoomIndex, 'booking-personal-active': bookingIndex === group.focus}">
             <div class="booking-owner">{{getUsernameFromEmail(booking.ownerEmail)}}</div>
-            <div>{{booking.description.length > 33 ? booking.description.substr(0, 33) + "..." : booking.description}}
+            <div class="booking-description">{{booking.description}}
             </div>
           </div>
 

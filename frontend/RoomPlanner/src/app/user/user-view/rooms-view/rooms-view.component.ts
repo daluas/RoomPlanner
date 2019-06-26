@@ -93,6 +93,7 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
             for (let j = i + 1; j < group.length; j++) {
               if (this.bookingsOverlap(group[i].bookings[x], group[j].bookings[0])) {
                 group[i].bookings.push(group[j].bookings[0]);
+                group[i].focus = null;
 
                 if (group[i].startDate.getTime() > group[j].bookings[0].startDate.getTime()) {
                   group[i].startDate = group[j].bookings[0].startDate;
@@ -112,8 +113,6 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
         this.groupedBookings.push(group);
 
       });
-
-      console.log(this.groupedBookings);
     }
   }
 
@@ -125,10 +124,12 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
     }));
   }
 
-  openBooking(roomIndex, groupIndex, bookingIndex) {
-    let booking = new Booking().create(this.groupedBookings[roomIndex][groupIndex].bookings[bookingIndex]);
-    booking.roomId = this.rooms[roomIndex].id;
-    this.createBooking.emit(booking);
+  openBooking(canOpen, roomIndex, groupIndex, bookingIndex) {
+    if (canOpen) {
+      let booking = new Booking().create(this.groupedBookings[roomIndex][groupIndex].bookings[bookingIndex]);
+      booking.roomId = this.rooms[roomIndex].id;
+      this.createBooking.emit(booking);
+    }
   }
 
   scrollCalendarToEightOClock() {
@@ -213,7 +214,6 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
     if (intervalIndex < 48 && (forDate > today || forDate === today && intervalIndex >= nowIntervals)) {
       this.newBookingRoomIndex = roomIndex;
       this.personalBookingsDisplayedHalf = this.shouldBeDisplayedHalf();
-      console.log(this.personalBookingsDisplayedHalf);
 
       let newDate = new Date(this.forDate.getTime());
 
@@ -415,7 +415,7 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
         bookingStartTime = booking.startDate.getTime();
         bookingEndTime = booking.endDate.getTime();
 
-        if(this.isBookingCreatedByCurrentUser(booking)){
+        if (this.isBookingCreatedByCurrentUser(booking)) {
           return;
         }
 
@@ -458,6 +458,10 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   bookingsOverlap(booking1: Booking, booking2: Booking) {
+    if (booking1.startDate.getTime() === booking2.startDate.getTime()) {
+      return true;
+    }
+
     if (this.isValueInOpenInterval(booking1.startDate, booking2.startDate, booking2.endDate)) {
       return true;
     }
