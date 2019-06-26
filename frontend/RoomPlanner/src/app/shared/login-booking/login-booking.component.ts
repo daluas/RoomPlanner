@@ -29,9 +29,11 @@ export class LoginBookingComponent implements OnInit {
   }
 
   status: boolean;
+  statusMessage: string;
   
   ngOnInit() {
     this.status = false;
+    this.statusMessage = "";
   }
 
   getErrorMessage() {
@@ -48,6 +50,7 @@ export class LoginBookingComponent implements OnInit {
 
   loginBookingFailed() {
     this.status = false;
+    this.statusMessage = "Invalid credentials";
     this.logged.emit(false);
     this.loginBookingForm.reset();
     this.loginBookingForm.markAllAsTouched();
