@@ -9,29 +9,50 @@
     <div class="auto-scroll-fix"></div>
 
     <div class="panel-element element-width" *ngFor="let room of rooms; let roomIndex = index">
-      <div class="interval-container" *ngFor="let interval of intervals; let intervalIndex = index" (click)="newBooking(roomIndex, intervalIndex)">
+      <div class="interval-container" *ngFor="let interval of intervals; let intervalIndex = index"
+        (click)="newBooking(roomIndex, intervalIndex)">
         <div class="interval-text">{{interval}}</div>
       </div>
 
       <div class="past-time" [style]="styleForPastTime"></div>
 
-      <div class="booking" [style]="getStyleForBooking(booking)" 
-        *ngFor="let booking of room.bookings; let bookingIndex = index"
-        [ngClass]="getBookingColorClass(booking)"
-        (click)="openBooking(roomIndex, bookingIndex)">
-        <div class="booking-owner">{{getUsernameFromEmail(booking.ownerEmail)}}</div>
-        <div *ngIf="isBookingCreatedByCurrentUser(booking)">
-          {{booking.description.length > 33 ? booking.description.substr(0, 33) + "..." : booking.description}}</div>
+      <div *ngFor="let group of groupedBookings[roomIndex]; let groupIndex = index">
+        <div class="booking booking-group" [style]="getStyleForGroup(group)"
+          [ngClass]="{'booking-half-left': personalBookingsDisplayedHalf && roomIndex === newBookingRoomIndex}">
+          <div class="booking-hover-frame" *ngIf="group.bookings.length > 1 && group.personal">
+            <div class="booking-hover-element" *ngFor="let booking of group.bookings; let hoverIndex = index"
+              [ngClass]="{'booking-hover-element-active' : hoverIndex === group.focus}"
+              (mouseover)="group.focus = hoverIndex">{{hoverIndex}}</div>
+          </div>
+        </div>
+
+        <div *ngFor="let booking of group.bookings; let bookingIndex = index;">
+          <div class="booking booking-personal" *ngIf="bookingIndex === group.focus && group.personal"
+            (click)="openBooking(roomIndex, groupIndex, bookingIndex)" [style]="getStyleForBooking(booking)"
+            [ngClass]="{'booking-half-left': personalBookingsDisplayedHalf && roomIndex === newBookingRoomIndex}">
+            <div class="booking-owner">{{getUsernameFromEmail(booking.ownerEmail)}}</div>
+            <div>{{booking.description.length > 33 ? booking.description.substr(0, 33) + "..." : booking.description}}
+            </div>
+          </div>
+
+          <div class="booking booking-other" *ngIf="!group.personal && bookingIndex === 0"
+            [style]="getStyleForGroup(group)">
+            <div class="booking-owner">{{getUsernameFromEmail(booking.ownerEmail)}}</div>
+          </div>
+        </div>
       </div>
 
-      <div class="booking booking-new" [style]="newBookingStyle" *ngIf="roomIndex === newBookingRoomIndex"></div>
-      <div class="booking" [style]="newBookingArrowsStyle" *ngIf="roomIndex === newBookingRoomIndex">
+      <div class="booking booking-new" [style]="newBookingStyle"
+        [ngClass]="{'booking-half-right': personalBookingsDisplayedHalf}" *ngIf="roomIndex === newBookingRoomIndex">
+      </div>
+      <div class="booking" [style]="newBookingArrowsStyle" *ngIf="roomIndex === newBookingRoomIndex"
+        [ngClass]="{'booking-half-right': personalBookingsDisplayedHalf}">
         <div class="booking-top-arrow" (mousedown)="followMouse('up')">
-            <i class="material-icons arrow-icon"> arrow_drop_up </i>
+          <i class="material-icons arrow-icon"> arrow_drop_up </i>
         </div>
         <div class="booking-both" (mousedown)="followMouse('both')"></div>
         <div class="booking-bottom-arrow" (mousedown)="followMouse('down')">
-            <i class="material-icons arrow-icon"> arrow_drop_down </i>
+          <i class="material-icons arrow-icon"> arrow_drop_down </i>
         </div>
 
         <div class="new-booking-buttons" *ngIf="!arrow">

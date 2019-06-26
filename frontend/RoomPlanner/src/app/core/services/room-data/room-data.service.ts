@@ -96,11 +96,42 @@ export class RoomDataService {
               ownerEmail: "user1@cegeka.ro",
               description: "this is a test description"
             },
+            {
+              id: 2,
+              startDate: new Date(new Date().setHours(9, 0, 0, 0)),
+              endDate: new Date(new Date().setHours(10, 30, 0, 0)),
+              ownerEmail: "user1@cegeka.ro",
+              description: "this is a test description"
+            },
+            {
+              id: 3,
+              startDate: new Date(new Date().setHours(11, 0, 0, 0)),
+              endDate: new Date(new Date().setHours(12, 30, 0, 0)),
+              ownerEmail: "user1@cegeka.ro",
+              description: "this is a test description"
+            },
+            {
+              id: 4,
+              startDate: new Date(new Date().setHours(11, 30, 0, 0)),
+              endDate: new Date(new Date().setHours(13, 30, 0, 0)),
+              ownerEmail: "user1@cegeka.ro",
+              description: "this is a test description"
+            },
             // this is a booking made by another user
             // this one shouldn't have ID or Description
             {             
-              startDate: new Date(new Date().setHours(12, 30, 0, 0)),
+              startDate: new Date(new Date().setHours(14, 30, 0, 0)),
               endDate: new Date(new Date().setHours(15, 0, 0, 0)),
+              ownerEmail: "user10@geceka.ro"            
+            },
+            {             
+              startDate: new Date(new Date().setHours(14, 30, 0, 0)),
+              endDate: new Date(new Date().setHours(16, 0, 0, 0)),
+              ownerEmail: "user10@geceka.ro"            
+            },
+            {             
+              startDate: new Date(new Date().setHours(16, 0, 0, 0)),
+              endDate: new Date(new Date().setHours(17, 0, 0, 0)),
               ownerEmail: "user10@geceka.ro"            
             }
           ]

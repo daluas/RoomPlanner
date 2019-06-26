@@ -26,10 +26,13 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
   newBookingEndDate: Date;
   newBookingStyle: SafeStyle;
   newBookingRoomIndex: number;
+  personalBookingsDisplayedHalf: boolean;
 
   newBookingArrowsStartDate: Date;
   newBookingArrowsEndDate: Date;
   newBookingArrowsStyle: SafeStyle;
+
+  groupedBookings: any[][];
 
   constructor(private sanitizer: DomSanitizer, private authService: AuthService) { }
 
@@ -40,6 +43,8 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
 
     this.setStyleForPastTime();
     setInterval(() => { this.setStyleForPastTime(); }, 60 * 1000);
+
+    this.groupeBookings();
   }
 
   ngAfterViewInit() {
@@ -50,6 +55,8 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
     this.setStyleForPastTime();
 
     this.resetNewBooking();
+
+    this.groupeBookings();
   }
 
   setCalendarIntervals() {
@@ -64,6 +71,52 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
     this.intervals.push("00.00");
   }
 
+  groupeBookings() {
+    if (this.rooms) {
+      this.groupedBookings = [];
+
+      this.rooms.forEach(room => {
+
+        let group = []
+        room.bookings.forEach(booking => {
+          group.push({
+            startDate: booking.startDate,
+            endDate: booking.endDate,
+            personal: this.isBookingCreatedByCurrentUser(booking),
+            focus: 0,
+            bookings: [booking]
+          });
+        });
+
+        for (let i = 0; i < group.length - 1; i++) {
+          for (let x = 0; x < group[i].bookings.length; x++) {
+            for (let j = i + 1; j < group.length; j++) {
+              if (this.bookingsOverlap(group[i].bookings[x], group[j].bookings[0])) {
+                group[i].bookings.push(group[j].bookings[0]);
+
+                if (group[i].startDate.getTime() > group[j].bookings[0].startDate.getTime()) {
+                  group[i].startDate = group[j].bookings[0].startDate;
+                }
+
+                if (group[i].endDate.getTime() < group[j].bookings[0].endDate.getTime()) {
+                  group[i].endDate = group[j].bookings[0].endDate;
+                }
+
+                group.splice(j, 1);
+                j--;
+              }
+            }
+          }
+        }
+
+        this.groupedBookings.push(group);
+
+      });
+
+      console.log(this.groupedBookings);
+    }
+  }
+
   bookRoom() {
     this.createBooking.emit(new Booking().create({
       startDate: this.newBookingStartDate,
@@ -72,12 +125,10 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
     }));
   }
 
-  openBooking(roomIndex, bookingIndex) {
-    if (this.rooms[roomIndex].bookings[bookingIndex].id) {
-      let booking = new Booking().create(this.rooms[roomIndex].bookings[bookingIndex]);
-      booking.roomId = this.rooms[roomIndex].id;
-      this.createBooking.emit(booking);
-    }
+  openBooking(roomIndex, groupIndex, bookingIndex) {
+    let booking = new Booking().create(this.groupedBookings[roomIndex][groupIndex].bookings[bookingIndex]);
+    booking.roomId = this.rooms[roomIndex].id;
+    this.createBooking.emit(booking);
   }
 
   scrollCalendarToEightOClock() {
@@ -99,6 +150,25 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
     let style = `top: ${top}px; height: ${height}px`;
 
     return this.sanitizer.bypassSecurityTrustStyle(style);
+  }
+
+  getStyleForGroup(group): SafeStyle {
+    if (group) {
+      let startHour = group.startDate.getHours();
+      let startMinute = group.startDate.getMinutes();
+
+      let endHour = group.endDate.getHours() === 0 ? 24 : group.endDate.getHours();
+      let endMinute = group.endDate.getMinutes();
+
+      let top = startHour * 100 + startMinute / 30 * 50 + 10;
+      let height = (endHour - startHour) * 100 + (endMinute - startMinute) / 30 * 50;
+
+      let style = `top: ${top}px; height: ${height}px`;
+
+      return this.sanitizer.bypassSecurityTrustStyle(style);
+    }
+
+    return null;
   }
 
   getBookingColorClass(booking: any) {
@@ -142,6 +212,8 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
 
     if (intervalIndex < 48 && (forDate > today || forDate === today && intervalIndex >= nowIntervals)) {
       this.newBookingRoomIndex = roomIndex;
+      this.personalBookingsDisplayedHalf = this.shouldBeDisplayedHalf();
+      console.log(this.personalBookingsDisplayedHalf);
 
       let newDate = new Date(this.forDate.getTime());
 
@@ -159,6 +231,18 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
         endDate: this.newBookingArrowsEndDate
       });
     }
+  }
+
+  shouldBeDisplayedHalf() {
+    let status = false;
+    this.rooms[this.newBookingRoomIndex].bookings.forEach(booking => {
+      if (this.isBookingCreatedByCurrentUser(booking)) {
+        status = true;
+        return;
+      }
+    });
+
+    return status;
   }
 
   arrow: string;
@@ -331,6 +415,10 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
         bookingStartTime = booking.startDate.getTime();
         bookingEndTime = booking.endDate.getTime();
 
+        if(this.isBookingCreatedByCurrentUser(booking)){
+          return;
+        }
+
         if (this.isValueInInterval(arrowsStartTime, bookingStartTime, bookingEndTime) &&
           this.isValueInInterval(arrowsEndTime, bookingStartTime, bookingEndTime)) {
           bookingCanBePerformed = false;
@@ -369,6 +457,34 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+  bookingsOverlap(booking1: Booking, booking2: Booking) {
+    if (this.isValueInOpenInterval(booking1.startDate, booking2.startDate, booking2.endDate)) {
+      return true;
+    }
+
+    if (this.isValueInOpenInterval(booking1.endDate, booking2.startDate, booking2.endDate)) {
+      return true;
+    }
+
+    if (this.isValueInOpenInterval(booking2.startDate, booking1.startDate, booking1.endDate)) {
+      return true;
+    }
+
+    if (this.isValueInOpenInterval(booking2.endDate, booking1.startDate, booking1.endDate)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  isValueInOpenInterval(value, start, end) {
+    if (value > start && value < end) {
+      return true;
+    }
+
+    return false;
+  }
+
   isValueInInterval(value, start, end) {
     if (value >= start && value <= end) {
       return true;
@@ -386,5 +502,7 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
     this.newBookingArrowsStartDate = null;
     this.newBookingArrowsEndDate = null;
     this.newBookingArrowsStyle = null;
+
+    this.personalBookingsDisplayedHalf = false;
   }
 }
