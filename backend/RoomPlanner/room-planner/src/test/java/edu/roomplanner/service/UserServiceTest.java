@@ -22,6 +22,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
@@ -116,9 +118,52 @@ public class UserServiceTest {
         Assert.assertEquals(expectedRoomDto, actualRoomDto);
     }
 
+    @Test
+    public void shouldReturnSameUserEntitiesWithFilteredReservations() {
+        RoomEntity roomEntityOne = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
+                new HashSet<>(),BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland",14);
+        Set<ReservationEntity> reservationEntitySet = buildReservationEntitySet(roomEntityOne);
+        roomEntityOne.setReservations(reservationEntitySet);
+        UserEntity roomEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "4westAD8%",
+                reservationEntitySet, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Westeros",20);
+
+        List<UserEntity> roomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
+
+        PersonEntity personEntity = (PersonEntity) BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "sghitun",
+                new HashSet<>(), UserType.PERSON, "Ghitun", "Stefania");
+
+        List<UserEntity> expected = buildUserEntitiesWithFilteredReservations(roomEntityList);
+
+        when(tokenParserService.getEmailFromToken()).thenReturn("sghitun@yahoo.com");
+        when(userRepository.findByEmail("sghitun@yahoo.com")).thenReturn(Optional.of(personEntity));
+
+        List<UserEntity> actual = sut.updateUserEntitiesReservation(roomEntityList);
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    private List<UserEntity> buildUserEntitiesWithFilteredReservations(List<UserEntity> userEntities) {
+        List<UserEntity> result = new ArrayList<>(userEntities);
+        for(UserEntity userEntity: result) {
+            Set<ReservationEntity> reservationEntities = setFilterReservationDescription(((RoomEntity)userEntity).getReservations());
+            ((RoomEntity) userEntity).setReservations(reservationEntities);
+        }
+        return result;
+    }
+
+    private Set<ReservationEntity> setFilterReservationDescription(Set<ReservationEntity> reservationEntitySet) {
+        Set<ReservationEntity> result = new HashSet<>(reservationEntitySet);
+        for(ReservationEntity reservationEntity: result) {
+            if (reservationEntity.getPerson().getId().equals(SECOND_PERSON_ID)) {
+                reservationEntity.setDescription(null);
+            }
+        }
+        return result;
+    }
+
     private Set<ReservationEntity> buildReservationEntitySet(UserEntity roomEntity) {
         PersonEntity personEntity = (PersonEntity) BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "sghitun",
-                null, UserType.PERSON, "Ghitun", "Stefania");
+                new HashSet<>(), UserType.PERSON, "Ghitun", "Stefania");
         ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, new GregorianCalendar(), new GregorianCalendar(),
                 "reservation1", personEntity, roomEntity);
         Set<ReservationEntity> reservationEntitySet = new HashSet<>();
