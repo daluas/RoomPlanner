@@ -60,7 +60,7 @@ export class FiltersComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     let firstFloor:FloorModel;
-    let copyArray:FloorModel[];
+   
     
     if (changes['buildingLayout']) {
       if (this.buildingLayout !== undefined) {
@@ -70,11 +70,9 @@ export class FiltersComponent implements OnInit, OnChanges {
             rooms: element.rooms
           }));
         });
-        copyArray = [...this.floors];
-        copyArray.reverse();
-        firstFloor = copyArray.pop();
+        
+        firstFloor = this.floors[0];
         this.floorByDefault = new FloorModel().create(firstFloor);
-        console.log(this.floorByDefault.floor);
       }
     }
   }

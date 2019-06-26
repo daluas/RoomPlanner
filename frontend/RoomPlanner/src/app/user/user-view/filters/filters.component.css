@@ -95,7 +95,9 @@
 }
  */
 
-
+.byDefaultFloor{
+    display: none;
+}
 
 .invalidHoursContainer{
     color: red;

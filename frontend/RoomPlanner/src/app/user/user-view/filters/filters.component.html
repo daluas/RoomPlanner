@@ -44,8 +44,9 @@
         <mat-form-field class="floorSelectContainer">
           <mat-label>Select an option:</mat-label>
 
-          <mat-select [value]="floorByDefault.floor" (selectionChange)="onFloorChange($event)" >
-            <mat-option *ngFor="let floor of floors" [value]="floor">{{floor.floor}}
+          <mat-select [value]="floorByDefault" (selectionChange)="onFloorChange($event)" >
+            <mat-option class="byDefaultFloor" [value]="floorByDefault">{{floorByDefault.floor}}</mat-option>
+            <mat-option *ngFor="let floor of floors"  [value]="floor">{{floor.floor}}
             </mat-option>
 
           </mat-select>
