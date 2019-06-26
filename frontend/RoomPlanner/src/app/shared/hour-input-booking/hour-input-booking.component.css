@@ -39,7 +39,10 @@ input{
     margin-bottom: 5px;
     width: 100%;
 }
-
+.successText{
+    color:green;
+    font-size: 9px;
+}
 .hour {
     display: inline-block;
     position: relative;

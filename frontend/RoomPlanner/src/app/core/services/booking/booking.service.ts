@@ -8,11 +8,11 @@ import { Booking } from '../../models/BookingModel';
   providedIn: 'root'
 })
 export class BookingService {
-  private backendUrl: string ='http://178.22.68.114/RoomPlanner';
+  private backendUrl: string = 'http://178.22.68.114/RoomPlanner';
 
   constructor(private httpClient: HttpClient) { }
 
-  createNewBooking(booking: Booking): Promise<Object> {
+  createNewBooking(booking: Booking): Promise<string> {
     console.log("createNewBooking(booking: Booking) was called!");
     let roomID: number = booking.roomId;
 
@@ -23,17 +23,47 @@ export class BookingService {
       description: booking.description,
     }
 
-    return this.httpClient.post(`${this.backendUrl}/api/reservations/${roomID}`, params).toPromise();
+    // return this.httpClient.post(`${this.backendUrl}/api/reservations/${roomID}`, params).toPromise();
+
+    return new Promise((res) => {
+      // caz de succes
+
+      res(`{
+        "id": 65,
+        "roomId": 2,
+        "email": "sghitun@yahoo.com",
+        "startDate": "2019-06-24T13:02:41.116+0000",
+        "endDate": "2019-06-24T13:02:41.116+0000",
+        "description": "ok"
+        }`);
+
+      // caz de eroare
+
+      //res(`{}`);
+
+    });
   }
 
-  prevalidation(booking: Booking): Promise<Object> {
+  prevalidation(booking: Booking): Promise<string> {
     console.log("prevalidation(booking: Booking) was called!");
     let roomID: number = booking.roomId;
-    let startDate= booking.startDate.toUTCString();
-    let endDate= booking.endDate.toUTCString();
-    let email= booking.personalEmail;
-    
-    return this.httpClient.get(`${this.backendUrl}/api/prevalidation?roomId=${roomID}&startDate=${startDate}&endDate=${startDate}&email=${email}`).toPromise();
+    let startDate = booking.startDate.toUTCString();
+    let endDate = booking.endDate.toUTCString();
+    let email = booking.personalEmail;
+
+    // return this.httpClient.get(`${this.backendUrl}/api/prevalidation?roomId=${roomID}&startDate=${startDate}&endDate=${startDate}&email=${email}`).toPromise();
+
+    return new Promise((res) => {
+      // caz de succes
+      res("You can book");
+
+      // caz de eroare
+      //res("Invalid parameters");
+
+      // caz de eroare
+      //res("The date is not available");
+
+    });
   }
 }
 
