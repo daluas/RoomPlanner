@@ -95,14 +95,18 @@ export class LoginBookingComponent implements OnInit {
   }
 
   logoutAutomatticaly() {
+    console.log("logout")
     if(this.isLogged == true) {
       this.logged.emit(false); 
-      location.reload();   
+      this.loginBookingForm.reset();
     }  
   }
 
   countdownTimer() {
-    setTimeout(this.logoutAutomatticaly, 5*1000);    
+    let scope = this;
+    setTimeout(() => {
+      scope.logoutAutomatticaly()
+    }, 60*1000);    
   }  
 
   cancelLogin() {

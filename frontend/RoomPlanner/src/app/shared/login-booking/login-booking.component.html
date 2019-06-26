@@ -16,9 +16,9 @@
       </form>
     </div>
   
-    <div *ngIf="this.isLogged==true">
-      Logout automatically after 60 seconds
-      <button mat-raised-button color="primary" (click)="logoutBooking()">Logout</button>
+    <div *ngIf="this.isLogged==true" class="logoutBox">
+      <p class="logoutText">Logout automatically after 60 seconds</p>
+      <button mat-raised-button color="primary" class="logoutBtn" (click)="logoutBooking()">Logout</button>
     </div>
   
   </div>
