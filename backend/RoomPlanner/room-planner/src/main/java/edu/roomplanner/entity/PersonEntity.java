@@ -23,4 +23,5 @@ public class PersonEntity extends UserEntity {
 
     @OneToMany(mappedBy = "person", cascade= javax.persistence.CascadeType.ALL)
     private Set<ReservationEntity> reservations;
+
 }

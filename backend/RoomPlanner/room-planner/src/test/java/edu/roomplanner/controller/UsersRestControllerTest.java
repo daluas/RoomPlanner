@@ -10,6 +10,7 @@ import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.FloorRepository;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
+import edu.roomplanner.service.TokenParserService;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
 import edu.roomplanner.util.OAuthHelper;
@@ -17,6 +18,7 @@ import org.flywaydb.core.Flyway;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -37,6 +39,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.*;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -71,6 +77,9 @@ public class UsersRestControllerTest {
     @Autowired
     private OAuthHelper oAuthHelper;
 
+    @Mock
+    private TokenParserService tokenParserService;
+
     private RequestPostProcessor bearerToken;
 
     @Before
@@ -84,7 +93,7 @@ public class UsersRestControllerTest {
         entityManager.createNativeQuery("ALTER SEQUENCE seq_user_id RESTART WITH 1").executeUpdate();
         entityManager.createNativeQuery("ALTER SEQUENCE seq_reservation_id RESTART WITH 1").executeUpdate();
 
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntiy(1L,"sghitun@yahoo.com","sghitun",UserType.PERSON,"Stefania","Ghitun");
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun", null, UserType.PERSON,"Stefania","Ghitun");
         userRepository.save(userEntityPerson);
 
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
@@ -94,19 +103,22 @@ public class UsersRestControllerTest {
     public void shouldReturnResponseEntityWithValidRoomDtoListAndStatusFoundWhenGetAllRoomsIsCalled() throws Exception {
 
         UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", BuildersWrapper.buildFloorEntity(1L, 5), 14);
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "westeros",
-                UserType.ROOM, "Westeros", BuildersWrapper.buildFloorEntity(2L, 8), 20);
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros",20);
         UserEntity userEntityThree = BuildersWrapper.buildRoomEntity(4L, "neverland@yahoo.com", "neverland",
-                UserType.ROOM, "Neverland", BuildersWrapper.buildFloorEntity(3L, 4), 5);
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(3L, 4), UserType.ROOM, "Neverland", 5);
 
         userRepository.save(userEntityOne);
         userRepository.save(userEntityTwo);
         userRepository.save(userEntityThree);
 
-        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
-        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros",  Collections.EMPTY_SET, 8, 20, UserType.ROOM);
-        RoomDto roomDtoThree = BuildersWrapper.buildRoomDto(4L, "neverland@yahoo.com", "Neverland", Collections.EMPTY_SET, 4, 5, UserType.ROOM);
+        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
+                new HashSet<>(), 5, 14, UserType.ROOM);
+        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros",
+                new HashSet<>(), 8, 20, UserType.ROOM);
+        RoomDto roomDtoThree = BuildersWrapper.buildRoomDto(4L, "neverland@yahoo.com", "Neverland",
+                new HashSet<>(), 4, 5, UserType.ROOM);
 
         List<RoomDto> roomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo, roomDtoThree);
         String jsonRoomDtoList = new ObjectMapper().writeValueAsString(roomDtoList);
@@ -119,14 +131,14 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoAndStatusFoundWhenGetRoomByIdIsCalled() throws Exception {
 
-        FloorEntity roomEntityFloor = BuildersWrapper.buildFloorEntity(1L,5);
-        floorRepository.save(roomEntityFloor);
         UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", roomEntityFloor, 14);
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
 
         userRepository.save(userEntityOne);
 
-        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
+                new HashSet<>(), 5, 14, UserType.ROOM);
+
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/{id}", 2).with(bearerToken))
@@ -211,9 +223,10 @@ public class UsersRestControllerTest {
     public void shouldReturnResponseEntityWithStatusFoundAndValidWhenGetRoomsByFiltersIsCalledWithValidFiltersButNoReservationsMatch() throws Exception {
 
         FloorEntity roomEntityFloor = BuildersWrapper.buildFloorEntity(1L,5);
+        floorRepository.save(roomEntityFloor);
 
-        UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", roomEntityFloor, 14);
+        UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland", new HashSet<>(),
+                roomEntityFloor, UserType.ROOM,"Wonderland", 14);
         userRepository.save(userEntityRoom);
 
 

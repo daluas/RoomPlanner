@@ -8,8 +8,6 @@ import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.mappers.RoomDtoMapper;
-import edu.roomplanner.repository.RoomRepository;
-import edu.roomplanner.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,27 +22,9 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
     @Autowired
     private ReservationDtoMapper reservationDtoMapper;
 
-
-    public RoomDto mapEntityToDto(RoomEntity roomEntity) {
-
-        Set<ReservationEntity> reservationEntitySet = roomEntity.getReservations();
-        Set<ReservationDto> reservationDtoSet = mapRoomEntitySetToDtoSet(reservationEntitySet);
-
-        if (roomEntity.getFloor() == null) {
-            return (RoomDto) UserDtoBuilder.builder()
-                    .withType(roomEntity.getType())
-                    .build();
-        }
-
-        return (RoomDto) UserDtoBuilder.builder()
-                .withId(roomEntity.getId())
-                .withEmail(roomEntity.getEmail())
-                .withType(roomEntity.getType())
-                .withFloor(roomEntity.getFloor().getFloor())
-                .withName(roomEntity.getName())
-                .withMaxPersons(roomEntity.getMaxPersons())
-                .withReservations(reservationDtoSet)
-                .build();
+    @Autowired
+    public RoomDtoMapperImpl(ReservationDtoMapper reservationDtoMapper) {
+        this.reservationDtoMapper = reservationDtoMapper;
     }
 
     public List<RoomDto> mapEntityListToDtoList(List<UserEntity> roomEntityList) {
@@ -64,4 +44,35 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
         }
         return reservationDtoSet;
     }
+
+
+   /* public RoomDto mapEntityToDto(RoomEntity roomEntity) {
+
+        Set<ReservationEntity> reservationEntitySet = roomEntity.getReservations();
+        Set<ReservationDto> reservationDtoSet = mapRoomEntitySetToDtoSet(reservationEntitySet);
+
+        if (roomEntity.getFloor() == null) {
+            return (RoomDto) UserDtoBuilder.builder()
+                    .withType(roomEntity.getType())
+                    .build();
+        }
+*/
+
+
+    public RoomDto mapEntityToDto(RoomEntity roomEntity) {
+
+        Set<ReservationEntity> reservationEntitySet = roomEntity.getReservations();
+        Set<ReservationDto> reservationDtoSet = mapRoomEntitySetToDtoSet(reservationEntitySet);
+        return (RoomDto) UserDtoBuilder.builder()
+                .withId(roomEntity.getId())
+                .withEmail(roomEntity.getEmail())
+                .withType(roomEntity.getType())
+                .withFloor(roomEntity.getFloor().getFloor())
+                .withName(roomEntity.getName())
+                .withMaxPersons(roomEntity.getMaxPersons())
+                .withReservations(reservationDtoSet)
+                .build();
+    }
+
+
 }

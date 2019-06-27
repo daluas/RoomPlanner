@@ -18,7 +18,7 @@ public class ReservationEntityBuilder {
         return new ReservationEntityBuilder();
     }
 
-    public  ReservationEntityBuilder withId(Long id) {
+    public ReservationEntityBuilder withId(Long id) {
         this.id = id;
         return this;
     }
