@@ -126,7 +126,7 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithStatusNotFoundWhenGetRoomByIdIsCalledWithPersonID() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 1).with(bearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/{id}", 1).with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
@@ -136,7 +136,7 @@ public class UsersRestControllerTest {
                 new HashSet<>(), 5, 14, UserType.ROOM);
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms", 1).with(roomBearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms", 1).with(roomBearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDto));
     }
@@ -147,15 +147,15 @@ public class UsersRestControllerTest {
                 new HashSet<>(), 5, 14, UserType.ROOM);
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/2", 1).with(roomBearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/2", 1).with(roomBearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDto));
     }
 
     @Test
-    public void shouldReturnResponseEntityWithStatusUnauthorizedWhenGetRoomByIdIsCalledWith() throws Exception {
+    public void shouldReturnResponseEntityWithStatusUnauthorizedWhenGetRoomByIdIsCalledWithOtherIdThenLoggedRoomId() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 1).with(bearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/{id}", 1).with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }
