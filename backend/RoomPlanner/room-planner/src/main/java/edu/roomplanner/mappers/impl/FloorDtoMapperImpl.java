@@ -63,7 +63,7 @@ public class FloorDtoMapperImpl implements FloorDtoMapper {
 
     private Set<RoomDto> mapRoomEntityListToRoomDtoListWithReservations(Set<RoomEntity> rooms) {
         return Optional.ofNullable(rooms)
-                .map(this::processRoomDtoStreamWithoutReservations)
+                .map(this::processRoomDtoStreamWithReservations)
                 .orElse(null);
     }
 
