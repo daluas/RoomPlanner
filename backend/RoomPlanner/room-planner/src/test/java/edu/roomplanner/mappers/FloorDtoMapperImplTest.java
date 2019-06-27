@@ -5,17 +5,23 @@ import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.mappers.impl.FloorDtoMapperImpl;
 import edu.roomplanner.util.BuildersWrapper;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-
+@RunWith(SpringRunner.class)
 public class FloorDtoMapperImplTest {
 
-    @Autowired
+    @Mock
+    private RoomDtoMapper roomDtoMapper;
+
+    @InjectMocks
     private FloorDtoMapperImpl sut;
 
     @Test

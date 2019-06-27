@@ -22,8 +22,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
@@ -52,7 +50,7 @@ public class UserServiceTest {
     @InjectMocks
     private UserServiceImpl sut;
 
-    private ReservationDtoMapper reservationDtoMapper = new ReservationDtoMapperImpl(userRepository, roomRepository);
+    private ReservationDtoMapper reservationDtoMapper = new ReservationDtoMapperImpl(userRepository);
 
     private final Long SECOND_PERSON_ID = 3L;
 
@@ -63,12 +61,14 @@ public class UserServiceTest {
 
     @Test
     public void shouldReturnRoomDtoListWhenGetAllRoomsIsCalled() {
+
         RoomEntity roomEntityOne = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                null,BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland",14);
+                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         Set<ReservationEntity> reservationEntitySet = buildReservationEntitySet(roomEntityOne);
         roomEntityOne.setReservations(reservationEntitySet);
         UserEntity roomEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "4westAD8%",
-                reservationEntitySet, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Westeros",20);
+                reservationEntitySet, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Westeros", 20);
+
 
         List<UserEntity> roomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
 
@@ -80,7 +80,7 @@ public class UserServiceTest {
         PersonEntity personEntity = (PersonEntity) BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "sghitun",
                 null, UserType.PERSON, "Ghitun", "Stefania");
 
-       List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
+        List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
 
         when(userRepository.findByType(UserType.ROOM)).thenReturn(roomEntityList);
         when(roomDtoMapper.mapEntityListToDtoList(roomEntityList)).thenReturn(expectedRoomDtoList);
@@ -95,17 +95,14 @@ public class UserServiceTest {
     @Test
     public void shouldReturnExpectedRoomDtoWhenGetRoomByIdIsCalled() {
         RoomEntity roomEntity = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                null,BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland",14);
+                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         Set<ReservationEntity> reservationEntitySet = buildReservationEntitySet(roomEntity);
         roomEntity.setReservations(reservationEntitySet);
 
         RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
-        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
 
         PersonEntity personEntity = (PersonEntity) BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "sghitun",
                 null, UserType.PERSON, "Ghitun", "Stefania");
-
         when(userValidator.checkValidRoomId(1L)).thenReturn(true);
         when(roomDtoMapper.mapEntityToDto((RoomEntity) roomEntity)).thenReturn(expectedRoomDto);
         when(userRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(roomEntity));
@@ -121,11 +118,11 @@ public class UserServiceTest {
     @Test
     public void shouldReturnSameUserEntitiesWithFilteredReservations() {
         RoomEntity roomEntityOne = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                new HashSet<>(),BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland",14);
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         Set<ReservationEntity> reservationEntitySet = buildReservationEntitySet(roomEntityOne);
         roomEntityOne.setReservations(reservationEntitySet);
         UserEntity roomEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "4westAD8%",
-                reservationEntitySet, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Westeros",20);
+                reservationEntitySet, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Westeros", 20);
 
         List<UserEntity> roomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
 
@@ -144,8 +141,8 @@ public class UserServiceTest {
 
     private List<UserEntity> buildUserEntitiesWithFilteredReservations(List<UserEntity> userEntities) {
         List<UserEntity> result = new ArrayList<>(userEntities);
-        for(UserEntity userEntity: result) {
-            Set<ReservationEntity> reservationEntities = setFilterReservationDescription(((RoomEntity)userEntity).getReservations());
+        for (UserEntity userEntity : result) {
+            Set<ReservationEntity> reservationEntities = setFilterReservationDescription(((RoomEntity) userEntity).getReservations());
             ((RoomEntity) userEntity).setReservations(reservationEntities);
         }
         return result;
@@ -153,7 +150,7 @@ public class UserServiceTest {
 
     private Set<ReservationEntity> setFilterReservationDescription(Set<ReservationEntity> reservationEntitySet) {
         Set<ReservationEntity> result = new HashSet<>(reservationEntitySet);
-        for(ReservationEntity reservationEntity: result) {
+        for (ReservationEntity reservationEntity : result) {
             if (reservationEntity.getPerson().getId().equals(SECOND_PERSON_ID)) {
                 reservationEntity.setDescription(null);
             }
@@ -178,8 +175,8 @@ public class UserServiceTest {
 
     private Set<ReservationDto> buildReservationDtoSet(Set<ReservationEntity> reservationEntities) {
         Set<ReservationDto> reservationDtos = new HashSet<>();
-        for(ReservationEntity reservationEntity:reservationEntities) {
-            if(reservationEntity.getPerson().getId().equals(SECOND_PERSON_ID)) {
+        for (ReservationEntity reservationEntity : reservationEntities) {
+            if (reservationEntity.getPerson().getId().equals(SECOND_PERSON_ID)) {
                 reservationEntity.setDescription(null);
             }
             ReservationDto reservationDto = reservationDtoMapper.mapReservationEntityToDto(reservationEntity);

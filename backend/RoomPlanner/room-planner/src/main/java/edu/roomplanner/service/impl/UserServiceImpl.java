@@ -40,11 +40,13 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository, UserValidator userValidator,
                            RoomDtoMapper roomDtoMapper, TokenParserService tokenParserService,
                            ReservationDtoMapper reservationDtoMapper) {
+
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.roomDtoMapper = roomDtoMapper;
         this.tokenParserService = tokenParserService;
         this.reservationDtoMapper = reservationDtoMapper;
+
     }
 
     @Override
@@ -63,6 +65,16 @@ public class UserServiceImpl implements UserService {
             Set<ReservationEntity> updatedReservationEntities = updateReservationDescription(userEntity.getReservations());
             userEntity.setReservations(updatedReservationEntities);
             roomDto = roomDtoMapper.mapEntityToDto(userEntity);
+        }
+        return roomDto;
+    }
+
+    @Override
+    public RoomDto getRoomByEmail(String email) {
+        RoomDto roomDto = null;
+        if (userValidator.checkValidRoomEmail(email)){
+            UserEntity userEntity = userRepository.findByEmail(email).get();
+            roomDto = roomDtoMapper.mapEntityToDto((RoomEntity) userEntity);
         }
         return roomDto;
     }
