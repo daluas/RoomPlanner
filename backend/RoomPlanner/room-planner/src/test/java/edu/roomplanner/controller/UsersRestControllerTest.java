@@ -7,6 +7,7 @@ import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
+import edu.roomplanner.util.OAuthHelper;
 import org.flywaydb.core.Flyway;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +19,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
@@ -38,10 +40,17 @@ public class UsersRestControllerTest {
     @Autowired
     private Flyway flyway;
 
+    @Autowired
+    private OAuthHelper oAuthHelper;
+
+    private RequestPostProcessor bearerToken;
+
     @Before
     public void init() {
         flyway.clean();
         flyway.migrate();
+
+        bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
     }
 
     @Autowired
@@ -50,20 +59,14 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoListAndStatusFoundWhenGetAllRoomsIsCalled() throws Exception {
 
-        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(1L, "Wonderland", 5, 14);
-        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(2L, "Westeros", 8, 21);
-        List<RoomDto> roomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
+        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "Wonderland", 5, 14);
+        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "Westeros", 8, 20);
+        RoomDto roomDtoThree = BuildersWrapper.buildRoomDto(4L, "Neverland", 4, 5);
+        List<RoomDto> roomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo, roomDtoThree);
         String jsonRoomDtoList = new ObjectMapper().writeValueAsString(roomDtoList);
 
-        UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                UserType.ROOM, "Wonderland", 5, 14);
-        UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com", "4westAD8%",
-                UserType.ROOM, "Westeros", 8, 21);
 
-        userRepository.save(userEntityOne);
-        userRepository.save(userEntityTwo);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/rooms").with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDtoList));
     }

@@ -1,11 +1,16 @@
 package edu.roomplanner.util;
 
-import edu.roomplanner.builders.PersonEntityBuilder;
-import edu.roomplanner.builders.RoomDtoBuilder;
-import edu.roomplanner.builders.RoomEntityBuilder;
+import edu.roomplanner.builders.*;
+import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.dto.RoomDto;
+import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.types.UserType;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class BuildersWrapper {
 
@@ -40,4 +45,26 @@ public class BuildersWrapper {
                 .withLastName(lastName)
                 .build();
     }
+    public static ReservationDto buildReservationDto(Long id, Long roomId, String email,Calendar startDate, Calendar endDate, String description){
+        return new ReservationDtoBuilder()
+                .withId(id)
+                .withRoomId(roomId)
+                .withEmail(email)
+                .withStartDate(startDate)
+                .withEndDate(endDate)
+                .withDescription(description)
+                .build();
+    }
+    public static ReservationEntity buildReservationEntity(Long id,Calendar startDate,Calendar endDate,UserEntity person,UserEntity room,String description){
+        return new ReservationEntityBuilder()
+                .withId(id)
+                .withStartDate(startDate)
+                .withEndDate(endDate)
+                .withPerson(person)
+                .withRoom(room)
+                .withDescription(description)
+                .build();
+    }
+
+
 }

@@ -4,6 +4,7 @@ import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.service.ReservationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,12 @@ public class ReservationController {
         this.bookRoomService = bookRoomService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/reservations/{room_id}")
-    ResponseEntity<ReservationDto> getReservationCreated(@PathVariable(name = "room_id") Long roomId,
+    @JsonSerialize
+    public class EmptyJsonResponse { }
+
+
+    @RequestMapping(method = RequestMethod.POST, value = "/api/reservations/{room_id}")
+    ResponseEntity<ReservationDto> postReservationCreated(@PathVariable(name = "room_id") Long roomId,
                                                          @RequestBody ReservationDto reservationDto) {
 
         LOGGER.info("Method was called.");
@@ -33,7 +38,7 @@ public class ReservationController {
 
         return reservationDtoOptional
                 .map(reservationEntity -> new ResponseEntity<>(reservationDtoOptional.get(), HttpStatus.CREATED))
-                .orElseGet(() -> new ResponseEntity("Room or person not found", HttpStatus.NOT_FOUND));
+                .orElseGet(() -> new ResponseEntity(new EmptyJsonResponse(),HttpStatus.NOT_FOUND));
     }
 
 }

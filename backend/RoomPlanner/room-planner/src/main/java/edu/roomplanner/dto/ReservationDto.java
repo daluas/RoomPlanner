@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+
 import java.util.Calendar;
+import java.util.Date;
+
 
 @JsonSerialize
 @Getter
@@ -17,7 +20,7 @@ public class ReservationDto {
 
     private Long id;
     private Long roomId;
-    private String personEmail;
+    private String email;
     private Calendar startDate;
     private Calendar endDate;
     private String description;
