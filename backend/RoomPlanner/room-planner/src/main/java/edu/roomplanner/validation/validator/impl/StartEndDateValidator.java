@@ -7,6 +7,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -27,21 +29,16 @@ public class StartEndDateValidator implements BookingValidator {
     }
 
     private Long getMinutesInFuture(Calendar startDate) {
-        startDate.set(Calendar.SECOND, 0);
-        startDate.set(Calendar.MILLISECOND, 0);
         return durationBetween(getSysDate(), startDate);
     }
 
     private Long getMinutesReservationTime(Calendar startDate, Calendar endDate) {
-        endDate.set(Calendar.SECOND, 0);
-        endDate.set(Calendar.MILLISECOND, 0);
         return durationBetween(startDate, endDate);
     }
 
     private Calendar getSysDate() {
-        Calendar sysDate = Calendar.getInstance();
-        sysDate.set(Calendar.SECOND, 0);
-        sysDate.set(Calendar.MILLISECOND, 0);
+        Calendar sysDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        sysDate.setTime(conversionToGmt(sysDate.getTime()));
         return sysDate;
     }
 
@@ -49,5 +46,15 @@ public class StartEndDateValidator implements BookingValidator {
         return TimeUnit.MINUTES.convert(endDate.getTime().getTime() - startDate.getTime().getTime(), TimeUnit.MILLISECONDS);
     }
 
-
+    private Date conversionToGmt(Date date) {
+        TimeZone tz = TimeZone.getDefault();
+        Date ret = new Date(date.getTime() - tz.getRawOffset());
+        if (tz.inDaylightTime(ret)) {
+            Date dstDate = new Date(ret.getTime() - tz.getDSTSavings());
+            if (tz.inDaylightTime(dstDate)) {
+                ret = dstDate;
+            }
+        }
+        return ret;
+    }
 }

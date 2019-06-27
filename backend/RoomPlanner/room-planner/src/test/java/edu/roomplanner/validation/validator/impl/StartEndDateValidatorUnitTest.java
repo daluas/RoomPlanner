@@ -29,7 +29,7 @@ public class StartEndDateValidatorUnitTest {
     @Test
     public void shouldVerifyThatStartDateIsInPastMinutes() {
         ReservationEntity reservationEntity = createReservationEntityWithStartDate(sysDate.get(Calendar.YEAR), sysDate.get(Calendar.MONTH), sysDate.get(Calendar.DAY_OF_MONTH),
-                sysDate.get(Calendar.HOUR_OF_DAY), sysDate.get(Calendar.MINUTE) - 1);
+                sysDate.get(Calendar.HOUR_OF_DAY) - 3, sysDate.get(Calendar.MINUTE) - 1);
         ValidationResult result = sut.validate(reservationEntity);
         assertEquals("Start date is in past!", result.getError());
     }
