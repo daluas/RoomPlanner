@@ -1,6 +1,7 @@
 package edu.roomplanner.service;
 
 import edu.roomplanner.dto.RoomDto;
+import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
@@ -49,11 +50,10 @@ public class UserServiceTest {
     @Test
     public void shouldReturnRoomDtoListWhenGetAllRoomsIsCalled() {
 
-
         UserEntity roomEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "4wonD2C%",
-                UserType.ROOM, "Wonderland", 5, 14);
+                UserType.ROOM, "Wonderland", BuildersWrapper.buildFloorEntity(1L, 5), 14);
         UserEntity roomEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "4westAD8%",
-                UserType.ROOM, "Westeros", 8, 20);
+                UserType.ROOM, "Westeros", BuildersWrapper.buildFloorEntity(1L, 5), 20);
 
         List<UserEntity> RoomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
         List<RoomDto> expectedRoomDtoList = roomDtoMapper.mapEntityListToDtoList(RoomEntityList);
@@ -71,7 +71,7 @@ public class UserServiceTest {
 
         RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
         UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                UserType.ROOM, "Wonderland", 5, 14);
+                UserType.ROOM, "Wonderland", BuildersWrapper.buildFloorEntity(1L, 5), 14);
 
         when(userValidator.checkValidRoomId(1L)).thenReturn(true);
         when(roomDtoMapper.mapEntityToDto((RoomEntity) userEntity)).thenReturn(expectedRoomDto);
@@ -86,8 +86,10 @@ public class UserServiceTest {
     @Test
     public void shouldReturnRoomListWithReservationsInTimePeriodWhenGetRoomByFiltersIsCalledWithPastDates(){
 
+        FloorEntity roomEntityFloor = BuildersWrapper.buildFloorEntity(1L,5);
+
         UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", 5, 14);
+                UserType.ROOM, "Wonderland", roomEntityFloor, 14);
         List<UserEntity> userEntityList = Arrays.asList(userEntityRoom);
 
         RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
@@ -110,8 +112,10 @@ public class UserServiceTest {
     @Test
     public void shouldReturnRoomListWithNoReservationsInTimePeriodWhenGetRoomByFiltersIsCalledWithPresentOrFutureDates(){
 
+        FloorEntity roomEntityFloor = BuildersWrapper.buildFloorEntity(1L,5);
+
         UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", 5, 14);
+                UserType.ROOM, "Wonderland", roomEntityFloor, 14);
         List<UserEntity> userEntityList = Arrays.asList(userEntityRoom);
 
         RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
@@ -133,10 +137,12 @@ public class UserServiceTest {
     @Test
     public void shouldReturnRoomListWithNoDuplicatesWhenGetRoomByFiltersIsCalledWithPresentOrFutureDatesAndRepositoryReturnsDuplicateData(){
 
+        FloorEntity roomEntityFloorOne = BuildersWrapper.buildFloorEntity(1L,5);
+        FloorEntity roomEntityFloorTwo = BuildersWrapper.buildFloorEntity(2L,8);
         UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", 5, 14);
+                UserType.ROOM, "Wonderland", roomEntityFloorOne, 14);
         UserEntity userEntityRoomUnique = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "westeros",
-                UserType.ROOM, "Westeros", 8, 20);
+                UserType.ROOM, "Westeros", roomEntityFloorTwo, 20);
         List<UserEntity> userEntityList = Arrays.asList(userEntityRoom, userEntityRoom, userEntityRoom, userEntityRoomUnique);
 
         RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);

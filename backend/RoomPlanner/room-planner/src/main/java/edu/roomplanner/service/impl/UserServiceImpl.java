@@ -1,5 +1,7 @@
 package edu.roomplanner.service.impl;
 
+import edu.roomplanner.builders.FloorDtoBuilder;
+import edu.roomplanner.dto.FloorDto;
 import edu.roomplanner.builders.UserDtoBuilder;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.dto.UserDto;
@@ -93,12 +95,13 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserDto buildUserDtoByRoomEntity(RoomEntity roomEntity) {
+
         return UserDtoBuilder.builder()
                 .withId(roomEntity.getId())
                 .withEmail(roomEntity.getEmail())
                 .withType(roomEntity.getType())
                 .withName(roomEntity.getName())
-                .withFloor(roomEntity.getFloor())
+                .withFloor(roomEntity.getFloor().getFloor())
                 .withMaxPersons(roomEntity.getMaxPersons())
                 .build();
     }

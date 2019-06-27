@@ -53,7 +53,7 @@ public class ValidatorIntegrationTest {
                 2007, 7, 8, 5);
         reservationRepository.save(reservation);
 
-        List<ReservationEntity> actualList = reservationRepository.findAvailableDate(reservation.getStartDate(), reservation.getEndDate(), reservation.getRoom().getId());
+        List<ReservationEntity> actualList = reservationRepository.findNonAvailableDate(reservation.getStartDate(), reservation.getEndDate(), reservation.getRoom().getId());
         List<ReservationEntity> expectedList = Arrays.asList(reservation);
 
         Assert.assertEquals(expectedList.isEmpty(), actualList.isEmpty());
@@ -61,14 +61,103 @@ public class ValidatorIntegrationTest {
     }
 
     @Test
-    public void shouldFindAValidDate() {
-        ReservationEntity reservation = getReservationEntity(2007, 6, 11, 45,
-                2007, 6, 11, 20);
-        ReservationEntity existReservation = getReservationEntity(2007, 6, 11, 20,
-                2007, 6, 12, 10);
+    public void shouldNotFindAValidDateCaseOne() {
+        ReservationEntity reservation = getReservationEntity(2007, 6, 11, 0
+                , 2007, 6, 13, 0);
+        ReservationEntity existReservation = getReservationEntity(2007, 6, 11, 30,
+                2007, 6, 12, 0);
         reservationRepository.save(existReservation);
 
-        List<ReservationEntity> actualList = reservationRepository.findAvailableDate(reservation.getStartDate(), reservation.getEndDate(), reservation.getRoom().getId());
+        List<ReservationEntity> actualList = reservationRepository.findNonAvailableDate(reservation.getStartDate(), reservation.getEndDate(), reservation.getRoom().getId());
+        List<ReservationEntity> expectedList = Arrays.asList(reservation);
+
+        Assert.assertEquals(expectedList.isEmpty(), actualList.isEmpty());
+
+    }
+
+    @Test
+    public void shouldNotFindAValidDateCaseTwo() {
+        ReservationEntity reservation = getReservationEntity(2007, 6, 11, 0
+                , 2007, 6, 12, 0);
+        ReservationEntity existReservation = getReservationEntity(2007, 6, 11, 30,
+                2007, 6, 13, 0);
+        reservationRepository.save(existReservation);
+
+        List<ReservationEntity> actualList = reservationRepository.findNonAvailableDate(reservation.getStartDate(), reservation.getEndDate(), reservation.getRoom().getId());
+        List<ReservationEntity> expectedList = Arrays.asList(reservation);
+
+        Assert.assertEquals(expectedList.isEmpty(), actualList.isEmpty());
+
+    }
+
+    @Test
+    public void shouldNotFindAValidDateCaseThree() {
+        ReservationEntity reservation = getReservationEntity(2007, 6, 11, 0
+                , 2007, 6, 12, 30);
+        ReservationEntity existReservation = getReservationEntity(2007, 6, 10, 30,
+                2007, 6, 12, 0);
+        reservationRepository.save(existReservation);
+
+        List<ReservationEntity> actualList = reservationRepository.findNonAvailableDate(reservation.getStartDate(), reservation.getEndDate(), reservation.getRoom().getId());
+        List<ReservationEntity> expectedList = Arrays.asList(existReservation);
+
+        Assert.assertEquals(expectedList.isEmpty(), actualList.isEmpty());
+
+    }
+
+    @Test
+    public void shouldNotFindAValidDateCaseFour() {
+        ReservationEntity reservation = getReservationEntity(2007, 6, 11, 0
+                , 2007, 6, 11, 30);
+        ReservationEntity existReservation = getReservationEntity(2007, 6, 10, 30,
+                2007, 6, 12, 0);
+        reservationRepository.save(existReservation);
+
+        List<ReservationEntity> actualList = reservationRepository.findNonAvailableDate(reservation.getStartDate(), reservation.getEndDate(), reservation.getRoom().getId());
+        List<ReservationEntity> expectedList = Arrays.asList(existReservation);
+
+        Assert.assertEquals(expectedList.isEmpty(), actualList.isEmpty());
+
+    }
+
+    @Test
+    public void shouldNotFindAValidDateCaseFive() {
+        ReservationEntity reservation = getReservationEntity(2007, 6, 10, 0,
+                2007, 6, 10, 30);
+        ReservationEntity existReservation = getReservationEntity(2007, 6, 10, 0,
+                2007, 6, 10, 30);
+        reservationRepository.save(existReservation);
+
+        List<ReservationEntity> actualList = reservationRepository.findNonAvailableDate(reservation.getStartDate(), reservation.getEndDate(), reservation.getRoom().getId());
+        List<ReservationEntity> expectedList = Arrays.asList(existReservation);
+
+        Assert.assertEquals(expectedList.isEmpty(), actualList.isEmpty());
+
+    }
+
+    @Test
+    public void shouldFindAValidDateCaseOne() {
+        ReservationEntity reservation = getReservationEntity(2007, 6, 10, 0,
+                2007, 6, 10, 30);
+        ReservationEntity existReservation = getReservationEntity(2007, 6, 10, 30,
+                2007, 6, 12, 0);
+        reservationRepository.save(existReservation);
+
+        List<ReservationEntity> actualList = reservationRepository.findNonAvailableDate(reservation.getStartDate(), reservation.getEndDate(), reservation.getRoom().getId());
+
+        Assert.assertEquals(new ArrayList<>().isEmpty(), actualList.isEmpty());
+
+    }
+
+    @Test
+    public void shouldFindAValidDateCaseTwo() {
+        ReservationEntity reservation = getReservationEntity(2007, 6, 12, 0,
+                2007, 6, 13, 0);
+        ReservationEntity existReservation = getReservationEntity(2007, 6, 10, 30,
+                2007, 6, 12, 0);
+        reservationRepository.save(existReservation);
+
+        List<ReservationEntity> actualList = reservationRepository.findNonAvailableDate(reservation.getStartDate(), reservation.getEndDate(), reservation.getRoom().getId());
 
         Assert.assertEquals(new ArrayList<>().isEmpty(), actualList.isEmpty());
 
@@ -86,7 +175,9 @@ public class ValidatorIntegrationTest {
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
         startDate.set(startYear, Calendar.JANUARY, startDay, startHour, startMinute, 0);
+        startDate.set(Calendar.MILLISECOND,0);
         endDate.set(endYear, Calendar.JANUARY, endDay, endHour, endMinute, 0);
+        endDate.set(Calendar.MILLISECOND,0);
 
         return new ReservationEntityBuilder()
                 .withStartDate(startDate)

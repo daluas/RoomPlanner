@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
 import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.dto.RoomDto;
+import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.repository.FloorRepository;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
@@ -58,6 +60,9 @@ public class UsersRestControllerTest {
     private UserRepository userRepository;
 
     @Autowired
+    private FloorRepository floorRepository;
+
+    @Autowired
     private ReservationRepository reservationRepository;
 
     @PersistenceContext
@@ -89,11 +94,11 @@ public class UsersRestControllerTest {
     public void shouldReturnResponseEntityWithValidRoomDtoListAndStatusFoundWhenGetAllRoomsIsCalled() throws Exception {
 
         UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", 5, 14);
+                UserType.ROOM, "Wonderland", BuildersWrapper.buildFloorEntity(1L, 5), 14);
         UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "westeros",
-                UserType.ROOM, "Westeros", 8, 20);
+                UserType.ROOM, "Westeros", BuildersWrapper.buildFloorEntity(2L, 8), 20);
         UserEntity userEntityThree = BuildersWrapper.buildRoomEntity(4L, "neverland@yahoo.com", "neverland",
-                UserType.ROOM, "Neverland", 4, 5);
+                UserType.ROOM, "Neverland", BuildersWrapper.buildFloorEntity(3L, 4), 5);
 
         userRepository.save(userEntityOne);
         userRepository.save(userEntityTwo);
@@ -102,10 +107,11 @@ public class UsersRestControllerTest {
         RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
         RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros",  Collections.EMPTY_SET, 8, 20, UserType.ROOM);
         RoomDto roomDtoThree = BuildersWrapper.buildRoomDto(4L, "neverland@yahoo.com", "Neverland", Collections.EMPTY_SET, 4, 5, UserType.ROOM);
+
         List<RoomDto> roomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo, roomDtoThree);
         String jsonRoomDtoList = new ObjectMapper().writeValueAsString(roomDtoList);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms").with(bearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms").with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDtoList));
     }
@@ -113,15 +119,17 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithValidRoomDtoAndStatusFoundWhenGetRoomByIdIsCalled() throws Exception {
 
+        FloorEntity roomEntityFloor = BuildersWrapper.buildFloorEntity(1L,5);
+        floorRepository.save(roomEntityFloor);
         UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", 5, 14);
+                UserType.ROOM, "Wonderland", roomEntityFloor, 14);
 
         userRepository.save(userEntityOne);
 
-        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 2).with(bearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/{id}", 2).with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDto));
     }
@@ -129,7 +137,7 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithStatusNotFoundWhenGetRoomByIdIsCalledWithNonexistentID() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 7).with(bearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/{id}", 7).with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
@@ -202,22 +210,12 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithStatusFoundAndValidWhenGetRoomsByFiltersIsCalledWithValidFiltersButNoReservationsMatch() throws Exception {
 
-       /* UserEntity userEntityPerson = BuildersWrapper.buildPersonEntiy(1L,"sghitun@yahoo.com","sghitun",
-                UserType.PERSON,"Stefania","Ghitun");
-        userRepository.save(userEntityPerson);*/
+        FloorEntity roomEntityFloor = BuildersWrapper.buildFloorEntity(1L,5);
+
         UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", 5, 14);
+                UserType.ROOM, "Wonderland", roomEntityFloor, 14);
         userRepository.save(userEntityRoom);
 
-       /* Calendar startDate = Calendar.getInstance();
-        startDate.set(2019,Calendar.JUNE,28,10,0,0);
-        Calendar endDate = Calendar.getInstance();
-        endDate.set(2019,Calendar.JUNE,28,11,30,0);
-
-        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L,startDate,endDate,"Demo meeting",userEntityPerson,userEntityRoom);
-        reservationRepository.save(reservationEntity);
-
-        ReservationDto expectedReservation = BuildersWrapper.buildReservationDto(1L,2L,"sghitun@yahoo.com",startDate,endDate,"Demo meeting");*/
 
         RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
         List<RoomDto> expectedList = Arrays.asList(roomDto);

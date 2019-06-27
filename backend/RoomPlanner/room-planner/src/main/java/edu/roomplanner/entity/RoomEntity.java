@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.Set;
 
+import javax.persistence.*;
+
 @Entity
 @Getter
 @Setter
@@ -18,8 +20,9 @@ public class RoomEntity extends UserEntity {
     @Column(name = "room_name")
     private String name;
 
-    @Column(name = "floor")
-    private Integer floor;
+    @ManyToOne
+    @JoinColumn(name = "floor_id", nullable = false)
+    private FloorEntity floor;
 
     @Column(name = "max_persons")
     private Integer maxPersons;

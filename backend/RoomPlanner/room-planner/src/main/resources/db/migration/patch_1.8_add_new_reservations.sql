@@ -1,20 +1,20 @@
-insert into users (email, password, type, first_name, last_name, room_name, floor, max_persons)
-values('narnia@yahoo.com', '{bcrypt}$2a$04$.XUsqgp0fzBqNguNr7Pi/O4kvLKO7nQWUOv.ugmOHOLX12usCSXIm','ROOM', null, null, 'Narnia', 4, 8);
+insert into users (email, password, type, first_name, last_name, room_name, floor_id, max_persons)
+values('narnia@yahoo.com', '{bcrypt}$2a$04$.XUsqgp0fzBqNguNr7Pi/O4kvLKO7nQWUOv.ugmOHOLX12usCSXIm','ROOM', null, null, 'Narnia', 3, 8);
 
 insert into users_roles (user_id, role_id) values (5,2);
 
-insert into users (email, password, type, first_name, last_name, room_name, floor, max_persons)
-values('morrowind@yahoo.com', '{bcrypt}$2a$04$fSme6rBNJnTw7KzloKRj4.RKwxnskcxiKelBuvlFFLpdzJazKcbo.','ROOM', null, null, 'Morrowind', 8, 10);
+insert into users (email, password, type, first_name, last_name, room_name, floor_id, max_persons)
+values('morrowind@yahoo.com', '{bcrypt}$2a$04$fSme6rBNJnTw7KzloKRj4.RKwxnskcxiKelBuvlFFLpdzJazKcbo.','ROOM', null, null, 'Morrowind', 2, 10);
 
 insert into users_roles (user_id, role_id) values (6,2);
 
-insert into users (email, password, type, first_name, last_name, room_name, floor, max_persons)
-values('atlantis@yahoo.com', '{bcrypt}$2a$04$8ISsDsPblN2vE85Lio4y8uirwiZi7ipMPF31j5yaXzHQ43l0iVv56','ROOM', null, null, 'Atlantis', 5, 26);
+insert into users (email, password, type, first_name, last_name, room_name, floor_id, max_persons)
+values('atlantis@yahoo.com', '{bcrypt}$2a$04$8ISsDsPblN2vE85Lio4y8uirwiZi7ipMPF31j5yaXzHQ43l0iVv56','ROOM', null, null, 'Atlantis', 1, 26);
 
 insert into users_roles (user_id, role_id) values (7,2);
 
-insert into users (email, password, type, first_name, last_name, room_name, floor, max_persons)
-values('asgard@yahoo.com', '{bcrypt}$2a$04$IkqUr.aqziiLMPmJOv80n.dkRgBdOgI32GEoE3Y9oMstyUJbY1deO','ROOM', null, null, 'Asgard', 4, 7);
+insert into users (email, password, type, first_name, last_name, room_name, floor_id, max_persons)
+values('asgard@yahoo.com', '{bcrypt}$2a$04$IkqUr.aqziiLMPmJOv80n.dkRgBdOgI32GEoE3Y9oMstyUJbY1deO','ROOM', null, null, 'Asgard', 3, 7);
 
 insert into users_roles (user_id, role_id) values (8,2);
 

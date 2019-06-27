@@ -29,11 +29,18 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
 
         Set<ReservationEntity> reservationEntitySet = roomEntity.getReservations();
         Set<ReservationDto> reservationDtoSet = mapRoomEntitySetToDtoSet(reservationEntitySet);
+
+        if (roomEntity.getFloor() == null) {
+            return (RoomDto) UserDtoBuilder.builder()
+                    .withType(roomEntity.getType())
+                    .build();
+        }
+
         return (RoomDto) UserDtoBuilder.builder()
                 .withId(roomEntity.getId())
                 .withEmail(roomEntity.getEmail())
                 .withType(roomEntity.getType())
-                .withFloor(roomEntity.getFloor())
+                .withFloor(roomEntity.getFloor().getFloor())
                 .withName(roomEntity.getName())
                 .withMaxPersons(roomEntity.getMaxPersons())
                 .withReservations(reservationDtoSet)
@@ -48,7 +55,7 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
         return roomDtoList;
     }
 
-    public Set<ReservationDto> mapRoomEntitySetToDtoSet(Set<ReservationEntity> reservationEntitySet){
+    private Set<ReservationDto> mapRoomEntitySetToDtoSet(Set<ReservationEntity> reservationEntitySet){
         Set<ReservationDto> reservationDtoSet = new HashSet<>();
         if(reservationEntitySet == null)
             return reservationDtoSet;
