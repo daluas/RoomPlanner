@@ -89,12 +89,13 @@
 
         </form>
     </span>
-    <div class="invalidHoursContainer" *ngIf="invalidHours==true">
+    <div class="invalidHoursContainer" *ngIf="invalidHours">
         <p>End hour has to be greater than start hour!</p>
     </div>
-    <div *ngIf="statusMessage">
-        <div class="successText" *ngIf="(statusMessage=='You can book') && (invalidHours==false)">{{status}}</div>
-        <div class="errorText" *ngIf="(statusMessage!='You can book') && (invalidHours==false)">{{status}}</div>
+    
+    <div *ngIf="status">
+        <div class="successText" *ngIf="(status=='You can book') && (invalidHours==false)">{{status}}</div>
+        <div class="errorText" *ngIf="(status!='You can book') && (invalidHours==false)">{{status}}</div>
         
     </div>
 </div>

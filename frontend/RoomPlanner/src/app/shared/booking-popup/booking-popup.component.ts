@@ -26,12 +26,14 @@ export class BookingPopupComponent implements OnInit {
 
   minDate = new Date(2019, 0, 1);
   status: boolean = false;
-  booked: boolean;
+  booked: boolean = true;
   bookingStatus: boolean;
   prevalidationStatus: boolean;
+  public invalidHours: boolean;
   ngOnInit() {
 
   }
+  
   startDateValidation(val) {
     if (val.value.getDate() > this.booking.endDate.getDate()) {
       this.status = true;
@@ -51,8 +53,7 @@ export class BookingPopupComponent implements OnInit {
   createBookingTest() {
 
     this.bookingService.createNewBooking(this.booking).then((bookingRes) => {
-      console.log(bookingRes);
-
+     
       let res = JSON.parse(bookingRes);
 
       if (res.id) {
@@ -68,29 +69,30 @@ export class BookingPopupComponent implements OnInit {
 
   }
  
-  getPrevalidationMessage(event) {
+  
+  getStatusOfBookButton(event) { //true=disabled fals=enabled
+
+    this.invalidHours=event;
+    if(this.invalidHours){
+      this.booked=false;
+    }
+    else{
+      this.booked=true;
+    }
+   
+  }
+ getPrevalidationMessage(event) {
     this.statusMessage = event;
     
-    if (this.statusMessage == "You can book") {
+    if (this.statusMessage == "You can book" ) {
       this.prevalidationStatus = true;
-      this.booked = true;
+ 
     }
-    else {
+    else  {
       this.prevalidationStatus = false;
       this.booked = false;
     }
   }
-  getStatusOfBookButton(event) { //true=disabled
-    console.log(event);
-    if (event == true) {
-      this.booked = false;
-    }
-    else {
-      this.booked = true;
-    }
-
-  }
- 
   updateBookingTest() {
 
   }
@@ -107,10 +109,10 @@ export class BookingPopupComponent implements OnInit {
     this.booking.startDate = event;
 
     if (this.booking.startDate.getTime() >= this.booking.endDate.getTime()) {
-      //this.invalidHours = true;
+      this.invalidHours = true;
     }
     else {
-      // this.invalidHours = false;
+       this.invalidHours = false;
     }
 
   }
