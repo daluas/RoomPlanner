@@ -41,16 +41,16 @@ export class BookingPopupComponent implements OnInit {
     this.status = false;
     this.isNewBooking = false;
 
-    let item = JSON.parse(localStorage.getItem("user-data"));
+    let userData = JSON.parse(localStorage.getItem("user-data"));
 
-    //this.usertype = item.type;
+    //this.usertype = userData.type;
     this.usertype = "ROOM";
 
     if (this.usertype == "ROOM") {
       this.isLogged = false;
     }
 
-    if (this.usertype == "PERSON") {
+    if (this.usertype == "PERSON" || this.usertype == "ADMIN") {
       this.isLogged = true;
     }
   }
