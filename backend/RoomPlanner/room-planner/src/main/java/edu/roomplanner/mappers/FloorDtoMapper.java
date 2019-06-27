@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface FloorDtoMapper {
 
-    FloorDto mapEntityToDto(FloorEntity floorEntity);
+    FloorDto mapEntityToDtoWithoutReservations(FloorEntity floorEntity);
 
     List<FloorDto> mapEntityListToDtoList(List<FloorEntity> floorEntityList);
 }
