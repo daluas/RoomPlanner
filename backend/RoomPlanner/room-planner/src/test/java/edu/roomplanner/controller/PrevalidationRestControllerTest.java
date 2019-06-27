@@ -130,8 +130,7 @@ public class PrevalidationRestControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=Thu, 27 Jun 2019 5:53:00 GMT&endDate=Thu, 27 Jun 2019 8:30:00 GMT&email=sghitun@yahoo.com")
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
     }
 
@@ -145,12 +144,10 @@ public class PrevalidationRestControllerTest {
 
         Calendar endDate = Calendar.getInstance();
         endDate.add(startDate.MINUTE, 40);
-        //   endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 40);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=notExistEmail@yahoo.com")
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
     }
 
@@ -168,9 +165,7 @@ public class PrevalidationRestControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=5000&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=sghitun@yahoo.com")
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
-
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
@@ -187,8 +182,7 @@ public class PrevalidationRestControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=sghitun@yahoo.com")
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
     }
 
@@ -206,8 +200,7 @@ public class PrevalidationRestControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=sghitun@yahoo.com")
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
     }
 
@@ -224,9 +217,7 @@ public class PrevalidationRestControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=testEmail@yahoo.com")
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
-
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
@@ -243,9 +234,7 @@ public class PrevalidationRestControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=sghitun@yahoo.com")
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
-
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
@@ -265,8 +254,7 @@ public class PrevalidationRestControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=testEmail@yahoo.com")
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
     }
 
