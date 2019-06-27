@@ -9,10 +9,7 @@ import edu.roomplanner.mappers.FloorDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -26,9 +23,9 @@ public class FloorDtoMapperImpl implements FloorDtoMapper {
     }
 
     @Override
-    public FloorDto mapEntityToDto(FloorEntity floorEntity) {
+    public FloorDto mapEntityToDtoWithoutReservations(FloorEntity floorEntity) {
 
-        Set<RoomDto> roomsDto = mapRoomEntityListToRoomDtoList(floorEntity.getRooms());
+        Set<RoomDto> roomsDto = mapRoomEntityListToRoomDtoListWithoutReservations(floorEntity.getRooms());
 
         return new FloorDtoBuilder()
                 .withId(floorEntity.getId())
@@ -41,19 +38,33 @@ public class FloorDtoMapperImpl implements FloorDtoMapper {
     public List<FloorDto> mapEntityListToDtoList(List<FloorEntity> roomEntityList) {
         List<FloorDto> floorsDto = new ArrayList<>();
         for (FloorEntity floorEntity : roomEntityList) {
-            floorsDto.add(mapEntityToDto(floorEntity));
+            floorsDto.add(mapEntityToDtoWithoutReservations(floorEntity));
         }
         return floorsDto;
 
     }
 
-    private Set<RoomDto> mapRoomEntityListToRoomDtoList(Set<RoomEntity> rooms) {
+    private Set<RoomDto> mapRoomEntityListToRoomDtoListWithoutReservations(Set<RoomEntity> rooms) {
         return Optional.ofNullable(rooms)
-                .map(this::processRoomDtoStream)
+                .map(this::processRoomDtoStreamWithoutReservations)
                 .orElse(null);
     }
 
-    private Set<RoomDto> processRoomDtoStream(Set<RoomEntity> rooms) {
+    private Set<RoomDto> processRoomDtoStreamWithoutReservations(Set<RoomEntity> rooms) {
+        return rooms.stream()
+                .map(roomMapper::mapEntityToDto)
+                .peek((room) -> room.setReservations(new HashSet<>()))
+                .collect(Collectors.toSet());
+
+    }
+
+    private Set<RoomDto> mapRoomEntityListToRoomDtoListWithReservations(Set<RoomEntity> rooms) {
+        return Optional.ofNullable(rooms)
+                .map(this::processRoomDtoStreamWithReservations)
+                .orElse(null);
+    }
+
+    private Set<RoomDto> processRoomDtoStreamWithReservations(Set<RoomEntity> rooms) {
         return rooms.stream()
                 .map(roomMapper::mapEntityToDto)
                 .collect(Collectors.toSet());
