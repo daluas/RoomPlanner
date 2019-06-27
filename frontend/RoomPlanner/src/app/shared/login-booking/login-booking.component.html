@@ -1,0 +1,30 @@
+<div class="loginContainer">
+
+  <div *ngIf="this.isLogged==false">
+    <form [formGroup]="loginBookingForm" class="loginBooking">
+      <mat-form-field>
+        <input matInput placeholder="Enter your email" formControlName="email">
+        <mat-error>{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+      <br/>
+      <mat-form-field>
+        <input matInput placeholder="Enter your password" type="password" formControlName="password" name="email">
+      </mat-form-field>
+      <br/>
+      <button mat-raised-button color="primary" class="loginBtn" [disabled]="!loginBookingForm.valid" (click)="authenticate()">Login</button>
+      <div *ngIf="status" class="statusMessage colorGreen">
+        {{statusMessage}}
+      </div>
+      <div *ngIf="!status " class="statusMessage colorRed">
+        {{statusMessage}}
+      </div>
+      <button mat-button color="primary" class="cancelBtn" (click)="cancelLogin()">Cancel</button>
+    </form>
+  </div>
+
+  <div *ngIf="this.isLogged==true" class="logoutBox">
+    <p class="logoutText">Logout automatically after {{this.counter}} seconds</p>
+    <button mat-raised-button color="primary" class="logoutBtn" (click)="logoutBooking()">Logout</button>
+  </div>
+
+</div>

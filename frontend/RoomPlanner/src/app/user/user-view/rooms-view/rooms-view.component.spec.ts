@@ -5,7 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
 import { MaterialDesignModule } from 'src/app/material-design/material-design.module';
 import { LoggedUser } from 'src/app/core/models/LoggedUser';
-import { Booking } from 'src/app/shared/models/Booking';
+import { Booking } from '../../../core/models/BookingModel';
 
 describe('RoomsViewComponent', () => {
   let component: RoomsViewComponent;

@@ -1,73 +1,118 @@
 import { Component, OnInit, Input, ɵConsole, Output, EventEmitter, Inject, ViewChild, ElementRef } from '@angular/core';
-import { Booking } from '../models/Booking';
 import { BookingService } from 'src/app/core/services/booking/booking.service';
 import { RoomsViewComponent } from '../../user/user-view/rooms-view/rooms-view.component';
 import { Data } from '@angular/router';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Time } from '@angular/common';
+import { LoginModel } from '../../core/models/LoginModel';
+import { AuthService } from '../../core/services/auth/auth.service';
+import { LoggedUser } from '../../core/models/LoggedUser';
+import { LoginBookingComponent } from '../login-booking/login-booking.component'
+import { Booking } from '../../core/models/BookingModel';
 
 @Component({
   selector: 'app-booking-popup',
   templateUrl: './booking-popup.component.html',
-  styleUrls: ['./booking-popup.component.css'] 
+  styleUrls: ['./booking-popup.component.css']
 })
+
 export class BookingPopupComponent implements OnInit {
 
   @Input() booking: Booking;
+
   @Output() booked: EventEmitter<Booking> = new EventEmitter();
-  
-  @ViewChild('description', {static: false}) description: ElementRef;
+  @Output() closePopup: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(public bookingService: BookingService) { }
 
-  ngOnInit() {
-    
-    this.booking = new Booking().create({
-       startDate: new Date() ,
-       endDate: new Date()
-    });
-   
+  constructor(public bookingService: BookingService, private fb: FormBuilder, private authService: AuthService) {
+    console.log("on constructor" + this.booking);
   }
 
+  minDate = new Date(2019, 0, 1);
+  invalidHours: boolean = false;
+
+  status: boolean;
+  usertype: string;
+
+  isLogged: boolean;
+  isNewBooking: boolean;
+
+  ngOnInit() {
+    this.status = false;
+    this.isNewBooking = false;
+
+    let userData = JSON.parse(localStorage.getItem("user-data"));
+
+    //this.usertype = userData.type;
+    this.usertype = "ROOM";
+
+    if (this.usertype == "ROOM") {
+      this.isLogged = false;
+    }
+
+    if (this.usertype == "PERSON" || this.usertype == "ADMIN") {
+      this.isLogged = true;
+    }
+  }
+
+  //isNewBooking = true; !!!!!
+  
   createBookingTest() {
     this.bookingService.createNewBooking(this.booking).then((booked) => {
 
       if (booked) {
         // succes, rezervarea a avut loc
-        //document.getElementById('testButton').innerHTML = "Book now";
-
-        // IMPORTANT!
-        this.booking.id = 10;
-        this.booking.ownerEmail = "user1@cegeka.ro",
-        this.booking.description = this.description.nativeElement.value;
         this.booked.emit(this.booking);
+        this.isNewBooking = true;
       } else {
         // eroare, inseamna ca nu s-a putut face rezervarea
         //document.getElementById('testButton').innerHTML = "Update";
+        //console.log("Booking error!");
       }
 
     })
     console.log(this.booking);
   }
-  // getDate(mydate: Data): string {
-  //   let day = mydate.getDay();
-  //   let month = mydate.getMonth();
-  //   let year = mydate.getFullYear();
-  //   let resultDate = day + "/" + month + "/" + year;
-  //   return resultDate;
-  // }
-  getTime( mytime: Data):string{
-    let hour=mytime.getHours();
-    let minutes=mytime.getMinutes();
-    if(minutes>=0 && minutes<=9){
-      minutes="0"+minutes;
-    }
-    let resultTime=hour+":"+minutes;
-    return resultTime;
-  }
-  updateBookingTest(){
+
+  updateBookingTest() {
 
   }
-  deleteBooking(){
-    
+
+  deleteBooking() {
+
   }
+  cancelBooking() {
+    this.booking.description = "";
+    this.closePopup.emit(true);
+  }
+
+  onHourEmit(event) {
+
+    this.booking.startDate = event;
+
+    if (this.booking.startDate.getTime() >= this.booking.endDate.getTime()) {
+      this.invalidHours = true;
+    }
+    else {
+      this.invalidHours = false;
+    }
+
+  }
+
+  getErrorForDate() {
+    if (this.booking.startDate > this.booking.endDate) {
+      this.status = true;
+    }
+  }
+
+  loggedChange(event) {
+    this.isLogged = event;
+  }
+
+  closeLoginPopup(event) {
+    if(event) {
+      this.closePopup.emit(true);
+    }
+  }
+
 }

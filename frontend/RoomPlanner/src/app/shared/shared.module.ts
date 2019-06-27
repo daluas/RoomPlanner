@@ -7,12 +7,16 @@ import { BookingPopupComponent } from './booking-popup/booking-popup.component';
 import { HourInputComponent } from './hour-input/hour-input.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { HourInputBookingComponent } from './hour-input-booking/hour-input-booking.component';
+import { LoginBookingComponent } from './login-booking/login-booking.component';
 
 @NgModule({
   declarations: [
     SpinnerComponent, 
     BookingPopupComponent, 
-    HourInputComponent
+    HourInputComponent, 
+    HourInputBookingComponent, 
+    LoginBookingComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +28,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   exports:[
     SpinnerComponent,
     BookingPopupComponent,
-    HourInputComponent
+    HourInputComponent,
+    LoginBookingComponent
   ]
 })
 export class SharedModule { }

@@ -75,17 +75,17 @@ export class LoginComponent implements OnInit {
 
           case "PERSON":
             this.loginSuccessfully();
-            this.router.navigate(["/user"]);
+            this.router.navigate(["/PERSON"]);
             break;
 
           case "ROOM":
             this.loginSuccessfully();
-            this.router.navigate(["/room"]);
+            this.router.navigate(["/ROOM"]);
             break;
 
           case "ADMIN":
             this.loginSuccessfully();
-            this.router.navigate(["/admin"]);
+            this.router.navigate(["/ADMIN"]);
             break;
 
           default:

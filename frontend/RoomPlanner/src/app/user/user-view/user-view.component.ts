@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Booking } from 'src/app/shared/models/Booking';
+
 import { RoomDataService } from 'src/app/core/services/room-data/room-data.service';
 import { FloorModel } from '../../core/models/FloorModel';
 import { Filters } from '../../shared/models/Filters';
 import { RoomModel } from '../../core/models/RoomModel';
+import { Booking } from '../../core/models/BookingModel';
 
 
 @Component({
@@ -14,12 +15,13 @@ import { RoomModel } from '../../core/models/RoomModel';
 export class UserViewComponent implements OnInit {
 
   bookingPopupOpen: boolean = false;
-  newBooking: Booking;
-  buildingLayout: FloorModel[] = new Array<FloorModel>();
-  rooms: RoomModel[];
-  displayedRooms: RoomModel[];
-  previousFilters: Filters;
+  booking: Booking;
+  buildingLayout: any;
+  rooms: any[];
+  displayedRooms: any[];
+  previousFilters: any;
 
+ 
   constructor(public roomDataService: RoomDataService) { }
 
   ngOnInit(): void {
@@ -105,7 +107,7 @@ export class UserViewComponent implements OnInit {
   }
 
   createBooking(booking: any) {
-    this.newBooking = booking;
+    this.booking = booking;
     this.bookingPopupOpen = true;
   }
 

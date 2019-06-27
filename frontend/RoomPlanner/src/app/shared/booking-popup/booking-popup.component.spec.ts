@@ -2,13 +2,16 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BookingPopupComponent } from './booking-popup.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Component, OnInit, Input, ɵConsole, Output, EventEmitter, Inject, DebugElement } from '@angular/core';
-import { Booking } from '../models/Booking';
 import { BookingService } from 'src/app/core/services/booking/booking.service';
-import { MatDatepickerModule, MatFormFieldModule, MatNativeDateModule, MatInputModule } from '@angular/material';
+import { MatDatepickerModule, MatFormFieldModule, MatNativeDateModule, MatInputModule, MatSnackBarModule } from '@angular/material';
 import { RoomsViewComponent } from '../../user/user-view/rooms-view/rooms-view.component';
 import { Data } from '@angular/router';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { LoginBookingComponent } from '../login-booking/login-booking.component';
+import { HourInputBookingComponent } from '../hour-input-booking/hour-input-booking.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('BookingPopupComponent', () => {
   let component: BookingPopupComponent;
@@ -20,13 +23,18 @@ describe('BookingPopupComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BookingPopupComponent ],
+      declarations: [ BookingPopupComponent, LoginBookingComponent, HourInputBookingComponent ],
       imports: [
         MatDatepickerModule,
         MatFormFieldModule,
         MatNativeDateModule,
         MatInputModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        MatSnackBarModule,
+        ReactiveFormsModule,
+        FormsModule,
+        HttpClientTestingModule,
+        RouterTestingModule
       ]
     })
     .compileComponents().then(() => {

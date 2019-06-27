@@ -1,0 +1,56 @@
+.loginContainer {
+    box-sizing: border-box;
+    position: relative;
+    padding: 25px 35px;
+    width: calc(100% - 20px);
+    max-width: 450px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 4px;
+    z-index: 100;
+    text-align: center;
+    margin-bottom: 10px; 
+}
+
+.loginBooking{
+    padding-bottom: 37px;
+}
+.loginBtn {
+    float:left;
+    width: 100px;
+    margin-bottom: 10px;
+}
+.cancelBtn {
+    float:right;
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+.logoutBox {
+    padding-bottom: 37px;
+}
+.logoutBtn {
+    float:right;
+    margin-bottom: 10px;
+}
+.logoutText {
+    float:left;
+    margin-top: 8px;
+}
+
+.statusMessage{
+    float: left;
+    margin: 10px;
+    font-size: 13px;
+}
+.colorRed{
+    color: red;
+}
+.colorGreen{
+    color: green;
+}
+
+mat-form-field{    
+    display: block;
+    font-size: 13px;
+} 

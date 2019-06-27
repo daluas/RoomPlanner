@@ -160,7 +160,7 @@ export class Interceptor implements HttpInterceptor {
     addAuthenticationToken(request: HttpRequest<any>, next: HttpHandler): HttpRequest<any> {
         // If you are calling an outside domain then do not add the token.
         // if (!request.url.match(/www.mydomain.com\//)) {
-        //     return request;
+        // return request;
         // }
         let token = this.getTokenLS();
         let userData = this.getUserData();
@@ -204,34 +204,32 @@ export class Interceptor implements HttpInterceptor {
         });
     }
 
-    //         // return next.handle(request).pipe(
-    //         tap({
-    //             next: (response: HttpEvent<any>) => {
-    //                 if (response instanceof HttpResponse) {
-    //                     console.log("backend responded");
-    //                     // response = response.clone({ body: "" })
-    //                 }
-    //                 if (response instanceof HttpErrorResponse) {
-    //                     console.log("error response (never)");
-    //                     console.log(response)
-    //                 }
-    //             },
-    //             error: (error: HttpErrorResponse) => {
-    //                 console.log(error.message);
-    //                 // status, statusText, name, headers, type, url, ok
-    //                 this._snackBar.open(
-    //                     `Call to ${error.url} failed with ${error.status} - ${error.statusText}`,
-    //                     'Close',
-    //                     {
-    //                         duration: 7000
-    //                     }
-    //                 );
+    // // return next.handle(request).pipe(
+    // tap({
+    // next: (response: HttpEvent<any>) => {
+    // if (response instanceof HttpResponse) {
+    // console.log("backend responded");
+    // // response = response.clone({ body: "" })
+    // }
+    // if (response instanceof HttpErrorResponse) {
+    // console.log("error response (never)");
+    // console.log(response)
+    // }
+    // },
+    // error: (error: HttpErrorResponse) => {
+    // console.log(error.message);
+    // // status, statusText, name, headers, type, url, ok
+    // this._snackBar.open(
+    // `Call to ${error.url} failed with ${error.status} - ${error.statusText}`,
+    // 'Close',
+    // {
+    // duration: 7000
+    // }
+    // );
 
-    //             },
-    //             complete: () => console.log('on complete')
-    //         })
-    //     )
+    // },
+    // complete: () => console.log('on complete')
+    // })
+    // )
 
 }
-
-

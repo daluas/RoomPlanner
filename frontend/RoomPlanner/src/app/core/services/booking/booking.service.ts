@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Booking } from 'src/app/shared/models/Booking';
+
+import { HttpParams, HttpClient } from '@angular/common/http';
+import { LoggedUser } from '../../models/LoggedUser';
+import { Booking } from '../../models/BookingModel';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookingService {
+  private backendUrl: string ='http://178.22.68.114/RoomPlanner';
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
-  createNewBooking(booking: Booking): Promise<boolean>{
+  createNewBooking(booking: Booking): Promise<Object> {
     console.log("createNewBooking(booking: Booking) was called!");
 
     // fara returnare de erori, doar true in caz de succes, ori false in caz de eroare
@@ -19,3 +23,4 @@ export class BookingService {
     });
   }
 }
+

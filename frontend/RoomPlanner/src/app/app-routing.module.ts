@@ -17,12 +17,12 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: "user",
+    path: "PERSON",
     loadChildren: "./user/user.module#UserModule",
     canActivate: [AuthGuard]
   },
   {
-    path: "room",
+    path: "ROOM",
     loadChildren: "./room/room.module#RoomModule",
     canActivate: [AuthGuard]
   },
