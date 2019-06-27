@@ -3,7 +3,9 @@ package edu.roomplanner.rest;
 import edu.roomplanner.dto.PersonDto;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.dto.UserDto;
+import edu.roomplanner.service.TokenParserService;
 import edu.roomplanner.service.UserService;
+import edu.roomplanner.validation.validator.UserRightsValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -27,10 +29,14 @@ public class UserRestController {
     private final static Logger LOGGER = LogManager.getLogger(UserRestController.class);
 
     private final UserService userService;
+    private final UserRightsValidator userRightsValidator;
+    private final TokenParserService tokenParserService;
 
     @Autowired
-    public UserRestController(UserService userService) {
+    public UserRestController(UserService userService, UserRightsValidator userRightsValidator, TokenParserService tokenParserService) {
         this.userService = userService;
+        this.userRightsValidator = userRightsValidator;
+        this.tokenParserService = tokenParserService;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/rooms")
@@ -39,6 +45,11 @@ public class UserRestController {
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error")})
     ResponseEntity<List<RoomDto>> getAllRooms() {
+
+        if (userRightsValidator.checkIfUserIsRoom()) {
+            RoomDto roomDto = userService.getRoomByEmail(tokenParserService.getEmailFromToken());
+            return new ResponseEntity(roomDto, HttpStatus.FOUND);
+        }
         LOGGER.info("Method was called.");
         List<RoomDto> allRooms = userService.getAllRooms();
         LOGGER.info("The following object was returned:" + allRooms);
@@ -55,8 +66,11 @@ public class UserRestController {
         LOGGER.info("Method was called.");
         RoomDto roomDto = userService.getRoomById(id);
         LOGGER.info("The following object was returned: " + roomDto);
+        if (userRightsValidator.checkIfUserIsRoom() && !userRightsValidator.checkIfLoggedRoomIsRequestedRoom(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         if (roomDto == null) {
-            return new ResponseEntity<>(new RoomDto(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(roomDto, HttpStatus.FOUND);
     }
@@ -69,6 +83,9 @@ public class UserRestController {
     @PreAuthorize("hasAuthority('person') or hasAuthority('room')")
     public ResponseEntity<UserDto> getUserEmailType(@RequestParam(name = "email") String email) {
         Optional<UserDto> userEmailTypeDtoOptional = userService.getUserDto(email);
+        if (userRightsValidator.checkIfUserIsRoom()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         return userEmailTypeDtoOptional.
                 map(userEmailTypeDto -> new ResponseEntity<>(userEmailTypeDto, HttpStatus.OK)).
                 orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));

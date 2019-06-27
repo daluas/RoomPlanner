@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.junit.Assert.assertFalse;
@@ -46,8 +47,8 @@ public class UserValidatorTest {
                 .withFloor(5)
                 .build();
 
-        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", floorEntity, 14);
+        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "Wonderland",
+                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
 
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(userEntity));
 
@@ -58,8 +59,8 @@ public class UserValidatorTest {
 
     @Test
     public void shouldReturnFalseWhenCheckValidRoomIdIsCalledWithInjectedPersonId() {
-        UserEntity userEntity = BuildersWrapper.buildPersonEntiy(3L, "sghitun@yahoo.com",
-                "sghitun", UserType.PERSON, "Git", "Mast");
+        UserEntity userEntity = BuildersWrapper.buildPersonEntity(3L, "sghitun@yahoo.com",
+                "sghitun", null, UserType.PERSON, "Git", "Mast");
 
         when(userRepository.findById(3L)).thenReturn(Optional.ofNullable(userEntity));
         boolean response = sut.checkValidRoomId(3L);
