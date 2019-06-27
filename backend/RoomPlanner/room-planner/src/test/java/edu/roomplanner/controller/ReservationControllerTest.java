@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
 import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.util.BuildersWrapper;
-import edu.roomplanner.util.OAuthHelper1;
+import edu.roomplanner.util.OAuthHelper;
 import org.flywaydb.core.Flyway;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +39,7 @@ public class ReservationControllerTest {
     private Flyway flyway;
 
     @Autowired
-    private OAuthHelper1 oAuthHelper;
+    private OAuthHelper oAuthHelper;
 
     private RequestPostProcessor bearerToken;
 

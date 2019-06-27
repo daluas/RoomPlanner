@@ -1,6 +1,7 @@
 package edu.roomplanner.mappers;
 
 import edu.roomplanner.dto.ReservationDto;
+import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.impl.ReservationDtoMapperImpl;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Calendar;
+import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -36,9 +38,9 @@ public class ReservationDtoMapperTest {
         endDate.set(2019, Calendar.JANUARY, 6, 10, 45, 0);
 
         UserEntity roomEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                UserType.ROOM, "Wonderland", 5, 14);
-        UserEntity personEntity = BuildersWrapper.buildPersonEntiy(1L, "sghitun@yahoo.com", "password",
-                UserType.PERSON, "Popescu", "Ana");
+                new HashSet<>(), new FloorEntity(), UserType.ROOM, "Wonderland", 14);
+        UserEntity personEntity = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "password",
+                new HashSet<>(), UserType.PERSON, "Popescu", "Ana");
 
         ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, personEntity, roomEntity, "description");
         ReservationDto expectedReservationDto = BuildersWrapper.buildReservationDto(1L, 1L, "sghitun@yahoo.com", startDate, endDate, "description");
@@ -58,17 +60,14 @@ public class ReservationDtoMapperTest {
         //Set<ReservationEntity> reservations = new HashSet<>();
 
         UserEntity roomEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                UserType.ROOM, "Wonderland", 5, 14);
-        UserEntity personEntity = BuildersWrapper.buildPersonEntiy(2L, "sghitun@yahoo.com", "password",
-                UserType.PERSON, "Popescu", "Ana");
+                new HashSet<>(),new FloorEntity(), UserType.ROOM, "Wonderland", 14);
+        UserEntity personEntity = BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "password",
+                new HashSet<>(), UserType.PERSON, "Popescu", "Ana");
 
         ReservationDto reservationDto = BuildersWrapper.buildReservationDto(1L, 1L, "sghitun@yahoo.com", startDate, endDate, "description");
         ReservationEntity expectedReservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, personEntity, roomEntity, "description");
        // reservations.add(expectedReservationEntity);
-        personEntity.setReservations(null);
-        personEntity.setRoles(null);
-        roomEntity.setReservations(null);
-        roomEntity.setRoles(null);
+
         when(userRepository.findByEmail("sghitun@yahoo.com")).thenReturn(java.util.Optional.of(personEntity));
         when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(roomEntity));
 

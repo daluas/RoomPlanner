@@ -1,6 +1,7 @@
 package edu.roomplanner.service;
 
 import edu.roomplanner.dto.ReservationDto;
+import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.ReservationDtoMapper;
@@ -18,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
@@ -49,9 +51,9 @@ public class ReservationServiceTest {
 
         ReservationDto reservationDto = BuildersWrapper.buildReservationDto(1L, null, "sghitun@yahoo.com", startDate, endDate, "description");
         UserEntity roomEntity = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "4wonD2C%",
-                UserType.ROOM, "Wonderland", 5, 14);
-        UserEntity personEntity = BuildersWrapper.buildPersonEntiy(2L, "sghitun@yahoo.com", "password",
-                UserType.PERSON, "Popescu", "Ana");
+                new HashSet<>(), new FloorEntity(),UserType.ROOM, "Wonderland",  14);
+        UserEntity personEntity = BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "password",
+                new HashSet<>(), UserType.PERSON, "Popescu", "Ana");
         ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, personEntity, roomEntity, "description");
 
         when(mapperService.mapReservationDtoToEntity(reservationDto)).thenReturn(reservationEntity);

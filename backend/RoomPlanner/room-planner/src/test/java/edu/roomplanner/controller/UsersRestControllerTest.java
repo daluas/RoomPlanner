@@ -1,5 +1,6 @@
 package edu.roomplanner.controller;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
 import edu.roomplanner.dto.RoomDto;
@@ -30,8 +31,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -67,9 +66,9 @@ public class UsersRestControllerTest {
         flyway.migrate();
 
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
-    }
 
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun", null, UserType.PERSON,"Stefania","Ghitun");
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun",
+                null, UserType.PERSON,"Stefania","Ghitun");
         userRepository.save(userEntityPerson);
 
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
