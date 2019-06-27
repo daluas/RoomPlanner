@@ -96,7 +96,7 @@ public class UsersRestControllerTest {
         List<RoomDto> roomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo, roomDtoThree);
         String jsonRoomDtoList = new ObjectMapper().writeValueAsString(roomDtoList);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms").with(bearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms").with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDtoList));
     }
@@ -108,7 +108,7 @@ public class UsersRestControllerTest {
                 new HashSet<>(), 5, 14, UserType.ROOM);
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 2).with(bearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/{id}", 2).with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDto));
     }
@@ -116,7 +116,7 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithStatusNotFoundWhenGetRoomByIdIsCalledWithNonexistentID() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 7).with(bearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/{id}", 7).with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
