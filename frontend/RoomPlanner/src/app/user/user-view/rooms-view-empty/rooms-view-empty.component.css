@@ -1,0 +1,14 @@
+.sorryText{
+    margin:0 auto;
+    text-align: center;
+    font-style: italic;
+}
+
+@media screen and (min-width: 768px) {
+    .sorryText{
+        margin:0 auto;
+        line-height: 700px;
+        text-align: center;
+        font-style: italic;
+}
+}

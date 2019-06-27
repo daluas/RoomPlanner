@@ -1,6 +1,6 @@
 <div class="container">
   <div class="filters-container">
-    <app-filters [buildingLayout]="buildingLayout" (filterChange)="updateRoomsBasedOnFilters($event)"></app-filters>
+    <app-filters [buildingLayout]="buildingLayout" (filterChange)="updateRoomsBasedOnFilters($event)" (roomChange)="roomIsSelectedOnFilters($event)"></app-filters>
   </div>
 
   <div class="booking-popup-container" [ngClass]="{'display-block' : bookingPopupOpen}">
@@ -9,6 +9,7 @@
   </div>
 
   <div class="room-view-container">
-    <!-- <app-rooms-view [rooms]="rooms" [forDate]="previousFilters.date" (createBooking)="createBooking($event)"></app-rooms-view> -->
+    <!-- <app-rooms-view [rooms]="displayedRooms" [forDate]="previousFilters.date" (createBooking)="createBooking($event)"></app-rooms-view> -->
+    <app-rooms-view-empty *ngIf="!displayedRooms || displayedRooms.length==0"></app-rooms-view-empty>
   </div>
 </div>

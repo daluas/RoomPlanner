@@ -1,4 +1,4 @@
-import { BookingModel } from './BookingModel';
+import { Booking} from './BookingModel';
 
 export class RoomModel{
     id?: number;
@@ -7,7 +7,7 @@ export class RoomModel{
     name: string;
     floor: number;
     maxPersons: number;
-    bookings: BookingModel[];
+    reservations: Booking[];
 
 
     constructor(){}

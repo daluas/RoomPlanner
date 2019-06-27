@@ -1,15 +1,23 @@
 import { LoggedUser } from './LoggedUser';
 
-export class BookingModel {
+export class Booking {
     id?: number;
     startDate: Date;
     endDate: Date;
+    roomId: number;
     description: string;
-    owner: LoggedUser;
-
-    constructor() { }
-
-    create(bookingModel: any): BookingModel {
-        return Object.assign(new BookingModel(), bookingModel);
+    personalEmail: string;
+ 
+    constructor() {
+        this.startDate=new Date();
+        this.endDate=new Date();
+        this.id=null;
+        this.roomId=null;
+        this.description=null;
+        this.personalEmail=null;
+     }
+ 
+    create(bookingModel: any): Booking {
+        return Object.assign(new Booking(), bookingModel);
     }
-}
+ }

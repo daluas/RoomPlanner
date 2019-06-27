@@ -15,6 +15,7 @@ import { RoomModel } from '../../../core/models/RoomModel';
 export class FiltersComponent implements OnInit, OnChanges {
 
   @Output() filterChange: EventEmitter<any> = new EventEmitter();
+  @Output() roomChange:EventEmitter<any>=new EventEmitter();
 
   dropdownOpen: boolean = false;
   dateChanged: boolean = false;
@@ -39,11 +40,8 @@ export class FiltersComponent implements OnInit, OnChanges {
 
   startHoursToSend: string = '00';
   startMinutesToSend: string = '00';
-
   endHoursToSend: string = '00';
   endMinutesToSend: string = '00';
-
-
 
   @Input() buildingLayout: FloorModel[];
 
@@ -51,11 +49,9 @@ export class FiltersComponent implements OnInit, OnChanges {
     private _dateAdapter: DateAdapter<Date>,
     private roomDataService: RoomDataService
   ) {
-    
   }
 
   ngOnInit() {
-   
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -145,6 +141,9 @@ export class FiltersComponent implements OnInit, OnChanges {
     });
 
     this.filterChange.emit(this.filters);
+    if(this.roomSelected!=null){
+      this.roomChange.emit(this.roomSelected);
+    }
   }
 
   onSliderChange(event) {
@@ -159,7 +158,7 @@ export class FiltersComponent implements OnInit, OnChanges {
     if (event.value == "all") {
       this.roomIsSelected = false;
     } else {
-      this.roomSelected = new RoomModel().create({ name: event.value });
+      this.roomSelected = new RoomModel().create(event.value);
       this.roomIsSelected = true;
     }
   }

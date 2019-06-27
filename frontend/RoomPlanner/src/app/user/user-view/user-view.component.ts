@@ -18,7 +18,9 @@ export class UserViewComponent implements OnInit {
   buildingLayout: FloorModel[] = new Array<FloorModel>();
   rooms: RoomModel[];
   displayedRooms: RoomModel[];
+  singleRoomSelected: RoomModel;
   previousFilters: Filters;
+
 
   constructor(public roomDataService: RoomDataService) { }
 
@@ -34,13 +36,10 @@ export class UserViewComponent implements OnInit {
 
   async setDefaultData() {
 
-    await this.roomDataService.getFloors().then((floors) => {
-      this.buildingLayout = floors;
-    });
+    this.buildingLayout = await this.roomDataService.getFloors();
 
     this.buildingLayout.sort(function (a, b) { return a.floor - b.floor });
 
-    let copyArray: FloorModel[];
     let firstFloor: FloorModel;
 
     firstFloor = this.buildingLayout[0];
@@ -52,11 +51,18 @@ export class UserViewComponent implements OnInit {
       floor: firstFloor.floor
     });
 
+  
+
     this.roomDataService.getRoomsByFilter(this.previousFilters).then((defaultRooms) => {
       this.rooms = <RoomModel[]>defaultRooms;
-      console.log(this.rooms);
       this.displayedRooms = <RoomModel[]>defaultRooms;
     })
+
+  }
+
+  roomIsSelectedOnFilters(room: RoomModel) {
+    console.log("Room emited: ", room);
+    this.singleRoomSelected = room;
   }
 
   updateRoomsBasedOnFilters(filters: Filters) {
@@ -70,19 +76,18 @@ export class UserViewComponent implements OnInit {
         this.setDisplayedRooms(filters);
       })
     }
-
     this.previousFilters = new Filters().create(filters);
   }
 
   filteredRoomsAlreadyExist(filters: Filters): boolean {
-    if (this.verifyDate(this.previousFilters.startDate,filters.startDate) &&
+    if (this.verifyDate(this.previousFilters.startDate, filters.startDate) &&
       this.previousFilters.floor == filters.floor) {
       return true;
     }
     return false;
   }
 
-  verifyDate(date1: Date, date2: Date):boolean {
+  verifyDate(date1: Date, date2: Date): boolean {
     if (date1.getFullYear() == date2.getFullYear()) {
       if (date1.getMonth() == date2.getMonth()) {
         if (date1.getDate() == date2.getDate()) {
@@ -94,14 +99,35 @@ export class UserViewComponent implements OnInit {
   }
 
   setDisplayedRooms(filters: Filters) {
-    this.displayedRooms = this.rooms.map((room) => {
-      if (filters.minPersons == room.maxPersons ) {
-        if(this.roomDataService.verifyRoomAvailabilityByFilters(room,filters)){
-          return room;
+
+    console.log(this.singleRoomSelected);
+
+    if (this.singleRoomSelected != null) {
+
+      console.log(this.roomDataService.verifyRoomAvailabilityByFilters(this.singleRoomSelected, filters))
+      if (this.roomDataService.verifyRoomAvailabilityByFilters(this.singleRoomSelected, filters)) {
+        this.displayedRooms = new Array<RoomModel>();
+        this.displayedRooms.push(this.singleRoomSelected);
+      }
+    } else {
+      this.displayedRooms = this.rooms.map((room) => {
+        if (filters.minPersons != null) {
+          if (filters.minPersons == room.maxPersons) {
+            if (this.roomDataService.verifyRoomAvailabilityByFilters(room, filters)) {
+              return room;
+            }
+          }
+        } else {
+          console.log(room);
+          console.log(this.roomDataService.verifyRoomAvailabilityByFilters(room, filters))
+          if (this.roomDataService.verifyRoomAvailabilityByFilters(room, filters)) {
+            return room;
+          }
         }
       }
+      );
     }
-    );
+
   }
 
   createBooking(booking: any) {
@@ -118,7 +144,7 @@ export class UserViewComponent implements OnInit {
 
     this.rooms.forEach(room => {
       if (room.id === booking.roomId) {
-        room.bookings.push(booking);
+        room.reservations.push(booking);
       }
     });
   }
