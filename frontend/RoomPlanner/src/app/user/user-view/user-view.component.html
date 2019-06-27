@@ -1,29 +1,14 @@
-<!-- <div class="container">
+<div class="container">
   <div class="filters-container">
     <app-filters [buildingLayout]="buildingLayout" (filterChange)="updateRoomsBasedOnFilters($event)"></app-filters>
   </div>
 
-  <div class="booking-popup-container" *ngIf="bookingPopupOpen" class="display-block">
+  <div class="booking-popup-container" *ngIf="bookingPopupOpen" [ngClass]="{'display-block' : bookingPopupOpen}">
     <div class="booking-popup-close"></div>
-    <app-booking-popup [booking]="newBooking" (booked)="addCreatedBooking($event)" (closePopup)="closeBookingPopup()"></app-booking-popup>
+    <app-booking-popup [(booking)]="booking" (booked)="addCreatedBooking($event)" (closePopup)="closeBookingPopup()"></app-booking-popup>
   </div>
 
   <div class="room-view-container">
-    <!-- <app-rooms-view [rooms]="rooms" [forDate]="previousFilters.date" (createBooking)="createBooking($event)"></app-rooms-view> -->
+    <app-rooms-view [rooms]="displayedRooms" [forDate]="previousFilters.date" (createBooking)="createBooking($event)"></app-rooms-view>
   </div>
-</div> -->
-
-<div class="container">
-    <div class="filters-container">
-      <app-filters [buildingLayout]="buildingLayout" (filterChange)="updateRoomsBasedOnFilters($event)"></app-filters>
-    </div>
-  
-    <div class="booking-popup-container"  *ngIf="bookingPopupOpen" [ngClass]="{'display-block' : bookingPopupOpen}">
-      <div class="booking-popup-close"></div>
-      <app-booking-popup [(booking)]="booking" (booked)="addCreatedBooking($event)" (closePopup)="closeBookingPopup()"></app-booking-popup>
-    </div>
-  
-    <div class="room-view-container">
-      <app-rooms-view [rooms]="rooms" [forDate]="previousFilters.date" (createBooking)="createBooking($event)"></app-rooms-view>
-    </div>
-  </div>
+</div>

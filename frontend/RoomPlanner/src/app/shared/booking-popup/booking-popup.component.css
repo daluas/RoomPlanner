@@ -8,6 +8,7 @@
     background: #ffffff;
     border-radius: 4px;
     z-index: 100;
+    margin-bottom: 10px;
 }
 
 .datePopup {
@@ -63,27 +64,19 @@
 .deleteBtn{
     width: 76px;
     margin-left: 20px;
-    float: right;
 }
-
 .invalidHoursContainer {
     margin-top: 10px;
     font-size: 12px; 
-    color: red;
-    text-align: center;
 }
-
-.authBox {
-    box-sizing: border-box;
-    position: relative;
-    padding: 25px 35px;
-    width: calc(100% - 20px);
-    max-width: 450px;
-    margin: 0 auto;
-    background: #ffffff;
-    border-radius: 4px;
-    z-index: 100;
-
-    text-align: center;
-    margin-bottom: 10px; 
+.errorMessage{
+    color: red;
+    font-size:9px;
+    text-align:center;
+}
+.error{
+    width:100%;
+}
+.hours{
+    margin-top: 10px;
 }

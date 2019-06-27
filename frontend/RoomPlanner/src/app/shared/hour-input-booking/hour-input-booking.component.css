@@ -39,7 +39,10 @@ input{
     margin-bottom: 5px;
     width: 100%;
 }
-
+.successText{
+    color:green;
+    font-size: 9px;
+}
 .hour {
     display: inline-block;
     position: relative;
@@ -104,12 +107,6 @@ input{
     top: 25px;
 }
 
-.bookingHoursContainer {
-    
-}
-/* .hourContainer {
-    width: 150px;
-} */
 .formStyle{
     margin:0;
     display: inline;
@@ -117,5 +114,11 @@ input{
 .hourContainer{
     padding-left:30px;
     padding-right: 30px;
+    text-align: center;
+}
+.invalidHoursContainer {
+    margin-top: 10px;
+    font-size: 9px; 
+    color: red;
     text-align: center;
 }

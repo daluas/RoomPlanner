@@ -72,13 +72,17 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   groupeBookings() {
+    console.log(this.rooms);
     if (this.rooms) {
       this.groupedBookings = [];
 
       this.rooms.forEach(room => {
 
         let group = []
-        room.bookings.forEach(booking => {
+        room.reservations.forEach(booking => {
+          booking.startDate = new Date(booking.startDate);
+          booking.endDate = new Date(booking.endDate);
+
           group.push({
             startDate: booking.startDate,
             endDate: booking.endDate,
@@ -180,7 +184,7 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   isBookingCreatedByCurrentUser(booking) {
-    return booking.ownerEmail === this.currentUser.email;
+    return booking.personEmail === this.currentUser.email;
   }
 
   getUsernameFromEmail(email): string {
@@ -235,7 +239,7 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
 
   shouldBeDisplayedHalf() {
     let status = false;
-    this.rooms[this.newBookingRoomIndex].bookings.forEach(booking => {
+    this.rooms[this.newBookingRoomIndex].reservations.forEach(booking => {
       if (this.isBookingCreatedByCurrentUser(booking)) {
         status = true;
         return;
@@ -406,7 +410,7 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
       arrowsEndTime = arrowsStartTime + 1000 * 60 * 30;
     }
 
-    let bookings = this.rooms[this.newBookingRoomIndex].bookings;
+    let bookings = this.rooms[this.newBookingRoomIndex].reservations;
 
     let bookingStartTime, bookingEndTime;
     let bookingCanBePerformed = true;

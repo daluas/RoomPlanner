@@ -3,6 +3,7 @@ import { MaterialDesignModule } from '../../material-design/material-design.modu
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HourInputBookingComponent } from 'src/app/shared/hour-input-booking/hour-input-booking.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('HourInputComponent', () => {
   let component: HourInputBookingComponent;
@@ -17,6 +18,7 @@ describe('HourInputComponent', () => {
       BrowserAnimationsModule,
       ReactiveFormsModule,
       FormsModule,
+      HttpClientTestingModule
     ]
   })
     .compileComponents();

@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { UserType } from './core/enums/enums';
 
 const routes: Routes = [
   {
@@ -17,12 +18,12 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: "PERSON",
+    path: UserType.PERSON.toLowerCase(),
     loadChildren: "./user/user.module#UserModule",
     canActivate: [AuthGuard]
   },
   {
-    path: "ROOM",
+    path: UserType.ROOM.toLowerCase(),
     loadChildren: "./room/room.module#RoomModule",
     canActivate: [AuthGuard]
   },

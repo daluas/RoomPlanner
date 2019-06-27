@@ -36,6 +36,14 @@ export class UserViewComponent implements OnInit {
 
   async setDefaultData() {
 
+    this.previousFilters = new Filters().create({
+      date:  new Date(),
+      startDate: new Date(new Date().setHours(0, 0, 0, 0)),
+      endDate: new Date(new Date().setHours(23, 59, 0, 0)),
+      minPersons: null,
+      floor: null
+    });
+
     await this.roomDataService.getFloors().then((floors) => {
       this.buildingLayout = floors;
     });
@@ -47,12 +55,7 @@ export class UserViewComponent implements OnInit {
 
     firstFloor = this.buildingLayout[0];
 
-    this.previousFilters = new Filters().create({
-      startDate: new Date(new Date().setHours(0, 0, 0, 0)),
-      endDate: new Date(new Date().setHours(23, 59, 0, 0)),
-      minPersons: null,
-      floor: firstFloor.floor
-    });
+    this.previousFilters.floor = firstFloor.floor
 
     this.roomDataService.getRoomsByFilter(this.previousFilters).then((defaultRooms) => {
       this.rooms = <RoomModel[]>defaultRooms;

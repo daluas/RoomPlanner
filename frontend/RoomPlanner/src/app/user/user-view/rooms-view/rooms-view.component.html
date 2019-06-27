@@ -1,8 +1,8 @@
-<!-- <div class="container" (mousemove)="mouseMove($event)" (mouseup)="finishBookingDragEvents()">
+<div class="container" (mousemove)="mouseMove($event)" (mouseup)="finishBookingDragEvents()">
   <div class="room-header">
     <div class="header-element element-width" *ngFor="let room of rooms">
       <span class="bold">{{room.name}}</span>, <span class="small-font">capacity: <span
-          class="bold">{{room.capacity}}</span></span>
+          class="bold">{{room.maxPersons}}</span></span>
     </div>
   </div>
 
@@ -34,14 +34,14 @@
           <div class="booking booking-personal" *ngIf="group.personal"
             (click)="openBooking(bookingIndex === group.focus, roomIndex, groupIndex, bookingIndex)" [style]="getStyleForBooking(booking)"
             [ngClass]="{'booking-half-left': personalBookingsDisplayedHalf && roomIndex === newBookingRoomIndex, 'booking-personal-active': bookingIndex === group.focus}">
-            <div class="booking-owner">{{getUsernameFromEmail(booking.ownerEmail)}}</div>
+            <div class="booking-owner">{{getUsernameFromEmail(booking.personEmail)}}</div>
             <div class="booking-description">{{booking.description}}
             </div>
           </div>
 
           <div class="booking booking-other" *ngIf="!group.personal && bookingIndex === 0"
             [style]="getStyleForGroup(group)">
-            <div class="booking-owner">{{getUsernameFromEmail(booking.ownerEmail)}}</div>
+            <div class="booking-owner">{{getUsernameFromEmail(booking.personEmail)}}</div>
           </div>
         </div>
       </div>
@@ -66,4 +66,4 @@
       </div>
     </div>
   </div>
-</div> -->
+</div>

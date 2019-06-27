@@ -28,7 +28,7 @@ describe('UserViewComponent', () => {
         SharedModule,
         HttpClientTestingModule
       ],
-      providers: [AuthGuard, { provide: Router, useValue: routerMock},]
+      providers: [AuthGuard, { provide: Router, useValue: routerMock}]
     })
       .compileComponents();
   }));

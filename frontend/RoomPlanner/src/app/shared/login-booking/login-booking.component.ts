@@ -5,6 +5,7 @@ import { AuthService } from '../../core/services/auth/auth.service';
 import { LoginModel } from '../../core/models/LoginModel';
 import { LoggedUser } from '../../core/models/LoggedUser';
 import { BookingPopupComponent } from '../booking-popup/booking-popup.component'
+import { UserType } from '../../core/enums/enums';
 
 @Component({
   selector: 'app-login-booking',
@@ -79,15 +80,15 @@ export class LoginBookingComponent implements OnInit {
 
         switch (user.type) {
 
-          case "PERSON":
+          case UserType.PERSON:
             this.loginBookingSuccessfully();
             break;
 
-          case "ROOM":
+          case UserType.ROOM:
             this.loginBookingFailed();
             break;
 
-          case "ADMIN":
+          case UserType.ADMIN:
             this.loginBookingSuccessfully();
             break;
 

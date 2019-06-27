@@ -9,6 +9,7 @@ import { HttpResponse, HttpHandler } from '@angular/common/http';
 import { Interceptor } from '../core/interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { UserType } from '../core/enums/enums';
 
 @Component({
   selector: 'app-login',
@@ -73,19 +74,19 @@ export class LoginComponent implements OnInit {
         this.authService.OnCurrentUserChanged(user)
         switch (user.type) {
 
-          case "PERSON":
+          case UserType.PERSON:
             this.loginSuccessfully();
-            this.router.navigate(["/PERSON"]);
+            this.router.navigate(['/' + UserType.PERSON.toLowerCase()]);
             break;
 
-          case "ROOM":
+          case UserType.ROOM:
             this.loginSuccessfully();
-            this.router.navigate(["/ROOM"]);
+            this.router.navigate(['/' + UserType.ROOM.toLowerCase()]);
             break;
 
-          case "ADMIN":
+          case UserType.ADMIN:
             this.loginSuccessfully();
-            this.router.navigate(["/ADMIN"]);
+            this.router.navigate(['/' + UserType.ADMIN.toLowerCase()]);
             break;
 
           default:
