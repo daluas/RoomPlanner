@@ -46,19 +46,6 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
     }
 
 
-   /* public RoomDto mapEntityToDto(RoomEntity roomEntity) {
-
-        Set<ReservationEntity> reservationEntitySet = roomEntity.getReservations();
-        Set<ReservationDto> reservationDtoSet = mapRoomEntitySetToDtoSet(reservationEntitySet);
-
-        if (roomEntity.getFloor() == null) {
-            return (RoomDto) UserDtoBuilder.builder()
-                    .withType(roomEntity.getType())
-                    .build();
-        }
-*/
-
-
     public RoomDto mapEntityToDto(RoomEntity roomEntity) {
 
         Set<ReservationEntity> reservationEntitySet = roomEntity.getReservations();

@@ -38,11 +38,11 @@ public class UserRestController {
     private final TokenParserService tokenParserService;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
     private ReservationRepository reservationRepository;
     @Autowired
-    RoomDtoMapper roomDtoMapper;
+    private RoomDtoMapper roomDtoMapper;
 
 
     @Autowired
