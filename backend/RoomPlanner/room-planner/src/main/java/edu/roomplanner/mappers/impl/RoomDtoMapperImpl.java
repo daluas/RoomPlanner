@@ -31,6 +31,13 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
 
         Set<ReservationEntity> reservationEntitySet = roomEntity.getReservations();
         Set<ReservationDto> reservationDtoSet = mapRoomEntitySetToDtoSet(reservationEntitySet);
+
+        if (roomEntity.getFloor() == null) {
+            return (RoomDto) UserDtoBuilder.builder()
+                    .withType(roomEntity.getType())
+                    .build();
+        }
+
         return (RoomDto) UserDtoBuilder.builder()
                 .withId(roomEntity.getId())
                 .withEmail(roomEntity.getEmail())

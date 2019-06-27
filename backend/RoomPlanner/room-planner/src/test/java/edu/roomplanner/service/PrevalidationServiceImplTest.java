@@ -31,20 +31,20 @@ public class PrevalidationServiceImplTest {
 
     @Test
     public void shouldReturnInvalidNullParameters() {
-        String expected = "Invalid parameters";
-        String actual = sut.prevalidate(null, null, null, null);
+        Integer expected = 400;
+        Integer actual = sut.prevalidate(null, null, null, null);
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnInvalidPersonEmailParameters() {
-        String expected = "Invalid parameters";
+        Integer expected = 400;
         String email = "invalidEmail@yahoo.com";
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
-        String actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, 1L);
+        Integer actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, 1L);
 
         assertEquals(expected, actual);
 
@@ -52,40 +52,40 @@ public class PrevalidationServiceImplTest {
 
     @Test
     public void shouldReturnInvalidPersonTypeParameters() {
-        String expected = "Invalid parameters";
+        Integer expected = 400;
         String email = "email@yahoo.com";
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.ofNullable(UserEntityBuilder.builder().withId(1L).withType(UserType.ROOM).build()));
 
-        String actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, 1L);
+        Integer actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, 1L);
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnInvalidRoomIdParameters() {
-        String expected = "Invalid parameters";
+        Integer expected = 400;
         String email = "email@yahoo.com";
         Long roomId = 2L;
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.ofNullable(UserEntityBuilder.builder().withId(1L).withType(UserType.PERSON).build()));
         when(userRepository.findById(roomId)).thenReturn(Optional.empty());
 
-        String actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, roomId);
+        Integer actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, roomId);
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnInvalidRoomTypeParameters() {
-        String expected = "Invalid parameters";
+        Integer expected = 400;
         String email = "email@yahoo.com";
         Long roomId = 2L;
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.ofNullable(UserEntityBuilder.builder().withId(1L).withType(UserType.PERSON).build()));
         when(userRepository.findById(roomId)).thenReturn(Optional.ofNullable(UserEntityBuilder.builder().withId(roomId).withType(UserType.PERSON).build()));
 
-        String actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, roomId);
+        Integer actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, roomId);
 
         assertEquals(expected, actual);
     }

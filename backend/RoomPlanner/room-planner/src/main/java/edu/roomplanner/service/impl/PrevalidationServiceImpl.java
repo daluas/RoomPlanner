@@ -31,9 +31,9 @@ public class PrevalidationServiceImpl implements PrevalidationService {
     }
 
     @Override
-    public String prevalidate(Calendar startDate, Calendar endDate, String email, Long roomId) {
+    public Integer prevalidate(Calendar startDate, Calendar endDate, String email, Long roomId) {
         if (verifyAllParameters(startDate, endDate, email, roomId)) {
-            return "Invalid parameters";
+            return 400;
         }
 
         PersonEntity personEntity = (PersonEntity) userRepository.findByEmail(email).get();
@@ -41,14 +41,14 @@ public class PrevalidationServiceImpl implements PrevalidationService {
 
         ValidationResult validStartEndDate = startEndDateValidator.validate(reservationEntity);
         if (validStartEndDate.getError() != null) {
-            return "Invalid parameterss";
+            return 400;
         }
 
         ValidationResult validDate = availabilityValidator.validate(reservationEntity);
         if (validDate.getError() == null) {
-            return "You can book";
+            return 200;
         }
-        return validDate.getError();
+        return 400;
 
 
     }

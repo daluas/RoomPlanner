@@ -31,6 +31,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.TimeZone;
 
 import static org.junit.Assert.*;
@@ -73,19 +74,19 @@ public class PrevalidationRestControllerTest {
 
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        UserEntity userEntityPersonOne = BuildersWrapper.buildPersonEntiy(1L, "sghitun@yahoo.com", "sghitun", UserType.PERSON, "Stefania", "Ghitun");
-        UserEntity userEntityPersonTwo = BuildersWrapper.buildPersonEntiy(5L, "testEmail@yahoo.com", "test", UserType.PERSON, "Test", "Name");
+        UserEntity userEntityPersonOne = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
+        UserEntity userEntityPersonTwo = BuildersWrapper.buildPersonEntity(5L, "testEmail@yahoo.com", "test", null, UserType.PERSON, "Test", "Name");
         userRepository.save(userEntityPersonOne);
         userRepository.save(userEntityPersonTwo);
 
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
 
         UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", BuildersWrapper.buildFloorEntity(1L, 5), 14);
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "westeros",
-                UserType.ROOM, "Westeros", BuildersWrapper.buildFloorEntity(2L, 8), 20);
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros", 20);
         UserEntity userEntityThree = BuildersWrapper.buildRoomEntity(4L, "neverland@yahoo.com", "neverland",
-                UserType.ROOM, "Neverland", BuildersWrapper.buildFloorEntity(3L, 4), 5);
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(3L, 4), UserType.ROOM, "Neverland", 5);
 
         Calendar sysDate = Calendar.getInstance();
         sysDate.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -125,142 +126,147 @@ public class PrevalidationRestControllerTest {
     @Test
     public void shouldReturnInvalidParametersWhenCalledWithPastDate() throws Exception {
 
-        String result = "Invalid parameters";
+        Integer result = 400;
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=Thu, 27 Jun 2019 5:53:00 GMT&endDate=Thu, 27 Jun 2019 8:30:00 GMT&email=sghitun@yahoo.com")
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(result));
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
 
     }
 
     @Test
     public void shouldReturnInvalidParametersWhenCalledWithWrongEmail() throws Exception {
 
-        String result = "Invalid parameters";
+        Integer result = 400;
 
         Calendar startDate = Calendar.getInstance();
-        startDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 10);
+        startDate.add(startDate.MINUTE, 10);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 40);
+        endDate.add(startDate.MINUTE, 40);
+        //   endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 40);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=notExistEmail@yahoo.com")
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(result));
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
 
     }
 
     @Test
     public void shouldReturnInvalidParametersWhenCalledWithWrongRoomId() throws Exception {
 
-        String result = "Invalid parameters";
+        Integer result = 400;
 
         Calendar startDate = Calendar.getInstance();
-        startDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 10);
+        startDate.add(startDate.MINUTE, 10);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 40);
+        endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE));
+        endDate.add(endDate.MINUTE, 40);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=5000&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=sghitun@yahoo.com")
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(result));
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
 
     }
 
     @Test
     public void shouldReturnInvalidParametersWhenCalledWithLessThanMinMinutes() throws Exception {
 
-        String result = "Invalid parameters";
+        Integer result = 400;
 
         Calendar startDate = Calendar.getInstance();
-        startDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 10);
+        startDate.add(startDate.MINUTE, 10);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 20);
+        endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE));
+        endDate.add(endDate.MINUTE, 20);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=sghitun@yahoo.com")
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(result));
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
 
     }
 
     @Test
     public void shouldReturnValidParametersWhenCalled() throws Exception {
 
-        String result = "You can book";
+        Integer result = 200;
 
         Calendar startDate = Calendar.getInstance();
-        startDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 10);
+        startDate.add(startDate.MINUTE, 10);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 40);
+        endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE));
+        endDate.add(endDate.MINUTE, 30);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=sghitun@yahoo.com")
                 .with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(result));
+                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
 
     }
 
     @Test
     public void shouldReturnInValidParametersWhenCalledWithAnotherReservation() throws Exception {
 
-        String result = "The date is not available!";
+        Integer result = 400;
 
         Calendar startDate = Calendar.getInstance();
-        startDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 10);
+        startDate.add(startDate.MINUTE, 10);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 40);
+        endDate.add(endDate.MINUTE, 40);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=testEmail@yahoo.com")
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(result));
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
 
     }
 
     @Test
     public void shouldReturnValidParametersWhenCalledWithAnotherReservationThatYouOwn() throws Exception {
 
-        String result = "You can book";
+        Integer result = 200;
 
         Calendar startDate = Calendar.getInstance();
-        startDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 10);
+        startDate.add(startDate.MINUTE, 10);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 40);
+        endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE));
+        endDate.add(endDate.MINUTE, 40);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=sghitun@yahoo.com")
                 .with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(result));
+                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
 
     }
 
     @Test
     public void shouldReturnValidParametersWhenCalledWithInnerReservations() throws Exception {
 
-        String result = "You can book";
+        Integer result = 200;
 
         Calendar startDate = Calendar.getInstance();
-        startDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE) + 31);
+        startDate.add(startDate.MINUTE, 31);
         startDate.set(Calendar.SECOND, 0);
         startDate.set(Calendar.MILLISECOND, 0);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.set(Calendar.HOUR, startDate.get(Calendar.HOUR) + 2);
+        endDate.set(Calendar.HOUR, endDate.get(Calendar.HOUR) + 2);
         endDate.set(Calendar.SECOND, 0);
         endDate.set(Calendar.MILLISECOND, 0);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=testEmail@yahoo.com")
                 .with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(result));
+                .andExpect(MockMvcResultMatchers.content().string(result.toString()));
 
     }
 

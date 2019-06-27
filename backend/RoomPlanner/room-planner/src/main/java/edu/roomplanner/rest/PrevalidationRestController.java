@@ -28,15 +28,18 @@ public class PrevalidationRestController {
 
     private static final Logger LOGGER = LogManager.getLogger(PrevalidationRestController.class);
 
-    @RequestMapping(method = RequestMethod.GET, value = "api/prevalidation")
+    @RequestMapping(method = RequestMethod.GET, value = "api/prevalidation", produces = "application/json")
     @PreAuthorize("hasAuthority('person')")
-    public ResponseEntity<String> prevalidation(@RequestParam("roomId") Long roomId, @RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar startDate,
-                                                @RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar endDate, @RequestParam("email") String email) {
+    public ResponseEntity<HttpStatus> prevalidation(@RequestParam("roomId") Long roomId, @RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar startDate,
+                                                    @RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar endDate, @RequestParam("email") String email) {
 
         LOGGER.info("Method was called.");
-        String result = prevalidationService.prevalidate(startDate, endDate, email, roomId);
+        Integer result = prevalidationService.prevalidate(startDate, endDate, email, roomId);
         LOGGER.info("The following object was returned:" + result);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        if (result == 200) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
     }
 

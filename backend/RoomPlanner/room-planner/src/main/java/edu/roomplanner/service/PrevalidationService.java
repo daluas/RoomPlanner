@@ -4,5 +4,5 @@ import java.util.Calendar;
 
 public interface PrevalidationService {
 
-    String prevalidate(Calendar startDate, Calendar endDate, String email, Long roomId);
+    Integer prevalidate(Calendar startDate, Calendar endDate, String email, Long roomId);
 }
