@@ -1,9 +1,8 @@
 package edu.roomplanner.validation.validator.impl;
 
-import edu.roomplanner.builders.ReservationEntityBuilder;
 import edu.roomplanner.entity.ReservationEntity;
-import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.repository.ReservationRepository;
+import edu.roomplanner.util.ReservationEntityUtil;
 import edu.roomplanner.validation.ValidationResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -27,11 +26,15 @@ public class AvailabilityValidatorTest {
     @InjectMocks
     private AvailabilityValidator sut;
 
+    private ReservationEntityUtil util = new ReservationEntityUtil();
+
     @Test
     public void shouldFindAValidDate() {
         ValidationResult expectedResult = new ValidationResult();
-        ReservationEntity reservationEntity = getReservationEntity();
-        when(repository.findAvailableDate(reservationEntity.getStartDate(), reservationEntity.getEndDate(), reservationEntity.getRoom().getId()))
+        Calendar startDate = util.createDate(2007, Calendar.JANUARY, 6, 10, 10, 0);
+        Calendar endDate = util.createDate(2007, Calendar.JANUARY, 6, 10, 45, 0);
+        ReservationEntity reservationEntity = util.getReservationEntity(2L, startDate, endDate);
+        when(repository.findNonAvailableDate(reservationEntity.getStartDate(), reservationEntity.getEndDate(), reservationEntity.getRoom().getId()))
                 .thenReturn(new ArrayList<>());
 
         ValidationResult result = sut.validate(reservationEntity);
@@ -42,32 +45,64 @@ public class AvailabilityValidatorTest {
     @Test
     public void shouldNotFindAValidDate() {
         ValidationResult expectedResult = new ValidationResult("The date is not available!");
-        ReservationEntity reservationEntity = getReservationEntity();
-        when(repository.findAvailableDate(reservationEntity.getStartDate(), reservationEntity.getEndDate(), reservationEntity.getRoom().getId()))
+        Calendar startDate = util.createDate(2007, Calendar.JANUARY, 6, 10, 10, 0);
+        Calendar endDate = util.createDate(2007, Calendar.JANUARY, 6, 10, 45, 0);
+        ReservationEntity reservationEntity = util.getReservationEntity(2L, startDate, endDate);
+        ReservationEntity reservationEntity2 = util.getReservationEntity(3L, startDate, endDate);
+        when(repository.findNonAvailableDate(reservationEntity.getStartDate(), reservationEntity.getEndDate(), reservationEntity.getRoom().getId()))
+                .thenReturn(Arrays.asList(reservationEntity2));
+
+        ValidationResult result = sut.validate(reservationEntity);
+
+        assertEquals(expectedResult.getError(), result.getError());
+    }
+
+    @Test
+    public void shouldFindAValidDateForUserWithTheSameId() {
+        ValidationResult expectedResult = new ValidationResult();
+        Calendar startDate = util.createDate(2007, Calendar.JANUARY, 6, 10, 10, 0);
+        Calendar endDate = util.createDate(2007, Calendar.JANUARY, 6, 10, 45, 0);
+        ReservationEntity reservationEntity = util.getReservationEntity(1L, startDate, endDate);
+        when(repository.findNonAvailableDate(reservationEntity.getStartDate(), reservationEntity.getEndDate(), reservationEntity.getRoom().getId()))
                 .thenReturn(Arrays.asList(reservationEntity));
 
         ValidationResult result = sut.validate(reservationEntity);
 
-        assertEquals(result.getError(), expectedResult.getError());
+        assertEquals(expectedResult.getError(), result.getError());
     }
 
-    private ReservationEntity getReservationEntity() {
+    @Test
+    public void shouldFindAValidDateForUserWithTheSameIdAndWithDataOverlapping() {
+        ValidationResult expectedResult = new ValidationResult();
+        Calendar startDate = util.createDate(2007, Calendar.JANUARY, 6, 10, 10, 0);
+        Calendar endDate = util.createDate(2007, Calendar.JANUARY, 6, 10, 45, 0);
+        ReservationEntity reservationEntity = util.getReservationEntity(1L, startDate, endDate);
+        startDate = util.createDate(2007, Calendar.JANUARY, 6, 9, 10, 0);
+        endDate = util.createDate(2007, Calendar.JANUARY, 6, 11, 45, 0);
+        ReservationEntity reservationEntity2 = util.getReservationEntity(1L, startDate, endDate);
+        when(repository.findNonAvailableDate(reservationEntity.getStartDate(), reservationEntity.getEndDate(), reservationEntity.getRoom().getId()))
+                .thenReturn(Arrays.asList(reservationEntity2));
 
-        RoomEntity room = new RoomEntity();
-        room.setId(1L);
+        ValidationResult result = sut.validate(reservationEntity);
 
-        Calendar startDate = Calendar.getInstance();
-        Calendar endDate = Calendar.getInstance();
-        startDate.set(2007, Calendar.JANUARY, 6, 10, 10, 0);
-        endDate.set(2007, Calendar.JANUARY, 6, 10, 45, 0);
-
-        return new ReservationEntityBuilder()
-                .withStartDate(startDate)
-                .withEndDate(endDate)
-                .withRoom(room)
-                .build();
-
+        assertEquals(expectedResult.getError(), result.getError());
     }
 
+    @Test
+    public void shouldFindAValidDateForUserWithoutTheSameIdAndWithDataOverlapping() {
+        ValidationResult expectedResult = new ValidationResult("The date is not available!");
+        Calendar startDate = util.createDate(2007, Calendar.JANUARY, 6, 10, 10, 0);
+        Calendar endDate = util.createDate(2007, Calendar.JANUARY, 6, 10, 45, 0);
+        ReservationEntity reservationEntity = util.getReservationEntity(1L, startDate, endDate);
+        startDate = util.createDate(2007, Calendar.JANUARY, 6, 9, 10, 0);
+        endDate = util.createDate(2007, Calendar.JANUARY, 6, 11, 45, 0);
+        ReservationEntity reservationEntity2 = util.getReservationEntity(3L, startDate, endDate);
+        when(repository.findNonAvailableDate(reservationEntity.getStartDate(), reservationEntity.getEndDate(), reservationEntity.getRoom().getId()))
+                .thenReturn(Arrays.asList(reservationEntity2));
+
+        ValidationResult result = sut.validate(reservationEntity);
+
+        assertEquals(expectedResult.getError(), result.getError());
+    }
 
 }

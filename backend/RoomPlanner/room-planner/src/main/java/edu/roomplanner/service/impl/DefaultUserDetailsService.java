@@ -11,7 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("userDetailsService")
 public class DefaultUserDetailsService implements UserDetailsService {
@@ -40,7 +41,7 @@ public class DefaultUserDetailsService implements UserDetailsService {
 
     private List<SimpleGrantedAuthority> transformEntityRolesToAuthorities(List<RoleEntity> roleEntities) {
         List<SimpleGrantedAuthority> result = new ArrayList<>();
-        for(RoleEntity roleEntity:roleEntities) {
+        for (RoleEntity roleEntity : roleEntities) {
             result.add(new SimpleGrantedAuthority(roleEntity.getName()));
         }
         return result;

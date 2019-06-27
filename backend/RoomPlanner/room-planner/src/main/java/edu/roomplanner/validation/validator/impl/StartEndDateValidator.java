@@ -28,17 +28,20 @@ public class StartEndDateValidator implements BookingValidator {
 
     private Long getMinutesInFuture(Calendar startDate) {
         startDate.set(Calendar.SECOND, 0);
+        startDate.set(Calendar.MILLISECOND, 0);
         return durationBetween(getSysDate(), startDate);
     }
 
     private Long getMinutesReservationTime(Calendar startDate, Calendar endDate) {
         endDate.set(Calendar.SECOND, 0);
+        endDate.set(Calendar.MILLISECOND, 0);
         return durationBetween(startDate, endDate);
     }
 
     private Calendar getSysDate() {
         Calendar sysDate = Calendar.getInstance();
         sysDate.set(Calendar.SECOND, 0);
+        sysDate.set(Calendar.MILLISECOND, 0);
         return sysDate;
     }
 

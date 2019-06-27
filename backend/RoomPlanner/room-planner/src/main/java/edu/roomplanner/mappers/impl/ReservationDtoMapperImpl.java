@@ -17,6 +17,7 @@ public class ReservationDtoMapperImpl implements ReservationDtoMapper {
 
     public ReservationDtoMapperImpl() {
     }
+
     @Autowired
     public ReservationDtoMapperImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -25,6 +26,7 @@ public class ReservationDtoMapperImpl implements ReservationDtoMapper {
     public ReservationDto mapReservationEntityToDto(ReservationEntity reservationEntity) {
         ReservationDto reservationDto = new ReservationDto();
         reservationDto.setId(reservationEntity.getId());
+        reservationDto.setRoomId(reservationEntity.getRoom().getId());
         reservationDto.setRoomId(reservationEntity.getRoom().getId());
         reservationDto.setEmail(reservationEntity.getPerson().getEmail());
         reservationEntity.getStartDate().setTime(reservationEntity.getStartDate().getTime());
