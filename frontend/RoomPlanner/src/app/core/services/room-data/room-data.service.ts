@@ -136,18 +136,18 @@ export class RoomDataService {
             }
           ]
         },
-        {
-          id: 2,
-          name: "405",
-          capacity: 5,
-          bookings: []
-        },
-        {
-          id: 3,
-          name: "406",
-          capacity: 5,
-          bookings: []
-        },
+        // {
+        //   id: 2,
+        //   name: "405",
+        //   capacity: 5,
+        //   bookings: []
+        // },
+        // {
+        //   id: 3,
+        //   name: "406",
+        //   capacity: 5,
+        //   bookings: []
+        // },
         // {
         //   id: 4,
         //   name: "407",

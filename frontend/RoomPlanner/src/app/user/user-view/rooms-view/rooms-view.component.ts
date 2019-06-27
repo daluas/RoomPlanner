@@ -444,8 +444,6 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
       });
     }
 
-
-
     if (bookingCanBePerformed) {
       this.newBookingStartDate = new Date(arrowsStartTime);
       this.newBookingEndDate = new Date(arrowsEndTime);
