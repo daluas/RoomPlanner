@@ -36,10 +36,8 @@ public class UserRightsValidatorTest {
     public void shouldReturnTrueIfCurrentUserIsRoom() {
 
         UserEntity roomEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "wonderland",
-                UserType.ROOM, "Wonderland", 5, 14);
+                null, null, UserType.ROOM, "Wonderland", 14);
 
-        roomEntity.setRoles(null);
-        roomEntity.setReservations(null);
         String email = "wonderland@yahoo.com";
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(roomEntity));
@@ -51,14 +49,12 @@ public class UserRightsValidatorTest {
     }
 
     @Test
-    public void shouldReturnFalseIfCurrentUserIsNotRoom(){
+    public void shouldReturnFalseIfCurrentUserIsNotRoom() {
 
-        UserEntity userEntity = BuildersWrapper.buildPersonEntiy(3L, "sghitun@yahoo.com",
-                "sghitun", UserType.PERSON, "Git", "Mast");
+        UserEntity userEntity = BuildersWrapper.buildPersonEntity(3L, "sghitun@yahoo.com",
+                "sghitun", null, UserType.PERSON, "Git", "Mast");
 
-        userEntity.setRoles(null);
-        userEntity.setReservations(null);
-        String email = "wonderland@yahoo.com";
+        String email = "sghitun@yahoo.com";
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(userEntity));
         when(tokenParserService.getEmailFromToken()).thenReturn(email);
@@ -69,34 +65,30 @@ public class UserRightsValidatorTest {
     }
 
     @Test
-    public void shouldReturnTrueIfCurrentRoomIdEqualsRequestedRoomId(){
+    public void shouldReturnTrueIfCurrentRoomIdEqualsRequestedRoomId() {
 
-        UserEntity userEntity = BuildersWrapper.buildPersonEntiy(3L, "sghitun@yahoo.com",
-                "sghitun", UserType.PERSON, "Git", "Mast");
+        UserEntity roomEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "wonderland",
+                null, null, UserType.ROOM, "Wonderland", 14);
 
-        userEntity.setRoles(null);
-        userEntity.setReservations(null);
         String email = "wonderland@yahoo.com";
 
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(userEntity));
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(roomEntity));
         when(tokenParserService.getEmailFromToken()).thenReturn(email);
 
-        boolean response = sut.checkIfLoggedRoomIsRequestedRoom(3L);
+        boolean response = sut.checkIfLoggedRoomIsRequestedRoom(1L);
 
         assertTrue(response);
     }
 
     @Test
-    public void shouldReturnFalseIfCurrentRoomIdEqualsRequestedRoomId(){
+    public void shouldReturnFalseIfCurrentRoomIdEqualsRequestedRoomId() {
 
-        UserEntity userEntity = BuildersWrapper.buildPersonEntiy(3L, "sghitun@yahoo.com",
-                "sghitun", UserType.PERSON, "Git", "Mast");
+        UserEntity roomEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "wonderland",
+                null, null, UserType.ROOM, "Wonderland", 14);
 
-        userEntity.setRoles(null);
-        userEntity.setReservations(null);
         String email = "wonderland@yahoo.com";
 
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(userEntity));
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(roomEntity));
         when(tokenParserService.getEmailFromToken()).thenReturn(email);
 
         boolean response = sut.checkIfLoggedRoomIsRequestedRoom(2L);

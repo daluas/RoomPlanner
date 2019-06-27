@@ -19,6 +19,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -60,6 +61,7 @@ public class UsersRestControllerTest {
     private TokenParserService tokenParserService;
 
     private RequestPostProcessor bearerToken;
+    private RequestPostProcessor roomBearerToken;
 
     @Before
     public void init() {
@@ -70,6 +72,7 @@ public class UsersRestControllerTest {
         userRepository.save(userEntityPerson);
 
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
+        roomBearerToken = oAuthHelper.addBearerToken("wonderland@yahoo.com", "room");
 
         UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
@@ -127,4 +130,32 @@ public class UsersRestControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
+    @Test
+    public void shouldReturnResponseEntityWithSameRoomDtoAsTheLoggedOneWhenGetAllRoomsIsCalledByRoom() throws Exception{
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
+                new HashSet<>(), 5, 14, UserType.ROOM);
+        String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/rooms", 1).with(roomBearerToken))
+                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.content().string(jsonRoomDto));
+    }
+
+    @Test
+    public void shouldReturnResponseEntityWithSameRoomDtoAsTheLoggedOneWhenGetRoomByIdIsCalledWithLoggedRoomId() throws Exception{
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
+                new HashSet<>(), 5, 14, UserType.ROOM);
+        String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/2", 1).with(roomBearerToken))
+                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.content().string(jsonRoomDto));
+    }
+
+    @Test
+    public void shouldReturnResponseEntityWithStatusUnauthorizedWhenGetRoomByIdIsCalledWith() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 1).with(bearerToken))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 }

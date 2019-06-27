@@ -52,7 +52,7 @@ public class UserRestController {
         RoomDto roomDto = userService.getRoomById(id);
         LOGGER.info("The following object was returned: " + roomDto);
         if(userRightsValidator.checkIfUserIsRoom() && !userRightsValidator.checkIfLoggedRoomIsRequestedRoom(id)){
-            return new ResponseEntity<>(new RoomDto(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         if (roomDto == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -65,7 +65,7 @@ public class UserRestController {
     public ResponseEntity<UserDto> getUserEmailType(@RequestParam(name = "email") String email) {
         Optional<UserDto> userEmailTypeDtoOptional = userService.getUserDto(email);
         if(userRightsValidator.checkIfUserIsRoom()){
-            return new ResponseEntity<>(new PersonDto(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         return userEmailTypeDtoOptional.
                 map(userEmailTypeDto -> new ResponseEntity<>(userEmailTypeDto, HttpStatus.OK)).
