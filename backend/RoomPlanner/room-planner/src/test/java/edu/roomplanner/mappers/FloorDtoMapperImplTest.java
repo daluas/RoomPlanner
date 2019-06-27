@@ -5,6 +5,7 @@ import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.mappers.impl.FloorDtoMapperImpl;
 import edu.roomplanner.util.BuildersWrapper;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +15,8 @@ import static org.junit.Assert.*;
 
 public class FloorDtoMapperImplTest {
 
-    private FloorDtoMapperImpl sut = new FloorDtoMapperImpl();
+    @Autowired
+    private FloorDtoMapperImpl sut;
 
     @Test
     public void shouldReturnFloorDtoListWhenMapEntityToDtoIsCalledWithValidFloorEntityList() {

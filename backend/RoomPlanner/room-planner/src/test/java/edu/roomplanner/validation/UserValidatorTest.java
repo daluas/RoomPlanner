@@ -16,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.HashSet;
 import java.util.Optional;
 
 import static org.junit.Assert.assertFalse;
@@ -49,6 +48,7 @@ public class UserValidatorTest {
 
         UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "Wonderland",
                 null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
+
 
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(userEntity));
 

@@ -1,6 +1,7 @@
 package edu.roomplanner.service.impl;
 
 import edu.roomplanner.builders.UserDtoBuilder;
+import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.dto.UserDto;
 import edu.roomplanner.entity.PersonEntity;
@@ -8,6 +9,7 @@ import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.exception.UserNotFoundException;
+import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.mappers.RoomDtoMapper;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.TokenParserService;
@@ -18,6 +20,7 @@ import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -31,14 +34,19 @@ public class UserServiceImpl implements UserService {
     private UserValidator userValidator;
     private RoomDtoMapper roomDtoMapper;
     private TokenParserService tokenParserService;
+    private ReservationDtoMapper reservationDtoMapper;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, UserValidator userValidator,
-                           RoomDtoMapper roomDtoMapper, TokenParserService tokenParserService) {
+                           RoomDtoMapper roomDtoMapper, TokenParserService tokenParserService,
+                           ReservationDtoMapper reservationDtoMapper) {
+
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.roomDtoMapper = roomDtoMapper;
         this.tokenParserService = tokenParserService;
+        this.reservationDtoMapper = reservationDtoMapper;
+
     }
 
     @Override
@@ -118,6 +126,7 @@ public class UserServiceImpl implements UserService {
                 .withId(personEntity.getId())
                 .withEmail(personEntity.getEmail())
                 .withType(personEntity.getType())
+                .withReservations(getReservationDtos(personEntity.getReservations()))
                 .withFirstName(personEntity.getFirstName())
                 .withLastName(personEntity.getLastName())
                 .build();
@@ -130,9 +139,18 @@ public class UserServiceImpl implements UserService {
                 .withEmail(roomEntity.getEmail())
                 .withType(roomEntity.getType())
                 .withName(roomEntity.getName())
+                .withReservations(getReservationDtos(roomEntity.getReservations()))
                 .withFloor(roomEntity.getFloor().getFloor())
                 .withMaxPersons(roomEntity.getMaxPersons())
                 .build();
+    }
+
+    private Set<ReservationDto> getReservationDtos(Set<ReservationEntity> reservationEntities) {
+        Set<ReservationDto> reservationDtos = new HashSet<>();
+        for(ReservationEntity reservationEntity:reservationEntities) {
+            reservationDtos.add(reservationDtoMapper.mapReservationEntityToDto(reservationEntity));
+        }
+        return reservationDtos;
     }
 
 }
