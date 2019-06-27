@@ -56,6 +56,7 @@ public class FloorDtoMapperImpl implements FloorDtoMapper {
     private Set<RoomDto> processRoomDtoStream(Set<RoomEntity> rooms) {
         return rooms.stream()
                 .map(roomMapper::mapEntityToDto)
+                .peek((room) -> room.setReservations(null))
                 .collect(Collectors.toSet());
 
     }
