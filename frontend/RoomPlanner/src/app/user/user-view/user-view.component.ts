@@ -53,13 +53,11 @@ export class UserViewComponent implements OnInit {
 
     firstFloor = this.buildingLayout[0];
 
-    this.previousFilters.floor = firstFloor.floor
+    this.previousFilters.floor = firstFloor.floor;
 
-  
-
-    this.roomDataService.getRoomsByFilter(this.previousFilters).then((defaultRooms) => {
-      this.rooms = <RoomModel[]>defaultRooms;
-      this.displayedRooms = <RoomModel[]>defaultRooms;
+    this.roomDataService.getSingleFloor(firstFloor.floor).then((floor) => {
+      this.rooms = <RoomModel[]>floor.rooms;
+      this.displayedRooms = <RoomModel[]>floor.rooms;
     })
 
   }
@@ -107,8 +105,7 @@ export class UserViewComponent implements OnInit {
     console.log(this.singleRoomSelected);
 
     if (this.singleRoomSelected != null) {
-
-      console.log(this.roomDataService.verifyRoomAvailabilityByFilters(this.singleRoomSelected, filters))
+      // console.log(this.roomDataService.verifyRoomAvailabilityByFilters(this.singleRoomSelected, filters))
       if (this.roomDataService.verifyRoomAvailabilityByFilters(this.singleRoomSelected, filters)) {
         this.displayedRooms = new Array<RoomModel>();
         this.displayedRooms.push(this.singleRoomSelected);

@@ -101,8 +101,6 @@ export class RoomDataService {
     return new Promise(res => { return res(roomArray); })
   }
 
-  //getFloors():FloorModel
-
   getFloors(): FloorModel[] {
     console.log("getFloors() was called!");
 
@@ -116,24 +114,7 @@ export class RoomDataService {
             "id": 2,
             "email": "wonderland@yahoo.com",
             "type": "ROOM",
-            "reservations":[
-              {
-                "id": 4,
-                "roomId": 2,
-                "personEmail": "sghitun@yahoo.com",
-                "startDate": "2019-06-28T09:00:00.000+0000",
-                "endDate": "2019-06-28T12:00:00.000+0000",
-                "description": "Retro meeting"
-              },
-              {
-                "id": 5,
-                "roomId": 2,
-                "personEmail": "sghitun@yahoo.com",
-                "startDate": "2019-06-27T14:00:00.000+0000",
-                "endDate": "2019-06-27T15:30:00.000+0000",
-                "description": "Retro meeting"
-              }
-            ] ,
+            "reservations":[],
             "name": "Wonderland",
             "floor": 5,
             "maxPersons": 14
@@ -148,24 +129,7 @@ export class RoomDataService {
                 "id": 3,
                 "email": "westeros@yahoo.com",
                 "type": "ROOM",
-                "reservations": [
-                  {
-                    "id": 4,
-                    "roomId": 3,
-                    "personEmail": "sghitun@yahoo.com",
-                    "startDate": "2019-06-29T11:30:00.000+0000",
-                    "endDate": "2019-06-28T12:00:00.000+0000",
-                    "description": "Retro meeting"
-                  },
-                  {
-                    "id": 5,
-                    "roomId": 3,
-                    "personEmail": "sghitun@yahoo.com",
-                    "startDate": "2019-06-27T14:00:00.000+0000",
-                    "endDate": "2019-06-29T12:30:00.000+0000",
-                    "description": "Retro meeting"
-                  }
-                ],
+                "reservations": [],
                 "name": "Westeros",
                 "floor": 8,
                 "maxPersons": 20
@@ -180,24 +144,7 @@ export class RoomDataService {
                 "id": 4,
                 "email": "neverland@yahoo.com",
                 "type": "ROOM",
-                "reservations": [
-                  {
-                    "id": 4,
-                    "roomId": 4,
-                    "personEmail": "sghitun@yahoo.com",
-                    "startDate": "2019-06-28T13:00:00.000+0000",
-                    "endDate": "2019-06-28T14:00:00.000+0000",
-                    "description": "Retro meeting"
-                  },
-                  {
-                    "id": 5,
-                    "roomId": 4,
-                    "personEmail": "sghitun@yahoo.com",
-                    "startDate": "2019-06-26T14:00:00.000+0000",
-                    "endDate": "2019-06-26T15:30:00.000+0000",
-                    "description": "Retro meeting"
-                  }
-                ],
+                "reservations": [],
                 "name": "Neverland",
                 "floor": 4,
                 "maxPersons": 5
@@ -226,20 +173,6 @@ export class RoomDataService {
       let r: RoomModel[] = new Array<RoomModel>();
 
       floorJson.rooms.forEach(roomJson => {
-        let reserv: Booking[] = new Array<Booking>();
-
-        roomJson.reservations.forEach(resJson => {
-          reserv.push(new Booking().create({
-            id: resJson.id,
-            roomId: resJson.roomId,
-            personEmail: resJson.personEmail,
-            startDate: new Date(new Date(resJson.startDate)),
-            endDate: new Date(new Date(resJson.endDate)),
-            description: resJson.description
-          }))
-        });
-
-
         r.push(new RoomModel().create({
           id: roomJson.id,
           email: roomJson.email,
@@ -247,7 +180,6 @@ export class RoomDataService {
           name: roomJson.name,
           floor: roomJson.floor,
           maxPersons: roomJson.maxPersons,
-          reservations: reserv
         })
         );
       })
@@ -262,18 +194,88 @@ export class RoomDataService {
     return floorArray;
   }
 
+  getSingleFloor(floorId:number): Promise<FloorModel> {
+    console.log("getSingleFloor() was called!");
 
-  verifyRoomAvailabilityByFilters(room: RoomModel, filters: Filters) {
-
-    room.reservations.forEach(res => {
-      if (res.startDate.getTime() != filters.startDate.getTime() && res.endDate.getTime() != filters.endDate.getTime()) {
-        return true;
+    var rez =
+      `{
+        "id": 1,
+        "floor": 5,
+        "rooms": [
+          {
+            "id": 2,
+            "email": "wonderland@yahoo.com",
+            "type": "ROOM",
+            "reservations":[
+              {
+              "id": 4,
+              "roomId": 2,
+              "personEmail": "sghitun@yahoo.com",
+              "startDate": "2019-06-28T09:00:00.000+0000",
+              "endDate": "2019-06-28T12:00:00.000+0000",
+              "description": "Retro meeting"
+            },
+            {
+              "id": 5,
+              "roomId": 2,
+              "personEmail": "sghitun@yahoo.com",
+              "startDate": "2019-06-27T14:00:00.000+0000",
+              "endDate": "2019-06-27T15:30:00.000+0000",
+              "description": "Retro meeting"
+            }
+          ],
+            "name": "Wonderland",
+            "floor": 5,
+            "maxPersons": 14
+          }
+        ]
       }
-    })
-    return false;
+    `;
 
+    // return this.httpClient.get(`${this.backendUrl}/floor/${floorId}`).toPromise().toPromise().then(data=>{
+    //   return data;
+    // }).catch(error=>{
+    //   console.log("Erorr--getRoomsByFilter")
+    //   return Promise.reject(error);
+    // });
 
+    let j = JSON.parse(rez);
+    let floor: FloorModel = new FloorModel();
+    let r: RoomModel[] = new Array<RoomModel>();
+
+    j.rooms.forEach(roomJson => {
+      r.push(new RoomModel().create({
+        id: roomJson.id,
+        email: roomJson.email,
+        type: roomJson.type,
+        name: roomJson.name,
+        floor: roomJson.floor,
+        maxPersons: roomJson.maxPersons,
+      })
+      );
+    });
+
+    floor = new FloorModel().create({
+      id: j.id,
+      floor: j.floor,
+      rooms: r
+    });
+  
+     return new Promise(res => { return res(floor); })
   }
+
+
+verifyRoomAvailabilityByFilters(room: RoomModel, filters: Filters) {
+
+  room.reservations.forEach(res => {
+    if (res.startDate.getTime() != filters.startDate.getTime() && res.endDate.getTime() != filters.endDate.getTime()) {
+      return true;
+    }
+  })
+  return false;
+
+
+}
 
   // getDefaultRooms() nu poate fi combinat cu getRooms(filters)
   // pentru ca getRooms cu filtre goale trebuie sa returneze toate camerele
