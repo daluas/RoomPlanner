@@ -1,0 +1,896 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7ba9df0e-fe97-4b25-9c3c-1d137a97d6e6" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/config/SwaggerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/util/ReservationEntityUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/config/ResourceServerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/config/ResourceServerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/repository/ReservationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/repository/ReservationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/rest/ReservationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/rest/ReservationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/validation/validator/impl/AvailabilityValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/validation/validator/impl/AvailabilityValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/validation/validator/impl/StartEndDateValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/validation/validator/impl/StartEndDateValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/controller/UsersRestControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/controller/UsersRestControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/validation/validator/impl/AvailabilityValidatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/validation/validator/impl/AvailabilityValidatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/validation/validator/impl/ValidatorIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/validation/validator/impl/ValidatorIntegrationTest.java" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/backend/RoomPlanner/room-planner/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="RoomPlannerApplication.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/RoomPlannerApplication.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="72">
+              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UsersRestControllerTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/controller/UsersRestControllerTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1516">
+              <caret line="159" column="5" selection-start-line="159" selection-start-column="5" selection-end-line="159" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserRestController.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/rest/UserRestController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="414">
+              <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AuthorizationServerConfig.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/config/AuthorizationServerConfig.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-327">
+              <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ResourceServerConfig.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/config/ResourceServerConfig.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="108">
+              <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SecurityConfig.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/config/SecurityConfig.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="432">
+              <caret line="36" column="5" selection-start-line="36" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ReservationController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/rest/ReservationController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="324">
+              <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserValidatorTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/validation/UserValidatorTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="432">
+              <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FloorRestController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/rest/FloorRestController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="30" column="51" selection-start-line="30" selection-start-column="51" selection-end-line="30" selection-end-column="51" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="develop_backend" />
+      </map>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/validation/UserRightsValidatorTest.java" />
+        <option value="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/controller/UsersRestControllerTest.java" />
+        <option value="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/config/SecurityConfig.java" />
+        <option value="$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/rest/UserRestController.java" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="960" />
+    <option name="width" value="960" />
+    <option name="height" value="1040" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="builders" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="dto" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="entity" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="exception" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="mappers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="mappers" type="462c0819:PsiDirectoryNode" />
+              <item name="impl" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="repository" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="rest" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="rest" type="462c0819:PsiDirectoryNode" />
+              <item name="intercept" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
+              <item name="impl" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="types" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="validation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="validation" type="462c0819:PsiDirectoryNode" />
+              <item name="validator" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="validation" type="462c0819:PsiDirectoryNode" />
+              <item name="validator" type="462c0819:PsiDirectoryNode" />
+              <item name="impl" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="controller" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project-with-git-attached" type="b2602c69:ProjectViewProjectNode" />
+              <item name="room-planner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="roomplanner" type="462c0819:PsiDirectoryNode" />
+              <item name="validation" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/backend/RoomPlanner/room-planner" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.RoomPlannerApplication">
+    <configuration name="RoomPlannerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="edu.roomplanner.RoomPlannerApplication" />
+      <module name="room-planner" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="edu.roomplanner.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    </configuration>
+    <configuration name="All in room-planner" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="room-planner" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+    </configuration>
+    <configuration name="UserRightsValidatorTest.shouldReturnTrueIfCurrentRoomIdEqualsRequestedRoomId" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="room-planner" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="edu.roomplanner.validation.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="edu.roomplanner.validation" />
+      <option name="MAIN_CLASS_NAME" value="edu.roomplanner.validation.UserRightsValidatorTest" />
+      <option name="METHOD_NAME" value="shouldReturnTrueIfCurrentRoomIdEqualsRequestedRoomId" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+    </configuration>
+    <configuration name="UsersRestControllerTest.shouldReturnResponseEntityWithSameRoomAsTheLoggedOneWhenGetAllRoomsIsCalledByRoom" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="room-planner" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="edu.roomplanner.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="edu.roomplanner.controller" />
+      <option name="MAIN_CLASS_NAME" value="edu.roomplanner.controller.UsersRestControllerTest" />
+      <option name="METHOD_NAME" value="shouldReturnResponseEntityWithSameRoomAsTheLoggedOneWhenGetAllRoomsIsCalledByRoom" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+    </configuration>
+    <configuration name="UsersRestControllerTest.shouldReturnResponseEntityWithSameRoomDtoAsTheLoggedOneWhenGetRoomByIdIsCalledWithLoggedRoomId" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="room-planner" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="edu.roomplanner.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="edu.roomplanner.controller" />
+      <option name="MAIN_CLASS_NAME" value="edu.roomplanner.controller.UsersRestControllerTest" />
+      <option name="METHOD_NAME" value="shouldReturnResponseEntityWithSameRoomDtoAsTheLoggedOneWhenGetRoomByIdIsCalledWithLoggedRoomId" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <properties />
+      <listeners />
+    </configuration>
+    <list>
+      <item itemvalue="Application.RoomPlannerApplication" />
+      <item itemvalue="JUnit.UserRightsValidatorTest.shouldReturnTrueIfCurrentRoomIdEqualsRequestedRoomId" />
+      <item itemvalue="JUnit.All in room-planner" />
+      <item itemvalue="JUnit.UsersRestControllerTest.shouldReturnResponseEntityWithSameRoomAsTheLoggedOneWhenGetAllRoomsIsCalledByRoom" />
+      <item itemvalue="JUnit.UsersRestControllerTest.shouldReturnResponseEntityWithSameRoomDtoAsTheLoggedOneWhenGetRoomByIdIsCalledWithLoggedRoomId" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.RoomPlannerApplication" />
+        <item itemvalue="JUnit.UsersRestControllerTest.shouldReturnResponseEntityWithSameRoomDtoAsTheLoggedOneWhenGetRoomByIdIsCalledWithLoggedRoomId" />
+        <item itemvalue="JUnit.UsersRestControllerTest.shouldReturnResponseEntityWithSameRoomAsTheLoggedOneWhenGetAllRoomsIsCalledByRoom" />
+        <item itemvalue="JUnit.All in room-planner" />
+        <item itemvalue="JUnit.UserRightsValidatorTest.shouldReturnTrueIfCurrentRoomIdEqualsRequestedRoomId" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7ba9df0e-fe97-4b25-9c3c-1d137a97d6e6" name="Default" comment="" />
+      <created>1561546538097</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1561546538097</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Merge branch 'feature-be/Do-not-show-other-user-reservation' of https://github.com/daluas/RoomPlanner into feature-be/show_only_room_own_reservations&#10;&#10;# Conflicts:&#10;#&#9;backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/TokenParserService.java&#10;#&#9;backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/impl/TokenParserServiceImpl.java">
+      <created>1561547632275</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1561547632276</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Merge branch 'feature-be/Do-not-show-other-user-reservation' of https://github.com/daluas/RoomPlanner into feature-be/show_only_room_own_reservations&#10;&#10;# Conflicts:&#10;#&#9;backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/TokenParserService.java&#10;#&#9;backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/impl/TokenParserServiceImpl.java">
+      <created>1561620946929</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1561620946929</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Merge branch 'feature-be/Do-not-show-other-user-reservation' of https://github.com/daluas/RoomPlanner into feature-be/show_only_room_own_reservations&#10;&#10;# Conflicts:&#10;#&#9;backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/TokenParserService.java&#10;#&#9;backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/impl/TokenParserServiceImpl.java">
+      <created>1561621161810</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1561621161810</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="UserRightsValidatorTest - 2019.06.26 at 14h 07m 17s.xml">
+      <configuration name="UserRightsValidatorTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="UserRightsValidatorTest_shouldReturnTrueIfCurrentRoomIdEqualsRequestedRoomId - 2019.06.26 at 14h 08m 03s.xml">
+      <configuration name="UserRightsValidatorTest.shouldReturnTrueIfCurrentRoomIdEqualsRequestedRoomId" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="UserRightsValidatorTest_shouldReturnTrueIfCurrentRoomIdEqualsRequestedRoomId - 2019.06.26 at 14h 08m 16s.xml">
+      <configuration name="UserRightsValidatorTest.shouldReturnTrueIfCurrentRoomIdEqualsRequestedRoomId" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_in_room-planner - 2019.06.26 at 14h 09m 58s.xml">
+      <configuration name="All in room-planner" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_in_room-planner - 2019.06.26 at 14h 10m 51s.xml">
+      <configuration name="All in room-planner" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="UsersRestControllerTest_shouldReturnResponseEntityWithSameRoomAsTheLoggedOneWhenGetAllRoomsIsCalledByRoom - 2019.06.27 at 10h 14m 48s.xml">
+      <configuration name="UsersRestControllerTest.shouldReturnResponseEntityWithSameRoomAsTheLoggedOneWhenGetAllRoomsIsCalledByRoom" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="UsersRestControllerTest_shouldReturnResponseEntityWithSameRoomDtoAsTheLoggedOneWhenGetRoomByIdIsCalledWithLoggedRoomId - 2019.06.27 at 10h 26m 43s.xml">
+      <configuration name="UsersRestControllerTest.shouldReturnResponseEntityWithSameRoomDtoAsTheLoggedOneWhenGetRoomByIdIsCalledWithLoggedRoomId" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="UsersRestControllerTest_shouldReturnResponseEntityWithSameRoomDtoAsTheLoggedOneWhenGetRoomByIdIsCalledWithLoggedRoomId - 2019.06.27 at 10h 28m 58s.xml">
+      <configuration name="UsersRestControllerTest.shouldReturnResponseEntityWithSameRoomDtoAsTheLoggedOneWhenGetRoomByIdIsCalledWithLoggedRoomId" configurationId="JUnit" />
+    </history-entry>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info anchor="right" id="Palette" order="4" />
+      <window_info anchor="bottom" id="TODO" order="10" />
+      <window_info anchor="bottom" id="Messages" order="3" weight="0.32924107" />
+      <window_info anchor="right" id="Palette&#9;" order="1" />
+      <window_info id="Image Layers" order="4" />
+      <window_info anchor="right" id="Capture Analysis" order="0" />
+      <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
+      <window_info anchor="right" id="Maven Projects" order="3" />
+      <window_info anchor="bottom" id="Version Control" order="2" />
+      <window_info anchor="bottom" id="Run" order="6" weight="0.32142857" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="0" visible="true" weight="0.38392857" />
+      <window_info id="Capture Tool" order="2" />
+      <window_info id="Designer" order="0" />
+      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.25266525" />
+      <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="6" weight="0.25" />
+      <window_info id="UI Designer" order="1" />
+      <window_info anchor="right" id="Theme Preview" order="2" />
+      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="7" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="5" type="SLIDING" weight="0.4" />
+      <window_info anchor="bottom" id="Message" order="4" />
+      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="5" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Merge branch 'feature-be/Do-not-show-other-user-reservation' of https://github.com/daluas/RoomPlanner into feature-be/show_only_room_own_reservations&#10;&#10;# Conflicts:&#10;#&#9;backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/TokenParserService.java&#10;#&#9;backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/impl/TokenParserServiceImpl.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'feature-be/Do-not-show-other-user-reservation' of https://github.com/daluas/RoomPlanner into feature-be/show_only_room_own_reservations&#10;&#10;# Conflicts:&#10;#&#9;backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/TokenParserService.java&#10;#&#9;backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/impl/TokenParserServiceImpl.java" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/RoomPlannerApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/util/BuildersWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="29" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/validation/UserRightsValidatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="77" column="65" selection-start-line="77" selection-start-column="65" selection-end-line="77" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/TokenParserService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/impl/TokenParserServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/util/AuthenticationHelperUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/validation/UserValidatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/rest/FloorRestController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="30" column="51" lean-forward="true" selection-start-line="30" selection-start-column="51" selection-end-line="30" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/validation/UserValidatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/util/BuildersWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="29" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/validation/UserRightsValidatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="77" column="65" selection-start-line="77" selection-start-column="65" selection-end-line="77" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/AuthenticationHelperService.java" />
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/TokenParserService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/service/impl/TokenParserServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/util/AuthenticationHelperUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/RoomPlannerApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/rest/ReservationController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/rest/FloorRestController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="30" column="51" selection-start-line="30" selection-start-column="51" selection-end-line="30" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/config/AuthorizationServerConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-327">
+          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/config/ResourceServerConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/config/SecurityConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="36" column="5" selection-start-line="36" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/test/java/edu/roomplanner/controller/UsersRestControllerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1516">
+          <caret line="159" column="5" selection-start-line="159" selection-start-column="5" selection-end-line="159" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/RoomPlanner/room-planner/src/main/java/edu/roomplanner/rest/UserRestController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>room-planner</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
