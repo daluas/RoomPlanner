@@ -3,12 +3,6 @@ package edu.roomplanner.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import java.util.Set;
-
 import javax.persistence.*;
 import java.util.Set;
 
@@ -28,7 +22,7 @@ public class RoomEntity extends UserEntity {
     @Column(name = "max_persons")
     private Integer maxPersons;
 
-    @OneToMany(mappedBy = "room", cascade= javax.persistence.CascadeType.ALL)
+    @OneToMany(mappedBy = "room", cascade = javax.persistence.CascadeType.ALL)
     private Set<ReservationEntity> reservations;
 
 }

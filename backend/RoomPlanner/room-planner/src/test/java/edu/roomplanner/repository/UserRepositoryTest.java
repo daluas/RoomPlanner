@@ -1,6 +1,5 @@
 package edu.roomplanner.repository;
 
-import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.types.UserType;
@@ -12,14 +11,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @Transactional
@@ -54,71 +55,71 @@ public class UserRepositoryTest {
         reservationRepository.deleteAll();
         sut.deleteAll();
 
-       entityManager.createNativeQuery("ALTER SEQUENCE seq_user_id RESTART WITH 1").executeUpdate();
-       entityManager.createNativeQuery("ALTER SEQUENCE seq_reservation_id RESTART WITH 1").executeUpdate();
+        entityManager.createNativeQuery("ALTER SEQUENCE seq_user_id RESTART WITH 1").executeUpdate();
+        entityManager.createNativeQuery("ALTER SEQUENCE seq_reservation_id RESTART WITH 1").executeUpdate();
 
     }
 
-   @Test
-    public void shouldReturnRoomListIfReservationIsBetweenFilterDatesWhenViewByFieldsIsCalled(){
+    @Test
+    public void shouldReturnRoomListIfReservationIsBetweenFilterDatesWhenViewByFieldsIsCalled() {
 
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun", null, UserType.PERSON,"Stefania","Ghitun");
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
         sut.save(userEntityPerson);
-       UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-               new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
+        UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         sut.save(userEntityRoom);
 
         List<UserEntity> expectedReservationRoomsList = Collections.singletonList(userEntityRoom);
 
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2019,Calendar.JUNE,22,10,0,0);
+        startDate.set(2019, Calendar.JUNE, 22, 10, 0, 0);
         Calendar endDate = Calendar.getInstance();
-        endDate.set(2019,Calendar.JUNE,22,11,30,0);
+        endDate.set(2019, Calendar.JUNE, 22, 11, 30, 0);
 
-        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L,startDate,endDate,"Demo meeting",userEntityPerson,userEntityRoom);
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, "Demo meeting", userEntityPerson, userEntityRoom);
         reservationRepository.save(reservationEntity);
 
         Calendar filterStartDate = Calendar.getInstance();
-        filterStartDate.set(2019,Calendar.JUNE,22,9,30,0);
+        filterStartDate.set(2019, Calendar.JUNE, 22, 9, 30, 0);
         Calendar filterEndDate = Calendar.getInstance();
-        filterEndDate.set(2019,Calendar.JUNE,22,12,0,0);
+        filterEndDate.set(2019, Calendar.JUNE, 22, 12, 0, 0);
 
-        List<UserEntity> actualReservationRoomsList = sut.viewByFields(filterStartDate,filterEndDate);
+        List<UserEntity> actualReservationRoomsList = sut.viewByFields(filterStartDate, filterEndDate);
 
         Assert.assertEquals(expectedReservationRoomsList, actualReservationRoomsList);
     }
 
-   @Test
-    public void shouldReturnEmptyRoomListIfReservationIsOutOfFilterDatesBoundsWhenViewByFieldsIsCalled(){
+    @Test
+    public void shouldReturnEmptyRoomListIfReservationIsOutOfFilterDatesBoundsWhenViewByFieldsIsCalled() {
 
-       UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun", null, UserType.PERSON,"Stefania","Ghitun");
-       sut.save(userEntityPerson);
-       UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-               new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
-       sut.save(userEntityRoom);
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
+        sut.save(userEntityPerson);
+        UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
+        sut.save(userEntityRoom);
 
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2019,Calendar.JUNE,22,10,0,0);
+        startDate.set(2019, Calendar.JUNE, 22, 10, 0, 0);
         Calendar endDate = Calendar.getInstance();
-        endDate.set(2019,Calendar.JUNE,22,11,30,0);
+        endDate.set(2019, Calendar.JUNE, 22, 11, 30, 0);
 
-        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L,startDate,endDate,"Demo meeting",userEntityPerson,userEntityRoom);
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, "Demo meeting", userEntityPerson, userEntityRoom);
         reservationRepository.save(reservationEntity);
 
         Calendar filterStartDate = Calendar.getInstance();
-        filterStartDate.set(2019,Calendar.JUNE,22,8,30,0);
+        filterStartDate.set(2019, Calendar.JUNE, 22, 8, 30, 0);
         Calendar filterEndDate = Calendar.getInstance();
-        filterEndDate.set(2019,Calendar.JUNE,22,9,0,0);
+        filterEndDate.set(2019, Calendar.JUNE, 22, 9, 0, 0);
 
-        List<UserEntity> actualReservationRoomsList = sut.viewByFields(filterStartDate,filterEndDate);
+        List<UserEntity> actualReservationRoomsList = sut.viewByFields(filterStartDate, filterEndDate);
 
         Assert.assertEquals(Collections.emptyList(), actualReservationRoomsList);
     }
 
     @Test
-    public void shouldReturnRoomListIfReservationStartDateIsBeforeStartFilterAndEndDateIsBeforeEndFilterWhenViewByFieldsIsCalled(){
+    public void shouldReturnRoomListIfReservationStartDateIsBeforeStartFilterAndEndDateIsBeforeEndFilterWhenViewByFieldsIsCalled() {
 
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun", null, UserType.PERSON,"Stefania","Ghitun");
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
         sut.save(userEntityPerson);
         UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
@@ -127,56 +128,27 @@ public class UserRepositoryTest {
         List<UserEntity> expectedReservationRoomsList = Collections.singletonList(userEntityRoom);
 
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2019,Calendar.JUNE,22,10,0,0);
+        startDate.set(2019, Calendar.JUNE, 22, 10, 0, 0);
         Calendar endDate = Calendar.getInstance();
-        endDate.set(2019,Calendar.JUNE,22,11,30,0);
+        endDate.set(2019, Calendar.JUNE, 22, 11, 30, 0);
 
-        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L,startDate,endDate,"Demo meeting",userEntityPerson,userEntityRoom);
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, "Demo meeting", userEntityPerson, userEntityRoom);
         reservationRepository.save(reservationEntity);
 
         Calendar filterStartDate = Calendar.getInstance();
-        filterStartDate.set(2019,Calendar.JUNE,22,11,0,0);
+        filterStartDate.set(2019, Calendar.JUNE, 22, 11, 0, 0);
         Calendar filterEndDate = Calendar.getInstance();
-        filterEndDate.set(2019,Calendar.JUNE,22,12,0,0);
+        filterEndDate.set(2019, Calendar.JUNE, 22, 12, 0, 0);
 
-        List<UserEntity> actualReservationRoomsList = sut.viewByFields(filterStartDate,filterEndDate);
-
-        Assert.assertEquals(expectedReservationRoomsList, actualReservationRoomsList);
-    }
-
-   @Test
-    public void shouldReturnRoomListIfReservationStartDateIsSameAsStartFilterAndEndDateIsSameAsEndFilterWhenViewByFieldsIsCalled(){
-
-       UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun", null, UserType.PERSON,"Stefania","Ghitun");
-       sut.save(userEntityPerson);
-       UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-               new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
-       sut.save(userEntityRoom);
-
-        List<UserEntity> expectedReservationRoomsList = Collections.singletonList(userEntityRoom);
-
-        Calendar startDate = Calendar.getInstance();
-        startDate.set(2019,Calendar.JUNE,22,10,0,0);
-        Calendar endDate = Calendar.getInstance();
-        endDate.set(2019,Calendar.JUNE,22,11,30,0);
-
-        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L,startDate,endDate,"Demo meeting",userEntityPerson,userEntityRoom);
-        reservationRepository.save(reservationEntity);
-
-        Calendar filterStartDate = Calendar.getInstance();
-        filterStartDate.set(2019,Calendar.JUNE,22,10,0,0);
-        Calendar filterEndDate = Calendar.getInstance();
-        filterEndDate.set(2019,Calendar.JUNE,22,11,30,0);
-
-        List<UserEntity> actualReservationRoomsList = sut.viewByFields(filterStartDate,filterEndDate);
+        List<UserEntity> actualReservationRoomsList = sut.viewByFields(filterStartDate, filterEndDate);
 
         Assert.assertEquals(expectedReservationRoomsList, actualReservationRoomsList);
     }
 
     @Test
-    public void shouldReturnRoomListIfReservationStartDateIsAfterStartFilterAndEndDateIsAfterEndFilterWhenViewByFieldsIsCalled(){
+    public void shouldReturnRoomListIfReservationStartDateIsSameAsStartFilterAndEndDateIsSameAsEndFilterWhenViewByFieldsIsCalled() {
 
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun", null, UserType.PERSON,"Stefania","Ghitun");
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
         sut.save(userEntityPerson);
         UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
@@ -185,19 +157,48 @@ public class UserRepositoryTest {
         List<UserEntity> expectedReservationRoomsList = Collections.singletonList(userEntityRoom);
 
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2019,Calendar.JUNE,22,10,0,0);
+        startDate.set(2019, Calendar.JUNE, 22, 10, 0, 0);
         Calendar endDate = Calendar.getInstance();
-        endDate.set(2019,Calendar.JUNE,22,11,30,0);
+        endDate.set(2019, Calendar.JUNE, 22, 11, 30, 0);
 
-        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L,startDate,endDate,"Demo meeting",userEntityPerson,userEntityRoom);
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, "Demo meeting", userEntityPerson, userEntityRoom);
         reservationRepository.save(reservationEntity);
 
         Calendar filterStartDate = Calendar.getInstance();
-        filterStartDate.set(2019,Calendar.JUNE,22,9,0,0);
+        filterStartDate.set(2019, Calendar.JUNE, 22, 10, 0, 0);
         Calendar filterEndDate = Calendar.getInstance();
-        filterEndDate.set(2019,Calendar.JUNE,22,11,0,0);
+        filterEndDate.set(2019, Calendar.JUNE, 22, 11, 30, 0);
 
-        List<UserEntity> actualReservationRoomsList = sut.viewByFields(filterStartDate,filterEndDate);
+        List<UserEntity> actualReservationRoomsList = sut.viewByFields(filterStartDate, filterEndDate);
+
+        Assert.assertEquals(expectedReservationRoomsList, actualReservationRoomsList);
+    }
+
+    @Test
+    public void shouldReturnRoomListIfReservationStartDateIsAfterStartFilterAndEndDateIsAfterEndFilterWhenViewByFieldsIsCalled() {
+
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
+        sut.save(userEntityPerson);
+        UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
+        sut.save(userEntityRoom);
+
+        List<UserEntity> expectedReservationRoomsList = Collections.singletonList(userEntityRoom);
+
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(2019, Calendar.JUNE, 22, 10, 0, 0);
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(2019, Calendar.JUNE, 22, 11, 30, 0);
+
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, "Demo meeting", userEntityPerson, userEntityRoom);
+        reservationRepository.save(reservationEntity);
+
+        Calendar filterStartDate = Calendar.getInstance();
+        filterStartDate.set(2019, Calendar.JUNE, 22, 9, 0, 0);
+        Calendar filterEndDate = Calendar.getInstance();
+        filterEndDate.set(2019, Calendar.JUNE, 22, 11, 0, 0);
+
+        List<UserEntity> actualReservationRoomsList = sut.viewByFields(filterStartDate, filterEndDate);
 
         Assert.assertEquals(expectedReservationRoomsList, actualReservationRoomsList);
     }
@@ -215,150 +216,274 @@ public class UserRepositoryTest {
      */
 
     @Test
-    public void shouldNotReturnRoomWithReservationBeginningBetweenFilterDatesWhenFilterByFieldsIsCalled(){
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun", null, UserType.PERSON,"Stefania","Ghitun");
+    public void shouldNotReturnRoomWithReservationBeginningBetweenFilterDatesWhenFilterByFieldsIsCalled() {
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
         sut.save(userEntityPerson);
         UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         sut.save(userEntityRoom);
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2019,Calendar.JUNE,28,10,30,0);
+        startDate.set(2019, Calendar.JUNE, 28, 10, 30, 0);
         Calendar endDate = Calendar.getInstance();
-        endDate.set(2019,Calendar.JUNE,28,11,30,0);
-        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L,startDate,endDate,"Retro",userEntityPerson,userEntityRoom);
+        endDate.set(2019, Calendar.JUNE, 28, 11, 30, 0);
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, "Retro", userEntityPerson, userEntityRoom);
         reservationRepository.save(reservationEntity);
 
         Calendar filterStartDate = Calendar.getInstance();
-        filterStartDate.set(2019,Calendar.JUNE,28,10,0,0);
+        filterStartDate.set(2019, Calendar.JUNE, 28, 10, 0, 0);
         Calendar filterEndDate = Calendar.getInstance();
-        filterEndDate.set(2019,Calendar.JUNE,28,11,0,0);
+        filterEndDate.set(2019, Calendar.JUNE, 28, 11, 0, 0);
 
-        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate,filterEndDate,null,null);
+        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate, filterEndDate, null, null);
 
         Assert.assertEquals(Collections.emptyList(), actualReservationRoomsList);
     }
 
     @Test
-    public void shouldNotReturnRoomWithReservationEndingBetweenFilterDatesWhenFilterByFieldsIsCalled(){
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun", null, UserType.PERSON,"Stefania","Ghitun");
+    public void shouldNotReturnRoomWithReservationEndingBetweenFilterDatesWhenFilterByFieldsIsCalled() {
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
         sut.save(userEntityPerson);
         UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         sut.save(userEntityRoom);
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2019,Calendar.JUNE,28,10,30,0);
+        startDate.set(2019, Calendar.JUNE, 28, 10, 30, 0);
         Calendar endDate = Calendar.getInstance();
-        endDate.set(2019,Calendar.JUNE,28,11,30,0);
-        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L,startDate,endDate,"Retro",userEntityPerson,userEntityRoom);
+        endDate.set(2019, Calendar.JUNE, 28, 11, 30, 0);
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, "Retro", userEntityPerson, userEntityRoom);
         reservationRepository.save(reservationEntity);
 
         Calendar filterStartDate = Calendar.getInstance();
-        filterStartDate.set(2019,Calendar.JUNE,28,11,0,0);
+        filterStartDate.set(2019, Calendar.JUNE, 28, 11, 0, 0);
         Calendar filterEndDate = Calendar.getInstance();
-        filterEndDate.set(2019,Calendar.JUNE,28,11,30,0);
+        filterEndDate.set(2019, Calendar.JUNE, 28, 11, 30, 0);
 
-        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate,filterEndDate,null,null);
+        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate, filterEndDate, null, null);
 
         Assert.assertEquals(Collections.emptyList(), actualReservationRoomsList);
     }
 
     @Test
-    public void shouldNotReturnRoomWithReservationInBetweenFilterDatesWhenFilterByFieldsIsCalled(){
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun", null, UserType.PERSON,"Stefania","Ghitun");
+    public void shouldNotReturnRoomWithReservationInBetweenFilterDatesWhenFilterByFieldsIsCalled() {
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
         sut.save(userEntityPerson);
         UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         sut.save(userEntityRoom);
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2019,Calendar.JUNE,28,10,0,0);
+        startDate.set(2019, Calendar.JUNE, 28, 10, 0, 0);
         Calendar endDate = Calendar.getInstance();
-        endDate.set(2019,Calendar.JUNE,28,11,0,0);
-        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L,startDate,endDate,"Retro",userEntityPerson,userEntityRoom);
+        endDate.set(2019, Calendar.JUNE, 28, 11, 0, 0);
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, "Retro", userEntityPerson, userEntityRoom);
         reservationRepository.save(reservationEntity);
 
         Calendar filterStartDate = Calendar.getInstance();
-        filterStartDate.set(2019,Calendar.JUNE,28,9,30,0);
+        filterStartDate.set(2019, Calendar.JUNE, 28, 9, 30, 0);
         Calendar filterEndDate = Calendar.getInstance();
-        filterEndDate.set(2019,Calendar.JUNE,28,11,30,0);
+        filterEndDate.set(2019, Calendar.JUNE, 28, 11, 30, 0);
 
-        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate,filterEndDate,null,null);
+        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate, filterEndDate, null, null);
 
         Assert.assertEquals(Collections.emptyList(), actualReservationRoomsList);
     }
 
     @Test
-    public void shouldNotReturnRoomWithReservationEncompassFilterDatesWhenFilterByFieldsIsCalled(){
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun", null, UserType.PERSON,"Stefania","Ghitun");
+    public void shouldNotReturnRoomWithReservationEncompassFilterDatesWhenFilterByFieldsIsCalled() {
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
         sut.save(userEntityPerson);
         UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         sut.save(userEntityRoom);
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2019,Calendar.JUNE,28,9,30,0);
+        startDate.set(2019, Calendar.JUNE, 28, 9, 30, 0);
         Calendar endDate = Calendar.getInstance();
-        endDate.set(2019,Calendar.JUNE,28,10,30,0);
-        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L,startDate,endDate,"Retro",userEntityPerson,userEntityRoom);
+        endDate.set(2019, Calendar.JUNE, 28, 10, 30, 0);
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, "Retro", userEntityPerson, userEntityRoom);
         reservationRepository.save(reservationEntity);
 
         Calendar filterStartDate = Calendar.getInstance();
-        filterStartDate.set(2019,Calendar.JUNE,28,9,0,0);
+        filterStartDate.set(2019, Calendar.JUNE, 28, 9, 0, 0);
         Calendar filterEndDate = Calendar.getInstance();
-        filterEndDate.set(2019,Calendar.JUNE,28,10,0,0);
+        filterEndDate.set(2019, Calendar.JUNE, 28, 10, 0, 0);
 
-        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate,filterEndDate,null,null);
+        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate, filterEndDate, null, null);
 
         Assert.assertEquals(Collections.emptyList(), actualReservationRoomsList);
     }
 
     @Test
-    public void shouldNotReturnRoomWithReservationMatchesFilterDatesWhenFilterByFieldsIsCalled(){
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun", null, UserType.PERSON,"Stefania","Ghitun");
+    public void shouldNotReturnRoomWithReservationMatchesFilterDatesWhenFilterByFieldsIsCalled() {
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
         sut.save(userEntityPerson);
         UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         sut.save(userEntityRoom);
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2019,Calendar.JUNE,28,9,30,0);
+        startDate.set(2019, Calendar.JUNE, 28, 9, 30, 0);
         Calendar endDate = Calendar.getInstance();
-        endDate.set(2019,Calendar.JUNE,28,10,30,0);
-        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L,startDate,endDate,"Retro",userEntityPerson,userEntityRoom);
+        endDate.set(2019, Calendar.JUNE, 28, 10, 30, 0);
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, "Retro", userEntityPerson, userEntityRoom);
         reservationRepository.save(reservationEntity);
 
         Calendar filterStartDate = Calendar.getInstance();
-        filterStartDate.set(2019,Calendar.JUNE,28,9,30,0);
+        filterStartDate.set(2019, Calendar.JUNE, 28, 9, 30, 0);
         Calendar filterEndDate = Calendar.getInstance();
-        filterEndDate.set(2019,Calendar.JUNE,28,10,30,0);
+        filterEndDate.set(2019, Calendar.JUNE, 28, 10, 30, 0);
 
-        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate,filterEndDate,null,null);
+        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate, filterEndDate, null, null);
 
         Assert.assertEquals(Collections.emptyList(), actualReservationRoomsList);
     }
 
     @Test
-    public void shouldNotReturnAllRoomsWhoseReservationIsNotInTheSameDayAsFilterDatesWhenFilterByFieldsIsCalled(){
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun", null, UserType.PERSON,"Stefania","Ghitun");
+    public void shouldNotReturnAllRoomsWhoseReservationIsNotInTheSameDayAsFilterDatesWhenFilterByFieldsIsCalled() {
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
         sut.save(userEntityPerson);
         UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         sut.save(userEntityRoom);
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2019,Calendar.JUNE,27,9,30,0);
+        startDate.set(2019, Calendar.JUNE, 27, 9, 30, 0);
         Calendar endDate = Calendar.getInstance();
-        endDate.set(2019,Calendar.JUNE,27,10,30,0);
-        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L,startDate,endDate,"Retro",userEntityPerson,userEntityRoom);
+        endDate.set(2019, Calendar.JUNE, 27, 10, 30, 0);
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, "Retro", userEntityPerson, userEntityRoom);
         reservationRepository.save(reservationEntity);
 
         UserEntity userEntityRoomSameDay = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "westeros",
-                new HashSet<>(), BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros",20);
-        sut.save(userEntityRoom);
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros", 20);
+        sut.save(userEntityRoomSameDay);
+
+        Calendar startSameDate = Calendar.getInstance();
+        startSameDate.set(2019, Calendar.JUNE, 28, 9, 0, 0);
+        Calendar endSameDate = Calendar.getInstance();
+        endSameDate.set(2019, Calendar.JUNE, 28, 11, 30, 0);
+        ReservationEntity reservationEntitySameDay = BuildersWrapper.buildReservationEntity(1L, startSameDate, endSameDate, "Retro", userEntityPerson, userEntityRoomSameDay);
+        reservationRepository.save(reservationEntitySameDay);
+
+        List<UserEntity> expectedReservationRoomsList = Collections.singletonList(userEntityRoom);
 
         Calendar filterStartDate = Calendar.getInstance();
-        filterStartDate.set(2019,Calendar.JUNE,28,9,30,0);
+        filterStartDate.set(2019, Calendar.JUNE, 28, 9, 30, 0);
         Calendar filterEndDate = Calendar.getInstance();
-        filterEndDate.set(2019,Calendar.JUNE,28,10,30,0);
+        filterEndDate.set(2019, Calendar.JUNE, 28, 10, 30, 0);
 
-        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate,filterEndDate,null,null);
+        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate, filterEndDate, null, null);
 
-        Assert.assertEquals(Collections.emptyList(), actualReservationRoomsList);
+        Assert.assertEquals(expectedReservationRoomsList, actualReservationRoomsList);
+    }
+
+    @Test
+    public void shouldReturnAllRoomsWhoseMaxPersonsIsGreaterThanMinPersonsFilterWhenFilterByFieldsIsCalled() {
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
+        sut.save(userEntityPerson);
+        UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
+        sut.save(userEntityRoom);
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(2019, Calendar.JUNE, 28, 15, 30, 0);
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(2019, Calendar.JUNE, 28, 17, 30, 0);
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, "Retro", userEntityPerson, userEntityRoom);
+        reservationRepository.save(reservationEntity);
+
+        UserEntity userEntityRoomTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "westeros",
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros", 20);
+        sut.save(userEntityRoomTwo);
+
+        Calendar startDateTwo = Calendar.getInstance();
+        startDateTwo.set(2019, Calendar.JUNE, 28, 9, 0, 0);
+        Calendar endDateTwo = Calendar.getInstance();
+        endDateTwo.set(2019, Calendar.JUNE, 28, 11, 30, 0);
+        ReservationEntity reservationEntityTwo = BuildersWrapper.buildReservationEntity(1L, startDateTwo, endDateTwo, "Retro", userEntityPerson, userEntityRoomTwo);
+        reservationRepository.save(reservationEntityTwo);
+
+        List<UserEntity> expectedReservationRoomsList = Collections.singletonList(userEntityRoomTwo);
+
+        Calendar filterStartDate = Calendar.getInstance();
+        filterStartDate.set(2019, Calendar.JUNE, 27, 9, 30, 0);
+        Calendar filterEndDate = Calendar.getInstance();
+        filterEndDate.set(2019, Calendar.JUNE, 27, 10, 30, 0);
+        Integer minPersons = 19;
+
+        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate, filterEndDate, minPersons, null);
+
+        Assert.assertEquals(expectedReservationRoomsList, actualReservationRoomsList);
+    }
+
+    @Test
+    public void shouldReturnAllRoomsWhoseFloorIsTheSameAsTheFilterFloorWhenFilterByFieldsIsCalled() {
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
+        sut.save(userEntityPerson);
+        UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
+        sut.save(userEntityRoom);
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(2019, Calendar.JUNE, 28, 15, 30, 0);
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(2019, Calendar.JUNE, 28, 17, 30, 0);
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, "Retro", userEntityPerson, userEntityRoom);
+        reservationRepository.save(reservationEntity);
+
+        UserEntity userEntityRoomTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "westeros",
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros", 20);
+        sut.save(userEntityRoomTwo);
+
+        Calendar startDateTwo = Calendar.getInstance();
+        startDateTwo.set(2019, Calendar.JUNE, 28, 9, 0, 0);
+        Calendar endDateTwo = Calendar.getInstance();
+        endDateTwo.set(2019, Calendar.JUNE, 28, 11, 30, 0);
+        ReservationEntity reservationEntityTwo = BuildersWrapper.buildReservationEntity(1L, startDateTwo, endDateTwo, "Retro", userEntityPerson, userEntityRoomTwo);
+        reservationRepository.save(reservationEntityTwo);
+
+        List<UserEntity> expectedReservationRoomsList = Collections.singletonList(userEntityRoom);
+
+        Calendar filterStartDate = Calendar.getInstance();
+        filterStartDate.set(2019, Calendar.JUNE, 27, 9, 30, 0);
+        Calendar filterEndDate = Calendar.getInstance();
+        filterEndDate.set(2019, Calendar.JUNE, 27, 10, 30, 0);
+        Integer floor = 5;
+
+        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate, filterEndDate, null, floor);
+
+        Assert.assertEquals(expectedReservationRoomsList, actualReservationRoomsList);
+    }
+
+    @Test
+    public void shouldReturnAllRoomsWhoseFloorAndMaxPersonsMatchTheFiltersWhenFilterByFieldsIsCalled() {
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
+        sut.save(userEntityPerson);
+        UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
+        sut.save(userEntityRoom);
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(2019, Calendar.JUNE, 28, 15, 30, 0);
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(2019, Calendar.JUNE, 28, 17, 30, 0);
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, "Retro", userEntityPerson, userEntityRoom);
+        reservationRepository.save(reservationEntity);
+
+        UserEntity userEntityRoomTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "westeros",
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros", 20);
+        sut.save(userEntityRoomTwo);
+
+        Calendar startDateTwo = Calendar.getInstance();
+        startDateTwo.set(2019, Calendar.JUNE, 28, 9, 0, 0);
+        Calendar endDateTwo = Calendar.getInstance();
+        endDateTwo.set(2019, Calendar.JUNE, 28, 11, 30, 0);
+        ReservationEntity reservationEntityTwo = BuildersWrapper.buildReservationEntity(1L, startDateTwo, endDateTwo, "Retro", userEntityPerson, userEntityRoomTwo);
+        reservationRepository.save(reservationEntityTwo);
+
+        List<UserEntity> expectedReservationRoomsList = Collections.singletonList(userEntityRoom);
+
+        Calendar filterStartDate = Calendar.getInstance();
+        filterStartDate.set(2019, Calendar.JUNE, 27, 9, 30, 0);
+        Calendar filterEndDate = Calendar.getInstance();
+        filterEndDate.set(2019, Calendar.JUNE, 27, 10, 30, 0);
+        Integer minPersons = 10;
+        Integer floor = 5;
+
+        List<UserEntity> actualReservationRoomsList = sut.filterByFields(filterStartDate, filterEndDate, minPersons, floor);
+
+        Assert.assertEquals(expectedReservationRoomsList, actualReservationRoomsList);
     }
 }

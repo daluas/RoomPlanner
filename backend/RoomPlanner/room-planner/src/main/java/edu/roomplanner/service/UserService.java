@@ -16,6 +16,8 @@ public interface UserService {
 
     RoomDto getRoomById(Long id);
 
+    RoomDto getRoomByEmail(String email);
+
     Optional<UserDto> getUserDto(String email);
 
     List<RoomDto> getRoomsByFilters(Calendar startDate, Calendar endDate, Integer minPersons, Integer floor);
@@ -23,5 +25,5 @@ public interface UserService {
     Set<ReservationEntity> updateReservationDescription(Set<ReservationEntity> reservationEntities);
 
     List<UserEntity> updateUserEntitiesReservation(List<UserEntity> userEntities);
-
 }
+

@@ -7,7 +7,6 @@ import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.dto.UserDto;
 import edu.roomplanner.entity.FloorEntity;
-import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.FloorRepository;
@@ -26,7 +25,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -36,7 +34,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -71,6 +73,7 @@ public class FloorRestControllerTest {
     private OAuthHelper oAuthHelper;
 
     private RequestPostProcessor bearerToken;
+    private RequestPostProcessor roomBearerToken;
 
     @Before
     public void init() {
@@ -87,13 +90,14 @@ public class FloorRestControllerTest {
         userRepository.save(userEntityPerson);
 
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
+        roomBearerToken = oAuthHelper.addBearerToken("wonderland@yahoo.com", "room");
 
         UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "Wonderland",
                 null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "Westeros",
-                null, BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros",  20);
+                null, BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros", 20);
         UserEntity userEntityThree = BuildersWrapper.buildRoomEntity(4L, "neverland@yahoo.com", "Neverland",
-                null, BuildersWrapper.buildFloorEntity(3L, 4), UserType.ROOM, "Neverland",5);
+                null, BuildersWrapper.buildFloorEntity(3L, 4), UserType.ROOM, "Neverland", 5);
 
         Set<RoomEntity> firstRoom = new HashSet<>();
         Set<RoomEntity> secondRoom = new HashSet<>();
@@ -121,6 +125,7 @@ public class FloorRestControllerTest {
     public void shouldReturnResponseEntityWithValidFloorDtoListAndStatusFoundWhenGetAllFloorsIsCalled() throws Exception {
 
         UserDto userEntityOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
+
                 new HashSet<ReservationDto>(), 5, 14, UserType.ROOM);
         UserDto userEntityTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros",
                 new HashSet<ReservationDto>(), 8, 20, UserType.ROOM);
@@ -148,6 +153,12 @@ public class FloorRestControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andExpect(MockMvcResultMatchers.content().string(jsonFloorDtoList));
 
+    }
+
+    @Test
+    public void shouldReturnUnauthorizedWhenGetUsersIsCalledByARoom() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/floors", 1).with(roomBearerToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
 }

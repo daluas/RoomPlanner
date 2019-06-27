@@ -35,11 +35,11 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
         return roomDtoList;
     }
 
-    private Set<ReservationDto> mapRoomEntitySetToDtoSet(Set<ReservationEntity> reservationEntitySet){
+    private Set<ReservationDto> mapRoomEntitySetToDtoSet(Set<ReservationEntity> reservationEntitySet) {
         Set<ReservationDto> reservationDtoSet = new HashSet<>();
-        if(reservationEntitySet == null)
+        if (reservationEntitySet == null)
             return reservationDtoSet;
-        for(ReservationEntity entity : reservationEntitySet){
+        for (ReservationEntity entity : reservationEntitySet) {
             reservationDtoSet.add(reservationDtoMapper.mapReservationEntityToDto(entity));
         }
         return reservationDtoSet;
@@ -62,6 +62,14 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
     public RoomDto mapEntityToDto(RoomEntity roomEntity) {
 
         Set<ReservationEntity> reservationEntitySet = roomEntity.getReservations();
+
+        if (roomEntity.getFloor() == null) {
+            return (RoomDto) UserDtoBuilder.builder()
+                    .withType(roomEntity.getType())
+                    .build();
+
+        }
+
         Set<ReservationDto> reservationDtoSet = mapRoomEntitySetToDtoSet(reservationEntitySet);
         return (RoomDto) UserDtoBuilder.builder()
                 .withId(roomEntity.getId())

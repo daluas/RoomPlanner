@@ -1,5 +1,7 @@
 package edu.roomplanner.validation;
 
+import edu.roomplanner.builders.FloorEntityBuilder;
+import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.UserRepository;
@@ -40,8 +42,13 @@ public class UserValidatorTest {
     @Test
     public void shouldReturnTrueWhenCheckValidRoomIdIsCalledWithInjectedRoomId() {
 
-        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "wonderland",
-                null, null, UserType.ROOM, "Wonderland", 14);
+        FloorEntity floorEntity = new FloorEntityBuilder()
+                .withFloor(5)
+                .build();
+
+        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "Wonderland",
+                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
+
 
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(userEntity));
 

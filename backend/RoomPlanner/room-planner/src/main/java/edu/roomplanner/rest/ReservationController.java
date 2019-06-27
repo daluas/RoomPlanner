@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -35,6 +36,7 @@ public class ReservationController {
             @ApiResponse(code = 404, message = "This room was not found."),
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error.")})
+    @PreAuthorize("hasAuthority('person')")
     ResponseEntity<ReservationDto> getReservationCreated(@PathVariable(name = "room_id") Long roomId,
                                                          @RequestBody ReservationDto reservationDto) {
 

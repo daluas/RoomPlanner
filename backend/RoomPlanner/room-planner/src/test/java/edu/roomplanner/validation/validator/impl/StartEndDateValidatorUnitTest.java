@@ -7,11 +7,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static edu.roomplanner.validation.validator.BookingValidator.MIN_MINUTES;
-
 import java.util.Calendar;
 
-import static org.junit.Assert.*;
+import static edu.roomplanner.validation.validator.BookingValidator.MIN_MINUTES;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 public class StartEndDateValidatorUnitTest {

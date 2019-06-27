@@ -20,14 +20,9 @@ import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.HashSet;
-
-import java.util.Set;
 
 
 @Service
@@ -44,11 +39,13 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository, UserValidator userValidator,
                            RoomDtoMapper roomDtoMapper, TokenParserService tokenParserService,
                            ReservationDtoMapper reservationDtoMapper) {
+
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.roomDtoMapper = roomDtoMapper;
         this.tokenParserService = tokenParserService;
         this.reservationDtoMapper = reservationDtoMapper;
+
     }
 
     @Override
@@ -67,6 +64,16 @@ public class UserServiceImpl implements UserService {
             Set<ReservationEntity> updatedReservationEntities = updateReservationDescription(userEntity.getReservations());
             userEntity.setReservations(updatedReservationEntities);
             roomDto = roomDtoMapper.mapEntityToDto(userEntity);
+        }
+        return roomDto;
+    }
+
+    @Override
+    public RoomDto getRoomByEmail(String email) {
+        RoomDto roomDto = null;
+        if (userValidator.checkValidRoomEmail(email)) {
+            UserEntity userEntity = userRepository.findByEmail(email).get();
+            roomDto = roomDtoMapper.mapEntityToDto((RoomEntity) userEntity);
         }
         return roomDto;
     }
@@ -94,9 +101,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<RoomDto> getRoomsByFilters(Calendar startDate, Calendar endDate, Integer minPersons, Integer floor) {
         Calendar currentDate = Calendar.getInstance();
+        conversionToGmt(currentDate.getTime());
         List<UserEntity> userEntityList;
-        if(startDate.compareTo(currentDate) <0)
-            userEntityList =  userRepository.viewByFields(startDate,endDate);
+        if (durationBetween(startDate, currentDate) > 0)
+            userEntityList = userRepository.viewByFields(startDate, endDate);
         else
             userEntityList = userRepository.filterByFields(startDate, endDate, minPersons, floor);
         userEntityList = userEntityList.stream().distinct().collect(Collectors.toList());
@@ -111,6 +119,22 @@ public class UserServiceImpl implements UserService {
             ((RoomEntity) userEntity).setReservations(updatedReservationEntities);
         }
         return userEntities;
+    }
+
+    private Long durationBetween(Calendar startDate, Calendar endDate) {
+        return TimeUnit.MINUTES.convert(endDate.getTime().getTime() - startDate.getTime().getTime(), TimeUnit.MILLISECONDS);
+    }
+
+    private Date conversionToGmt(Date date) {
+        TimeZone tz = TimeZone.getDefault();
+        Date ret = new Date(date.getTime() - tz.getRawOffset());
+        if (tz.inDaylightTime(ret)) {
+            Date dstDate = new Date(ret.getTime() - tz.getDSTSavings());
+            if (tz.inDaylightTime(dstDate)) {
+                ret = dstDate;
+            }
+        }
+        return ret;
     }
 
     private Long getLoggedUserId() {
@@ -153,7 +177,7 @@ public class UserServiceImpl implements UserService {
 
     private Set<ReservationDto> getReservationDtos(Set<ReservationEntity> reservationEntities) {
         Set<ReservationDto> reservationDtos = new HashSet<>();
-        for(ReservationEntity reservationEntity:reservationEntities) {
+        for (ReservationEntity reservationEntity : reservationEntities) {
             reservationDtos.add(reservationDtoMapper.mapReservationEntityToDto(reservationEntity));
         }
         return reservationDtos;

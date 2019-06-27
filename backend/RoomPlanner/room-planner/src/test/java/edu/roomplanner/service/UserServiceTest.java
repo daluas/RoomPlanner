@@ -2,7 +2,6 @@ package edu.roomplanner.service;
 
 import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.dto.RoomDto;
-
 import edu.roomplanner.entity.PersonEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
@@ -10,7 +9,6 @@ import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.mappers.RoomDtoMapper;
 import edu.roomplanner.mappers.impl.ReservationDtoMapperImpl;
-import edu.roomplanner.repository.RoomRepository;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.impl.UserServiceImpl;
 import edu.roomplanner.types.UserType;
@@ -25,14 +23,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringRunner;
 
-
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
-
 import java.util.*;
-
 
 import static org.mockito.Mockito.when;
 
@@ -50,15 +41,12 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     @Mock
-    private RoomRepository roomRepository;
-
-    @Mock
     private TokenParserService tokenParserService;
 
     @InjectMocks
     private UserServiceImpl sut;
 
-    private ReservationDtoMapper reservationDtoMapper = new ReservationDtoMapperImpl(userRepository, roomRepository);
+    private ReservationDtoMapper reservationDtoMapper = new ReservationDtoMapperImpl(userRepository);
 
     private final Long SECOND_PERSON_ID = 3L;
 
@@ -69,12 +57,14 @@ public class UserServiceTest {
 
     @Test
     public void shouldReturnRoomDtoListWhenGetAllRoomsIsCalled() {
+
         RoomEntity roomEntityOne = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                null,BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland",14);
+                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         Set<ReservationEntity> reservationEntitySet = buildReservationEntitySet(roomEntityOne);
         roomEntityOne.setReservations(reservationEntitySet);
         UserEntity roomEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "4westAD8%",
-                reservationEntitySet, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Westeros",20);
+                reservationEntitySet, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Westeros", 20);
+
 
         List<UserEntity> roomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
 
@@ -86,7 +76,7 @@ public class UserServiceTest {
         PersonEntity personEntity = (PersonEntity) BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "sghitun",
                 null, UserType.PERSON, "Ghitun", "Stefania");
 
-       List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
+        List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
 
         when(userRepository.findByType(UserType.ROOM)).thenReturn(roomEntityList);
         when(roomDtoMapper.mapEntityListToDtoList(roomEntityList)).thenReturn(expectedRoomDtoList);
@@ -101,7 +91,7 @@ public class UserServiceTest {
     @Test
     public void shouldReturnExpectedRoomDtoWhenGetRoomByIdIsCalled() {
         RoomEntity roomEntity = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                null,BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland",14);
+                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         Set<ReservationEntity> reservationEntitySet = buildReservationEntitySet(roomEntity);
         roomEntity.setReservations(reservationEntitySet);
 
@@ -109,7 +99,6 @@ public class UserServiceTest {
 
         PersonEntity personEntity = (PersonEntity) BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "sghitun",
                 null, UserType.PERSON, "Ghitun", "Stefania");
-
         when(userValidator.checkValidRoomId(1L)).thenReturn(true);
         when(roomDtoMapper.mapEntityToDto(roomEntity)).thenReturn(expectedRoomDto);
         when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(roomEntity));
@@ -123,76 +112,76 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldReturnRoomListWithReservationsInTimePeriodWhenGetRoomByFiltersIsCalledWithPastDates(){
+    public void shouldReturnRoomListWithReservationsInTimePeriodWhenGetRoomByFiltersIsCalledWithPastDates() {
 
         RoomEntity userEntityRoom = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                null,BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland",14);
+                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         List<UserEntity> userEntityList = Collections.singletonList(userEntityRoom);
 
-        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
-        List<RoomDto> expectedRoomDtoList = Collections.singletonList(roomDto);
-
-         Calendar startDate = Calendar.getInstance();
-        startDate.set(2019,Calendar.JUNE,22,10,0,0);
-        Calendar endDate = Calendar.getInstance();
-        endDate.set(2019,Calendar.JUNE,22,11,30,0);
-
-        when(userRepository.viewByFields(startDate,endDate)).thenReturn(userEntityList);
-        when(roomDtoMapper.mapEntityListToDtoList(userEntityList)).thenReturn(expectedRoomDtoList);
-
-        List<RoomDto> actualRoomDtoList = sut.getRoomsByFilters(startDate,endDate,null,null);
-
-        Assert.assertEquals(expectedRoomDtoList, actualRoomDtoList);
-
-    }
-
-    @Test
-    public void shouldReturnRoomListWithNoReservationsInTimePeriodWhenGetRoomByFiltersIsCalledWithPresentOrFutureDates(){
-
-        RoomEntity userEntityRoom = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                null,BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland",14);
-        List<UserEntity> userEntityList = Collections.singletonList(userEntityRoom);
-
-        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", Collections.EMPTY_SET, 5, 14, UserType.ROOM);
         List<RoomDto> expectedRoomDtoList = Collections.singletonList(roomDto);
 
         Calendar startDate = Calendar.getInstance();
-        startDate.add(Calendar.MINUTE,10);
+        startDate.set(2019, Calendar.JUNE, 22, 10, 0, 0);
         Calendar endDate = Calendar.getInstance();
-        endDate.add(Calendar.MINUTE,10);
+        endDate.set(2019, Calendar.JUNE, 22, 11, 30, 0);
 
-        when(userRepository.filterByFields(startDate,endDate,null,null)).thenReturn(userEntityList);
+        when(userRepository.viewByFields(startDate, endDate)).thenReturn(userEntityList);
         when(roomDtoMapper.mapEntityListToDtoList(userEntityList)).thenReturn(expectedRoomDtoList);
 
-        List<RoomDto> actualRoomDtoList = sut.getRoomsByFilters(startDate,endDate,null,null);
+        List<RoomDto> actualRoomDtoList = sut.getRoomsByFilters(startDate, endDate, null, null);
+
+        Assert.assertEquals(expectedRoomDtoList, actualRoomDtoList);
+
+    }
+
+    @Test
+    public void shouldReturnRoomListWithNoReservationsInTimePeriodWhenGetRoomByFiltersIsCalledWithPresentOrFutureDates() {
+
+        RoomEntity userEntityRoom = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
+                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
+        List<UserEntity> userEntityList = Collections.singletonList(userEntityRoom);
+
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", Collections.EMPTY_SET, 5, 14, UserType.ROOM);
+        List<RoomDto> expectedRoomDtoList = Collections.singletonList(roomDto);
+
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.MINUTE, 10);
+        Calendar endDate = Calendar.getInstance();
+        endDate.add(Calendar.MINUTE, 10);
+
+        when(userRepository.filterByFields(startDate, endDate, null, null)).thenReturn(userEntityList);
+        when(roomDtoMapper.mapEntityListToDtoList(userEntityList)).thenReturn(expectedRoomDtoList);
+
+        List<RoomDto> actualRoomDtoList = sut.getRoomsByFilters(startDate, endDate, null, null);
 
         Assert.assertEquals(expectedRoomDtoList, actualRoomDtoList);
     }
 
     @Test
-    public void shouldReturnRoomListWithNoDuplicatesWhenGetRoomByFiltersIsCalledWithPresentOrFutureDatesAndRepositoryReturnsDuplicateData(){
+    public void shouldReturnRoomListWithNoDuplicatesWhenGetRoomByFiltersIsCalledWithPresentOrFutureDatesAndRepositoryReturnsDuplicateData() {
 
         RoomEntity userEntityRoom = (RoomEntity) BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
-                null,BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland",14);
+                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         UserEntity userEntityRoomUnique = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "westeros",
-                null, BuildersWrapper.buildFloorEntity(2L, 8),UserType.ROOM, "Westeros", 20);
+                null, BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros", 20);
         List<UserEntity> userEntityList = Arrays.asList(userEntityRoom, userEntityRoom, userEntityRoom, userEntityRoomUnique);
 
-        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
-        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros",  Collections.EMPTY_SET, 8, 20, UserType.ROOM);
-        List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDtoOne,roomDtoTwo);
+        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", Collections.EMPTY_SET, 5, 14, UserType.ROOM);
+        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros", Collections.EMPTY_SET, 8, 20, UserType.ROOM);
+        List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
 
         Calendar startDate = Calendar.getInstance();
-        startDate.add(Calendar.MINUTE,10);
+        startDate.add(Calendar.MINUTE, 10);
         Calendar endDate = Calendar.getInstance();
-        endDate.add(Calendar.MINUTE,10);
+        endDate.add(Calendar.MINUTE, 10);
 
-        List<UserEntity> filteredUserEntityList = Arrays.asList(userEntityRoom,userEntityRoomUnique);
+        List<UserEntity> filteredUserEntityList = Arrays.asList(userEntityRoom, userEntityRoomUnique);
 
-        when(userRepository.filterByFields(startDate,endDate,null,null)).thenReturn(userEntityList);
+        when(userRepository.filterByFields(startDate, endDate, null, null)).thenReturn(userEntityList);
         when(roomDtoMapper.mapEntityListToDtoList(filteredUserEntityList)).thenReturn(expectedRoomDtoList);
 
-        List<RoomDto> actualRoomDtoList = sut.getRoomsByFilters(startDate,endDate,null,null);
+        List<RoomDto> actualRoomDtoList = sut.getRoomsByFilters(startDate, endDate, null, null);
 
         Assert.assertEquals(expectedRoomDtoList, actualRoomDtoList);
     }
@@ -200,11 +189,11 @@ public class UserServiceTest {
     @Test
     public void shouldReturnSameUserEntitiesWithFilteredReservations() {
         RoomEntity roomEntityOne = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                new HashSet<>(),BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland",14);
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         Set<ReservationEntity> reservationEntitySet = buildReservationEntitySet(roomEntityOne);
         roomEntityOne.setReservations(reservationEntitySet);
         UserEntity roomEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "4westAD8%",
-                reservationEntitySet, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Westeros",20);
+                reservationEntitySet, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Westeros", 20);
 
         List<UserEntity> roomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
 
@@ -223,8 +212,8 @@ public class UserServiceTest {
 
     private List<UserEntity> buildUserEntitiesWithFilteredReservations(List<UserEntity> userEntities) {
         List<UserEntity> result = new ArrayList<>(userEntities);
-        for(UserEntity userEntity: result) {
-            Set<ReservationEntity> reservationEntities = setFilterReservationDescription(((RoomEntity)userEntity).getReservations());
+        for (UserEntity userEntity : result) {
+            Set<ReservationEntity> reservationEntities = setFilterReservationDescription(((RoomEntity) userEntity).getReservations());
             ((RoomEntity) userEntity).setReservations(reservationEntities);
         }
         return result;
@@ -232,7 +221,7 @@ public class UserServiceTest {
 
     private Set<ReservationEntity> setFilterReservationDescription(Set<ReservationEntity> reservationEntitySet) {
         Set<ReservationEntity> result = new HashSet<>(reservationEntitySet);
-        for(ReservationEntity reservationEntity: result) {
+        for (ReservationEntity reservationEntity : result) {
             if (reservationEntity.getPerson().getId().equals(SECOND_PERSON_ID)) {
                 reservationEntity.setDescription(null);
             }
@@ -257,8 +246,8 @@ public class UserServiceTest {
 
     private Set<ReservationDto> buildReservationDtoSet(Set<ReservationEntity> reservationEntities) {
         Set<ReservationDto> reservationDtos = new HashSet<>();
-        for(ReservationEntity reservationEntity:reservationEntities) {
-            if(reservationEntity.getPerson().getId().equals(SECOND_PERSON_ID)) {
+        for (ReservationEntity reservationEntity : reservationEntities) {
+            if (reservationEntity.getPerson().getId().equals(SECOND_PERSON_ID)) {
                 reservationEntity.setDescription(null);
             }
             ReservationDto reservationDto = reservationDtoMapper.mapReservationEntityToDto(reservationEntity);

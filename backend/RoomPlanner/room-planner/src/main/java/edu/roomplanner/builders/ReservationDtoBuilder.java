@@ -17,7 +17,7 @@ public class ReservationDtoBuilder {
         return new ReservationDtoBuilder();
     }
 
-    public  ReservationDtoBuilder withId(Long id) {
+    public ReservationDtoBuilder withId(Long id) {
         this.id = id;
         return this;
     }
