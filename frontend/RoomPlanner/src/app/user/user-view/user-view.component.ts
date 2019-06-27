@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Booking } from 'src/app/shared/models/Booking';
 import { RoomDataService } from 'src/app/core/services/room-data/room-data.service';
+import { FloorModel } from '../../core/models/FloorModel';
+import { Filters } from '../../shared/models/Filters';
+import { RoomModel } from '../../core/models/RoomModel';
 
 
 @Component({
@@ -12,10 +15,10 @@ export class UserViewComponent implements OnInit {
 
   bookingPopupOpen: boolean = false;
   newBooking: Booking;
-  buildingLayout: any;
-  rooms: any[];
-  displayedRooms: any[];
-  previousFilters: any;
+  buildingLayout: FloorModel[] = new Array<FloorModel>();
+  rooms: RoomModel[];
+  displayedRooms: RoomModel[];
+  previousFilters: Filters;
 
   constructor(public roomDataService: RoomDataService) { }
 
@@ -28,52 +31,77 @@ export class UserViewComponent implements OnInit {
     this.bookingPopupOpen = false;
   }
 
-  setDefaultData() {
-    // set default filtes, now that we know the first floor
-    this.previousFilters = {
-      date: new Date()
-    }
 
-    this.roomDataService.getBuildingLayout().then((buildingLayout) => {
-      this.buildingLayout = buildingLayout;
+  async setDefaultData() {
+
+    await this.roomDataService.getFloors().then((floors) => {
+      this.buildingLayout = floors;
     });
 
-    this.roomDataService.getDefaultRooms().then((defaultRooms) => {
-      this.rooms = defaultRooms;
-      this.displayedRooms = defaultRooms;
+    this.buildingLayout.sort(function (a, b) { return a.floor - b.floor });
+
+    let copyArray: FloorModel[];
+    let firstFloor: FloorModel;
+
+    firstFloor = this.buildingLayout[0];
+
+    this.previousFilters = new Filters().create({
+      startDate: new Date(new Date().setHours(0, 0, 0, 0)),
+      endDate: new Date(new Date().setHours(23, 59, 0, 0)),
+      minPersons: null,
+      floor: firstFloor.floor
+    });
+
+    this.roomDataService.getRoomsByFilter(this.previousFilters).then((defaultRooms) => {
+      this.rooms = <RoomModel[]>defaultRooms;
+      console.log(this.rooms);
+      this.displayedRooms = <RoomModel[]>defaultRooms;
     })
   }
 
-  updateRoomsBasedOnFilters(filters: any) {
+  updateRoomsBasedOnFilters(filters: Filters) {
     console.log("Filters component emited: ", filters);
 
-    if (this.filteredRoomsAlreadyExist(filters)){
+    if (this.filteredRoomsAlreadyExist(filters)) {
       this.setDisplayedRooms(filters);
     } else {
-      this.roomDataService.getRooms(filters).then((rooms) => {
-        this.rooms = rooms;
+      this.roomDataService.getRoomsByFilter(filters).then((rooms) => {
+        this.rooms = <RoomModel[]>rooms;
         this.setDisplayedRooms(filters);
       })
     }
 
-    this.previousFilters = filters;
-
-    // !!! IMPORTANT - make this work with filters date field;
-    this.previousFilters = {
-      date: new Date()
-    }
+    this.previousFilters = new Filters().create(filters);
   }
 
-  filteredRoomsAlreadyExist(filters: any): boolean{
-    //if this.previousFilters date && floor is the same, than return true
-
+  filteredRoomsAlreadyExist(filters: Filters): boolean {
+    if (this.verifyDate(this.previousFilters.startDate,filters.startDate) &&
+      this.previousFilters.floor == filters.floor) {
+      return true;
+    }
     return false;
   }
 
-  setDisplayedRooms(filters: any){
-    // this.displayedRooms = this.rooms.map((room) => { if(filters conditions) return room});
-    // DELETE THIS
-    this.displayedRooms = this.rooms;
+  verifyDate(date1: Date, date2: Date):boolean {
+    if (date1.getFullYear() == date2.getFullYear()) {
+      if (date1.getMonth() == date2.getMonth()) {
+        if (date1.getDate() == date2.getDate()) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  setDisplayedRooms(filters: Filters) {
+    this.displayedRooms = this.rooms.map((room) => {
+      if (filters.minPersons == room.maxPersons ) {
+        if(this.roomDataService.verifyRoomAvailabilityByFilters(room,filters)){
+          return room;
+        }
+      }
+    }
+    );
   }
 
   createBooking(booking: any) {
@@ -88,8 +116,8 @@ export class UserViewComponent implements OnInit {
 
     this.closeBookingPopup();
 
-    this.rooms.forEach(room=>{
-      if(room.id === booking.roomId){
+    this.rooms.forEach(room => {
+      if (room.id === booking.roomId) {
         room.bookings.push(booking);
       }
     });

@@ -2,7 +2,6 @@
     width: 100%;
 }
 
-
 input{
     text-align: center;
 }
@@ -12,10 +11,8 @@ input{
     display: inline-block;
     vertical-align: top;
     text-align: center;
-    line-height: 121px;
+    line-height: 80px;
 }
-
-
 
 .hoursInputContainer{
     width: calc((100% - 30px)/2);
@@ -28,11 +25,17 @@ input{
     display: inline-block;
     vertical-align: top;
 }
+
 .hoursInput{
     text-align: center;
 }
+
 .minutesInput{
     text-align: center;
+}
+
+.errorText{
+    color:red;
 }
 
 .hour {
@@ -52,21 +55,24 @@ input{
 .key_up_hours{
     text-align: center;
     cursor: pointer;
+    margin-bottom: -15px;
 }
 
 .key_down_hours{
     text-align: center;
     cursor: pointer;
+    margin-top: -8px;
 }
 
 
 .key_up_minutes{
     text-align: center;
     cursor: pointer;
-
+    margin-bottom: -15px;
 }
 
 .key_down_minutes{
     text-align: center;
     cursor: pointer;
+    margin-top: -8px;
 }

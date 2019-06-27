@@ -1,8 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { Time } from '@angular/common';
 import { Filters } from 'src/app/shared/models/Filters';
 import { DateAdapter } from '@angular/material';
 import { RoomDataService } from 'src/app/core/services/room-data/room-data.service';
+import { FormControl } from '@angular/forms';
+import { FloorModel } from '../../../core/models/FloorModel';
+import { RoomModel } from '../../../core/models/RoomModel';
 
 @Component({
   selector: 'app-filters',
@@ -15,46 +18,62 @@ export class FiltersComponent implements OnInit, OnChanges {
 
   dropdownOpen: boolean = false;
   dateChanged: boolean = false;
+  dateInThePastIn: boolean = false;
+  roomIsSelected: boolean = false;
 
-  floors: number[] = [];
-  floorByDefault: number;
+  floors: FloorModel[] = new Array<FloorModel>();
+  floorByDefault: FloorModel = new FloorModel().create({floor:1});
 
-  startHour: Date = new Date(new Date().setHours(0, 0, 0, 0));
-  endHour: Date = new Date(new Date().setHours(0, 0, 0, 0));
-  numberOfPeople: number;
-  floorSelected: number;
 
+  startDate: Date = new Date(new Date().setHours(0, 0, 0, 0));
+  endDate: Date = new Date(new Date().setHours(0, 0, 0, 0));
+  numberOfPeople: number = null;
+  floorSelected: FloorModel = null;
+  roomSelected: RoomModel = null;
   filters: Filters;
-  defaultDate: Date = new Date(new Date().setHours(0, 0, 0, 0));
 
+
+  defaultDate: Date = new Date(new Date().setHours(0, 0, 0, 0));
   selectedDate: Date;
   finalDate: Date;
 
-  invalidHours:boolean=false;
+  startHoursToSend: string = '00';
+  startMinutesToSend: string = '00';
 
-  dateInThePastIn: boolean = false;
+  endHoursToSend: string = '00';
+  endMinutesToSend: string = '00';
+
+
+
+  @Input() buildingLayout: FloorModel[];
 
   constructor(
     private _dateAdapter: DateAdapter<Date>,
     private roomDataService: RoomDataService
   ) {
+    
   }
 
   ngOnInit() {
+   
   }
 
-  @Input() buildingLayout: any;
-
   ngOnChanges(changes: SimpleChanges): void {
+    let firstFloor:FloorModel;
+   
+    
     if (changes['buildingLayout']) {
       if (this.buildingLayout !== undefined) {
         this.buildingLayout.forEach(element => {
-          this.floors.push(element.floor);
+          this.floors.push(new FloorModel().create({
+            floor: element.floor,
+            rooms: element.rooms
+          }));
         });
+        
+        firstFloor = this.floors[0];
+        this.floorByDefault = new FloorModel().create(firstFloor);
       }
-      let copyArray=[...this.floors];
-      copyArray.reverse();
-      this.floorByDefault = copyArray.pop();
     }
   }
 
@@ -72,7 +91,6 @@ export class FiltersComponent implements OnInit, OnChanges {
   }
 
   onApplyFilters() {
-
     if (this.dateChanged) {
       this.finalDate = this.selectedDate;
     }
@@ -80,34 +98,52 @@ export class FiltersComponent implements OnInit, OnChanges {
       this.finalDate = this.defaultDate;
     }
 
-    if(this.startHour.getMinutes()<30){
-      this.startHour.setMinutes(0);
+    if (this.startDate.getMinutes() < 30) {
+      this.startDate.setMinutes(0);
     }
-    else if(this.startHour.getMinutes()>30){
-      this.startHour.setMinutes(30);
-    }
-
-    if(this.endHour.getMinutes()<30 && this.endHour.getMinutes()>0){
-      this.endHour.setMinutes(30);
-    }
-    else if(this.endHour.getMinutes()>30){
-      this.endHour.setMinutes(0);
-      this.endHour.setHours(this.endHour.getHours()+1);
+    else if (this.startDate.getMinutes() > 30) {
+      this.startDate.setMinutes(30);
     }
 
-   
-    if (this.floorSelected == null){
+    if (this.endDate.getMinutes() < 30 && this.endDate.getMinutes() > 0) {
+      this.endDate.setMinutes(30);
+    }
+
+    else if (this.endDate.getMinutes() > 30) {
+      if (this.endDate.getHours() != 23) {
+        this.endDate.setMinutes(0);
+        this.endDate.setHours(this.endDate.getHours() + 1);
+      } else {
+        this.endDate.setMinutes(59);
+      }
+    }
+
+    if (this.dateInThePastIn == true || this.startDate.getTime() == this.endDate.getTime()) {
+      this.startDate.setTime(this.finalDate.getTime());
+      this.endDate.setTime(this.finalDate.getTime());
+      this.endDate.setHours(23);
+      this.endDate.setMinutes(59);
+    } else {
+      this.startDate.setDate(this.finalDate.getDate());
+      this.startDate.setMonth(this.finalDate.getMonth());
+      this.startDate.setFullYear(this.finalDate.getUTCFullYear());
+
+      this.endDate.setDate(this.finalDate.getDate());
+      this.endDate.setMonth(this.finalDate.getMonth());
+      this.endDate.setFullYear(this.finalDate.getUTCFullYear());
+    }
+
+    if (this.floorSelected == null) {
       this.floorSelected = this.floorByDefault;
     }
+
     this.filters = new Filters().create({
-      date: this.finalDate,
-      startHour: this.startHour,
-      endHour: this.endHour,
-      floor: this.floorSelected,
-      numberOfPeople: this.numberOfPeople
+      startDate: this.startDate,
+      endDate: this.endDate,
+      floor: this.floorSelected.floor,
+      minPersons: this.numberOfPeople
     });
 
-    
     this.filterChange.emit(this.filters);
   }
 
@@ -119,33 +155,88 @@ export class FiltersComponent implements OnInit, OnChanges {
     this.floorSelected = event.value;
   }
 
-  onPeopleClear(){
-    this.numberOfPeople =undefined;
+  onRoomChange(event) {
+    if (event.value == "all") {
+      this.roomIsSelected = false;
+    } else {
+      this.roomSelected = new RoomModel().create({ name: event.value });
+      this.roomIsSelected = true;
+    }
   }
-  onFloorClear(){
-    this.floorSelected=this.floorByDefault;
+
+  onPeopleClear() {
+    this.numberOfPeople = null;
   }
 
   onStartHourEmit(event) {
-    this.startHour = event;
+    this.startDate = event;
 
-    if(this.startHour.getTime()>=this.endHour.getTime()){
-      this.invalidHours=true;
-    } 
-    else{
-      this.invalidHours=false;
+    if (this.startDate.getHours() >= this.endDate.getHours()) {
+      if (this.startDate.getHours() < 10) {
+        this.endHoursToSend = '0' + this.startDate.getHours();
+      } else {
+        this.endHoursToSend = this.startDate.getHours().toString();
+      }
+
+      if (this.startDate.getMinutes() >= 30) {
+        this.endMinutesToSend = '00';
+        if (this.startDate.getHours() + 1 < 10) {
+          this.endHoursToSend = '0' + (this.startDate.getHours() + 1);
+        } else {
+          this.endHoursToSend = (this.startDate.getHours() + 1).toString();
+        }
+      }
+      else {
+        this.endMinutesToSend = '30';
+      }
+
+      if (this.startDate.getHours() == 23) {
+        if (this.startDate.getMinutes() == 0) {
+          this.endHoursToSend = this.startDate.getHours().toString();
+          this.endMinutesToSend = '30';
+        } else if (this.startDate.getMinutes() == 30) {
+          this.endMinutesToSend = '59';
+          this.endHoursToSend = this.startDate.getHours().toString();
+        }
+      }
+      this.endDate = new Date(2019, 0, 0, +this.endHoursToSend, +this.endMinutesToSend);
     }
   }
 
   onEndHourEmit(event) {
-    this.endHour = event;
+    this.endDate = event;
 
-    if(this.startHour.getTime()>=this.endHour.getTime()){
-      this.invalidHours=true;
-    } 
-    else{
-      this.invalidHours=false;
+    if (this.endDate.getHours() <= this.startDate.getHours()) {
+
+      if (this.endDate.getHours() < 10) {
+        this.startHoursToSend = '0' + this.endDate.getHours();
+      } else {
+        this.startHoursToSend = this.endDate.getHours().toString();
+      }
+
+      if (this.endDate.getHours() == this.startDate.getHours()) {
+
+        if (this.endDate.getMinutes() == 30) {
+          this.startMinutesToSend = '00';
+        } else if (this.endDate.getMinutes() == 0) {
+
+          if (this.endDate.getHours() == 0) {
+            this.startHoursToSend = '00';
+            this.startMinutesToSend = '00';
+          } else {
+            this.startMinutesToSend = '30';
+
+            if (this.endDate.getHours() < 10) {
+              this.startHoursToSend = '0' + (this.endDate.getHours() - 1);
+            } else {
+              this.startHoursToSend = (this.endDate.getHours() - 1).toString();
+            }
+          }
+        }
+      }
+      this.startDate = new Date(2019, 0, 0, +this.startHoursToSend, +this.startMinutesToSend);
     }
+
   }
 
 }
