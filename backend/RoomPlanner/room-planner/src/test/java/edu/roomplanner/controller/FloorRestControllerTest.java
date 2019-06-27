@@ -3,9 +3,11 @@ package edu.roomplanner.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
 import edu.roomplanner.dto.FloorDto;
+import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.dto.UserDto;
 import edu.roomplanner.entity.FloorEntity;
+import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.FloorRepository;
@@ -30,10 +32,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -68,17 +67,17 @@ public class FloorRestControllerTest {
         flyway.clean();
         flyway.migrate();
 
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntiy(1L, "sghitun@yahoo.com", "sghitun", UserType.PERSON, "Stefania", "Ghitun");
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
         userRepository.save(userEntityPerson);
 
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
 
         UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "Wonderland",
-                UserType.ROOM, "Wonderland", BuildersWrapper.buildFloorEntity(1L, 5), 14);
+                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "Westeros",
-                UserType.ROOM, "Westeros", BuildersWrapper.buildFloorEntity(2L, 8), 20);
+                null, BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros",  20);
         UserEntity userEntityThree = BuildersWrapper.buildRoomEntity(4L, "neverland@yahoo.com", "Neverland",
-                UserType.ROOM, "Neverland", BuildersWrapper.buildFloorEntity(3L, 4), 5);
+                null, BuildersWrapper.buildFloorEntity(3L, 4), UserType.ROOM, "Neverland",5);
 
         Set<RoomEntity> firstRoom = new HashSet<>();
         Set<RoomEntity> secondRoom = new HashSet<>();
@@ -106,12 +105,12 @@ public class FloorRestControllerTest {
     public void shouldReturnResponseEntityWithValidFloorDtoListAndStatusFoundWhenGetAllFloorsIsCalled() throws Exception {
 
         UserDto userEntityOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
-                null, 5, 14, UserType.ROOM);
+                new HashSet<ReservationDto>(), 5, 14, UserType.ROOM);
         UserDto userEntityTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros",
-                null, 8, 20, UserType.ROOM);
+                new HashSet<ReservationDto>(), 8, 20, UserType.ROOM);
 
         UserDto userEntityThree = BuildersWrapper.buildRoomDto(4L, "neverland@yahoo.com", "Neverland",
-                null, 4, 5, UserType.ROOM);
+                new HashSet<ReservationDto>(), 4, 5, UserType.ROOM);
 
         Set<RoomDto> firstRoom = new HashSet<>();
         Set<RoomDto> secondRoom = new HashSet<>();
