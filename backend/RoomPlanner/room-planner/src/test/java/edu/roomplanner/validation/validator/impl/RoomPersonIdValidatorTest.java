@@ -14,9 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 public class RoomPersonIdValidatorTest {

@@ -57,12 +57,14 @@ public class UserServiceTest {
 
     @Test
     public void shouldReturnRoomDtoListWhenGetAllRoomsIsCalled() {
+
         RoomEntity roomEntityOne = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         Set<ReservationEntity> reservationEntitySet = buildReservationEntitySet(roomEntityOne);
         roomEntityOne.setReservations(reservationEntitySet);
         UserEntity roomEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "4westAD8%",
                 reservationEntitySet, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Westeros", 20);
+
 
         List<UserEntity> roomEntityList = Arrays.asList(roomEntityOne, roomEntityTwo);
 
@@ -94,12 +96,9 @@ public class UserServiceTest {
         roomEntity.setReservations(reservationEntitySet);
 
         RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
-        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
 
         PersonEntity personEntity = (PersonEntity) BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "sghitun",
                 null, UserType.PERSON, "Ghitun", "Stefania");
-
         when(userValidator.checkValidRoomId(1L)).thenReturn(true);
         when(roomDtoMapper.mapEntityToDto((RoomEntity) roomEntity)).thenReturn(expectedRoomDto);
         when(userRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(roomEntity));

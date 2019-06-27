@@ -175,9 +175,9 @@ public class ValidatorIntegrationTest {
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
         startDate.set(startYear, Calendar.JANUARY, startDay, startHour, startMinute, 0);
-        startDate.set(Calendar.MILLISECOND,0);
+        startDate.set(Calendar.MILLISECOND, 0);
         endDate.set(endYear, Calendar.JANUARY, endDay, endHour, endMinute, 0);
-        endDate.set(Calendar.MILLISECOND,0);
+        endDate.set(Calendar.MILLISECOND, 0);
 
         return new ReservationEntityBuilder()
                 .withStartDate(startDate)
