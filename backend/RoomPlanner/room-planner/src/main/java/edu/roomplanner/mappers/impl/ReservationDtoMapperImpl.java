@@ -15,12 +15,10 @@ import java.util.Optional;
 public class ReservationDtoMapperImpl implements ReservationDtoMapper {
 
     private UserRepository userRepository;
-    private RoomRepository roomRepository;
 
     @Autowired
-    public ReservationDtoMapperImpl(UserRepository userRepository, RoomRepository roomRepository) {
+    public ReservationDtoMapperImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roomRepository = roomRepository;
     }
 
     public ReservationDto mapReservationEntityToDto(ReservationEntity reservationEntity) {
@@ -43,7 +41,7 @@ public class ReservationDtoMapperImpl implements ReservationDtoMapper {
         reservationDto.getEndDate().setTime(reservationDto.getEndDate().getTime());
         reservationEntity.setEndDate(reservationDto.getEndDate());
         reservationEntity.setDescription(reservationDto.getDescription());
-        Optional<UserEntity> roomEntityOptional = roomRepository.findById(reservationDto.getRoomId());
+        Optional<UserEntity> roomEntityOptional = userRepository.findById(reservationDto.getRoomId());
         roomEntityOptional.ifPresent(reservationEntity::setRoom);
         Optional<UserEntity> userEntity = userRepository.findByEmail(reservationDto.getPersonEmail());
         userEntity.ifPresent(reservationEntity::setPerson);
