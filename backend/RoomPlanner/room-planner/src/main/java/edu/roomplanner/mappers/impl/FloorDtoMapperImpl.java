@@ -6,6 +6,7 @@ import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.mappers.FloorDtoMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,6 +17,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class FloorDtoMapperImpl implements FloorDtoMapper {
+
+    private RoomDtoMapperImpl roomMapper;
+
+    @Autowired
+    public FloorDtoMapperImpl(RoomDtoMapperImpl roomMapper) {
+        this.roomMapper = roomMapper;
+    }
 
     @Override
     public FloorDto mapEntityToDto(FloorEntity floorEntity) {
@@ -46,7 +54,6 @@ public class FloorDtoMapperImpl implements FloorDtoMapper {
     }
 
     private Set<RoomDto> processRoomDtoStream(Set<RoomEntity> rooms) {
-        RoomDtoMapperImpl roomMapper = new RoomDtoMapperImpl();
         return rooms.stream()
                 .map(roomMapper::mapEntityToDto)
                 .collect(Collectors.toSet());

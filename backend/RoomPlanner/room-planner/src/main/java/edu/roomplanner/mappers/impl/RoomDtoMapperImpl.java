@@ -19,9 +19,13 @@ import java.util.Set;
 @Component
 public class RoomDtoMapperImpl implements RoomDtoMapper {
 
-    @Autowired
     private ReservationDtoMapper reservationDtoMapper;
 
+
+    @Autowired
+    public RoomDtoMapperImpl(ReservationDtoMapper reservationDtoMapper) {
+        this.reservationDtoMapper = reservationDtoMapper;
+    }
 
     public RoomDto mapEntityToDto(RoomEntity roomEntity) {
 

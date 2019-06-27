@@ -8,6 +8,7 @@ import edu.roomplanner.mappers.impl.RoomDtoMapperImpl;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -17,7 +18,8 @@ import static org.junit.Assert.assertEquals;
 
 public class RoomDtoMapperTest {
 
-    private RoomDtoMapperImpl sut = new RoomDtoMapperImpl();
+    @Autowired
+    private RoomDtoMapperImpl sut;
 
     @Test
     public void shouldReturnRoomDtoWhenMapEntityToDtoIsCalledwithValidRoomEntity() {
