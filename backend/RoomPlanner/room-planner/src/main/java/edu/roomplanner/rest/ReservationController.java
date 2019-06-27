@@ -32,7 +32,8 @@ public class ReservationController {
     }
 
     @JsonSerialize
-    public class EmptyJsonResponse { }
+    public class EmptyJsonResponse {
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/api/reservations/{room_id}")
     @ApiOperation("Books a reservation for a room with a specific id.")
@@ -41,8 +42,8 @@ public class ReservationController {
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error.")})
     @PreAuthorize("hasAuthority('person')")
-    ResponseEntity<ReservationDto> getReservationCreated(@PathVariable(name = "room_id") Long roomId,
-                                                         @RequestBody ReservationDto reservationDto) {
+    ResponseEntity<ReservationDto> postReservationCreated(@PathVariable(name = "room_id") Long roomId,
+                                                          @RequestBody ReservationDto reservationDto) {
 
         LOGGER.info("Method was called.");
         Optional<ReservationDto> reservationDtoOptional = bookRoomService.createReservation(roomId, reservationDto);
@@ -50,7 +51,7 @@ public class ReservationController {
 
         return reservationDtoOptional
                 .map(reservationEntity -> new ResponseEntity<>(reservationDtoOptional.get(), HttpStatus.CREATED))
-                .orElseGet(() -> new ResponseEntity(new EmptyJsonResponse(),HttpStatus.NOT_FOUND));
+                .orElseGet(() -> new ResponseEntity(new EmptyJsonResponse(), HttpStatus.NOT_FOUND));
     }
 
 }

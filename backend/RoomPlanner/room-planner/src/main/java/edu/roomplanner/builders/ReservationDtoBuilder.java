@@ -13,32 +13,38 @@ public class ReservationDtoBuilder {
     private Calendar endDate;
     private String description;
 
-    public ReservationDtoBuilder withId(Long id){
-        this.id=id;
+    public ReservationDtoBuilder withId(Long id) {
+        this.id = id;
         return this;
     }
-    public ReservationDtoBuilder withRoomId(Long roomId){
-        this.roomId=roomId;
+
+    public ReservationDtoBuilder withRoomId(Long roomId) {
+        this.roomId = roomId;
         return this;
     }
-    public ReservationDtoBuilder withEmail(String email){
-        this.email=email;
+
+    public ReservationDtoBuilder withEmail(String email) {
+        this.email = email;
         return this;
     }
-    public ReservationDtoBuilder withStartDate(Calendar startDate){
-        this.startDate =startDate;
+
+    public ReservationDtoBuilder withStartDate(Calendar startDate) {
+        this.startDate = startDate;
         return this;
     }
-    public ReservationDtoBuilder withEndDate(Calendar endDate){
-        this.endDate=endDate;
+
+    public ReservationDtoBuilder withEndDate(Calendar endDate) {
+        this.endDate = endDate;
         return this;
     }
-    public ReservationDtoBuilder withDescription(String description){
-        this.description=description;
+
+    public ReservationDtoBuilder withDescription(String description) {
+        this.description = description;
         return this;
     }
-    public ReservationDto build(){
-        ReservationDto reservationDto=new ReservationDto();
+
+    public ReservationDto build() {
+        ReservationDto reservationDto = new ReservationDto();
         reservationDto.setId(id);
         reservationDto.setRoomId(roomId);
         reservationDto.setEmail(email);
