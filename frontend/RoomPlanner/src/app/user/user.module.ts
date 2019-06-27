@@ -6,12 +6,14 @@ import { MaterialDesignModule } from '../material-design/material-design.module'
 import { FiltersComponent } from './user-view/filters/filters.component';
 import { SharedModule } from '../shared/shared.module';
 import { RoomsViewComponent } from './user-view/rooms-view/rooms-view.component';
+import { RoomsViewEmptyComponent } from './user-view/rooms-view-empty/rooms-view-empty.component';
 
 @NgModule({
   declarations: [
     UserViewComponent, 
     FiltersComponent,
-    RoomsViewComponent
+    RoomsViewComponent,
+    RoomsViewEmptyComponent
   ],
   imports: [
     CommonModule,

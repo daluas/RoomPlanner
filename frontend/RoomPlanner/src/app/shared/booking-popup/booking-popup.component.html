@@ -30,9 +30,6 @@
     </span>
   </div> 
 
-  <div class="invalidHoursContainer" *ngIf="invalidHours==true">
-    <p>End hour has to be greater than start hour!</p>
-  </div>
 
   <div class="hours">
       <app-hour-input-booking [(booking)]="booking" (hourEmitter)="onHourEmit($event)" (statusMessage)="getPrevalidationMessage($event)" (disableBookButton)="getStatusOfBookButton($event)"></app-hour-input-booking>

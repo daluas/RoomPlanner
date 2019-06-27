@@ -7,7 +7,7 @@ export class RoomModel{
     name: string;
     floor: number;
     maxPersons: number;
-    bookings: Booking[];
+    reservations: Booking[];
 
     constructor(){}
 

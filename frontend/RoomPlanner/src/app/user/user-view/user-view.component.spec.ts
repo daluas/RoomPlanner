@@ -9,6 +9,7 @@ import { RoomsViewComponent } from './rooms-view/rooms-view.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
 import { Router } from '@angular/router';
+import { RoomsViewEmptyComponent } from './rooms-view-empty/rooms-view-empty.component';
 
 describe('UserViewComponent', () => {
   let component: UserViewComponent;
@@ -20,7 +21,8 @@ describe('UserViewComponent', () => {
       declarations: [
         UserViewComponent,
         FiltersComponent,
-        RoomsViewComponent
+        RoomsViewComponent,
+        RoomsViewEmptyComponent
       ],
       imports: [
         MaterialDesignModule,

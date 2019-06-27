@@ -63,7 +63,7 @@
 
           <mat-select (selectionChange)="onRoomChange($event)" value="all">
             <mat-option value="all">All rooms</mat-option>
-            <mat-option *ngFor="let room of floorSelected.rooms" [value]="room.name">{{room.name}}
+            <mat-option *ngFor="let room of floorSelected.rooms" [value]="room">{{room.name}}
             </mat-option>
 
           </mat-select>
