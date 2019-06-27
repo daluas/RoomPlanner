@@ -9,10 +9,7 @@ import edu.roomplanner.mappers.FloorDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -56,7 +53,7 @@ public class FloorDtoMapperImpl implements FloorDtoMapper {
     private Set<RoomDto> processRoomDtoStreamWithoutReservations(Set<RoomEntity> rooms) {
         return rooms.stream()
                 .map(roomMapper::mapEntityToDto)
-                .peek((room) -> room.setReservations(null))
+                .peek((room) -> room.setReservations(new HashSet<>()))
                 .collect(Collectors.toSet());
 
     }
