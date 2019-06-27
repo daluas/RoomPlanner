@@ -7,7 +7,7 @@ import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
-import edu.roomplanner.util.OAuthHelper;
+import edu.roomplanner.util.OAuthHelper1;
 import org.flywaydb.core.Flyway;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class UsersRestControllerTest {
     private Flyway flyway;
 
     @Autowired
-    private OAuthHelper oAuthHelper;
+    private OAuthHelper1 oAuthHelper;
 
     private RequestPostProcessor bearerToken;
 
