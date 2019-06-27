@@ -106,15 +106,13 @@ public class UserServiceTest {
         roomEntity.setReservations(reservationEntitySet);
 
         RoomDto expectedRoomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
-        UserEntity userEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                null, BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
 
         PersonEntity personEntity = (PersonEntity) BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "sghitun",
                 null, UserType.PERSON, "Ghitun", "Stefania");
 
         when(userValidator.checkValidRoomId(1L)).thenReturn(true);
-        when(roomDtoMapper.mapEntityToDto((RoomEntity) roomEntity)).thenReturn(expectedRoomDto);
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(roomEntity));
+        when(roomDtoMapper.mapEntityToDto(roomEntity)).thenReturn(expectedRoomDto);
+        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(roomEntity));
         when(userRepository.findByType(UserType.ROOM)).thenReturn(Collections.singletonList(roomEntity));
         when(tokenParserService.getEmailFromToken()).thenReturn("sghitun@yahoo.com");
         when(userRepository.findByEmail("sghitun@yahoo.com")).thenReturn(Optional.of(personEntity));
@@ -129,10 +127,10 @@ public class UserServiceTest {
 
         RoomEntity userEntityRoom = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 null,BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland",14);
-        List<UserEntity> userEntityList = Arrays.asList(userEntityRoom);
+        List<UserEntity> userEntityList = Collections.singletonList(userEntityRoom);
 
         RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
-        List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDto);
+        List<RoomDto> expectedRoomDtoList = Collections.singletonList(roomDto);
 
          Calendar startDate = Calendar.getInstance();
         startDate.set(2019,Calendar.JUNE,22,10,0,0);
@@ -153,10 +151,10 @@ public class UserServiceTest {
 
         RoomEntity userEntityRoom = (RoomEntity) BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
                 null,BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland",14);
-        List<UserEntity> userEntityList = Arrays.asList(userEntityRoom);
+        List<UserEntity> userEntityList = Collections.singletonList(userEntityRoom);
 
         RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
-        List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDto);
+        List<RoomDto> expectedRoomDtoList = Collections.singletonList(roomDto);
 
         Calendar startDate = Calendar.getInstance();
         startDate.add(Calendar.MINUTE,10);

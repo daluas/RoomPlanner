@@ -11,6 +11,7 @@ import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.FloorRepository;
+import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
@@ -32,6 +33,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.*;
 
 @RunWith(SpringRunner.class)
@@ -40,9 +44,9 @@ import java.util.*;
         classes = RoomPlannerApplication.class
 )
 @AutoConfigureMockMvc(secure = false)
+@Transactional
 @TestPropertySource(locations = "classpath:application-test.properties")
 @EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
-@Sql(scripts = "classpath:scripts/clean-up.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class FloorRestControllerTest {
 
     @Autowired
@@ -53,6 +57,12 @@ public class FloorRestControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private FloorRepository floorRepository;
@@ -66,6 +76,12 @@ public class FloorRestControllerTest {
     public void init() {
         flyway.clean();
         flyway.migrate();
+
+        reservationRepository.deleteAll();
+        userRepository.deleteAll();
+
+        entityManager.createNativeQuery("ALTER SEQUENCE seq_user_id RESTART WITH 1").executeUpdate();
+        entityManager.createNativeQuery("ALTER SEQUENCE seq_reservation_id RESTART WITH 1").executeUpdate();
 
         UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
         userRepository.save(userEntityPerson);

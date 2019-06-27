@@ -174,7 +174,7 @@ public class UsersRestControllerTest {
         params.add("minPersons",minPersons);
         params.add("floor",floor);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/filters")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/filters")
                 .params(params)
                 .with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound());
@@ -191,7 +191,7 @@ public class UsersRestControllerTest {
         params.add("endDate",endDate);
 
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/filters")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/filters")
                 .params(params)
                 .with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound());
@@ -212,7 +212,7 @@ public class UsersRestControllerTest {
         params.add("floor",floor);
 
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/filters")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/filters")
                 .params(params)
                 .with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound())
@@ -222,16 +222,13 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithStatusFoundAndValidWhenGetRoomsByFiltersIsCalledWithValidFiltersButNoReservationsMatch() throws Exception {
 
-        FloorEntity roomEntityFloor = BuildersWrapper.buildFloorEntity(1L,5);
-        floorRepository.save(roomEntityFloor);
-
-        UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland", new HashSet<>(),
-                roomEntityFloor, UserType.ROOM,"Wonderland", 14);
+        UserEntity userEntityRoom = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         userRepository.save(userEntityRoom);
 
 
         RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",  Collections.EMPTY_SET, 5, 14, UserType.ROOM);
-        List<RoomDto> expectedList = Arrays.asList(roomDto);
+        List<RoomDto> expectedList = Collections.singletonList(roomDto);
         String jsonExpectedList = new ObjectMapper().writeValueAsString(expectedList);
 
         String startDateParam = "Fri, 28 Jun 2019 14:00:00 GMT";
@@ -243,7 +240,7 @@ public class UsersRestControllerTest {
         params.add("endDate",endDateParam);
 
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/filters")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/filters")
                 .params(params)
                 .with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound())

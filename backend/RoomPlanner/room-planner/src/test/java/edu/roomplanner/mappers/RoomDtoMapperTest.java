@@ -8,7 +8,10 @@ import edu.roomplanner.mappers.impl.RoomDtoMapperImpl;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -16,9 +19,10 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(SpringRunner.class)
 public class RoomDtoMapperTest {
 
-    @Autowired
+    @InjectMocks
     private RoomDtoMapperImpl sut;
 
     @Test

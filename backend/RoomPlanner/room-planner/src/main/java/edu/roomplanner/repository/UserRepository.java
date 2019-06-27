@@ -25,7 +25,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             " (r.start_date >= :start_date and r.end_date <= :end_date) or " +
             " (:start_date > r.start_date and :start_date < r.end_date) or" +
             " (:end_date  >  r.start_date and :end_date   < r.end_date)))) and " +
-            " (u.floor = (CAST (CAST(:floor AS character varying) AS integer)) or :floor is null) and " +
+            " ( (select floor from floors f where f.id = u.floor_id) = (CAST (CAST(:floor AS character varying) AS integer)) or :floor is null) and " +
             " (u.max_persons >= (CAST (CAST(:min_persons AS character varying) AS integer)) or :min_persons is null)", nativeQuery=true)
     List<UserEntity> filterByFields(@Param("start_date") Calendar startDate, @Param("end_date") Calendar endDate,
                                     @Param("min_persons") Integer minPersons, @Param("floor") Integer floor);

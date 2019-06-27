@@ -87,7 +87,7 @@ public class UserRestController {
                 orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "rooms/filters")
+    @RequestMapping(method = RequestMethod.GET, value = "/api/rooms/filters")
     public ResponseEntity<List<RoomDto>> getRoomsByFilters(@RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar startDate, @RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar endDate, @RequestParam(required = false) Integer minPersons, @RequestParam(required = false) Integer floor) {
         List<RoomDto> filteredRooms = userService.getRoomsByFilters(startDate, endDate, minPersons, floor);
         return new ResponseEntity<>(filteredRooms, HttpStatus.FOUND);
