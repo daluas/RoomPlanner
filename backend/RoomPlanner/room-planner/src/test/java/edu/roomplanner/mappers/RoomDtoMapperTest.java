@@ -52,7 +52,6 @@ public class RoomDtoMapperTest {
         assertEquals(expectedRoomDto, actualRoomDto);
     }
 
-
     @Test
     public void shouldReturnRoomDtoListWhenMapEntityListToDtoListIsCalledwithValidRoomEntityList() {
         UserEntity roomEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "4wonD2C%",

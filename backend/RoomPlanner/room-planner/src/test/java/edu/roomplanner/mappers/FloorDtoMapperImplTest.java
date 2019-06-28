@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 public class FloorDtoMapperImplTest {
@@ -48,7 +48,7 @@ public class FloorDtoMapperImplTest {
 
         FloorEntity floorEntity = new FloorEntity();
         FloorDto expectedFloorDto = new FloorDto();
-        FloorDto actualFloorDto = sut.mapEntityToDto(floorEntity);
+        FloorDto actualFloorDto = sut.mapEntityToDtoWithoutReservations(floorEntity);
 
         assertEquals(expectedFloorDto, actualFloorDto);
     }
@@ -57,7 +57,7 @@ public class FloorDtoMapperImplTest {
     public void shouldReturnFloorDtoWhenMapEntityToDtoIsCalledWithValidFloorEntity() {
         FloorEntity floorEntity = BuildersWrapper.buildFloorEntity(1L, 5);
         FloorDto expectedFloorDto = BuildersWrapper.buildFloorDto(1L, 5);
-        FloorDto actualFloorDto = sut.mapEntityToDto(floorEntity);
+        FloorDto actualFloorDto = sut.mapEntityToDtoWithoutReservations(floorEntity);
 
         assertEquals(expectedFloorDto, actualFloorDto);
     }

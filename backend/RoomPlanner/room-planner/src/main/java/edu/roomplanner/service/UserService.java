@@ -15,10 +15,12 @@ public interface UserService {
 
     RoomDto getRoomById(Long id);
 
+    RoomDto getRoomByEmail(String email);
+
     Optional<UserDto> getUserDto(String email);
 
     Set<ReservationEntity> updateReservationDescription(Set<ReservationEntity> reservationEntities);
 
     List<UserEntity> updateUserEntitiesReservation(List<UserEntity> userEntities);
-
 }
+

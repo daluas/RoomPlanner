@@ -31,8 +31,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -60,21 +58,23 @@ public class UsersRestControllerTest {
     private TokenParserService tokenParserService;
 
     private RequestPostProcessor bearerToken;
+    private RequestPostProcessor roomBearerToken;
 
     @Before
     public void init() {
         flyway.clean();
         flyway.migrate();
 
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun", null, UserType.PERSON,"Stefania","Ghitun");
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
         userRepository.save(userEntityPerson);
 
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
+        roomBearerToken = oAuthHelper.addBearerToken("wonderland@yahoo.com", "room");
 
         UserEntity userEntityOne = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         UserEntity userEntityTwo = BuildersWrapper.buildRoomEntity(3L, "westeros@yahoo.com", "westeros",
-                new HashSet<>(), BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros",20);
+                new HashSet<>(), BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros", 20);
         UserEntity userEntityThree = BuildersWrapper.buildRoomEntity(4L, "neverland@yahoo.com", "neverland",
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(3L, 4), UserType.ROOM, "Neverland", 5);
 
@@ -123,8 +123,44 @@ public class UsersRestControllerTest {
     @Test
     public void shouldReturnResponseEntityWithStatusNotFoundWhenGetRoomByIdIsCalledWithPersonID() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{id}", 1).with(bearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/{id}", 1).with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void shouldReturnResponseEntityWithSameRoomDtoAsTheLoggedOneWhenGetAllRoomsIsCalledByRoom() throws Exception {
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
+                new HashSet<>(), 5, 14, UserType.ROOM);
+        String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms", 1).with(roomBearerToken))
+                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.content().string(jsonRoomDto));
+    }
+
+    @Test
+    public void shouldReturnResponseEntityWithSameRoomDtoAsTheLoggedOneWhenGetRoomByIdIsCalledWithLoggedRoomId() throws Exception {
+        RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
+                new HashSet<>(), 5, 14, UserType.ROOM);
+        String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/2", 1).with(roomBearerToken))
+                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.content().string(jsonRoomDto));
+    }
+
+    @Test
+    public void shouldReturnResponseEntityWithStatusUnauthorizedWhenGetRoomByIdIsCalledWithOtherIdThenLoggedRoomId() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/3", 1).with(roomBearerToken))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    }
+
+    @Test
+    public void shouldReturnResponseEntityWithStatusUnauthorizedWhenGetUsersIsCalledByRoom() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users?email=sghitun%40yahoo.com", 1).with(roomBearerToken))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
 }

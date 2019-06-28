@@ -8,6 +8,7 @@ import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.mappers.RoomDtoMapper;
+import edu.roomplanner.types.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +31,14 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
     public RoomDto mapEntityToDto(RoomEntity roomEntity) {
 
         Set<ReservationEntity> reservationEntitySet = roomEntity.getReservations();
+
+        if (roomEntity.getFloor() == null) {
+            return (RoomDto) UserDtoBuilder.builder()
+                    .withType(roomEntity.getType())
+                    .build();
+
+        }
+
         Set<ReservationDto> reservationDtoSet = mapRoomEntitySetToDtoSet(reservationEntitySet);
 
         if (roomEntity.getFloor() == null) {
