@@ -148,7 +148,7 @@ public class FloorRestControllerTest {
     }
 
     @Test
-    public void shouldReturnResponseEntityWithRequestedFloor() throws Exception{
+    public void shouldReturnResponseEntityWithRequestedFloorAndStatusFoundWhenCalledByUser() throws Exception {
 
         UserDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
                 new HashSet<ReservationDto>(), 5, 14, UserType.ROOM);
@@ -163,12 +163,16 @@ public class FloorRestControllerTest {
     }
 
     @Test
-    public void shouldReturnResponseEntityWithStatusForbiddenWhenCalledByRoom() throws Exception{
+    public void shouldReturnResponseEntityWithStatusForbiddenWhenCalledByRoom() throws Exception {
 
-            mockMvc.perform(MockMvcRequestBuilders.get("/api/floors/5").with(roomBearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/floors/5").with(roomBearerToken))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
+    @Test
+    public void shouldReturnResponseEntityWithStatusNotFoundWhenFloorDoesNotExistWhenCalledByUser() throws Exception{
 
-
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/floors/7").with(bearerToken))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 }
