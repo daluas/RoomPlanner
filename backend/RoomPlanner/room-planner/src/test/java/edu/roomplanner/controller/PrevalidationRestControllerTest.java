@@ -69,7 +69,7 @@ public class PrevalidationRestControllerTest {
     private DateFormat df = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' GMT'");
 
     @Before
-    public void init() {
+    public void init() throws Exception {
         flyway.clean();
         flyway.migrate();
 
@@ -90,7 +90,7 @@ public class PrevalidationRestControllerTest {
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(3L, 4), UserType.ROOM, "Neverland", 5);
 
         Calendar sysDate = Calendar.getInstance();
-        sysDate.setTime(new Date(df.format(sysDate.getTime())));
+        sysDate.setTime(df.parse(df.format(sysDate.getTime())));
 
         ReservationEntityUtil reservationEntityUtil = new ReservationEntityUtil();
         Calendar startDate = (Calendar) sysDate.clone();
