@@ -57,26 +57,22 @@ public class ReservationDtoMapperTest {
         Calendar endDate = Calendar.getInstance();
         startDate.set(2019, Calendar.JANUARY, 6, 10, 10, 0);
         endDate.set(2019, Calendar.JANUARY, 6, 10, 45, 0);
-        //Set<ReservationEntity> reservations = new HashSet<>();
 
         UserEntity roomEntity = BuildersWrapper.buildRoomEntity(1L, "wonderland@yahoo.com", "4wonD2C%",
-                new HashSet<>(),new FloorEntity(), UserType.ROOM, "Wonderland", 14);
+                new HashSet<>(), new FloorEntity(), UserType.ROOM, "Wonderland", 14);
         UserEntity personEntity = BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "password",
                 new HashSet<>(), UserType.PERSON, "Popescu", "Ana");
 
         ReservationDto reservationDto = BuildersWrapper.buildReservationDto(1L, 1L, "sghitun@yahoo.com", startDate, endDate, "description");
         ReservationEntity expectedReservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, personEntity, roomEntity, "description");
-       // reservations.add(expectedReservationEntity);
 
         when(userRepository.findByEmail("sghitun@yahoo.com")).thenReturn(java.util.Optional.of(personEntity));
         when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(roomEntity));
 
         ReservationEntity actualReservationEntity = sut.mapReservationDtoToEntity(reservationDto);
 
-        System.out.println(actualReservationEntity);
-
         assertEquals(expectedReservationEntity, actualReservationEntity);
 
     }
 
-    }
+}

@@ -3,7 +3,6 @@ package edu.roomplanner.builders;
 import edu.roomplanner.dto.ReservationDto;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class ReservationDtoBuilder {
     private Long id;

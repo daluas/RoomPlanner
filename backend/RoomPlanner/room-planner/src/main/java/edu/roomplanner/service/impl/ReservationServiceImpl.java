@@ -4,7 +4,6 @@ import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
-import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -46,10 +45,12 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ReservationEntity convertToEntity(ReservationDto reservationDto) {
         ReservationEntity reservationEntity = mapperService.mapReservationDtoToEntity(reservationDto);
-        if (reservationEntity.getPerson() == null)
+        if (reservationEntity.getPerson() == null) {
             throw new UsernameNotFoundException("Invalid email");
-        if (reservationEntity.getRoom() == null)
+        }
+        if (reservationEntity.getRoom() == null) {
             throw new UsernameNotFoundException("Invalid room id");
+        }
         return reservationEntity;
     }
 

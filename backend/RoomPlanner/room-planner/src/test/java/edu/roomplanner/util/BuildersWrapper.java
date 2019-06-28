@@ -3,7 +3,6 @@ package edu.roomplanner.util;
 import edu.roomplanner.builders.*;
 import edu.roomplanner.dto.FloorDto;
 import edu.roomplanner.dto.ReservationDto;
-import edu.roomplanner.builders.*;
 import edu.roomplanner.dto.RoomDto;
 import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.ReservationEntity;
@@ -95,7 +94,8 @@ public class BuildersWrapper {
                 .withRoom(room)
                 .build();
     }
-    public static ReservationDto buildReservationDto(Long id, Long roomId, String email,Calendar startDate, Calendar endDate, String description){
+
+    public static ReservationDto buildReservationDto(Long id, Long roomId, String email, Calendar startDate, Calendar endDate, String description) {
         return new ReservationDtoBuilder()
                 .withId(id)
                 .withRoomId(roomId)
@@ -105,7 +105,8 @@ public class BuildersWrapper {
                 .withDescription(description)
                 .build();
     }
-    public static ReservationEntity buildReservationEntity(Long id,Calendar startDate,Calendar endDate,UserEntity person,UserEntity room,String description){
+
+    public static ReservationEntity buildReservationEntity(Long id, Calendar startDate, Calendar endDate, UserEntity person, UserEntity room, String description) {
         return new ReservationEntityBuilder()
                 .withId(id)
                 .withStartDate(startDate)
