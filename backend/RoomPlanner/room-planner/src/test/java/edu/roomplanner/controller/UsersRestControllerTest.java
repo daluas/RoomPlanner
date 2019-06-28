@@ -230,8 +230,8 @@ public class UsersRestControllerTest {
         List<RoomDto> expectedList = Collections.singletonList(roomDto);
         String jsonExpectedList = new ObjectMapper().writeValueAsString(expectedList);
 
-        String startDateParam = "Fri, 28 Jun 2019 14:00:00 GMT";
-        String endDateParam = "Fri, 28 Jun 2019 15:30:00 GMT";
+        String startDateParam = "Fri, 26 Jul 2019 14:00:00 GMT";
+        String endDateParam = "Fri, 26 Jul 2019 15:30:00 GMT";
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
