@@ -8,7 +8,7 @@ public class ReservationDtoBuilder {
 
     private Long id;
     private Long roomId;
-    private String personEmail;
+    private String email;
     private Calendar startDate;
     private Calendar endDate;
     private String description;
@@ -38,8 +38,8 @@ public class ReservationDtoBuilder {
         return this;
     }
 
-    public ReservationDtoBuilder withPersonEmail(String personEmail) {
-        this.personEmail = personEmail;
+    public ReservationDtoBuilder withEmail(String email) {
+        this.email = email;
         return this;
     }
 
@@ -55,7 +55,7 @@ public class ReservationDtoBuilder {
         reservationDto.setRoomId(roomId);
         reservationDto.setStartDate(startDate);
         reservationDto.setEndDate(endDate);
-        reservationDto.setPersonEmail(personEmail);
+        reservationDto.setEmail(email);
         reservationDto.setDescription(description);
 
         return reservationDto;
