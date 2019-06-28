@@ -65,7 +65,7 @@ public class PrevalidationRestControllerTest {
 
     private RequestPostProcessor bearerToken;
 
-    private DateFormat df = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'hh:mm:ss' GMT'");
+    private DateFormat df = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' GMT'");
 
     @Before
     public void init() {
@@ -195,6 +195,8 @@ public class PrevalidationRestControllerTest {
         startDate.add(startDate.MINUTE, 10);
 
         Calendar endDate = Calendar.getInstance();
+        endDate.set(Calendar.HOUR, startDate.get(Calendar.DAY_OF_MONTH));
+        endDate.set(Calendar.HOUR, startDate.get(Calendar.HOUR));
         endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE));
         endDate.add(endDate.MINUTE, 30);
 
@@ -229,6 +231,8 @@ public class PrevalidationRestControllerTest {
         startDate.add(startDate.MINUTE, 10);
 
         Calendar endDate = Calendar.getInstance();
+        endDate.set(Calendar.HOUR, startDate.get(Calendar.DAY_OF_MONTH));
+        endDate.set(Calendar.HOUR, startDate.get(Calendar.HOUR));
         endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE));
         endDate.add(endDate.MINUTE, 40);
 
@@ -248,7 +252,7 @@ public class PrevalidationRestControllerTest {
         startDate.set(Calendar.MILLISECOND, 0);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.set(Calendar.HOUR, endDate.get(Calendar.HOUR) + 2);
+        endDate.add(endDate.HOUR_OF_DAY, 2);
         endDate.set(Calendar.SECOND, 0);
         endDate.set(Calendar.MILLISECOND, 0);
 
