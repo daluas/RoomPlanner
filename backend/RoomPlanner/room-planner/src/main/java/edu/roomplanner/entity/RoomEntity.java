@@ -22,7 +22,7 @@ public class RoomEntity extends UserEntity {
     @Column(name = "max_persons")
     private Integer maxPersons;
 
-    @OneToMany(mappedBy = "room", cascade = javax.persistence.CascadeType.ALL)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private Set<ReservationEntity> reservations;
 
 }

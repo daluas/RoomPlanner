@@ -103,10 +103,12 @@ public class UserServiceImpl implements UserService {
         Calendar currentDate = Calendar.getInstance();
         conversionToGmt(currentDate.getTime());
         List<UserEntity> userEntityList;
-        if (durationBetween(startDate, currentDate) > 0)
+        if (durationBetween(startDate, currentDate) > 0) {
             userEntityList = userRepository.viewByFields(startDate, endDate);
-        else
+        }
+        else {
             userEntityList = userRepository.filterByFields(startDate, endDate, minPersons, floor);
+        }
         userEntityList = userEntityList.stream().distinct().collect(Collectors.toList());
         return roomDtoMapper.mapEntityListToDtoList(userEntityList);
     }
