@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Calendar;
@@ -31,20 +32,20 @@ public class PrevalidationServiceImplTest {
 
     @Test
     public void shouldReturnInvalidNullParameters() {
-        Integer expected = 400;
-        Integer actual = sut.prevalidate(null, null, null, null);
+        HttpStatus expected = HttpStatus.BAD_REQUEST;
+        HttpStatus actual = sut.prevalidate(null, null, null, null);
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnInvalidPersonEmailParameters() {
-        Integer expected = 400;
+        HttpStatus expected = HttpStatus.BAD_REQUEST;
         String email = "invalidEmail@yahoo.com";
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
-        Integer actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, 1L);
+        HttpStatus actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, 1L);
 
         assertEquals(expected, actual);
 
@@ -52,40 +53,40 @@ public class PrevalidationServiceImplTest {
 
     @Test
     public void shouldReturnInvalidPersonTypeParameters() {
-        Integer expected = 400;
+        HttpStatus expected = HttpStatus.BAD_REQUEST;
         String email = "email@yahoo.com";
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.ofNullable(UserEntityBuilder.builder().withId(1L).withType(UserType.ROOM).build()));
 
-        Integer actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, 1L);
+        HttpStatus actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, 1L);
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnInvalidRoomIdParameters() {
-        Integer expected = 400;
+        HttpStatus expected = HttpStatus.BAD_REQUEST;
         String email = "email@yahoo.com";
         Long roomId = 2L;
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.ofNullable(UserEntityBuilder.builder().withId(1L).withType(UserType.PERSON).build()));
         when(userRepository.findById(roomId)).thenReturn(Optional.empty());
 
-        Integer actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, roomId);
+        HttpStatus actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, roomId);
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnInvalidRoomTypeParameters() {
-        Integer expected = 400;
+        HttpStatus expected = HttpStatus.BAD_REQUEST;
         String email = "email@yahoo.com";
         Long roomId = 2L;
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.ofNullable(UserEntityBuilder.builder().withId(1L).withType(UserType.PERSON).build()));
         when(userRepository.findById(roomId)).thenReturn(Optional.ofNullable(UserEntityBuilder.builder().withId(roomId).withType(UserType.PERSON).build()));
 
-        Integer actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, roomId);
+        HttpStatus actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, roomId);
 
         assertEquals(expected, actual);
     }

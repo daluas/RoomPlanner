@@ -31,6 +31,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.TimeZone;
 
@@ -89,13 +90,18 @@ public class PrevalidationRestControllerTest {
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(3L, 4), UserType.ROOM, "Neverland", 5);
 
         Calendar sysDate = Calendar.getInstance();
-        sysDate.setTimeZone(TimeZone.getTimeZone("GMT"));
+        sysDate.setTime(new Date(df.format(sysDate.getTime())));
 
         ReservationEntityUtil reservationEntityUtil = new ReservationEntityUtil();
-        Calendar startDate = reservationEntityUtil.createDate(sysDate.get(Calendar.YEAR), sysDate.get(Calendar.MONTH), sysDate.get(Calendar.DAY_OF_MONTH),
-                sysDate.get(Calendar.HOUR), sysDate.get(Calendar.MINUTE), 0);
-        Calendar endDate = reservationEntityUtil.createDate(sysDate.get(Calendar.YEAR), sysDate.get(Calendar.MONTH), sysDate.get(Calendar.DAY_OF_MONTH),
-                sysDate.get(Calendar.HOUR), sysDate.get(Calendar.MINUTE) + 31, 0);
+        Calendar startDate = (Calendar) sysDate.clone();
+        Calendar endDate = (Calendar) sysDate.clone();
+        endDate.add(endDate.MINUTE, 31);
+        startDate.setTime(conversionToGmt(startDate.getTime()));
+        endDate.setTime(conversionToGmt(endDate.getTime()));
+        startDate.set(Calendar.SECOND,0);
+        startDate.set(Calendar.MILLISECOND,0);
+        endDate.set(Calendar.SECOND,0);
+        endDate.set(Calendar.MILLISECOND,0);
 
         ReservationEntity reservationEntityOne = new ReservationEntityBuilder()
                 .withStartDate(startDate)
@@ -103,10 +109,17 @@ public class PrevalidationRestControllerTest {
                 .withPerson(userEntityPersonOne)
                 .withRoom(userEntityOne).build();
 
-        startDate = reservationEntityUtil.createDate(sysDate.get(Calendar.YEAR), sysDate.get(Calendar.MONTH), sysDate.get(Calendar.DAY_OF_MONTH),
-                sysDate.get(Calendar.HOUR) + 2, sysDate.get(Calendar.MINUTE), 0);
-        endDate = reservationEntityUtil.createDate(sysDate.get(Calendar.YEAR), sysDate.get(Calendar.MONTH), sysDate.get(Calendar.DAY_OF_MONTH),
-                sysDate.get(Calendar.HOUR) + 2, sysDate.get(Calendar.MINUTE) + 31, 0);
+        startDate = (Calendar) sysDate.clone();
+        startDate.add(startDate.HOUR, 2);
+        endDate = (Calendar) sysDate.clone();
+        endDate.add(startDate.HOUR, 2);
+        endDate.add(endDate.MINUTE, 31);
+        startDate.setTime(conversionToGmt(startDate.getTime()));
+        endDate.setTime(conversionToGmt(endDate.getTime()));
+        startDate.set(Calendar.SECOND,0);
+        startDate.set(Calendar.MILLISECOND,0);
+        endDate.set(Calendar.SECOND,0);
+        endDate.set(Calendar.MILLISECOND,0);
 
         ReservationEntity reservationEntityTwo = new ReservationEntityBuilder()
                 .withStartDate(startDate)
@@ -125,9 +138,6 @@ public class PrevalidationRestControllerTest {
 
     @Test
     public void shouldReturnInvalidParametersWhenCalledWithPastDate() throws Exception {
-
-        Integer result = 400;
-
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=Thu, 27 Jun 2019 5:53:00 GMT&endDate=Thu, 27 Jun 2019 8:30:00 GMT&email=sghitun@yahoo.com")
                 .with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -136,9 +146,6 @@ public class PrevalidationRestControllerTest {
 
     @Test
     public void shouldReturnInvalidParametersWhenCalledWithWrongEmail() throws Exception {
-
-        Integer result = 400;
-
         Calendar startDate = Calendar.getInstance();
         startDate.add(startDate.MINUTE, 10);
 
@@ -153,9 +160,6 @@ public class PrevalidationRestControllerTest {
 
     @Test
     public void shouldReturnInvalidParametersWhenCalledWithWrongRoomId() throws Exception {
-
-        Integer result = 400;
-
         Calendar startDate = Calendar.getInstance();
         startDate.add(startDate.MINUTE, 10);
 
@@ -170,13 +174,12 @@ public class PrevalidationRestControllerTest {
 
     @Test
     public void shouldReturnInvalidParametersWhenCalledWithLessThanMinMinutes() throws Exception {
-
-        Integer result = 400;
-
         Calendar startDate = Calendar.getInstance();
         startDate.add(startDate.MINUTE, 10);
 
         Calendar endDate = Calendar.getInstance();
+        endDate.set(Calendar.DAY_OF_MONTH, startDate.get(Calendar.DAY_OF_MONTH));
+        endDate.set(Calendar.HOUR, startDate.get(Calendar.HOUR));
         endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE));
         endDate.add(endDate.MINUTE, 20);
 
@@ -188,14 +191,11 @@ public class PrevalidationRestControllerTest {
 
     @Test
     public void shouldReturnValidParametersWhenCalled() throws Exception {
-
-        Integer result = 200;
-
         Calendar startDate = Calendar.getInstance();
         startDate.add(startDate.MINUTE, 10);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.set(Calendar.HOUR, startDate.get(Calendar.DAY_OF_MONTH));
+        endDate.set(Calendar.DAY_OF_MONTH, startDate.get(Calendar.DAY_OF_MONTH));
         endDate.set(Calendar.HOUR, startDate.get(Calendar.HOUR));
         endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE));
         endDate.add(endDate.MINUTE, 30);
@@ -208,14 +208,14 @@ public class PrevalidationRestControllerTest {
 
     @Test
     public void shouldReturnInValidParametersWhenCalledWithAnotherReservation() throws Exception {
-
-        Integer result = 400;
-
         Calendar startDate = Calendar.getInstance();
         startDate.add(startDate.MINUTE, 10);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.add(endDate.MINUTE, 40);
+        endDate.set(Calendar.DAY_OF_MONTH, startDate.get(Calendar.DAY_OF_MONTH));
+        endDate.set(Calendar.HOUR, startDate.get(Calendar.HOUR));
+        endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE));
+        endDate.add(endDate.MINUTE, 30);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=2&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=testEmail@yahoo.com")
                 .with(bearerToken))
@@ -224,14 +224,11 @@ public class PrevalidationRestControllerTest {
 
     @Test
     public void shouldReturnValidParametersWhenCalledWithAnotherReservationThatYouOwn() throws Exception {
-
-        Integer result = 200;
-
         Calendar startDate = Calendar.getInstance();
         startDate.add(startDate.MINUTE, 10);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.set(Calendar.HOUR, startDate.get(Calendar.DAY_OF_MONTH));
+        endDate.set(Calendar.DAY_OF_MONTH, startDate.get(Calendar.DAY_OF_MONTH));
         endDate.set(Calendar.HOUR, startDate.get(Calendar.HOUR));
         endDate.set(Calendar.MINUTE, startDate.get(Calendar.MINUTE));
         endDate.add(endDate.MINUTE, 40);
@@ -243,16 +240,13 @@ public class PrevalidationRestControllerTest {
 
     @Test
     public void shouldReturnValidParametersWhenCalledWithInnerReservations() throws Exception {
-
-        Integer result = 200;
-
         Calendar startDate = Calendar.getInstance();
         startDate.add(startDate.MINUTE, 31);
         startDate.set(Calendar.SECOND, 0);
         startDate.set(Calendar.MILLISECOND, 0);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.add(endDate.HOUR_OF_DAY, 2);
+        endDate.add(endDate.HOUR, 2);
         endDate.set(Calendar.SECOND, 0);
         endDate.set(Calendar.MILLISECOND, 0);
 
@@ -260,6 +254,18 @@ public class PrevalidationRestControllerTest {
                 .with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
+    }
+
+    private Date conversionToGmt(Date date) {
+        TimeZone tz = TimeZone.getDefault();
+        Date ret = new Date(date.getTime() - tz.getRawOffset());
+        if (tz.inDaylightTime(ret)) {
+            Date dstDate = new Date(ret.getTime() - tz.getDSTSavings());
+            if (tz.inDaylightTime(dstDate)) {
+                ret = dstDate;
+            }
+        }
+        return ret;
     }
 
 

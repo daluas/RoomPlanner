@@ -34,12 +34,10 @@ public class PrevalidationRestController {
                                                     @RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar endDate, @RequestParam("email") String email) {
 
         LOGGER.info("Method was called.");
-        Integer result = prevalidationService.prevalidate(startDate, endDate, email, roomId);
+        HttpStatus result = prevalidationService.prevalidate(startDate, endDate, email, roomId);
         LOGGER.info("The following object was returned:" + result);
-        if (result == 200) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(result);
 
     }
 

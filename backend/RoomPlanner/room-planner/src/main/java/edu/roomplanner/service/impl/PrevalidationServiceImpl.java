@@ -10,6 +10,7 @@ import edu.roomplanner.validation.ValidationResult;
 import edu.roomplanner.validation.validator.impl.AvailabilityValidator;
 import edu.roomplanner.validation.validator.impl.StartEndDateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -31,9 +32,9 @@ public class PrevalidationServiceImpl implements PrevalidationService {
     }
 
     @Override
-    public Integer prevalidate(Calendar startDate, Calendar endDate, String email, Long roomId) {
+    public HttpStatus prevalidate(Calendar startDate, Calendar endDate, String email, Long roomId) {
         if (verifyAllParameters(startDate, endDate, email, roomId)) {
-            return 400;
+            return HttpStatus.BAD_REQUEST;
         }
 
         PersonEntity personEntity = (PersonEntity) userRepository.findByEmail(email).get();
@@ -41,14 +42,14 @@ public class PrevalidationServiceImpl implements PrevalidationService {
 
         ValidationResult validStartEndDate = startEndDateValidator.validate(reservationEntity);
         if (validStartEndDate.getError() != null) {
-            return 400;
+            return HttpStatus.BAD_REQUEST;
         }
 
         ValidationResult validDate = availabilityValidator.validate(reservationEntity);
         if (validDate.getError() == null) {
-            return 200;
+            return HttpStatus.OK;
         }
-        return 400;
+        return HttpStatus.BAD_REQUEST;
 
 
     }
