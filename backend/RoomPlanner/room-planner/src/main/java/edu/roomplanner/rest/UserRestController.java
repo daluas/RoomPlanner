@@ -102,8 +102,18 @@ public class UserRestController {
                 map(userEmailTypeDto -> new ResponseEntity<>(userEmailTypeDto, HttpStatus.OK)).
                 orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+
     @RequestMapping(method = RequestMethod.GET, value = "/api/rooms/filters")
-    public ResponseEntity<List<RoomDto>> getRoomsByFilters(@RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar startDate, @RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar endDate, @RequestParam(required = false) Integer minPersons, @RequestParam(required = false) Integer floor) {
+    @ApiOperation("Returns a list of rooms filtered by reservation start date, reservation end date, room capacity and room floor")
+    @ApiResponses(value = {@ApiResponse(code = 302, message = "FOUND", response = RoomDto.class),
+                            @ApiResponse(code = 401, message = "You are not authenticated."),
+                            @ApiResponse(code = 500, message = "Internal server error")})
+    @PreAuthorize("hasAuthority('person')")
+    public ResponseEntity<List<RoomDto>> getRoomsByFilters(@RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar startDate,
+                                                           @RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar endDate,
+                                                           @RequestParam(required = false) Integer minPersons,
+                                                           @RequestParam(required = false) Integer floor) {
         List<RoomDto> filteredRooms = userService.getRoomsByFilters(startDate, endDate, minPersons, floor);
         return new ResponseEntity<>(filteredRooms, HttpStatus.FOUND);
     }
