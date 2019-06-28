@@ -40,7 +40,7 @@ export class UserViewComponent implements OnInit {
 
     this.previousFilters = new Filters().create({
       startDate: new Date(new Date().setHours(0, 0, 0, 0)),
-      endDate: new Date(new Date().setHours(23, 59, 0, 0)),
+      endDate: new Date(new Date().setHours(0, 0, 0, 0)),
       minPersons: null,
       floor: null
     });
@@ -71,9 +71,11 @@ export class UserViewComponent implements OnInit {
     console.log("Filters component emited: ", filters);
 
     if (this.filteredRoomsAlreadyExist(filters)) {
+      console.log("aceleasi filtre!");
       this.setDisplayedRooms(filters);
     } else {
       this.roomDataService.getRoomsByFilter(filters).then((rooms) => {
+        console.log("filtre diferite!");
         this.rooms = <RoomModel[]>rooms;
         this.setDisplayedRooms(filters);
       })
@@ -102,21 +104,19 @@ export class UserViewComponent implements OnInit {
 
   setDisplayedRooms(filters: Filters) {
 
-    console.log(this.singleRoomSelected);
+    console.log(`camera selectata de user:${this.singleRoomSelected}`);
+
+    this.displayedRooms = [];
 
     if (this.singleRoomSelected != null) {
-      // console.log(this.roomDataService.verifyRoomAvailabilityByFilters(this.singleRoomSelected, filters))
       if (this.roomDataService.verifyRoomAvailabilityByFilters(this.singleRoomSelected, filters)) {
-        this.displayedRooms = new Array<RoomModel>();
         this.displayedRooms.push(this.singleRoomSelected);
       }
     } else {
       this.displayedRooms = this.rooms.map((room) => {
-        if (filters.minPersons != null) {
-          if (filters.minPersons == room.maxPersons) {
-            if (this.roomDataService.verifyRoomAvailabilityByFilters(room, filters)) {
-              return room;
-            }
+        if (filters.minPersons != null && filters.minPersons == room.maxPersons) {
+          if (this.roomDataService.verifyRoomAvailabilityByFilters(room, filters)) {
+            return room;
           }
         } else {
           console.log(room);

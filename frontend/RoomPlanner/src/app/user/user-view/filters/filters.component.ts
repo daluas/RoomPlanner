@@ -69,6 +69,9 @@ export class FiltersComponent implements OnInit, OnChanges {
         
         firstFloor = this.floors[0];
         this.floorByDefault = new FloorModel().create(firstFloor);
+
+        this.floorSelected = this.floorByDefault;
+        
       }
     }
   }
@@ -104,7 +107,6 @@ export class FiltersComponent implements OnInit, OnChanges {
     if (this.endDate.getMinutes() < 30 && this.endDate.getMinutes() > 0) {
       this.endDate.setMinutes(30);
     }
-
     else if (this.endDate.getMinutes() > 30) {
       if (this.endDate.getHours() != 23) {
         this.endDate.setMinutes(0);
@@ -117,8 +119,8 @@ export class FiltersComponent implements OnInit, OnChanges {
     if (this.dateInThePastIn == true || this.startDate.getTime() == this.endDate.getTime()) {
       this.startDate.setTime(this.finalDate.getTime());
       this.endDate.setTime(this.finalDate.getTime());
-      this.endDate.setHours(23);
-      this.endDate.setMinutes(59);
+      this.endDate.setHours(0);
+      this.endDate.setMinutes(0);
     } else {
       this.startDate.setDate(this.finalDate.getDate());
       this.startDate.setMonth(this.finalDate.getMonth());
@@ -128,11 +130,11 @@ export class FiltersComponent implements OnInit, OnChanges {
       this.endDate.setMonth(this.finalDate.getMonth());
       this.endDate.setFullYear(this.finalDate.getUTCFullYear());
     }
-
-    if (this.floorSelected == null) {
+    if (this.floorSelected == undefined) {
       this.floorSelected = this.floorByDefault;
     }
 
+  
     this.filters = new Filters().create({
       startDate: this.startDate,
       endDate: this.endDate,

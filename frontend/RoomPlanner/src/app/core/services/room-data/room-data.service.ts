@@ -40,13 +40,13 @@ export class RoomDataService {
     var res =
       `[
       {
-        "id": 2,
-        "email": "wonderland@yahoo.com",
+        "id": 4,
+        "email": "neverland@yahoo.com",
         "type": "ROOM",
         "reservations":[
           {
             "id": 4,
-            "roomId": 2,
+            "roomId": 4,
             "personEmail": "sghitun@yahoo.com",
             "startDate": "2019-06-28T09:00:00.000+0000",
             "endDate": "2019-06-28T12:00:00.000+0000",
@@ -54,16 +54,42 @@ export class RoomDataService {
           },
           {
             "id": 5,
-            "roomId": 2,
+            "roomId": 4,
             "personEmail": "sghitun@yahoo.com",
             "startDate": "2019-06-27T14:00:00.000+0000",
             "endDate": "2019-06-27T15:30:00.000+0000",
             "description": "Retro meeting"
           }
         ] ,
-        "name": "Wonderland",
-        "floor": 5,
+        "name": "Neverland",
+        "floor": 4,
         "maxPersons": 14
+      },
+      {
+        "id": 12,
+        "email": "roomNew@yahoo.com",
+        "type": "ROOM",
+        "reservations":[
+          {
+            "id": 4,
+            "roomId":12,
+            "personEmail": "sghitun@yahoo.com",
+            "startDate": "2019-06-28T09:00:00.000+0000",
+            "endDate": "2019-06-28T12:00:00.000+0000",
+            "description": "Retro meeting"
+          },
+          {
+            "id": 5,
+            "roomId": 12,
+            "personEmail": "sghitun@yahoo.com",
+            "startDate": "2019-06-27T12:00:00.000+0000",
+            "endDate": "2019-06-27T14:00:00.000+0000",
+            "description": "Retro meeting"
+          }
+        ] ,
+        "name": "roomNew",
+        "floor": 4,
+        "maxPersons":20
       }
     ]`
 
@@ -194,7 +220,7 @@ export class RoomDataService {
     return floorArray;
   }
 
-  getSingleFloor(floorId:number): Promise<FloorModel> {
+  getSingleFloor(floorId: number): Promise<FloorModel> {
     console.log("getSingleFloor() was called!");
 
     var rez =
@@ -244,6 +270,21 @@ export class RoomDataService {
     let r: RoomModel[] = new Array<RoomModel>();
 
     j.rooms.forEach(roomJson => {
+
+      let reserv: Booking[] = new Array<Booking>();
+
+      roomJson.reservations.forEach(resJson => {
+        reserv.push(new Booking().create({
+          id: resJson.id,
+          roomId: resJson.roomId,
+          personEmail: resJson.personEmail,
+          startDate: new Date(new Date(resJson.startDate)),
+          endDate: new Date(new Date(resJson.endDate)),
+          description: resJson.description
+        }))
+      });
+
+
       r.push(new RoomModel().create({
         id: roomJson.id,
         email: roomJson.email,
@@ -251,6 +292,7 @@ export class RoomDataService {
         name: roomJson.name,
         floor: roomJson.floor,
         maxPersons: roomJson.maxPersons,
+        reservations: reserv
       })
       );
     });
@@ -260,131 +302,45 @@ export class RoomDataService {
       floor: j.floor,
       rooms: r
     });
-  
-     return new Promise(res => { return res(floor); })
+
+    return new Promise(res => { return res(floor); })
+
   }
 
 
-verifyRoomAvailabilityByFilters(room: RoomModel, filters: Filters) {
+  verifyRoomAvailabilityByFilters(room: RoomModel, filters: Filters) {
 
-  room.reservations.forEach(res => {
-    if (res.startDate.getTime() != filters.startDate.getTime() && res.endDate.getTime() != filters.endDate.getTime()) {
+    let status = true;
+
+    room.reservations.forEach(res => {
+      console.log(res.startDate, res.endDate);
+      if (this.isValueInOpenInterval(res.startDate, filters.startDate, filters.endDate)) {
+        status = false;
+      }
+
+      if (this.isValueInOpenInterval(res.endDate, filters.startDate, filters.endDate)) {
+        status = false;
+      }
+
+      if (this.isValueInOpenInterval(filters.startDate, res.startDate, res.endDate)) {
+        status = false;
+      }
+
+      // if (res.startDate.getTime() != filters.startDate.getTime() && res.endDate.getTime() != filters.endDate.getTime()) {
+      //   return true;
+      // }
+    })
+    return status;
+  }
+
+
+  isValueInOpenInterval(value, start, end) {
+    if (value > start && value < end) {
       return true;
     }
-  })
-  return false;
-
-
-}
-
-  // getDefaultRooms() nu poate fi combinat cu getRooms(filters)
-  // pentru ca getRooms cu filtre goale trebuie sa returneze toate camerele
-  // si getDefaultRooms() toate camere de la primul etaj, dar noi nu stim inca care
-  // e acel prim etaj ca sa apelam getRooms() cu filtru pe acel prim etaj
-  // getDefaultRooms(): Promise<any[]> {
-  //   console.log("getDefaultRooms() was called!");
-
-  //   // fara returnare de erori, doar rooms, ori null
-  //   return new Promise((res) => {
-  //     // http request fara filtre, decat pe data curenta la nivel de zi,
-  //     // ca nu stim inca care este primul etaj al cladirii
-
-  //     res([
-  //       {
-  //         id: 1,
-  //         name: "401",
-  //         capacity: 10,
-  //         bookings: [
-  //           // this is a booking made by current user
-  //           {
-  //             id: 1,
-  //             startDate: new Date(new Date().setHours(10, 0, 0, 0)),
-  //             endDate: new Date(new Date().setHours(10, 30, 0, 0)),
-  //             ownerEmail: "user1@cegeka.ro",
-  //             description: "this is a test description"
-  //           },
-  //           // this is a booking made by another user
-  //           // this one shouldn't have ID or Description
-  //           {
-  //             startDate: new Date(new Date().setHours(12, 30, 0, 0)),
-  //             endDate: new Date(new Date().setHours(15, 0, 0, 0)),
-  //             ownerEmail: "user10@geceka.ro"
-  //           }
-  //         ]
-  //       },
-  //       {
-  //         id: 2,
-  //         name: "405",
-  //         capacity: 5,
-  //         bookings: []
-  //       }
-  //     ])
-
-  //     // if error, res(null)
-  //   });
-  // }
-
-  // apelata doar din user view
-  // getRooms(filter: Filters): Promise<any[]> {
-  //   console.log("getRooms(filters: any) was called!");
-
-  //   // fara returnare de erori, doar rooms, ori null
-  //   return new Promise((res) => {
-  //     // You can filter only on these values:
-  //     // current date -> which will get all rooms
-  //     // current date, floor value -> which will get all rooms for a specific floor
-  //     // current date, room id -> which will get a single room
-
-  //     res([
-  //       {
-  //         id: 3,
-  //         name: "501",
-  //         capacity: 10,
-  //         bookings: [
-  //           // this is a booking made by current user
-  //           {
-  //             id: 3,
-  //             startDate: new Date(new Date().setHours(13, 0, 0, 0)),
-  //             endDate: new Date(new Date().setHours(14, 30, 0, 0)),
-  //             ownerEmail: "user1@cegeka.ro",
-  //             description: "this is a test description"
-  //           },
-  //         ]
-  //       }
-  //     ])
-
-  //     // if error, res(null)
-  //   });
-  // }
-
-  // apelata doar din room view
-  // getRoom(date: Date): Promise<any> {
-  //   console.log("getRoom(date: Date) was called!");
-  //   // fara returnare de erori, doar room, ori null
-
-  //   return new Promise((res) => {
-  //     // vezi cu backend-ul cum iei programul camerei utilizatorului room logat
-  //     // si va fi apelata la anumite intervale pentru a face refresh
-
-  //     res([
-  //       {
-  //         id: 5,
-  //         name: "813",
-  //         capacity: 14,
-  //         bookings: [
-  //           {
-  //             id: 3,
-  //             startDate: new Date(new Date().setHours(11, 0, 0, 0)),
-  //             endDate: new Date(new Date().setHours(13, 30, 0, 0)),
-  //             ownerEmail: "user1@cegeka.ro",
-  //           },
-  //         ]
-  //       }
-  //     ])
-  //   });
-  // }
-
-
-
+    return false;
+  }
 
 }
+
+
