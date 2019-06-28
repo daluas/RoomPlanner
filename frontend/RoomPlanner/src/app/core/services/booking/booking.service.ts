@@ -45,7 +45,7 @@ export class BookingService {
   }
 
   prevalidation(booking: Booking): Promise<string> {
-    console.log("prevalidation(booking: Booking) was called!");
+    //console.log("prevalidation(booking: Booking) was called!");
     let roomID: number = booking.roomId;
     let startDate = booking.startDate.toUTCString();
     let endDate = booking.endDate.toUTCString();

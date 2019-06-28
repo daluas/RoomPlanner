@@ -34,14 +34,19 @@ input{
 
 .errorText{
     color:red;
-    font-size: 9px;
+    font-size: 13px;
     margin-top: 3px;
     margin-bottom: 5px;
     width: 100%;
+    text-align: center;
 }
 .successText{
     color:green;
-    font-size: 9px;
+    font-size: 13px;
+    margin-top: 3px;
+    margin-bottom: 5px;
+    width: 100%;
+    text-align: center;
 }
 .hour {
     display: inline-block;
@@ -118,7 +123,7 @@ input{
 }
 .invalidHoursContainer {
     margin-top: 10px;
-    font-size: 9px; 
+    font-size: 13px; 
     color: red;
     text-align: center;
 }

@@ -75,9 +75,8 @@ export class LoginBookingComponent implements OnInit {
 
     this.authService.authenticateUser(user)
       .then((user: LoggedUser) => {
-        console.log("got user: ", user);
-        this.authService.OnCurrentUserChanged(user)
-
+        console.log("got user (room view): ", user);
+       
         switch (user.type) {
 
           case UserType.PERSON:

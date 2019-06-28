@@ -56,8 +56,8 @@ export class RoomDataService {
             "id": 5,
             "roomId": 2,
             "personEmail": "sghitun@yahoo.com",
-            "startDate": "2019-06-27T14:00:00.000+0000",
-            "endDate": "2019-06-27T15:30:00.000+0000",
+            "startDate": "2019-06-28T14:00:00.000+0000",
+            "endDate": "2019-06-28T15:30:00.000+0000",
             "description": "Retro meeting"
           }
         ] ,
