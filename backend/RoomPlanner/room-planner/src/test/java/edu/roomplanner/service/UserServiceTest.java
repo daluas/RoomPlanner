@@ -9,7 +9,6 @@ import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.mappers.RoomDtoMapper;
 import edu.roomplanner.mappers.impl.ReservationDtoMapperImpl;
-import edu.roomplanner.repository.RoomRepository;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.impl.UserServiceImpl;
 import edu.roomplanner.types.UserType;
@@ -40,9 +39,6 @@ public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
-
-    @Mock
-    private RoomRepository roomRepository;
 
     @Mock
     private TokenParserService tokenParserService;

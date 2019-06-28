@@ -32,7 +32,7 @@ public class UserValidatorImpl implements UserValidator {
     @Override
     public boolean checkValidRoomEmail(String email) {
         Optional<UserEntity> userEntity = userRepository.findByEmail(email);
-        if(userEntity.isPresent()){
+        if (userEntity.isPresent()) {
             return UserType.ROOM.equals(userEntity.get().getType());
         }
         return false;
