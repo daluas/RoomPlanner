@@ -7,7 +7,6 @@ import edu.roomplanner.util.BuildersWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
@@ -18,8 +17,6 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 public class FloorDtoMapperImplTest {
 
-    @Mock
-    private RoomDtoMapper roomDtoMapper;
 
     @InjectMocks
     private FloorDtoMapperImpl sut;

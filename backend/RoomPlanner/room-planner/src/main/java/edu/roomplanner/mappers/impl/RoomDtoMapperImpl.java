@@ -8,7 +8,6 @@ import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.mappers.RoomDtoMapper;
-import edu.roomplanner.types.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,13 +19,33 @@ import java.util.Set;
 @Component
 public class RoomDtoMapperImpl implements RoomDtoMapper {
 
+    @Autowired
     private ReservationDtoMapper reservationDtoMapper;
-
 
     @Autowired
     public RoomDtoMapperImpl(ReservationDtoMapper reservationDtoMapper) {
         this.reservationDtoMapper = reservationDtoMapper;
     }
+
+    public List<RoomDto> mapEntityListToDtoList(List<UserEntity> roomEntityList) {
+        List<RoomDto> roomDtoList = new ArrayList<>();
+        for (UserEntity room : roomEntityList) {
+            roomDtoList.add(mapEntityToDto((RoomEntity) room));
+        }
+        return roomDtoList;
+    }
+
+    private Set<ReservationDto> mapRoomEntitySetToDtoSet(Set<ReservationEntity> reservationEntitySet) {
+        Set<ReservationDto> reservationDtoSet = new HashSet<>();
+        if (reservationEntitySet == null) {
+            return reservationDtoSet;
+        }
+        for (ReservationEntity entity : reservationEntitySet) {
+            reservationDtoSet.add(reservationDtoMapper.mapReservationEntityToDto(entity));
+        }
+        return reservationDtoSet;
+    }
+
 
     public RoomDto mapEntityToDto(RoomEntity roomEntity) {
 
@@ -58,19 +77,5 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
                 .build();
     }
 
-    public List<RoomDto> mapEntityListToDtoList(List<UserEntity> roomEntityList) {
-        List<RoomDto> roomDtoList = new ArrayList<>();
-        for (UserEntity room : roomEntityList) {
-            roomDtoList.add(mapEntityToDto((RoomEntity) room));
-        }
-        return roomDtoList;
-    }
 
-    public Set<ReservationDto> mapRoomEntitySetToDtoSet(Set<ReservationEntity> reservationEntitySet) {
-        Set<ReservationDto> reservationDtoSet = new HashSet<>();
-        for (ReservationEntity entity : reservationEntitySet) {
-            reservationDtoSet.add(reservationDtoMapper.mapReservationEntityToDto(entity));
-        }
-        return reservationDtoSet;
-    }
 }
