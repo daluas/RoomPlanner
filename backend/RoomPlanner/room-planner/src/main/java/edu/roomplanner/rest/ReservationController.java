@@ -51,7 +51,7 @@ public class ReservationController {
 
         return reservationDtoOptional
                 .map(reservationEntity -> new ResponseEntity<>(reservationDtoOptional.get(), HttpStatus.CREATED))
-                .orElseGet(() -> new ResponseEntity(new EmptyJsonResponse(), HttpStatus.NOT_FOUND));
+                .orElseGet(() -> new ResponseEntity(new EmptyJsonResponse(), HttpStatus.BAD_REQUEST));
     }
 
 }

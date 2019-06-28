@@ -9,6 +9,7 @@ import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.service.impl.ReservationServiceImpl;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
+import edu.roomplanner.validation.BookingChain;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +31,8 @@ public class ReservationServiceTest {
     private ReservationDtoMapper mapperService;
     @Mock
     private ReservationRepository reservationRepository;
+    @Mock
+    private BookingChain bookingChain;
     @InjectMocks
     private ReservationServiceImpl sut;
 

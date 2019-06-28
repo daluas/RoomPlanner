@@ -5,6 +5,7 @@ import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.service.ReservationService;
+import edu.roomplanner.validation.BookingChain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,14 @@ public class ReservationServiceImpl implements ReservationService {
 
     private ReservationDtoMapper mapperService;
     private ReservationRepository reservationRepository;
+    private BookingChain bookingChain;
 
     @Autowired
-    public ReservationServiceImpl(ReservationDtoMapper mapperService, ReservationRepository reservationRepository) {
+    public ReservationServiceImpl(ReservationDtoMapper mapperService, ReservationRepository reservationRepository,
+                                  BookingChain bookingChain) {
         this.mapperService = mapperService;
         this.reservationRepository = reservationRepository;
+        this.bookingChain = bookingChain;
     }
 
     @Override
@@ -34,6 +38,11 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         ReservationEntity reservationEntity = convertToEntity(reservationDto);
+
+        if (!bookingChain.validate(reservationEntity).isEmpty()) {
+            return Optional.empty();
+        }
+
         reservationRepository.save(reservationEntity);
         ReservationDto currentReservationDto = convertToDto(reservationEntity);
         currentReservationDto.setRoomId(roomId);
