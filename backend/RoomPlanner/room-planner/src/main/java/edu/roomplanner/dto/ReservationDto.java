@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 
+
 @JsonSerialize
 @Getter
 @Setter
@@ -17,7 +18,7 @@ public class ReservationDto {
 
     private Long id;
     private Long roomId;
-    private String personEmail;
+    private String email;
     private Calendar startDate;
     private Calendar endDate;
     private String description;
