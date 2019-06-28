@@ -27,4 +27,9 @@ public class FloorServiceImpl implements FloorService {
 
         return floorDtoMapper.mapEntityListToDtoList(floorRepository.findAll());
     }
+
+    @Override
+    public FloorDto getFloorByFloor(Integer floor) {
+        return floorDtoMapper.mapEntityToDtoWithReservations(floorRepository.findByFloor(floor));
+    }
 }

@@ -7,4 +7,5 @@ package edu.roomplanner.service;
 public interface FloorService {
 
     List<FloorDto> getAllFloors();
+    FloorDto getFloorByFloor(Integer floor);
 }
