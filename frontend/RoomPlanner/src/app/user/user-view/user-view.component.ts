@@ -18,7 +18,7 @@ export class UserViewComponent implements OnInit {
   booking: Booking;
   newBooking: Booking;
   buildingLayout: FloorModel[] = new Array<FloorModel>();
-  rooms: RoomModel[];
+  rooms: RoomModel[]=new Array<RoomModel>();
   displayedRooms: RoomModel[];
   singleRoomSelected: RoomModel;
   previousFilters: Filters;
@@ -64,7 +64,16 @@ export class UserViewComponent implements OnInit {
 
   roomIsSelectedOnFilters(room: RoomModel) {
     console.log("Room emited: ", room);
-    this.singleRoomSelected = room;
+
+    this.roomDataService.getSingleFloor(room.floor).then((floor)=>{
+      floor.rooms.forEach(r=>{
+        if(r.name==room.name){
+          this.rooms.push(r);
+        }
+      })
+      
+    })
+    this.singleRoomSelected = this.rooms.pop();
   }
 
   updateRoomsBasedOnFilters(filters: Filters) {
@@ -104,10 +113,11 @@ export class UserViewComponent implements OnInit {
 
   setDisplayedRooms(filters: Filters) {
 
-    console.log(`camera selectata de user:${this.singleRoomSelected}`);
+    console.log(`camera selectata de user:`);
+    console.log(this.singleRoomSelected);
 
     this.displayedRooms = [];
-
+  
     if (this.singleRoomSelected != null) {
       if (this.roomDataService.verifyRoomAvailabilityByFilters(this.singleRoomSelected, filters)) {
         this.displayedRooms.push(this.singleRoomSelected);

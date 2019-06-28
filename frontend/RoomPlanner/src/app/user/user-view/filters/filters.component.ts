@@ -142,6 +142,9 @@ export class FiltersComponent implements OnInit, OnChanges {
       minPersons: this.numberOfPeople
     });
 
+    console.log(`Filtreleeee`)
+    console.log(this.filters)
+
     this.filterChange.emit(this.filters);
     if(this.roomSelected!=null){
       this.roomChange.emit(this.roomSelected);
