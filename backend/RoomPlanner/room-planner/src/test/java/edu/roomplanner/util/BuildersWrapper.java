@@ -94,4 +94,28 @@ public class BuildersWrapper {
                 .withRoom(room)
                 .build();
     }
+
+    public static ReservationDto buildReservationDto(Long id, Long roomId, String email, Calendar startDate, Calendar endDate, String description) {
+        return new ReservationDtoBuilder()
+                .withId(id)
+                .withRoomId(roomId)
+                .withEmail(email)
+                .withStartDate(startDate)
+                .withEndDate(endDate)
+                .withDescription(description)
+                .build();
+    }
+
+    public static ReservationEntity buildReservationEntity(Long id, Calendar startDate, Calendar endDate, UserEntity person, UserEntity room, String description) {
+        return new ReservationEntityBuilder()
+                .withId(id)
+                .withStartDate(startDate)
+                .withEndDate(endDate)
+                .withPerson(person)
+                .withRoom(room)
+                .withDescription(description)
+                .build();
+    }
+
+
 }

@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public RoomDto getRoomByEmail(String email) {
         RoomDto roomDto = null;
-        if (userValidator.checkValidRoomEmail(email)){
+        if (userValidator.checkValidRoomEmail(email)) {
             UserEntity userEntity = userRepository.findByEmail(email).get();
             roomDto = roomDtoMapper.mapEntityToDto((RoomEntity) userEntity);
         }
@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
 
     private Set<ReservationDto> getReservationDtos(Set<ReservationEntity> reservationEntities) {
         Set<ReservationDto> reservationDtos = new HashSet<>();
-        for(ReservationEntity reservationEntity:reservationEntities) {
+        for (ReservationEntity reservationEntity : reservationEntities) {
             reservationDtos.add(reservationDtoMapper.mapReservationEntityToDto(reservationEntity));
         }
         return reservationDtos;
