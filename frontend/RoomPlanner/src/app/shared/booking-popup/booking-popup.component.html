@@ -1,5 +1,5 @@
 
-<app-login-booking *ngIf="this.usertype=='ROOM'" [isLogged]="this.isLogged" [isNewBooking]="this.isNewBooking" (logged)="loggedChange($event)" (closeLogin)="closeLoginPopup($event)"></app-login-booking>
+<app-login-booking *ngIf="this.usertype=='ROOM'" [isLogged]="this.isLogged" [isNewAction]="this.isNewAction" (logged)="loggedChange($event)" (closeLogin)="closeLoginPopup($event)"></app-login-booking>
 
 <div class="container" *ngIf="this.isLogged==true">
   <div>

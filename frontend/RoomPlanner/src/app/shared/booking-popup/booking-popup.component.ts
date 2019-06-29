@@ -36,7 +36,7 @@ export class BookingPopupComponent implements OnInit {
   usertype: string;
 
   isLogged: boolean;
-  isNewBooking: boolean;
+  isNewAction: boolean;
 
   statusMessage: string;  
  
@@ -47,7 +47,7 @@ export class BookingPopupComponent implements OnInit {
 
   ngOnInit() {
     this.status = false;
-    this.isNewBooking = false;
+    this.isNewAction = false;
 
     let userData = JSON.parse(localStorage.getItem("user-data"));
 
@@ -79,21 +79,55 @@ export class BookingPopupComponent implements OnInit {
       this.status = false;
     }
   }
+
   createBookingTest() {
 
-    this.bookingService.createNewBooking(this.booking).then((bookingRes) => {
-     
+    this.bookingService.createNewBooking(this.booking).then((bookingRes) => {     
       let res = JSON.parse(bookingRes);
-
       if (res.id) {
-        this.isNewBooking = true;
+        this.isNewAction = true;
         this.bookingRes.emit(this.booking);
         console.log("Booking successfully");
-        this.bookingStatus = true;
-      
+        this.bookingStatus = true;      
+      }
+      else {
+        //todo
+        console.log("Booking failed");
       }
     })
-  }    
+  }  
+  
+  updateBookingTest() {
+    this.bookingService.updateBooking(this.booking).then((bookingRes) => {     
+      let res = JSON.parse(bookingRes);
+      if (res.id) {
+        this.isNewAction = true;
+        this.bookingRes.emit(this.booking);
+        console.log("Update successfully");
+        this.bookingStatus = true;      
+      }
+      else {
+        //todo
+        console.log("Update failed");
+      }
+    })
+  }
+
+  deleteBooking() {
+    this.bookingService.deleteBooking(this.booking).then((bookingRes) => {     
+      let res = JSON.parse(bookingRes);
+      if (res.status == "200") {
+        this.isNewAction = true;
+        this.bookingRes.emit(this.booking);
+        console.log("Delete successfully");
+        //this.bookingStatus = true;      
+      }
+      else if(res.status == "400") {
+        //todo
+        console.log("Delete failed");
+      }
+    })
+  }
   
   getStatusOfBookButton(event) { //true=disabled fals=enabled
 
@@ -118,13 +152,7 @@ export class BookingPopupComponent implements OnInit {
       this.booked = false;
     }
   }
-  updateBookingTest() {
-
-  }
-
-  deleteBooking() {
-
-  }
+  
   cancelBooking() {
     this.booking.description = "";
     this.closePopup.emit(true);
