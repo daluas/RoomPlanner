@@ -24,8 +24,8 @@ const routes: Routes = [
   },
   {
     path: UserType.ROOM.toLowerCase(),
-    loadChildren: "./room/room.module#RoomModule",
-    canActivate: [AuthGuard]
+    loadChildren: "./room/room.module#RoomModule"
+    //canActivate: [AuthGuard]
   },
   {
     path: "**",

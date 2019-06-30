@@ -1,3 +1,6 @@
-<p>
-  room-view works!
-</p>
+<div class="container">
+  <div class="clock-container">
+    <app-clock [isActive]="isClockActive" [reservations]="reservations" (setInterval)="setReservationInterval($event)">
+    </app-clock>
+  </div>
+</div>
