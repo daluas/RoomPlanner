@@ -40,7 +40,6 @@ export class ClockComponent implements OnInit, OnChanges, OnDestroy {
     let startTimeForIntervals = this.getStartTimeForIntervals();
     this.availabilityIntervals = this.getAvailabilityIntervals(startTimeForIntervals);
     this.drawIntervals();
-
   }
 
   getStartTimeForIntervals() {
@@ -81,7 +80,7 @@ export class ClockComponent implements OnInit, OnChanges, OnDestroy {
 
       const pathData = [
         `M ${startX} ${startY}`, // Move
-        `A ${width / 2 - 2 } ${width / 2 - 2} 0 0 1 ${endX} ${endY}`, // Arc
+        `A ${width / 2 - 2} ${width / 2 - 2} 0 0 1 ${endX} ${endY}`, // Arc
         `L ${width / 2} ${width / 2}`, // Line
         `L ${startX} ${startY}`, // Line
       ].join(' ');
@@ -99,7 +98,7 @@ export class ClockComponent implements OnInit, OnChanges, OnDestroy {
 
     const pathData = [
       `M ${startX} ${startY}`, // Move
-      `A ${width / 4 } ${width / 4 } 0 0 1 ${endX} ${endY}`, // Arc
+      `A ${width / 4} ${width / 4} 0 0 1 ${endX} ${endY}`, // Arc
       `L ${width / 2} ${width / 2}`, // Line
       `L ${startX} ${startY}`, // Line
     ].join(' ');
@@ -128,7 +127,7 @@ export class ClockComponent implements OnInit, OnChanges, OnDestroy {
 
     let unit = 1 / 24;
     let units = (hour * 2 + (minutes == 30 ? 1 : 0));
-    
+
 
     return unit * (units + 24 - 6);
   }
@@ -145,7 +144,7 @@ export class ClockComponent implements OnInit, OnChanges, OnDestroy {
     ];
   }
 
-  getSvgWidth(){
+  getSvgWidth() {
     return document.getElementById('svg-clock').getBoundingClientRect().width;
   }
 }
