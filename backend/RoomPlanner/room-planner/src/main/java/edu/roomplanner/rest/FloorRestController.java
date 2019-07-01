@@ -1,7 +1,6 @@
 package edu.roomplanner.rest;
 
 import edu.roomplanner.dto.FloorDto;
-import edu.roomplanner.dto.PersonDto;
 import edu.roomplanner.service.FloorService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -52,14 +51,14 @@ public class FloorRestController {
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error.")})
     @PreAuthorize("hasAuthority('person')")
-    ResponseEntity<FloorDto>getFloorByName(@PathVariable Integer floor){
+    ResponseEntity<FloorDto> getFloorByName(@PathVariable Integer floor) {
         FloorDto floorDto = floorService.getFloorByFloor(floor);
 
-        if(floorDto == null){
+        if (floorDto == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(floorDto,HttpStatus.FOUND);
+        return new ResponseEntity<>(floorDto, HttpStatus.FOUND);
     }
 
 }
