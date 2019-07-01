@@ -34,16 +34,16 @@ export class Interceptor implements HttpInterceptor {
             if (request.body.get("grant_type") === "password") {
 
 
-                let token = new LoginToken().create({
-                    access_token: "access",
-                    token_type: "bearer",
-                    refresh_Token: "refreshh",
-                    expiration_timestamp: 1561102598
-                })
-                localStorage.setItem("access-token", JSON.stringify(token))
-                return of(new HttpResponse({
-                    body: token
-                }))
+                // let token = new LoginToken().create({
+                //     access_token: "access",
+                //     token_type: "bearer",
+                //     refresh_Token: "refreshh",
+                //     expiration_timestamp: 1561102598
+                // })
+                // localStorage.setItem("access-token", JSON.stringify(token))
+                // return of(new HttpResponse({
+                //     body: token
+                // }))
 
 
 
@@ -96,16 +96,16 @@ export class Interceptor implements HttpInterceptor {
 
         if (request.url === `${this.BASE_URL}/users`) {
             
-            console.log(request);
-            let userdata = new LoggedUser().create({
-                email: request.params.get("email"),
-                type: "PERSON"
-            })
-            console.log(userdata);
+            // console.log(request);
+            // let userdata = new LoggedUser().create({
+            //     email: request.params.get("email"),
+            //     type: "PERSON"
+            // })
+            // console.log(userdata);
 
-            return of(new HttpResponse({
-                body: userdata
-            }))
+            // return of(new HttpResponse({
+            //     body: userdata
+            // }))
 
             request = this.addAuthenticationToken(request, next);
             return next.handle(request)

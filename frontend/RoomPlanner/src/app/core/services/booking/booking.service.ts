@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { HttpParams, HttpClient } from '@angular/common/http';
+import { HttpParams, HttpClient, HttpResponse } from '@angular/common/http';
 import { LoggedUser } from '../../models/LoggedUser';
 import { Booking } from '../../models/BookingModel';
+import { Observable, Subscription } from 'rxjs';
+import { Config } from 'protractor';
 
 @Injectable({
   providedIn: 'root'
@@ -12,30 +14,24 @@ export class BookingService {
 
   constructor(private httpClient: HttpClient) { }
 
-  prevalidation(booking: Booking): Promise<string> {
-    //console.log("prevalidation(booking: Booking) was called!");
+  prevalidation(booking: Booking): number {//Observable<HttpResponse<Config>>
+    console.log("prevalidation was called!");
     let roomID: number = booking.roomId;
     let startDate = booking.startDate.toUTCString();
     let endDate = booking.endDate.toUTCString();
     let email = booking.personalEmail;
-
-    // return this.httpClient.get(`${this.backendUrl}/api/prevalidation?roomId=${roomID}&startDate=${startDate}&endDate=${startDate}&email=${email}`).toPromise();
-    console.log("prevalidation "+booking.startDate, booking.endDate, booking.personalEmail);
-    return new Promise((res) => {
-      // caz de succes
-      res("You can book");
-
-      // caz de eroare
-      //res("Invalid parameters");
-
-      // caz de eroare
-      //res("The date is not available");
-
-    });
+    
+   // return this.httpClient.get(`${this.backendUrl}/api/prevalidation?roomId=${roomID}&startDate=${startDate}&endDate=${startDate}&email=${email}`).toPromise();
+   
+    //ok!
+   // return this.httpClient.get(`${this.backendUrl}/api/prevalidation?roomId=${roomID}&startDate=${startDate}&endDate=${startDate}&email=${email}`, {observe: 'response'});                  
+    return 200;
+   
+   
   }
 
   createNewBooking(booking: Booking): Promise<string> {
-    console.log("createNewBooking(booking: Booking) was called!");
+    console.log("createNewBooking was called!");
     let roomID: number = booking.roomId;
 
     let params = {
@@ -44,41 +40,44 @@ export class BookingService {
       endDate: booking.endDate.toJSON(),
       description: booking.description,
     }
-    console.log("params in service:" +params.description);
+  
     // return this.httpClient.post(`${this.backendUrl}/api/reservations/${roomID}`, params).toPromise();
 
     return new Promise((res) => {
       // caz de succes
 
-      res(`{
-        "id": 65,
-        "roomId": 2,
-        "email": "sghitun@yahoo.com",
-        "startDate": "2019-06-24T13:02:41.116+0000",
-        "endDate": "2019-06-24T13:02:41.116+0000",
-        "description": "ok"
-        }`);
+      // res(`{
+      //   "id": 65,
+      //   "roomId": 2,
+      //   "email": "sghitun@yahoo.com",
+      //   "startDate": "2019-06-24T13:02:41.116+0000",
+      //   "endDate": "2019-06-24T13:02:41.116+0000",
+      //   "description": "ok"
+      //   }`);
 
       // caz de eroare
 
-      //res(`{}`);
+      res(`{}`);
 
     });
   }
 
 
   updateBooking(booking: Booking): Promise<string> {
-    console.log("updateBooking(booking: Booking) was called!");
+    console.log("updateBooking was called!");
     let roomID: number = booking.roomId;
-
+    let id : number = booking.id;
     let params = {
       email: booking.personalEmail,
+      roomId :booking.roomId,
       startDate: booking.startDate.toJSON(),
       endDate: booking.endDate.toJSON(),
       description: booking.description,
+     
     }
 
-    // return this.httpClient.post(`${this.backendUrl}/api/update-reservations/${roomID}`, params).toPromise();
+    //return this.httpClient.patch(`${this.backendUrl}/api/update-reservations/${id}`, params).toPromise();
+    //status code: 200 OK or 204 NO CONTENT 
 
     return new Promise((res) => {
       // caz de succes
@@ -99,7 +98,7 @@ export class BookingService {
     });
   }
 
-  deleteBooking(booking: Booking): Promise<string> {
+  deleteBooking(booking: Booking): number {//Observable<HttpResponse<Config>>
     console.log("deleteBooking(booking: Booking) was called!");
     let roomID: number = booking.roomId;
 
@@ -108,22 +107,9 @@ export class BookingService {
       id: booking.id
     }
 
-    // return this.httpClient.post(`${this.backendUrl}/api/delete-reservations/${roomID}`, params).toPromise();
+    //return this.httpClient.delete(`${this.backendUrl}/api/reservations?/reservations=${roomID}`, params).toPromise();
 
-    return new Promise((res) => {
-      // caz de succes
-
-      res(`{
-        "status": 200
-        }`);
-
-      // caz de eroare
-
-      // res(`{
-      //   "status": 400
-      //   }`);
-
-    });
+    return 200;
   }
 
 }

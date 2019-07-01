@@ -21,12 +21,12 @@ export class BookingPopupComponent implements OnInit {
 
   @Input() booking: Booking;
 
-  @Output() bookingRes: EventEmitter<Booking> = new EventEmitter();
+  @Output() bookingRes: EventEmitter<object> = new EventEmitter();
   @Output() closePopup: EventEmitter<boolean> = new EventEmitter();
 
 
   constructor(public bookingService: BookingService, private fb: FormBuilder, private authService: AuthService) {
-    console.log("on constructor" + this.booking);
+    
   }
 
   minDate = new Date(2019, 0, 1);
@@ -38,12 +38,13 @@ export class BookingPopupComponent implements OnInit {
   isLogged: boolean;
   isNewAction: boolean;
 
-  statusMessage: string;  
+  statusMessage: number;  
  
   booked: boolean = true;
   bookingStatus: boolean;
   prevalidationStatus: boolean;
  
+  statusDelete : number;
 
   ngOnInit() {
     this.status = false;
@@ -68,18 +69,22 @@ export class BookingPopupComponent implements OnInit {
     console.log('start date :'+this.booking.startDate);
     if (val.value.getDate() > this.booking.endDate.getDate()) {
       this.status = true;
+      this.booked = false;
     }
     else {
       this.status = false;
+      this.booked = true;
     }
   }
   endDateValidation(val) {
     this.booking.endDate=val.value;
     if (val.value.getDate() < this.booking.startDate.getDate()) {
-      this.status = true;
+      this.status = true; 
+     this.booked = false;
     }
     else {
       this.status = false;
+      this.booked = true;
     }
   }
   getDescription(desc){
@@ -104,6 +109,7 @@ export class BookingPopupComponent implements OnInit {
       else {
         //todo
         console.log("Booking failed");
+        this.bookingStatus = false;
       }
     })
   }  
@@ -125,22 +131,36 @@ export class BookingPopupComponent implements OnInit {
   }
 
   deleteBooking() {
-    this.bookingService.deleteBooking(this.booking).then((bookingRes) => {     
-      let res = JSON.parse(bookingRes);
-      if (res.status == "200") {
+    this.statusDelete=this.bookingService.deleteBooking(this.booking);     
+    if (this.statusDelete == 200) {
         this.isNewAction = true;
         this.bookingRes.emit(this.booking);
         console.log("Delete successfully");
         //this.bookingStatus = true;      
       }
-      else if(res.status == "400") {
-        //todo
+      else if(this.statusDelete == 400) {
+   
         console.log("Delete failed");
       }
-    })
+
+      //ok!! (for integration)
+      // this.bookingService.deleteBooking(this.booking).subscribe((res)=>{
+        //   this.statusDelete=res.status;
+        //   if (this.statusDelete == 200 ) {
+        //     this.isNewAction = true;
+        //     this.bookingRes.emit(this.booking);
+        //     console.log("Delete successfully");
+        // 
+        //   }
+        //  else if(this.statusDelete == 400) {
+        //    console.log("Delete failed");
+        // }
+        //   this.statusMessage.emit(this.prevalidationStatus);
+        // })
+   
   }
   
-  getStatusOfBookButton(event) { //true=disabled fals=enabled
+  getStatusOfBookButton(event) { //true=disabled false=enabled
 
     this.invalidHours=event;
     if(this.invalidHours){
@@ -154,7 +174,7 @@ export class BookingPopupComponent implements OnInit {
  getPrevalidationMessage(event) {
     this.statusMessage = event;
     
-    if (this.statusMessage == "You can book" ) {
+    if (this.statusMessage == 200 ) {
       this.prevalidationStatus = true;
  
     }

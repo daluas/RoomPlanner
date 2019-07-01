@@ -94,8 +94,8 @@
     </div>
     
     <div *ngIf="status">
-        <div class="successText" *ngIf="(status=='You can book') && (invalidHours==false)">{{status}}</div>
-        <div class="errorText" *ngIf="(status!='You can book') && (invalidHours==false)">{{status}}</div>
+        <div class="successText" *ngIf="(prevalidationStatus==200) && (invalidHours==false)">You can book</div>
+        <div class="errorText" *ngIf="(prevalidationStatus!=200) && (invalidHours==false)">Invalid parameters</div>
         
     </div>
 </div>

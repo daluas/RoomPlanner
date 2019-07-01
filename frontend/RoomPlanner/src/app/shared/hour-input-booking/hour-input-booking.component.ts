@@ -7,6 +7,7 @@ import { Booking } from '../../core/models/BookingModel';
 import { BookingPopupComponent } from '../booking-popup/booking-popup.component';
 import { BookingService } from '../../core/services/booking/booking.service';
 import { ɵINTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic';
+import { HttpResponse } from '@angular/common/http';
 
 
 @Component({
@@ -19,7 +20,7 @@ export class HourInputBookingComponent implements OnInit {
   @Output() startHourEmitter: EventEmitter<Date> = new EventEmitter();
   @Output() endHourEmitter: EventEmitter<Date> = new EventEmitter();
   
-  @Output() statusMessage: EventEmitter<string> = new EventEmitter();
+  @Output() statusMessage: EventEmitter<number> = new EventEmitter();
   @Output() disableBookButton: EventEmitter<boolean> = new EventEmitter();
   @Input() booking: Booking;
 
@@ -29,7 +30,7 @@ export class HourInputBookingComponent implements OnInit {
   endHourForm: FormGroup;
   invalidHours: boolean;
   status: string;
-
+  prevalidationStatus : number;
   ngOnInit() {
 
 
@@ -84,17 +85,41 @@ export class HourInputBookingComponent implements OnInit {
     }
   }
   prevalidation() {
-    this.bookingService.prevalidation(this.booking).then((prevalidationStatus) => {
-      this.status = prevalidationStatus;
+    // this.bookingService.prevalidation(this.booking).then((prevalidationStatus) => {
+    //   this.status = prevalidationStatus;
 
-      if (prevalidationStatus == "You can book" && this.invalidHours == false) {
-        this.disableBookButton.emit(false);//emit(false)=buton enabled
-      }
-      else {
-        this.disableBookButton.emit(true);//emit(true)=buton disabled
-      }
-      this.statusMessage.emit(prevalidationStatus);
-    })
+    //   if (prevalidationStatus == "You can book" && this.invalidHours == false) {
+    //     this.disableBookButton.emit(false);//emit(false)=buton enabled
+    //   }
+    //   else {
+    //     this.disableBookButton.emit(true);//emit(true)=buton disabled
+    //   }
+    //   this.statusMessage.emit(prevalidationStatus);
+  //  })\
+
+    // ok! (for integration)
+    // this.bookingService.prevalidation(this.booking).subscribe((res)=>{
+    //   this.prevalidationStatus=res.status;
+    //   console.log("prevalidation status: "+res.status);
+    //   if (this.prevalidationStatus == 200 && this.invalidHours == false) {
+    //     this.disableBookButton.emit(false);//emit(false)=buton enabled
+    //   }
+    //   else {
+    //     this.disableBookButton.emit(true);//emit(true)=buton disabled
+    //   }
+    //   this.statusMessage.emit(this.prevalidationStatus);
+    // })
+
+    this.prevalidationStatus= this.bookingService.prevalidation(this.booking);
+    if (this.prevalidationStatus == 200 && this.invalidHours == false) {
+      this.disableBookButton.emit(false);//emit(false)=buton enabled
+    }
+    else {
+      this.disableBookButton.emit(true);//emit(true)=buton disabled
+    }
+    this.statusMessage.emit(this.prevalidationStatus);
+    
+    
   }
 
   update() {
