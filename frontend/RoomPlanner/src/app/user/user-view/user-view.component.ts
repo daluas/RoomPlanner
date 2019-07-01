@@ -18,7 +18,7 @@ export class UserViewComponent implements OnInit {
   booking: Booking;
   newBooking: Booking;
   buildingLayout: FloorModel[] = new Array<FloorModel>();
-  rooms: RoomModel[]=new Array<RoomModel>();
+  rooms: RoomModel[] = new Array<RoomModel>();
   displayedRooms: RoomModel[];
   singleRoomSelected: RoomModel;
   previousFilters: Filters;
@@ -45,7 +45,10 @@ export class UserViewComponent implements OnInit {
       floor: null
     });
 
-    this.buildingLayout = await this.roomDataService.getFloors();
+    this.buildingLayout = <FloorModel[]>await this.roomDataService.getFloors()
+      .catch(error => {
+        console.log(error)
+      });
 
     this.buildingLayout.sort(function (a, b) { return a.floor - b.floor });
 
@@ -58,87 +61,74 @@ export class UserViewComponent implements OnInit {
     this.roomDataService.getSingleFloor(firstFloor.floor).then((floor) => {
       this.rooms = <RoomModel[]>floor.rooms;
       this.displayedRooms = <RoomModel[]>floor.rooms;
+      console.log("Rooms by default", this.rooms)
     })
 
-  }
-
-  roomIsSelectedOnFilters(room: RoomModel) {
-    console.log("Room emited: ", room);
-
-    this.roomDataService.getSingleFloor(room.floor).then((floor)=>{
-      floor.rooms.forEach(r=>{
-        if(r.name==room.name){
-          this.rooms.push(r);
-        }
-      })
-      
-    })
-    this.singleRoomSelected = this.rooms.pop();
   }
 
   updateRoomsBasedOnFilters(filters: Filters) {
+
     console.log("Filters component emited: ", filters);
 
+    if (filters.roomSelected != null || filters.roomSelected != undefined) {
+      this.roomDataService.getSingleFloor(filters.roomSelected.floor).then((floor) => {
+        floor.rooms.forEach(r => {
+          if (r.name == filters.roomSelected.name) {
+            this.singleRoomSelected = r;
+            this.checkRoomsBasedOnFilters(filters);
+          }
+        })
+      })
+    } else {
+      this.singleRoomSelected = null;
+      this.checkRoomsBasedOnFilters(filters);
+    }
+  }
+
+  checkRoomsBasedOnFilters(filters: Filters) {
+
+    console.log("single room", this.singleRoomSelected)
+    this.displayedRooms = [];
+
     if (this.filteredRoomsAlreadyExist(filters)) {
-      console.log("aceleasi filtre!");
       this.setDisplayedRooms(filters);
     } else {
+      this.rooms = [];
       this.roomDataService.getRoomsByFilter(filters).then((rooms) => {
-        console.log("filtre diferite!");
         this.rooms = <RoomModel[]>rooms;
-        this.setDisplayedRooms(filters);
+        this.setDisplayedRooms(filters)
       })
     }
     this.previousFilters = new Filters().create(filters);
   }
 
   filteredRoomsAlreadyExist(filters: Filters): boolean {
-    if (this.verifyDate(this.previousFilters.startDate, filters.startDate) &&
+    if (this.previousFilters.startDate.getTime() == filters.startDate.getTime() &&
+      this.previousFilters.endDate.getTime() == filters.endDate.getTime() &&
       this.previousFilters.floor == filters.floor) {
       return true;
     }
     return false;
   }
 
-  verifyDate(date1: Date, date2: Date): boolean {
-    if (date1.getFullYear() == date2.getFullYear()) {
-      if (date1.getMonth() == date2.getMonth()) {
-        if (date1.getDate() == date2.getDate()) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
   setDisplayedRooms(filters: Filters) {
 
-    console.log(`camera selectata de user:`);
-    console.log(this.singleRoomSelected);
-
     this.displayedRooms = [];
-  
     if (this.singleRoomSelected != null) {
       if (this.roomDataService.verifyRoomAvailabilityByFilters(this.singleRoomSelected, filters)) {
         this.displayedRooms.push(this.singleRoomSelected);
       }
     } else {
-      this.displayedRooms = this.rooms.map((room) => {
-        if (filters.minPersons != null && filters.minPersons == room.maxPersons) {
-          if (this.roomDataService.verifyRoomAvailabilityByFilters(room, filters)) {
-            return room;
+      if (filters.minPersons != null) {
+        this.rooms.forEach(room=>{
+          if(room.maxPersons==filters.minPersons){
+            this.displayedRooms.push(room);
           }
-        } else {
-          console.log(room);
-          console.log(this.roomDataService.verifyRoomAvailabilityByFilters(room, filters))
-          if (this.roomDataService.verifyRoomAvailabilityByFilters(room, filters)) {
-            return room;
-          }
-        }
+        })
+      }else{
+        this.displayedRooms=<RoomModel[]>this.rooms;
       }
-      );
     }
-
   }
 
   createBooking(booking: any) {

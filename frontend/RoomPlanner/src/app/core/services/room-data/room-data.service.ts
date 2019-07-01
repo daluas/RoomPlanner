@@ -34,35 +34,36 @@ export class RoomDataService {
     // }
 
 
-    // var res = this.httpClient.get(`${this.backendUrl}/rooms/filters`, { params: params });
+    // var result = new Promise(this.httpClient.get(`${this.backendUrl}/rooms/filters`, { params: params });
 
+    // return new Promise(res => { return res(result); })
 
     var res =
       `[
       {
         "id": 4,
-        "email": "neverland@yahoo.com",
+        "email": "wonderland@yahoo.com",
         "type": "ROOM",
         "reservations":[
           {
             "id": 4,
-            "roomId": 4,
+            "roomId": 2,
             "personEmail": "sghitun@yahoo.com",
-            "startDate": "2019-06-28T09:00:00.000+0000",
-            "endDate": "2019-06-28T12:00:00.000+0000",
+            "startDate": "2019-07-01T09:00:00.000+0000",
+            "endDate": "2019-07-01T12:00:00.000+0000",
             "description": "Retro meeting"
           },
           {
             "id": 5,
-            "roomId": 4,
+            "roomId": 2,
             "personEmail": "sghitun@yahoo.com",
-            "startDate": "2019-06-27T14:00:00.000+0000",
-            "endDate": "2019-06-27T15:30:00.000+0000",
+            "startDate": "2019-07-01T14:00:00.000+0000",
+            "endDate": "2019-07-01T15:30:00.000+0000",
             "description": "Retro meeting"
           }
         ] ,
-        "name": "Neverland",
-        "floor": 4,
+        "name": "Wonderland",
+        "floor": 5,
         "maxPersons": 14
       },
       {
@@ -74,21 +75,21 @@ export class RoomDataService {
             "id": 4,
             "roomId":12,
             "personEmail": "sghitun@yahoo.com",
-            "startDate": "2019-06-28T09:00:00.000+0000",
-            "endDate": "2019-06-28T12:00:00.000+0000",
+            "startDate": "2019-07-02T09:00:00.000+0000",
+            "endDate": "2019-07-02T12:00:00.000+0000",
             "description": "Retro meeting"
           },
           {
             "id": 5,
             "roomId": 12,
             "personEmail": "sghitun@yahoo.com",
-            "startDate": "2019-06-27T12:00:00.000+0000",
-            "endDate": "2019-06-27T14:00:00.000+0000",
+            "startDate": "2019-07-01T12:00:00.000+0000",
+            "endDate": "2019-07-01T14:00:00.000+0000",
             "description": "Retro meeting"
           }
         ] ,
         "name": "roomNew",
-        "floor": 4,
+        "floor": 5,
         "maxPersons":20
       }
     ]`
@@ -127,7 +128,7 @@ export class RoomDataService {
     return new Promise(res => { return res(roomArray); })
   }
 
-  getFloors(): FloorModel[] {
+  getFloors(): Promise<FloorModel[]> {
     console.log("getFloors() was called!");
 
     var rez =
@@ -217,7 +218,11 @@ export class RoomDataService {
       }))
     });
 
-    return floorArray;
+    // return floorArray;
+
+    return new Promise((resolve, reject)=>{
+      resolve(floorArray);
+    })
   }
 
   getSingleFloor(floorId: number): Promise<FloorModel> {
@@ -237,16 +242,16 @@ export class RoomDataService {
               "id": 4,
               "roomId": 2,
               "personEmail": "sghitun@yahoo.com",
-              "startDate": "2019-06-28T09:00:00.000+0000",
-              "endDate": "2019-06-28T12:00:00.000+0000",
+              "startDate": "2019-07-01T09:00:00.000+0000",
+              "endDate": "2019-07-01T12:00:00.000+0000",
               "description": "Retro meeting"
             },
             {
               "id": 5,
               "roomId": 2,
               "personEmail": "sghitun@yahoo.com",
-              "startDate": "2019-06-27T14:00:00.000+0000",
-              "endDate": "2019-06-27T15:30:00.000+0000",
+              "startDate": "2019-07-01T14:00:00.000+0000",
+              "endDate": "2019-07-01T15:30:00.000+0000",
               "description": "Retro meeting"
             }
           ],
@@ -307,6 +312,16 @@ export class RoomDataService {
 
   }
 
+  getRoom(room:RoomModel){
+    this.getSingleFloor(room.floor).then((floor) => {
+      floor.rooms.forEach(r => {
+        if (r.name == room.name) {
+          return r;
+        }
+      })
+    })
+  }
+
 
   verifyRoomAvailabilityByFilters(room: RoomModel, filters: Filters) {
 
@@ -314,7 +329,7 @@ export class RoomDataService {
 
     room.reservations.forEach(res => {
       console.log(res.startDate, res.endDate);
-      if (this.isValueInOpenInterval(res.startDate, filters.startDate, filters.endDate)) {
+      if (this.isValueInInterval(res.startDate, filters.startDate, filters.endDate)) {
         status = false;
       }
 
@@ -325,15 +340,17 @@ export class RoomDataService {
       if (this.isValueInOpenInterval(filters.startDate, res.startDate, res.endDate)) {
         status = false;
       }
-
-      // if (res.startDate.getTime() != filters.startDate.getTime() && res.endDate.getTime() != filters.endDate.getTime()) {
-      //   return true;
-      // }
     })
     return status;
   }
 
 
+  isValueInInterval(value, start, end) {
+    if (value >= start && value < end) {
+      return true;
+    }
+    return false;
+  }
   isValueInOpenInterval(value, start, end) {
     if (value > start && value < end) {
       return true;

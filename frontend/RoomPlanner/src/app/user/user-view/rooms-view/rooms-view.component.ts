@@ -193,15 +193,15 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
 
   setStyleForPastTime() {
     if (this.forDate) {
-      let forDate = new Date(this.forDate.setHours(0, 0, 0, 0)).getTime();
+      // let forDate = new Date(this.forDate.setHours(0, 0, 0, 0)).getTime();
       let today = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
       let style = "height: 0px";
 
-      if (forDate < today) {
+      if (this.forDate.getTime() < today) {
         style = "height: 2400px";
       }
 
-      if (forDate === today) {
+      if (this.forDate.getTime() === today) {
         let now = new Date();
         style = `height: ${now.getHours() * 100 + now.getMinutes() * 10 / 6}px`
       }
@@ -211,11 +211,11 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   newBooking(roomIndex, intervalIndex) {
-    let forDate = new Date(this.forDate.setHours(0, 0, 0, 0)).getTime();
+    //let forDate = new Date(this.forDate.setHours(0, 0, 0, 0)).getTime();
     let today = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
     let nowIntervals = new Date().getHours() * 2 + (new Date().getMinutes() < 30 ? 0 : 1);
 
-    if (intervalIndex < 48 && (forDate > today || forDate === today && intervalIndex >= nowIntervals)) {
+    if (intervalIndex < 48 && (this.forDate.getTime() > today || this.forDate.getTime()  === today && intervalIndex >= nowIntervals)) {
       this.newBookingRoomIndex = roomIndex;
       this.personalBookingsDisplayedHalf = this.shouldBeDisplayedHalf();
 
@@ -257,7 +257,7 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
 
     let arrowsStartTime, arrowsEndTime;
 
-    let forDate = new Date(this.forDate.setHours(0, 0, 0, 0)).getTime();
+    //let forDate = new Date(this.forDate.setHours(0, 0, 0, 0)).getTime();
     let today = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
     let now = new Date().setHours(new Date().getHours(), (new Date().getMinutes() < 30 ? 0 : 30), 0, 0);
 
@@ -265,24 +265,24 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
       arrowsStartTime = this.newBookingArrowsStartDate.getTime() + event.movementY * 60 * 60 * 10;
       arrowsEndTime = this.newBookingArrowsEndDate.getTime();
 
-      if (arrowsStartTime < forDate) {
-        arrowsStartTime = forDate;
+      if (arrowsStartTime < this.forDate.getTime() ) {
+        arrowsStartTime = this.forDate.getTime() ;
       }
 
       if (arrowsStartTime < now) {
         arrowsStartTime = now;
       }
 
-      if (arrowsStartTime > forDate + 23 * 60 * 60 * 1000 + 1000 * 60 * 30) {
-        arrowsStartTime = forDate + 23 * 60 * 60 * 1000 + 1000 * 60 * 30;
+      if (arrowsStartTime > this.forDate.getTime()  + 23 * 60 * 60 * 1000 + 1000 * 60 * 30) {
+        arrowsStartTime = this.forDate.getTime()  + 23 * 60 * 60 * 1000 + 1000 * 60 * 30;
       }
 
       if (arrowsEndTime - arrowsStartTime < 1000 * 60 * 30) {
         arrowsEndTime = arrowsStartTime + 1000 * 60 * 30;
       }
 
-      if (arrowsEndTime > forDate + 24 * 60 * 60 * 1000) {
-        arrowsEndTime = forDate + 24 * 60 * 60 * 1000;
+      if (arrowsEndTime > this.forDate.getTime()  + 24 * 60 * 60 * 1000) {
+        arrowsEndTime = this.forDate.getTime()  + 24 * 60 * 60 * 1000;
       }
     }
 
@@ -290,36 +290,36 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
       arrowsStartTime = this.newBookingArrowsStartDate.getTime();
       arrowsEndTime = this.newBookingArrowsEndDate.getTime() + event.movementY * 60 * 60 * 10;
 
-      if (arrowsEndTime > forDate + 24 * 60 * 60 * 1000) {
-        arrowsEndTime = forDate + 24 * 60 * 60 * 1000;
+      if (arrowsEndTime > this.forDate.getTime()  + 24 * 60 * 60 * 1000) {
+        arrowsEndTime = this.forDate.getTime()  + 24 * 60 * 60 * 1000;
       }
 
-      if (arrowsEndTime < forDate + 30 * 60 * 1000) {
-        arrowsEndTime = forDate + 30 * 60 * 1000;
+      if (arrowsEndTime < this.forDate.getTime()  + 30 * 60 * 1000) {
+        arrowsEndTime = this.forDate.getTime()  + 30 * 60 * 1000;
       }
 
       if (arrowsEndTime - arrowsStartTime < 1000 * 60 * 30) {
         arrowsStartTime = arrowsEndTime - 1000 * 60 * 30;
       }
 
-      if (arrowsStartTime < forDate) {
-        arrowsStartTime = forDate;
+      if (arrowsStartTime < this.forDate.getTime() ) {
+        arrowsStartTime = this.forDate.getTime() ;
       }
 
       if (arrowsStartTime < now) {
         arrowsStartTime = now;
       }
 
-      if (arrowsStartTime > forDate + 23 * 60 * 60 * 1000 + 1000 * 60 * 30) {
-        arrowsStartTime = forDate + 23 * 60 * 60 * 1000 + 1000 * 60 * 30;
+      if (arrowsStartTime > this.forDate.getTime()  + 23 * 60 * 60 * 1000 + 1000 * 60 * 30) {
+        arrowsStartTime = this.forDate.getTime()  + 23 * 60 * 60 * 1000 + 1000 * 60 * 30;
       }
 
       if (arrowsEndTime - arrowsStartTime < 1000 * 60 * 30) {
         arrowsEndTime = arrowsStartTime + 1000 * 60 * 30;
       }
 
-      if (arrowsEndTime > forDate + 24 * 60 * 60 * 1000) {
-        arrowsEndTime = forDate + 24 * 60 * 60 * 1000;
+      if (arrowsEndTime > this.forDate.getTime()  + 24 * 60 * 60 * 1000) {
+        arrowsEndTime = this.forDate.getTime()  + 24 * 60 * 60 * 1000;
       }
     }
 
@@ -327,24 +327,24 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
       arrowsStartTime = this.newBookingArrowsStartDate.getTime() + event.movementY * 60 * 60 * 10;
       arrowsEndTime = this.newBookingArrowsEndDate.getTime() + event.movementY * 60 * 60 * 10;
 
-      if (arrowsStartTime < forDate) {
-        arrowsStartTime = forDate;
+      if (arrowsStartTime < this.forDate.getTime() ) {
+        arrowsStartTime = this.forDate.getTime() ;
       }
 
       if (arrowsStartTime < now) {
         arrowsStartTime = now;
       }
 
-      if (arrowsStartTime > forDate + 23 * 60 * 60 * 1000 + 1000 * 60 * 30) {
-        arrowsStartTime = forDate + 23 * 60 * 60 * 1000 + 1000 * 60 * 30;
+      if (arrowsStartTime > this.forDate.getTime()  + 23 * 60 * 60 * 1000 + 1000 * 60 * 30) {
+        arrowsStartTime = this.forDate.getTime()  + 23 * 60 * 60 * 1000 + 1000 * 60 * 30;
       }
 
       if (arrowsEndTime - arrowsStartTime < 1000 * 60 * 30) {
         arrowsEndTime = arrowsStartTime + 1000 * 60 * 30;
       }
 
-      if (arrowsEndTime > forDate + 24 * 60 * 60 * 1000) {
-        arrowsEndTime = forDate + 24 * 60 * 60 * 1000;
+      if (arrowsEndTime > this.forDate.getTime()  + 24 * 60 * 60 * 1000) {
+        arrowsEndTime = this.forDate.getTime()  + 24 * 60 * 60 * 1000;
       }
     }
 
