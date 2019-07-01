@@ -143,7 +143,7 @@ public class ReservationControllerTest {
                 .content(jsonReservationDto)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
     }
 
@@ -163,7 +163,7 @@ public class ReservationControllerTest {
                 .content(jsonReservationDto)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
     }
 

@@ -39,7 +39,6 @@ public class AvailabilityValidator implements BookingValidator {
 
     }
 
-
     private Boolean areNonAvailableReservationForSameUser(List<ReservationEntity> nonAvailableReservations,
                                                           ReservationEntity currentReservationEntity) {
         Long currentReservationPersonId = currentReservationEntity.getPerson().getId();
