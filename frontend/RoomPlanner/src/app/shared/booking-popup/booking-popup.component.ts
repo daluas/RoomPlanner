@@ -64,6 +64,8 @@ export class BookingPopupComponent implements OnInit {
   }
    
   startDateValidation(val) {
+    this.booking.startDate=val.value;
+    console.log('start date :'+this.booking.startDate);
     if (val.value.getDate() > this.booking.endDate.getDate()) {
       this.status = true;
     }
@@ -72,6 +74,7 @@ export class BookingPopupComponent implements OnInit {
     }
   }
   endDateValidation(val) {
+    this.booking.endDate=val.value;
     if (val.value.getDate() < this.booking.startDate.getDate()) {
       this.status = true;
     }
@@ -79,9 +82,17 @@ export class BookingPopupComponent implements OnInit {
       this.status = false;
     }
   }
-
+  getDescription(desc){
+    this.booking.description=desc.value;
+  }
+  onStartHourEmit(event){
+    this.booking.startDate.setHours(event.getHours(), event.getMinutes());
+  }
+  onEndHourEmit(event){
+    this.booking.endDate.setHours(event.getHours(), event.getMinutes());
+  }
   createBookingTest() {
-
+   
     this.bookingService.createNewBooking(this.booking).then((bookingRes) => {     
       let res = JSON.parse(bookingRes);
       if (res.id) {
@@ -186,5 +197,5 @@ export class BookingPopupComponent implements OnInit {
       this.closePopup.emit(true);
     }
   }
-
+  
 }

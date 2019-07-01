@@ -28,14 +28,14 @@
   </div> 
 
   <div class="hours">
-      <app-hour-input-booking [(booking)]="booking" (hourEmitter)="onHourEmit($event)" (statusMessage)="getPrevalidationMessage($event)" (disableBookButton)="getStatusOfBookButton($event)"></app-hour-input-booking>
+      <app-hour-input-booking [(booking)]="booking" (startHourEmitter)="onStartHourEmit($event)" (endHourEmitter)="onEndHourEmit($event)" (statusMessage)="getPrevalidationMessage($event)" (disableBookButton)="getStatusOfBookButton($event)"></app-hour-input-booking>
   </div>
 
   <mat-error class="errorMessage" *ngIf="status">Start date is bigger than end date</mat-error> 
 
   <div class="descriptionBox">
     <div class="dateTitle">Notes:</div>
-    <textarea class="descriptionContent" [value]="booking.description"> </textarea>
+    <textarea class="descriptionContent" [(value)]="booking.description" #desc (change) = "getDescription(desc)"> </textarea>
   </div>
 
   <div>

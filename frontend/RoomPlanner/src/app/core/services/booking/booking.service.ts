@@ -20,7 +20,7 @@ export class BookingService {
     let email = booking.personalEmail;
 
     // return this.httpClient.get(`${this.backendUrl}/api/prevalidation?roomId=${roomID}&startDate=${startDate}&endDate=${startDate}&email=${email}`).toPromise();
-
+    console.log("prevalidation "+booking.startDate, booking.endDate, booking.personalEmail);
     return new Promise((res) => {
       // caz de succes
       res("You can book");
@@ -44,7 +44,7 @@ export class BookingService {
       endDate: booking.endDate.toJSON(),
       description: booking.description,
     }
-
+    console.log("params in service:" +params.description);
     // return this.httpClient.post(`${this.backendUrl}/api/reservations/${roomID}`, params).toPromise();
 
     return new Promise((res) => {
