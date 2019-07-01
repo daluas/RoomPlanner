@@ -156,9 +156,38 @@ public class FloorRestControllerTest {
     }
 
     @Test
-    public void shouldReturnUnauthorizedWhenGetUsersIsCalledByARoom() throws Exception {
+    public void shouldReturnResponseEntityWithStatusUnauthorizedWhenGetUsersIsCalledByARoom() throws Exception {
+
         mockMvc.perform(MockMvcRequestBuilders.get("/api/floors", 1).with(roomBearerToken))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
+    @Test
+    public void shouldReturnResponseEntityWithRequestedFloorAndStatusFoundWhenCalledByUser() throws Exception {
+
+        UserDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
+                new HashSet<ReservationDto>(), 5, 14, UserType.ROOM);
+        Set<RoomDto> firstRoom = new HashSet<>();
+        firstRoom.add((RoomDto) roomDtoOne);
+        FloorDto floorDtoOne = BuildersWrapper.buildFloorDtoWithRooms(1L, 5, firstRoom);
+        String jsonFloorDto = new ObjectMapper().writeValueAsString(floorDtoOne);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/floors/5").with(bearerToken))
+                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.content().string(jsonFloorDto));
+    }
+
+    @Test
+    public void shouldReturnResponseEntityWithStatusForbiddenWhenCalledByRoom() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/floors/5").with(roomBearerToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    public void shouldReturnResponseEntityWithStatusNotFoundWhenFloorDoesNotExistWhenCalledByUser() throws Exception{
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/floors/7").with(bearerToken))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 }

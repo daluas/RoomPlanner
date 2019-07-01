@@ -35,6 +35,22 @@ public class FloorDtoMapperImpl implements FloorDtoMapper {
     }
 
     @Override
+    public FloorDto mapEntityToDtoWithReservations(FloorEntity floorEntity) {
+
+        if(floorEntity == null){
+            return new FloorDto();
+        }
+
+        Set<RoomDto> roomsDto = mapRoomEntityListToRoomDtoListWithReservations(floorEntity.getRooms());
+
+        return new FloorDtoBuilder()
+                .withId(floorEntity.getId())
+                .withFloor(floorEntity.getFloor())
+                .withRooms(roomsDto)
+                .build();
+    }
+
+    @Override
     public List<FloorDto> mapEntityListToDtoList(List<FloorEntity> roomEntityList) {
         List<FloorDto> floorsDto = new ArrayList<>();
         for (FloorEntity floorEntity : roomEntityList) {
