@@ -17,4 +17,5 @@ public class TokenParserServiceImpl implements TokenParserService {
             return ((UserDetails) email).getUsername();
         return (String) email;
     }
+
 }

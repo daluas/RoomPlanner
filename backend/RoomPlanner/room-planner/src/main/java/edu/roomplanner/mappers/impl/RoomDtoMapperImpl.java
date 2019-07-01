@@ -77,5 +77,4 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
                 .build();
     }
 
-
 }

@@ -6,8 +6,10 @@ import java.util.Calendar;
 
 @Data
 public class FilterDto {
+
     Calendar startDate;
     Calendar endDate;
     Integer minPersons;
     Integer floor;
+
 }

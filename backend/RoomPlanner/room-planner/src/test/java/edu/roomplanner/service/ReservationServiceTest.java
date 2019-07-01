@@ -22,7 +22,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Calendar;
 import java.util.HashSet;
-import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 

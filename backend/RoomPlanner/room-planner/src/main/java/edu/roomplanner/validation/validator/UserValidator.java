@@ -5,4 +5,5 @@ public interface UserValidator {
     boolean checkValidRoomId(Long id);
 
     boolean checkValidRoomEmail(String email);
+
 }

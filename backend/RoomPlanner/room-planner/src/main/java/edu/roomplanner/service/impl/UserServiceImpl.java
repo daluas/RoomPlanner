@@ -8,6 +8,7 @@ import edu.roomplanner.entity.PersonEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.exception.RoomNotFoundException;
 import edu.roomplanner.exception.UserNotFoundException;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.mappers.RoomDtoMapper;
@@ -57,35 +58,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public RoomDto getRoomById(Long id) {
-        RoomDto roomDto = null;
         if (userValidator.checkValidRoomId(id)) {
             RoomEntity userEntity = (RoomEntity) userRepository.findById(id)
                     .orElseThrow(() -> new UserNotFoundException("User not found"));
             Set<ReservationEntity> updatedReservationEntities = updateReservationDescription(userEntity.getReservations());
             userEntity.setReservations(updatedReservationEntities);
-            roomDto = roomDtoMapper.mapEntityToDto(userEntity);
+            return roomDtoMapper.mapEntityToDto(userEntity);
         }
-        return roomDto;
+        throw new RoomNotFoundException("Invalid room id! Not found!");
     }
 
     @Override
     public RoomDto getRoomByEmail(String email) {
-        RoomDto roomDto = null;
         if (userValidator.checkValidRoomEmail(email)) {
             UserEntity userEntity = userRepository.findByEmail(email).get();
-            roomDto = roomDtoMapper.mapEntityToDto((RoomEntity) userEntity);
+            return roomDtoMapper.mapEntityToDto((RoomEntity) userEntity);
         }
-        return roomDto;
+
+        throw new RoomNotFoundException("Invalid room email! Not found!");
     }
 
     @Override
-    public Optional<UserDto> getUserDto(String email) {
+    public UserDto getUserDto(String email) {
         Optional<UserEntity> userEntity = userRepository.findByEmail(email);
         if (userEntity.isPresent()) {
-            UserDto userDto = buildUserDto(userEntity.get());
-            return Optional.of(userDto);
+            return buildUserDto(userEntity.get());
         }
-        return Optional.empty();
+        throw new UserNotFoundException("Invalid user email! Not found!");
     }
 
     @Override
@@ -101,7 +100,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<RoomDto> getRoomsByFilters(Calendar startDate, Calendar endDate, Integer minPersons, Integer floor) {
         Calendar currentDate = Calendar.getInstance();
-        conversionToGmt(currentDate.getTime());
+
         List<UserEntity> userEntityList;
         if (durationBetween(startDate, currentDate) > 0) {
             userEntityList = userRepository.viewByFields(startDate, endDate);
@@ -124,18 +123,6 @@ public class UserServiceImpl implements UserService {
 
     private Long durationBetween(Calendar startDate, Calendar endDate) {
         return TimeUnit.MINUTES.convert(endDate.getTime().getTime() - startDate.getTime().getTime(), TimeUnit.MILLISECONDS);
-    }
-
-    private Date conversionToGmt(Date date) {
-        TimeZone tz = TimeZone.getDefault();
-        Date ret = new Date(date.getTime() - tz.getRawOffset());
-        if (tz.inDaylightTime(ret)) {
-            Date dstDate = new Date(ret.getTime() - tz.getDSTSavings());
-            if (tz.inDaylightTime(dstDate)) {
-                ret = dstDate;
-            }
-        }
-        return ret;
     }
 
     private Long getLoggedUserId() {

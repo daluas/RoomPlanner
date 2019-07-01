@@ -5,4 +5,5 @@ public interface UserRightsValidator {
     boolean checkIfUserIsRoom();
 
     boolean checkIfLoggedRoomIsRequestedRoom(Long id);
+
 }

@@ -24,8 +24,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Api(value = "RoomPlanner API", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -44,7 +44,6 @@ public class UserRestController {
     @Autowired
     private RoomDtoMapper roomDtoMapper;
 
-
     @Autowired
     public UserRestController(UserService userService, UserRightsValidator userRightsValidator, TokenParserService tokenParserService) {
         this.userService = userService;
@@ -58,11 +57,13 @@ public class UserRestController {
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error")})
     ResponseEntity<List<RoomDto>> getAllRooms() {
+
+        LOGGER.info("Method was called.");
         if (userRightsValidator.checkIfUserIsRoom()) {
             RoomDto roomDto = userService.getRoomByEmail(tokenParserService.getEmailFromToken());
-            return new ResponseEntity(roomDto, HttpStatus.FOUND);
+            return new ResponseEntity<>(Collections.singletonList(roomDto), HttpStatus.FOUND);
         }
-        LOGGER.info("Method was called.");
+
         List<RoomDto> allRooms = userService.getAllRooms();
         LOGGER.info("The following object was returned:" + allRooms);
         return new ResponseEntity<>(allRooms, HttpStatus.FOUND);
@@ -75,15 +76,15 @@ public class UserRestController {
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error.")})
     ResponseEntity<RoomDto> getRoomById(@PathVariable Long id) {
+
         LOGGER.info("Method was called.");
         RoomDto roomDto = userService.getRoomById(id);
         LOGGER.info("The following object was returned: " + roomDto);
+
         if (userRightsValidator.checkIfUserIsRoom() && !userRightsValidator.checkIfLoggedRoomIsRequestedRoom(id)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        if (roomDto == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+
         return new ResponseEntity<>(roomDto, HttpStatus.FOUND);
     }
 
@@ -94,13 +95,16 @@ public class UserRestController {
             @ApiResponse(code = 500, message = "Internal server error.")})
     @PreAuthorize("hasAuthority('person') or hasAuthority('room')")
     public ResponseEntity<UserDto> getUserEmailType(@RequestParam(name = "email") String email) {
-        Optional<UserDto> userEmailTypeDtoOptional = userService.getUserDto(email);
+
+        LOGGER.info("Method was called.");
+        UserDto userEmailTypeDto = userService.getUserDto(email);
+        LOGGER.info("The following object was returned: " + userEmailTypeDto);
+
         if (userRightsValidator.checkIfUserIsRoom()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        return userEmailTypeDtoOptional.
-                map(userEmailTypeDto -> new ResponseEntity<>(userEmailTypeDto, HttpStatus.OK)).
-                orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+        return new ResponseEntity<>(userEmailTypeDto, HttpStatus.OK);
     }
 
 
@@ -114,7 +118,12 @@ public class UserRestController {
                                                            @RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar endDate,
                                                            @RequestParam(required = false) Integer minPersons,
                                                            @RequestParam(required = false) Integer floor) {
+
+        LOGGER.info("Method was called.");
         List<RoomDto> filteredRooms = userService.getRoomsByFilters(startDate, endDate, minPersons, floor);
+        LOGGER.info("The following object was returned: " + filteredRooms);
+
         return new ResponseEntity<>(filteredRooms, HttpStatus.FOUND);
     }
+
 }
