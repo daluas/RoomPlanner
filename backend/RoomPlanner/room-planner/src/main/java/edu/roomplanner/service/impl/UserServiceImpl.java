@@ -105,8 +105,7 @@ public class UserServiceImpl implements UserService {
         List<UserEntity> userEntityList;
         if (durationBetween(startDate, currentDate) > 0) {
             userEntityList = userRepository.viewByFields(startDate, endDate);
-        }
-        else {
+        } else {
             userEntityList = userRepository.filterByFields(startDate, endDate, minPersons, floor);
         }
         userEntityList = userEntityList.stream().distinct().collect(Collectors.toList());

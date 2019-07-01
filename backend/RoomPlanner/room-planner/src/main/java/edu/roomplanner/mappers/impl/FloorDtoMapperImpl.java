@@ -37,7 +37,7 @@ public class FloorDtoMapperImpl implements FloorDtoMapper {
     @Override
     public FloorDto mapEntityToDtoWithReservations(FloorEntity floorEntity) {
 
-        if(floorEntity == null){
+        if (floorEntity == null) {
             return new FloorDto();
         }
 

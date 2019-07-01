@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
 import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.entity.*;
+import edu.roomplanner.mappers.ReservationDtoMapper;
+import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,17 +27,23 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.TimeZone;
 
 @RunWith(SpringRunner.class)
+@Transactional
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = RoomPlannerApplication.class
 )
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-test.properties")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ReservationControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -42,10 +52,19 @@ public class ReservationControllerTest {
     private Flyway flyway;
 
     @Autowired
-    private OAuthHelper oAuthHelper;
+    private ReservationRepository reservationRepository;
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ReservationDtoMapper reservationDtoMapper;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Autowired
+    private OAuthHelper oAuthHelper;
 
     private RequestPostProcessor bearerToken;
 
@@ -56,12 +75,39 @@ public class ReservationControllerTest {
         flyway.clean();
         flyway.migrate();
 
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(5L, "testEmail@yahoo.com", "test", null, UserType.PERSON, "Test", "Name");
-        userRepository.save(userEntityPerson);
-
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
 
         bearerTokenTest = oAuthHelper.addBearerToken("testEmail@yahoo.com", "person");
+
+        Calendar startDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        Calendar endDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        startDate.set(2019, Calendar.AUGUST, 6, 7, 10, 0);
+        startDate.set(Calendar.MILLISECOND, 0);
+        endDate.set(2019, Calendar.AUGUST, 6, 7, 45, 0);
+        endDate.set(Calendar.MILLISECOND, 0);
+
+        reservationRepository.deleteAll();
+        userRepository.deleteAll();
+
+        entityManager.createNativeQuery("ALTER SEQUENCE seq_user_id RESTART WITH 1").executeUpdate();
+        entityManager.createNativeQuery("ALTER SEQUENCE seq_reservation_id RESTART WITH 1").executeUpdate();
+
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun",
+                new HashSet<>(), UserType.PERSON, "Stefania", "Ghitun");
+        userRepository.save(userEntityPerson);
+
+        UserEntity personEntity = BuildersWrapper.buildPersonEntity(2L, "marius@yahoo.com", "marius",
+                new HashSet<>(), UserType.PERSON, "parasca", "marius");
+        userRepository.save(personEntity);
+
+        FloorEntity floorEntity = BuildersWrapper.buildFloorEntity(1L, 5);
+
+        UserEntity roomEntity = BuildersWrapper.buildRoomEntity(3L, "wonderland@yahoo.com", "wonderland",
+                new HashSet<>(), floorEntity, UserType.ROOM, "Wonderland", 4);
+        userRepository.save(roomEntity);
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, personEntity,
+                roomEntity, "ok");
+        reservationRepository.save(reservationEntity);
     }
 
     @Test
@@ -71,11 +117,11 @@ public class ReservationControllerTest {
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
-        startDate.set(2019, Calendar.JANUARY, 6, 10, 10, 0);
-        endDate.set(2019, Calendar.JANUARY, 6, 10, 45, 0);
-        ReservationDto reservationDto = BuildersWrapper.buildReservationDto(1L, 2L, "sghitun@yahoo.com", startDate, endDate, "description");
+        startDate.set(2019, Calendar.AUGUST, 6, 10, 10, 0);
+        endDate.set(2019, Calendar.AUGUST, 6, 10, 45, 0);
+        ReservationDto reservationDto = BuildersWrapper.buildReservationDto(1L, 3L, "marius@yahoo.com", startDate, endDate, "description");
         String jsonReservationDto = new ObjectMapper().setDateFormat(dateFormat).writeValueAsString(reservationDto);
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/reservations/{room_id}", 2)
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/reservations/{room_id}", 3)
                 .with(bearerToken)
                 .content(jsonReservationDto)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -101,7 +147,7 @@ public class ReservationControllerTest {
                 .content(jsonReservationDto)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
     }
 
@@ -121,7 +167,32 @@ public class ReservationControllerTest {
                 .content(jsonReservationDto)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+    }
+
+
+    @Test
+    public void shouldReturnBadRequestWhenPostReservationThatIsAlreadyBooked() throws Exception {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.000Z");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        startDate.set(2019, Calendar.AUGUST, 6, 10, 10, 0);
+        startDate.set(Calendar.MILLISECOND, 0);
+        endDate.set(2019, Calendar.AUGUST, 6, 10, 45, 0);
+        endDate.set(Calendar.MILLISECOND, 0);
+        ReservationDto reservationDto = BuildersWrapper.buildReservationDto(1L, null, "sghitun@yahoo.com",
+                startDate, endDate, "description");
+
+        String jsonReservationDto = new ObjectMapper().setDateFormat(dateFormat).writeValueAsString(reservationDto);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/reservations/{room_id}", 3)
+                .with(bearerToken)
+                .content(jsonReservationDto)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
     }
 
@@ -134,14 +205,35 @@ public class ReservationControllerTest {
 
     @Test
     public void shouldReturnNotFoundWhenReservationIsDeletedForAnotherUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations?reservation=11")
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun",
+                new HashSet<>(), UserType.PERSON, "Stefania", "Ghitun");
+        FloorEntity floorEntity = BuildersWrapper.buildFloorEntity(1L, 5);
+        UserEntity roomEntity = BuildersWrapper.buildRoomEntity(3L, "wonderland@yahoo.com", "wonderland",
+                new HashSet<>(), floorEntity, UserType.ROOM, "Wonderland", 4);
+        UserEntity userEntityPersonOne = BuildersWrapper.buildPersonEntity(5L, "testEmail@yahoo.com", "test", null, UserType.PERSON, "Test", "Name");
+        ReservationEntity reservationEntityTwo = BuildersWrapper.buildReservationEntity(2L, Calendar.getInstance(), Calendar.getInstance(), userEntityPerson,
+                roomEntity, "ReservationToBeDeleted");
+        reservationRepository.save(reservationEntityTwo);
+        userRepository.save(userEntityPersonOne);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations?reservation=2")
                 .with(bearerTokenTest))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
     public void shouldDeleteReservation() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations?reservation=11")
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun",
+                new HashSet<>(), UserType.PERSON, "Stefania", "Ghitun");
+        FloorEntity floorEntity = BuildersWrapper.buildFloorEntity(1L, 5);
+        UserEntity roomEntity = BuildersWrapper.buildRoomEntity(3L, "wonderland@yahoo.com", "wonderland",
+                new HashSet<>(), floorEntity, UserType.ROOM, "Wonderland", 4);
+        UserEntity userEntityPersonOne = BuildersWrapper.buildPersonEntity(5L, "testEmail@yahoo.com", "test", null, UserType.PERSON, "Test", "Name");
+        ReservationEntity reservationEntityTwo = BuildersWrapper.buildReservationEntity(2L, Calendar.getInstance(), Calendar.getInstance(), userEntityPerson,
+                roomEntity, "ReservationToBeDeleted");
+        reservationRepository.save(reservationEntityTwo);
+        userRepository.save(userEntityPersonOne);
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations?reservation=2")
                 .with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
