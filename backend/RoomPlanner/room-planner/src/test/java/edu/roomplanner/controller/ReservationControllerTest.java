@@ -3,6 +3,9 @@ package edu.roomplanner.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
 import edu.roomplanner.dto.ReservationDto;
+import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.repository.UserRepository;
+import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
 import edu.roomplanner.util.OAuthHelper;
 import org.flywaydb.core.Flyway;
@@ -41,14 +44,24 @@ public class ReservationControllerTest {
     @Autowired
     private OAuthHelper oAuthHelper;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private RequestPostProcessor bearerToken;
+
+    private RequestPostProcessor bearerTokenTest;
 
     @Before
     public void init() {
         flyway.clean();
         flyway.migrate();
 
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(5L, "testEmail@yahoo.com", "test", null, UserType.PERSON, "Test", "Name");
+        userRepository.save(userEntityPerson);
+
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
+
+        bearerTokenTest = oAuthHelper.addBearerToken("testEmail@yahoo.com", "person");
     }
 
     @Test
@@ -112,4 +125,24 @@ public class ReservationControllerTest {
 
     }
 
+    @Test
+    public void shouldReturnNotFoundWhenReservationIdIsInvalid() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations?reservation=20")
+                .with(bearerToken))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void shouldReturnNotFoundWhenReservationIsDeletedForAnotherUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations?reservation=11")
+                .with(bearerTokenTest))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void shouldDeleteReservation() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations?reservation=11")
+                .with(bearerToken))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }

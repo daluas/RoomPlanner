@@ -1,11 +1,14 @@
 package edu.roomplanner.service;
 
+import edu.roomplanner.builders.ReservationEntityBuilder;
+import edu.roomplanner.builders.UserEntityBuilder;
 import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
+import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.impl.ReservationServiceImpl;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
@@ -16,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Calendar;
@@ -26,6 +30,11 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 public class ReservationServiceTest {
+
+    @Mock
+    private TokenParserService tokenParserService;
+    @Mock
+    private UserRepository userRepository;
     @Mock
     private ReservationDtoMapper mapperService;
     @Mock
@@ -69,5 +78,58 @@ public class ReservationServiceTest {
         Assert.assertEquals(expectedReservationDto, actualReservationDto);
     }
 
+    @Test
+    public void shouldNotFindValidReservationId() {
+        HttpStatus expected = HttpStatus.NOT_FOUND;
+        Long roomId = 4L;
 
+        when(reservationRepository.findById(roomId)).thenReturn(Optional.empty());
+        HttpStatus actual = sut.deleteReservation(roomId);
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldFindThatAPersonWantsToDeleteOtherUserReservation() {
+        HttpStatus expected = HttpStatus.NOT_FOUND;
+        Long roomId = 4L;
+        String email = "sghitun@yahoo.com";
+
+        when(tokenParserService.getEmailFromToken()).thenReturn(email);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(getPerson(6L)));
+        when(reservationRepository.findById(roomId)).thenReturn(Optional.of(getReservation(5L)));
+        HttpStatus actual = sut.deleteReservation(roomId);
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldDeleteReservation() {
+        HttpStatus expected = HttpStatus.OK;
+        Long roomId = 4L;
+        String email = "sghitun@yahoo.com";
+
+        when(tokenParserService.getEmailFromToken()).thenReturn(email);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(getPerson(6L)));
+        when(reservationRepository.findById(roomId)).thenReturn(Optional.of(getReservation(6L)));
+        HttpStatus actual = sut.deleteReservation(roomId);
+
+        Assert.assertEquals(expected, actual);
+    }
+
+
+    private UserEntity getPerson(Long personId) {
+        return UserEntityBuilder.builder()
+                .withType(UserType.PERSON)
+                .withId(personId)
+                .build();
+    }
+
+    private ReservationEntity getReservation(Long personId) {
+        return ReservationEntityBuilder.builder()
+                .withId(4L)
+                .withPerson(getPerson(personId))
+                .build();
+    }
 }
+
