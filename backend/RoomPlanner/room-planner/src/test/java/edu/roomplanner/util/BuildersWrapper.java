@@ -83,7 +83,6 @@ public class BuildersWrapper {
                 .build();
     }
 
-
     public static ReservationEntity buildReservationEntity(Long id, Calendar startDate, Calendar endDate, String description, UserEntity person, UserEntity room) {
         return ReservationEntityBuilder.builder()
                 .withId(id)
@@ -104,7 +103,7 @@ public class BuildersWrapper {
                 .withEndDate(endDate)
                 .withDescription(description)
                 .build();
-    }
+}
 
     public static ReservationEntity buildReservationEntity(Long id, Calendar startDate, Calendar endDate, UserEntity person, UserEntity room, String description) {
         return new ReservationEntityBuilder()
@@ -116,6 +115,4 @@ public class BuildersWrapper {
                 .withDescription(description)
                 .build();
     }
-
-
 }
