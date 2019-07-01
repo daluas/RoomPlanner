@@ -9,5 +9,7 @@ public interface FloorDtoMapper {
 
     FloorDto mapEntityToDtoWithoutReservations(FloorEntity floorEntity);
 
+    FloorDto mapEntityToDtoWithReservations(FloorEntity floorEntity);
+
     List<FloorDto> mapEntityListToDtoList(List<FloorEntity> floorEntityList);
 }
