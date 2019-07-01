@@ -4,11 +4,13 @@ import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.exception.InvalidReservationDtoException;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.service.impl.ReservationServiceImpl;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
+import edu.roomplanner.validation.BookingChain;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +32,8 @@ public class ReservationServiceTest {
     private ReservationDtoMapper mapperService;
     @Mock
     private ReservationRepository reservationRepository;
+    @Mock
+    private BookingChain bookingChain;
     @InjectMocks
     private ReservationServiceImpl sut;
 
@@ -45,7 +49,7 @@ public class ReservationServiceTest {
         Calendar endDate = Calendar.getInstance();
         startDate.set(2019, Calendar.JANUARY, 6, 10, 10, 0);
         endDate.set(2019, Calendar.JANUARY, 6, 10, 45, 0);
-        Optional<ReservationDto> expectedReservationDto = Optional.of(BuildersWrapper.buildReservationDto(1L, 2L, "sghitun@yahoo.com", startDate, endDate, "description"));
+        ReservationDto expectedReservationDto = BuildersWrapper.buildReservationDto(1L, 2L, "sghitun@yahoo.com", startDate, endDate, "description");
         ReservationDto reservationDto = BuildersWrapper.buildReservationDto(1L, null, "sghitun@yahoo.com", startDate, endDate, "description");
         UserEntity roomEntity = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "4wonD2C%",
                 new HashSet<>(), new FloorEntity(), UserType.ROOM, "Wonderland", 14);
@@ -55,18 +59,16 @@ public class ReservationServiceTest {
         when(mapperService.mapReservationDtoToEntity(reservationDto)).thenReturn(reservationEntity);
         when(reservationRepository.save(reservationEntity)).thenReturn(reservationEntity);
         when(mapperService.mapReservationEntityToDto(reservationEntity)).thenReturn(reservationDto);
-        Optional<ReservationDto> actualReservationDto = sut.createReservation(2L, reservationDto);
+        ReservationDto actualReservationDto = sut.createReservation(2L, reservationDto);
 
         Assert.assertEquals(expectedReservationDto, actualReservationDto);
 
     }
 
-    @Test
-    public void shouldReturnEmptyReservationDtoWhenCreateReservationIsCalledWithEmptyReservationDto() {
-        Optional<ReservationDto> expectedReservationDto = Optional.empty();
+    @Test(expected = InvalidReservationDtoException.class)
+    public void shouldReturnEmptyReservationDtoWhenCreateReservationIsCalledWithEmptyReservationDto() throws Exception {
         ReservationDto reservationDto = new ReservationDto();
-        Optional<ReservationDto> actualReservationDto = sut.createReservation(2L, reservationDto);
-        Assert.assertEquals(expectedReservationDto, actualReservationDto);
+        sut.createReservation(2L, reservationDto);
     }
 
 
