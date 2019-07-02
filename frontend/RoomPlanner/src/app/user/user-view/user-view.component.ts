@@ -45,11 +45,13 @@ export class UserViewComponent implements OnInit {
       floor: null
     });
 
-    this.buildingLayout = <FloorModel[]>await this.roomDataService.getFloors()
-      .catch(error => {
-        console.log(error)
-      });
-
+    await this.roomDataService.getFloors().then((floors)=>{
+      this.buildingLayout = <FloorModel[]>floors;
+    });
+      
+    if(this.buildingLayout == undefined){
+      return;
+    }
     this.buildingLayout.sort(function (a, b) { return a.floor - b.floor });
 
     let firstFloor: FloorModel;
@@ -58,7 +60,7 @@ export class UserViewComponent implements OnInit {
 
     this.previousFilters.floor = firstFloor.floor;
 
-    this.roomDataService.getSingleFloor(firstFloor.floor).then((floor) => {
+    await this.roomDataService.getSingleFloor(firstFloor.floor).then((floor) => {
       this.rooms = <RoomModel[]>floor.rooms;
       this.displayedRooms = <RoomModel[]>floor.rooms;
       console.log("Rooms by default", this.rooms)
@@ -66,12 +68,12 @@ export class UserViewComponent implements OnInit {
 
   }
 
-  updateRoomsBasedOnFilters(filters: Filters) {
+  async updateRoomsBasedOnFilters(filters: Filters) {
 
     console.log("Filters component emited: ", filters);
 
     if (filters.roomSelected != null || filters.roomSelected != undefined) {
-      this.roomDataService.getSingleFloor(filters.roomSelected.floor).then((floor) => {
+      await this.roomDataService.getSingleFloor(filters.roomSelected.floor).then((floor) => {
         floor.rooms.forEach(r => {
           if (r.name == filters.roomSelected.name) {
             this.singleRoomSelected = r;
@@ -85,7 +87,7 @@ export class UserViewComponent implements OnInit {
     }
   }
 
-  checkRoomsBasedOnFilters(filters: Filters) {
+  async checkRoomsBasedOnFilters(filters: Filters) {
 
     console.log("single room", this.singleRoomSelected)
     this.displayedRooms = [];
@@ -94,7 +96,7 @@ export class UserViewComponent implements OnInit {
       this.setDisplayedRooms(filters);
     } else {
       this.rooms = [];
-      this.roomDataService.getRoomsByFilter(filters).then((rooms) => {
+      await this.roomDataService.getRoomsByFilter(filters).then((rooms) => {
         this.rooms = <RoomModel[]>rooms;
         this.setDisplayedRooms(filters)
       })
@@ -116,6 +118,7 @@ export class UserViewComponent implements OnInit {
     this.displayedRooms = [];
     if (this.singleRoomSelected != null) {
       if (this.roomDataService.verifyRoomAvailabilityByFilters(this.singleRoomSelected, filters)) {
+        console.log('blabla')
         this.displayedRooms.push(this.singleRoomSelected);
       }
     } else {
