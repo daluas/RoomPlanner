@@ -69,5 +69,53 @@ public class ReservationServiceTest {
         Assert.assertEquals(expectedReservationDto, actualReservationDto);
     }
 
+    @Test
+    public void shouldReturnReservationDtoWhenUpdateReservationIsCalledWithValidId() {
+
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        Calendar newStartDate = Calendar.getInstance();
+        Calendar newEndDate = Calendar.getInstance();
+        startDate.set(2022, Calendar.JANUARY, 6, 10, 10, 0);
+        endDate.set(2022, Calendar.JANUARY, 6, 10, 45, 0);
+        newStartDate.set(2025, Calendar.JANUARY, 6, 10, 10, 0);
+        newEndDate.set(2025, Calendar.JANUARY, 6, 10, 45, 0);
+
+        ReservationDto expectedReservationDto = BuildersWrapper.buildReservationDto(1L, 2L, "sghitun@yahoo.com", newStartDate, newEndDate, "reservation updated");
+        ReservationDto updatedReservationDto = BuildersWrapper.buildReservationDto(1L, 2L, "sghitun@yahoo.com", newStartDate, newEndDate, "reservation updated");
+        ReservationDto reservationDto = BuildersWrapper.buildReservationDto(null, null, null, newStartDate, newEndDate, "reservation updated");
+
+        UserEntity roomEntity = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "4wonD2C%",
+                new HashSet<>(), new FloorEntity(), UserType.ROOM, "Wonderland", 14);
+        UserEntity personEntity = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "password",
+                new HashSet<>(), UserType.PERSON, "Popescu", "Ana");
+        Optional<ReservationEntity> reservationEntity = Optional.ofNullable(BuildersWrapper.buildReservationEntity(1L, startDate, endDate, personEntity, roomEntity, "description"));
+        ReservationEntity newReservationEntity = BuildersWrapper.buildReservationEntity(1L, newStartDate, newEndDate, personEntity, roomEntity, "reservation updated");
+
+        when(reservationRepository.findById(1L)).thenReturn(reservationEntity);
+        when(reservationRepository.save(reservationEntity.get())).thenReturn(newReservationEntity);
+        when(mapperService.mapReservationEntityToDto(newReservationEntity)).thenReturn(updatedReservationDto);
+
+        ReservationDto actualReservationDto = sut.updateReservation(1L, reservationDto);
+
+        Assert.assertEquals(expectedReservationDto, actualReservationDto);
+
+    }
+
+    @Test
+    public void shouldReturnEmptyReservationDtoWhenUpdateReservationIsCalledWithInvalidId() {
+        ReservationDto expectedReservationDto = null;
+        ReservationDto reservationDto = new ReservationDto();
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        startDate.set(2025, Calendar.JANUARY, 6, 10, 10, 0);
+        endDate.set(2025, Calendar.JANUARY, 6, 10, 45, 0);
+        reservationDto.setStartDate(startDate);
+        reservationDto.setEndDate(endDate);
+        reservationDto.setDescription("description");
+        ReservationDto actualReservationDto = sut.updateReservation(255L, reservationDto);
+        Assert.assertEquals(expectedReservationDto, actualReservationDto);
+    }
+
 
 }

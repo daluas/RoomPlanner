@@ -27,7 +27,6 @@ public class ReservationDtoMapperImpl implements ReservationDtoMapper {
         ReservationDto reservationDto = new ReservationDto();
         reservationDto.setId(reservationEntity.getId());
         reservationDto.setRoomId(reservationEntity.getRoom().getId());
-        reservationDto.setRoomId(reservationEntity.getRoom().getId());
         reservationDto.setEmail(reservationEntity.getPerson().getEmail());
         reservationEntity.getStartDate().setTime(reservationEntity.getStartDate().getTime());
         reservationDto.setStartDate(reservationEntity.getStartDate());

@@ -54,4 +54,24 @@ public class ReservationController {
                 .orElseGet(() -> new ResponseEntity(new EmptyJsonResponse(), HttpStatus.NOT_FOUND));
     }
 
+    @ApiOperation("Update a reservation with a specific id.")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Reservation was updated successfully."),
+            @ApiResponse(code = 404, message = "This reservation was not found."),
+            @ApiResponse(code = 401, message = "You are not authenticated."),
+            @ApiResponse(code = 500, message = "Internal server error.")})
+    @PreAuthorize("hasAuthority('person')")
+    @RequestMapping(method = RequestMethod.PATCH, value = "/api/reservations/{id}")
+    ResponseEntity<ReservationDto> updateReservation(@PathVariable Long id,
+                                                     @RequestBody ReservationDto reservationDto) {
+
+        LOGGER.info("Method was called.");
+        ReservationDto reservationDtoUpdated = bookRoomService.updateReservation(id, reservationDto);
+        if (reservationDtoUpdated == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        LOGGER.info("The following object was returned: " + reservationDtoUpdated);
+        return new ResponseEntity<>(reservationDtoUpdated, HttpStatus.OK);
+
+    }
+
 }

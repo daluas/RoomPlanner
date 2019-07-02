@@ -13,4 +13,6 @@ public interface ReservationService {
 
     ReservationDto convertToDto(ReservationEntity reservationEntity);
 
+    ReservationDto updateReservation(Long roomId, ReservationDto reservationDto);
+
 }

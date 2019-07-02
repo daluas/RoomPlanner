@@ -65,4 +65,17 @@ public class ReservationServiceImpl implements ReservationService {
                 .anyMatch(Objects::isNull);
     }
 
+    @Override
+    public ReservationDto updateReservation(Long id, ReservationDto reservationDto) {
+        Optional<ReservationEntity> reservationEntityOptional = reservationRepository.findById(id);
+        if (reservationEntityOptional.isPresent()) {
+            reservationEntityOptional.get().setStartDate(reservationDto.getStartDate());
+            reservationEntityOptional.get().setEndDate(reservationDto.getEndDate());
+            reservationEntityOptional.get().setDescription(reservationDto.getDescription());
+            ReservationEntity updatedEntity = reservationRepository.save(reservationEntityOptional.get());
+            return mapperService.mapReservationEntityToDto(updatedEntity);
+        }
+        return null;
+    }
+
 }
