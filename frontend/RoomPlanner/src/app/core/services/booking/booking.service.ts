@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/core/services/auth/auth.service';
   providedIn: 'root'
 })
 export class BookingService {
-  private backendUrl: string = 'http://178.22.68.114/RoomPlanner/api';
+  private backendUrl: string = 'http://178.22.68.114:8081/api';
 
   constructor(private httpClient: HttpClient, private authService : AuthService) { }
 
