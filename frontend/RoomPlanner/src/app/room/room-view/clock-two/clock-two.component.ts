@@ -39,7 +39,17 @@ export class ClockTwoComponent implements OnInit, AfterViewInit, OnChanges {
 
     let radians = 0.0174532925;
 
-    let r = 200;
+    
+
+    console.log(+d3.select('figure').style("width"))
+
+    let w = +d3.select('figure').style("width").split("px")[0] - margin.left - margin.right;
+    let h = +d3.select('figure').style("height").split("px")[0] - margin.top - margin.bottom;
+
+    // let r = 200;
+    let r = w/2
+    console.log(r)
+
 
     let secR = r + 16;
     let hourR = r - 40;
@@ -48,8 +58,6 @@ export class ClockTwoComponent implements OnInit, AfterViewInit, OnChanges {
     let minuteHandLength = r;
     let secondHandLength = r - 12;
 
-    let w = +d3.select('figure').style("width").split("px")[0] - margin.left - margin.right;
-    let h = +d3.select('figure').style("height").split("px")[0] - margin.top - margin.bottom;
     console.log(w, h, r);
     this.r = r;
     console.log("this radius", this.r)
@@ -204,7 +212,7 @@ export class ClockTwoComponent implements OnInit, AfterViewInit, OnChanges {
         }
       }
       )
-      .style('stroke-width', 7)
+      .style('stroke-width', 12)
       .style('stroke-linecap', 'round')
       .call(this.draggie)
 
@@ -225,7 +233,7 @@ export class ClockTwoComponent implements OnInit, AfterViewInit, OnChanges {
 
 
 
-    // // WORKS -  small circle in middle to cover hands
+    // small circle in middle to cover hands
     face.append('circle')
       .attr('cx', 0)
       .attr('cy', 0)
@@ -244,11 +252,11 @@ export class ClockTwoComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   dragstart(event) {
-    console.log("nino nino")
+    console.log("drag start")
   }
 
   drag(event, d, i) {
-
+    console.log("draggg event")
     let rr = Math.abs(event.length)
     let rad = Math.atan2(d3.event.y, d3.event.x);
     console.log(rad)

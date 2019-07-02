@@ -25,7 +25,7 @@ export class ClockComponent implements OnInit, OnChanges, OnDestroy {
     let scope = this;
     this.updateInterval = setInterval(() => {
       scope.setClock();
-    }, 60 * 1000)
+    }, 2 * 1000)
   }
 
   ngOnChanges() {
