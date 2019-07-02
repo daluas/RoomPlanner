@@ -7,7 +7,6 @@ import edu.roomplanner.util.BuildersWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
@@ -18,8 +17,6 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 public class FloorDtoMapperImplTest {
 
-    @Mock
-    private RoomDtoMapper roomDtoMapper;
 
     @InjectMocks
     private FloorDtoMapperImpl sut;
@@ -48,7 +45,7 @@ public class FloorDtoMapperImplTest {
 
         FloorEntity floorEntity = new FloorEntity();
         FloorDto expectedFloorDto = new FloorDto();
-        FloorDto actualFloorDto = sut.mapEntityToDto(floorEntity);
+        FloorDto actualFloorDto = sut.mapEntityToDtoWithoutReservations(floorEntity);
 
         assertEquals(expectedFloorDto, actualFloorDto);
     }
@@ -57,7 +54,7 @@ public class FloorDtoMapperImplTest {
     public void shouldReturnFloorDtoWhenMapEntityToDtoIsCalledWithValidFloorEntity() {
         FloorEntity floorEntity = BuildersWrapper.buildFloorEntity(1L, 5);
         FloorDto expectedFloorDto = BuildersWrapper.buildFloorDto(1L, 5);
-        FloorDto actualFloorDto = sut.mapEntityToDto(floorEntity);
+        FloorDto actualFloorDto = sut.mapEntityToDtoWithoutReservations(floorEntity);
 
         assertEquals(expectedFloorDto, actualFloorDto);
     }

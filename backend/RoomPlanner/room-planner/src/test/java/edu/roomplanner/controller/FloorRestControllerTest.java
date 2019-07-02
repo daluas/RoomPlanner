@@ -10,6 +10,7 @@ import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.RoomEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.repository.FloorRepository;
+import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
@@ -24,17 +25,20 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -42,9 +46,9 @@ import java.util.Set;
         classes = RoomPlannerApplication.class
 )
 @AutoConfigureMockMvc(secure = false)
+@Transactional
 @TestPropertySource(locations = "classpath:application-test.properties")
 @EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
-@Sql(scripts = "classpath:scripts/clean-up.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class FloorRestControllerTest {
 
     @Autowired
@@ -55,6 +59,12 @@ public class FloorRestControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private FloorRepository floorRepository;
@@ -70,8 +80,13 @@ public class FloorRestControllerTest {
         flyway.clean();
         flyway.migrate();
 
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com",
-                "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
+        reservationRepository.deleteAll();
+        userRepository.deleteAll();
+
+        entityManager.createNativeQuery("ALTER SEQUENCE seq_user_id RESTART WITH 1").executeUpdate();
+        entityManager.createNativeQuery("ALTER SEQUENCE seq_reservation_id RESTART WITH 1").executeUpdate();
+
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
         userRepository.save(userEntityPerson);
 
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
@@ -141,9 +156,38 @@ public class FloorRestControllerTest {
     }
 
     @Test
-    public void shouldReturnUnauthorizedWhenGetUsersIsCalledByARoom() throws Exception {
+    public void shouldReturnResponseEntityWithStatusUnauthorizedWhenGetUsersIsCalledByARoom() throws Exception {
+
         mockMvc.perform(MockMvcRequestBuilders.get("/api/floors", 1).with(roomBearerToken))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
+    @Test
+    public void shouldReturnResponseEntityWithRequestedFloorAndStatusFoundWhenCalledByUser() throws Exception {
+
+        UserDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
+                new HashSet<ReservationDto>(), 5, 14, UserType.ROOM);
+        Set<RoomDto> firstRoom = new HashSet<>();
+        firstRoom.add((RoomDto) roomDtoOne);
+        FloorDto floorDtoOne = BuildersWrapper.buildFloorDtoWithRooms(1L, 5, firstRoom);
+        String jsonFloorDto = new ObjectMapper().writeValueAsString(floorDtoOne);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/floors/5").with(bearerToken))
+                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.content().string(jsonFloorDto));
+    }
+
+    @Test
+    public void shouldReturnResponseEntityWithStatusForbiddenWhenCalledByRoom() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/floors/5").with(roomBearerToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    public void shouldReturnResponseEntityWithStatusNotFoundWhenFloorDoesNotExistWhenCalledByUser() throws Exception{
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/floors/7").with(bearerToken))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 }

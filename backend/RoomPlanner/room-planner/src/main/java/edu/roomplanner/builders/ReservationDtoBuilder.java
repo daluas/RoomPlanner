@@ -5,6 +5,7 @@ import edu.roomplanner.dto.ReservationDto;
 import java.util.Calendar;
 
 public class ReservationDtoBuilder {
+
     private Long id;
     private Long roomId;
     private String email;
@@ -12,18 +13,12 @@ public class ReservationDtoBuilder {
     private Calendar endDate;
     private String description;
 
+    public static ReservationDtoBuilder builder() {
+        return new ReservationDtoBuilder();
+    }
+
     public ReservationDtoBuilder withId(Long id) {
         this.id = id;
-        return this;
-    }
-
-    public ReservationDtoBuilder withRoomId(Long roomId) {
-        this.roomId = roomId;
-        return this;
-    }
-
-    public ReservationDtoBuilder withEmail(String email) {
-        this.email = email;
         return this;
     }
 
@@ -37,18 +32,30 @@ public class ReservationDtoBuilder {
         return this;
     }
 
+
+    public ReservationDtoBuilder withRoomId(Long roomId) {
+        this.roomId = roomId;
+        return this;
+    }
+
+    public ReservationDtoBuilder withEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
     public ReservationDtoBuilder withDescription(String description) {
         this.description = description;
         return this;
     }
 
     public ReservationDto build() {
+
         ReservationDto reservationDto = new ReservationDto();
         reservationDto.setId(id);
         reservationDto.setRoomId(roomId);
-        reservationDto.setEmail(email);
         reservationDto.setStartDate(startDate);
         reservationDto.setEndDate(endDate);
+        reservationDto.setEmail(email);
         reservationDto.setDescription(description);
 
         return reservationDto;
