@@ -98,26 +98,27 @@ export class HourInputBookingComponent implements OnInit {
   //  })\
 
     // ok! (for integration)
-    // this.bookingService.prevalidation(this.booking).subscribe((res)=>{
-    //   this.prevalidationStatus=res.status;
-    //   console.log("prevalidation status: "+res.status);
-    //   if (this.prevalidationStatus == 200 && this.invalidHours == false) {
-    //     this.disableBookButton.emit(false);//emit(false)=buton enabled
-    //   }
-    //   else {
-    //     this.disableBookButton.emit(true);//emit(true)=buton disabled
-    //   }
-    //   this.statusMessage.emit(this.prevalidationStatus);
-    // })
+    this.bookingService.prevalidation(this.booking).subscribe((res)=>{
+      this.prevalidationStatus=res.status;
+      console.log("prevalidation status: "+res.status);
+      if (this.prevalidationStatus == 200 && this.invalidHours == false) {
+        this.disableBookButton.emit(false);//emit(false)=buton enabled
+      }
+      else {
+        this.disableBookButton.emit(true);//emit(true)=buton disabled
+      }
+      this.statusMessage.emit(this.prevalidationStatus);
+    })
 
-    this.prevalidationStatus= this.bookingService.prevalidation(this.booking);
-    if (this.prevalidationStatus == 200 && this.invalidHours == false) {
-      this.disableBookButton.emit(false);//emit(false)=buton enabled
-    }
-    else {
-      this.disableBookButton.emit(true);//emit(true)=buton disabled
-    }
-    this.statusMessage.emit(this.prevalidationStatus);
+    //for mock
+    // this.prevalidationStatus= this.bookingService.prevalidation(this.booking);
+    // if (this.prevalidationStatus == 200 && this.invalidHours == false) {
+    //   this.disableBookButton.emit(false);//emit(false)=buton enabled
+    // }
+    // else {
+    //   this.disableBookButton.emit(true);//emit(true)=buton disabled
+    // }
+    // this.statusMessage.emit(this.prevalidationStatus);
     
     
   }
@@ -131,7 +132,7 @@ export class HourInputBookingComponent implements OnInit {
         this.endHourForm.setValue({ hour: this.endHourForm.value.hour, minutes: '30' });
       }
     }
-
+   
     this.finalStartHour = new Date(new Date().setHours(this.startHourForm.value.hour, this.startHourForm.value.minutes, 0, 0));
     this.finalEndHour = new Date(new Date().setHours(this.endHourForm.value.hour, this.endHourForm.value.minutes, 0, 0));
 

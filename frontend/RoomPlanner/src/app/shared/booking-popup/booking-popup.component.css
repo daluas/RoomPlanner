@@ -10,7 +10,18 @@
     z-index: 100;
     margin-bottom: 10px;
 }
-
+.containerMessage{
+    box-sizing: border-box;
+    position: relative;
+    padding: 25px 35px;
+    width: calc(100% - 20px);
+    max-width: 450px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 4px;
+    z-index: 100;
+    margin-bottom: 10px;
+}
 .datePopup {
     width: 150px;
     text-align: center;

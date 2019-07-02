@@ -46,8 +46,12 @@
   </div>
 </div>
 
-<div *ngIf="bookingStatus==false" class="container">
+<div *ngIf="bookingStatus==false || updateStatus==false || deleteStatus==false" class="containerMessage">
   <div class="errorMessage">
-    <p>Booking failed</p>
+    <p *ngIf="!booking.id">Booking failed</p>
+    <p *ngIf="booking.id && updateStatus==false">Update failed</p>
+    <p *ngIf="booking.id && deleteStatus==false">Delete failed</p>
   </div>
+ 
 </div>
+
