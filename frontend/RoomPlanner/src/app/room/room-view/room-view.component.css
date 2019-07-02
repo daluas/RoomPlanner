@@ -10,3 +10,9 @@
     width: calc(100% - 20px);
     max-width: 500px;
 }
+
+.date{
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+}

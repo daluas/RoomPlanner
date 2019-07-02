@@ -11,6 +11,8 @@ export class RoomViewComponent implements OnInit {
   isClockActive: boolean = false;
   reservations: Booking[];
 
+  date: Date = new Date();
+
   constructor() { }
 
   ngOnInit() {
