@@ -3,16 +3,12 @@ package edu.roomplanner.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
 import edu.roomplanner.dto.ReservationDto;
-import edu.roomplanner.entity.*;
-import edu.roomplanner.mappers.ReservationDtoMapper;
-import edu.roomplanner.repository.ReservationRepository;
-import edu.roomplanner.repository.UserRepository;
-import edu.roomplanner.types.UserType;
 import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
+import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
 import edu.roomplanner.util.OAuthHelper;
@@ -37,7 +33,6 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.TimeZone;
 
@@ -97,8 +92,8 @@ public class ReservationControllerTest {
         entityManager.createNativeQuery("ALTER SEQUENCE seq_user_id RESTART WITH 1").executeUpdate();
         entityManager.createNativeQuery("ALTER SEQUENCE seq_reservation_id RESTART WITH 1").executeUpdate();
 
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun",
-                new HashSet<>(), UserType.PERSON,"Stefania","Ghitun");
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun",
+                new HashSet<>(), UserType.PERSON, "Stefania", "Ghitun");
         userRepository.save(userEntityPerson);
 
         UserEntity personEntity = BuildersWrapper.buildPersonEntity(2L, "marius@yahoo.com", "marius",
@@ -208,8 +203,8 @@ public class ReservationControllerTest {
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
-        startDate.set(2019, Calendar.JANUARY, 6, 10, 10, 0);
-        endDate.set(2019, Calendar.JANUARY, 6, 10, 45, 0);
+        startDate.set(2019, Calendar.JULY, 7, 18, 10, 0);
+        endDate.set(2019, Calendar.JULY, 7, 18, 45, 0);
         UserEntity roomEntity = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "4wonD2C%",
                 new HashSet<>(), new FloorEntity(), UserType.ROOM, "Wonderland", 14);
         UserEntity personEntity = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "password",
@@ -219,8 +214,8 @@ public class ReservationControllerTest {
 
         Calendar newStartDate = Calendar.getInstance();
         Calendar newEndDate = Calendar.getInstance();
-        newStartDate.set(2034, Calendar.JANUARY, 6, 10, 10, 0);
-        newEndDate.set(2034, Calendar.JANUARY, 6, 10, 45, 0);
+        newStartDate.set(2040, Calendar.JUNE, 24, 13, 2, 0);
+        newEndDate.set(2040, Calendar.JUNE, 24, 13, 33, 0);
 
         ReservationDto reservationDtoForUpdate = BuildersWrapper.buildReservationDto(null, null, null, newStartDate, newEndDate, "reservation updated");
         ReservationDto reservationDtoUpdated = BuildersWrapper.buildReservationDto(1L, 2L, "sghitun@yahoo.com", newStartDate, newEndDate, "reservation updated");
