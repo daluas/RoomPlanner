@@ -1,15 +1,3 @@
-.container{
-    box-sizing: border-box;
-    position: relative;
-    padding: 25px 35px;
-    width: calc(100% - 20px);
-    max-width: 450px;
-    margin: 0 auto;
-    background: #ffffff;
-    border-radius: 4px;
-    z-index: 100;
-    margin-bottom: 10px;
-}
 .containerMessage{
     box-sizing: border-box;
     position: relative;
@@ -22,59 +10,13 @@
     z-index: 100;
     margin-bottom: 10px;
 }
-.datePopup {
-    width: 150px;
-    text-align: center;
-}
-.startDate{
-    margin-left: 20px;
-    float:left;   
-}
-.endDate{
-    margin-right: 20px;
-    float:right;
-}
 ::ng-deep .cdk-overlay-container {
     position: fixed !important;
     z-index: 10000 !important; 
 }
-.datePicker{
-    width: 130px;
-}
 .dateTitle {
     color: #673ab7;
     margin-bottom: 10px;
-}
-.verticalLine {
-    border-left: 1px solid #bfbfbf;
-    height: 155px;
-    position: absolute;
-    left: 50%;
-    top: 25px;
-}
-.descriptionContent {
-    margin-top: 0px;
-    margin-bottom: 20px;
-    width: 374px;
-    height: 120px;
-    resize: none;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-.descriptionBox {
-    margin-top: 10px;
-}
-.bookBtn .updateBtn .deleteBtn {
-    float:left;
-}
-.updateBtn  {
-    margin-right: 10px;
-}
-.cancelBtn {
-    float:right;
-}
-.deleteBtn{
-    width: 76px;
-    margin-left: 20px;
 }
 .invalidHoursContainer {
     margin-top: 10px;
@@ -90,4 +32,141 @@
 }
 .hours{
     margin-top: 10px;
+}
+
+@media screen and (min-width: 481px) {
+    .container{
+        box-sizing: border-box;
+        position: relative;
+        padding: 25px 35px;
+        width: calc(100% - 20px);
+        max-width: 450px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 4px;
+        z-index: 100;
+        margin-bottom: 10px;
+    }
+    
+    .datePopup {
+        width: 150px;
+        text-align: center;
+    }
+    .startDate{
+        margin-left: 20px;
+        float:left;   
+    }
+    .endDate{
+        margin-right: 20px;
+        float:right;
+    }
+    .datePicker{
+        width: 130px;
+    }
+    .verticalLine {
+        border-left: 1px solid #bfbfbf;
+        height: 155px;
+        position: absolute;
+        left: 50%;
+        top: 25px;
+    }
+    .descriptionContent {
+        margin-top: 0px;
+        margin-bottom: 20px;
+        width: 374px;
+        height: 120px;
+        resize: none;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
+    .descriptionBox {
+        margin-top: 10px;
+    }
+
+    .bookBtn .updateBtn .deleteBtn {
+        float:left;
+    }
+    .updateBtn  {
+        margin-right: 10px;
+    }
+    .cancelBtn {
+        float:right;
+    }
+    .deleteBtn{
+        width: 76px;
+        margin-left: 20px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .container{
+        box-sizing: border-box;
+        position: relative;
+        padding-top: 25px;
+        padding-bottom: 50px;
+        padding-left: 25px;
+        padding-right: 25px;
+        width: calc(100% - 20px);
+        max-width: 300px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 4px;
+        z-index: 100;
+        margin-bottom: 10px;
+    }
+    
+    .datePopup {
+        width: 180px;
+        text-align: center;
+    }
+    .startDate{
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    .endDate{
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    .datePicker{
+        width: 150px;
+    }
+    .verticalLine {
+        border-left: 1px solid #bfbfbf;
+        height: 0px;
+        position: absolute;
+        top: 0px;
+    }
+    .descriptionContent {
+        margin-top: 0px;
+        margin-bottom: 20px;
+        width: 100%;
+        min-height: 50px;
+        resize: none;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
+    .descriptionBox {
+        margin-top: 10px;
+    }
+
+    .bookBtn .updateBtn .deleteBtn {
+        float:left;
+    }
+    .updateBtn  {
+        margin-right: 5px;
+    }
+    .cancelBtn {
+        float:right;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    .deleteBtn{
+        width: 76px;
+        margin-left: 5px;
+    }
+}
+@media screen and (max-width: 317px) {
+    .cancelBtn {
+        float:left;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
 }

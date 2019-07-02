@@ -104,14 +104,6 @@ input{
   
 }
 
-.verticalLine {
-    border-left: 1px solid #bfbfbf;
-    height: 155px;
-    position: absolute;
-    left: 50%;
-    top: 25px;
-}
-
 .formStyle{
     margin:0;
     display: inline;
@@ -126,4 +118,29 @@ input{
     font-size: 13px; 
     color: red;
     text-align: center;
+}
+
+
+@media screen and (min-width: 481px) {    
+    .verticalLine {
+        border-left: 1px solid #bfbfbf;
+        height: 155px;
+        position: absolute;
+        left: 50%;
+        top: 25px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .verticalLine {
+        border-left: 1px solid #bfbfbf;
+        height: 0px;
+        position: absolute;
+        left: 50%;
+        top: 0px;
+    }
+    .bookingHoursContainer{
+        display: flex;
+        flex-direction: column
+    }
 }
