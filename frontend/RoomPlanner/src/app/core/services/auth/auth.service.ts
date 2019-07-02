@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material';
 })
 export class AuthService {
 	private token: LoginToken;
-	private backendUrl: string = 'http://178.22.68.114:8081';
+	private backendUrl: string = 'http://178.22.68.114/api/RoomPlanner';
 	private currentUser: LoggedUser;
 	private currentUserSubscriber: Subscriber<LoggedUser> = new Subscriber<LoggedUser>();
 

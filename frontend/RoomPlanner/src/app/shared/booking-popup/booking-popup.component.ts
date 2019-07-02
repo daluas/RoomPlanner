@@ -21,12 +21,16 @@ export class BookingPopupComponent implements OnInit {
 
   @Input() booking: Booking;
 
-  @Output() bookingRes: EventEmitter<any> = new EventEmitter();
+  @Output() bookingRes: EventEmitter<Booking> = new EventEmitter();
   @Output() closePopup: EventEmitter<boolean> = new EventEmitter();
 
 
-  constructor(public bookingService: BookingService, private fb: FormBuilder, private authService: AuthService) {
-    
+  constructor(
+    public bookingService: BookingService,
+    private fb: FormBuilder,
+    private authService: AuthService
+  ) {
+
   }
 
   minDate = new Date(2019, 0, 1);
@@ -38,16 +42,17 @@ export class BookingPopupComponent implements OnInit {
   isLogged: boolean;
   isNewAction: boolean;
 
-  statusMessage: number;  
- 
+  statusMessage: number;
+
   booked: boolean = true;
   bookingStatus: boolean;
   prevalidationStatus: boolean;
-  updateStatus : boolean;
-  deleteStatus : boolean=true;
-  
-  statusDelete : number;
+  updateStatus: boolean;
+  deleteStatus: boolean = true;
+
+  statusDelete: number;
   openMessageContainter: boolean;
+
   ngOnInit() {
     this.status = false;
     this.isNewAction = false;
@@ -65,10 +70,10 @@ export class BookingPopupComponent implements OnInit {
       this.isLogged = true;
     }
   }
-   
+
   startDateValidation(val) {
-    this.booking.startDate=val.value;
-    console.log('start date :'+this.booking.startDate);
+    this.booking.startDate = val.value;
+    console.log('start date :' + this.booking.startDate);
     if (val.value.getDate() > this.booking.endDate.getDate()) {
       this.status = true;
       this.booked = false;
@@ -79,62 +84,66 @@ export class BookingPopupComponent implements OnInit {
     }
   }
   endDateValidation(val) {
-    this.booking.endDate=val.value;
+    this.booking.endDate = val.value;
     if (val.value.getDate() < this.booking.startDate.getDate()) {
-      this.status = true; 
-     this.booked = false;
+      this.status = true;
+      this.booked = false;
     }
     else {
       this.status = false;
       this.booked = true;
     }
   }
-  getDescription(desc){
-    this.booking.description=desc.value;
+  getDescription(desc) {
+    this.booking.description = desc.value;
   }
-  onStartHourEmit(event){
+  onStartHourEmit(event) {
     this.booking.startDate.setHours(event.getHours(), event.getMinutes());
   }
-  onEndHourEmit(event){
+  onEndHourEmit(event) {
     this.booking.endDate.setHours(event.getHours(), event.getMinutes());
   }
   createBookingTest() {
-   
-    this.bookingService.createNewBooking(this.booking).then((bookingRes) => {     
-      let res = JSON.parse(bookingRes);
-      if (res.id) {
+
+    this.bookingService.createNewBooking(this.booking).then((bookingRes: Booking) => {
+      console.log(bookingRes) // ce trimite backendu la eroare? mockuit pe string gol  
+      if (bookingRes) { // verificare daca e gol sau daca chiar primesc un booking. eventual cum era, cu booking.id
         this.isNewAction = true;
         this.bookingRes.emit(this.booking);
         console.log("Booking successfully");
-        this.bookingStatus = true;   
-        this.closeLoginPopup(true); 
+        this.bookingStatus = true;
+        this.closeLoginPopup(true);
       }
       else {
         //todo
         console.log("Booking failed");
         this.bookingStatus = false;
-       
+
       }
+    }).catch(error => {
+      console.log(error)
     })
-  }  
-  
+  }
+
   updateBookingTest() {
-    this.bookingService.updateBooking(this.booking).then((bookingRes) => {     
-      let res = JSON.parse(bookingRes);
-      if (res.id) {
+    this.bookingService.updateBooking(this.booking).subscribe(res => {
+      if (res.status==200) { // la fel, verificare ca la create NEW booking
         this.isNewAction = true;
         this.bookingRes.emit(this.booking);
         console.log("Update successfully");
-        this.updateStatus = true;   
-         this.closeLoginPopup(true);   
+        this.updateStatus = true;
+        this.closeLoginPopup(true);
       }
       else {
         //todo
         console.log("Update failed");
-        this.updateStatus = false;    
-       
+        this.updateStatus = false;
+
       }
     })
+      // .catch(error => {
+      //   console.log(error)
+      // })
   }
 
   deleteBooking() {
@@ -150,53 +159,53 @@ export class BookingPopupComponent implements OnInit {
     //   else if(this.statusDelete == 400) {
     //     console.log("Delete failed");
     //     this.deleteStatus = false; 
-         
+
     //   }
 
-      //ok!! (for integration)
-      this.bookingService.deleteBooking(this.booking).subscribe((res)=>{
-          this.statusDelete=res.status;
-          if (this.statusDelete == 200 ) {
-            this.isNewAction = true;
-            this.bookingRes.emit(this.booking);
-            this.deleteStatus = true;  
-            this.closeLoginPopup(true);  
-            console.log("Delete successfully");
-        
-          }
-         else if(this.statusDelete == 400) {
-           console.log("Delete failed");
-           this.deleteStatus = false; 
-        }
-          // this.statusMessage.emit(this.prevalidationStatus);
-        })
-   
+    //ok!! (for integration)
+    this.bookingService.deleteBooking(this.booking).subscribe((res) => {
+      this.statusDelete = res.status;
+      if (this.statusDelete == 200) {
+        this.isNewAction = true;
+        this.bookingRes.emit(this.booking);
+        this.deleteStatus = true;
+        this.closeLoginPopup(true);
+        console.log("Delete successfully");
+
+      }
+      else if (this.statusDelete == 400) {
+        console.log("Delete failed");
+        this.deleteStatus = false;
+      }
+      // this.statusMessage.emit(this.prevalidationStatus);
+    })
+
   }
-  
+
   getStatusOfBookButton(event) { //true=disabled false=enabled
 
-    this.invalidHours=event;
-    if(this.invalidHours){
-      this.booked=false;
+    this.invalidHours = event;
+    if (this.invalidHours) {
+      this.booked = false;
     }
-    else{
-      this.booked=true;
-    }   
+    else {
+      this.booked = true;
+    }
   }
 
- getPrevalidationMessage(event) {
+  getPrevalidationMessage(event) {
     this.statusMessage = event;
-    
-    if (this.statusMessage == 200 ) {
+
+    if (this.statusMessage == 200) {
       this.prevalidationStatus = true;
- 
+
     }
-    else  {
+    else {
       this.prevalidationStatus = false;
       this.booked = false;
     }
   }
-  
+
   cancelBooking() {
     this.booking.description = "";
     this.closePopup.emit(true);
@@ -210,7 +219,7 @@ export class BookingPopupComponent implements OnInit {
       this.invalidHours = true;
     }
     else {
-       this.invalidHours = false;
+      this.invalidHours = false;
     }
 
   }
@@ -226,9 +235,9 @@ export class BookingPopupComponent implements OnInit {
   }
 
   closeLoginPopup(event) {
-    if(event) {
+    if (event) {
       this.closePopup.emit(true);
     }
   }
- 
+
 }

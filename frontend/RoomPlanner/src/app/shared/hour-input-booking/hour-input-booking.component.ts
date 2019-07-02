@@ -19,7 +19,7 @@ export class HourInputBookingComponent implements OnInit {
 
   @Output() startHourEmitter: EventEmitter<Date> = new EventEmitter();
   @Output() endHourEmitter: EventEmitter<Date> = new EventEmitter();
-  
+
   @Output() statusMessage: EventEmitter<number> = new EventEmitter();
   @Output() disableBookButton: EventEmitter<boolean> = new EventEmitter();
   @Input() booking: Booking;
@@ -30,7 +30,7 @@ export class HourInputBookingComponent implements OnInit {
   endHourForm: FormGroup;
   invalidHours: boolean;
   status: string;
-  prevalidationStatus : number;
+  prevalidationStatus: number;
   ngOnInit() {
 
 
@@ -85,22 +85,13 @@ export class HourInputBookingComponent implements OnInit {
     }
   }
   prevalidation() {
-    // this.bookingService.prevalidation(this.booking).then((prevalidationStatus) => {
-    //   this.status = prevalidationStatus;
-
-    //   if (prevalidationStatus == "You can book" && this.invalidHours == false) {
-    //     this.disableBookButton.emit(false);//emit(false)=buton enabled
-    //   }
-    //   else {
-    //     this.disableBookButton.emit(true);//emit(true)=buton disabled
-    //   }
-    //   this.statusMessage.emit(prevalidationStatus);
-  //  })\
-
     // ok! (for integration)
-    this.bookingService.prevalidation(this.booking).subscribe((res)=>{
-      this.prevalidationStatus=res.status;
-      console.log("prevalidation status: "+res.status);
+    this.bookingService.prevalidation(this.booking).subscribe(res => {
+      console.log(res);
+
+
+      this.prevalidationStatus = res.status;
+      console.log("prevalidation status: " + res.status);
       if (this.prevalidationStatus == 200 && this.invalidHours == false) {
         this.disableBookButton.emit(false);//emit(false)=buton enabled
       }
@@ -119,8 +110,6 @@ export class HourInputBookingComponent implements OnInit {
     //   this.disableBookButton.emit(true);//emit(true)=buton disabled
     // }
     // this.statusMessage.emit(this.prevalidationStatus);
-    
-    
   }
 
   update() {
@@ -132,7 +121,7 @@ export class HourInputBookingComponent implements OnInit {
         this.endHourForm.setValue({ hour: this.endHourForm.value.hour, minutes: '30' });
       }
     }
-   
+
     this.finalStartHour = new Date(new Date().setHours(this.startHourForm.value.hour, this.startHourForm.value.minutes, 0, 0));
     this.finalEndHour = new Date(new Date().setHours(this.endHourForm.value.hour, this.endHourForm.value.minutes, 0, 0));
 
@@ -140,7 +129,7 @@ export class HourInputBookingComponent implements OnInit {
     this.endHourEmitter.emit(this.finalEndHour);
     this.validateHours();
     this.prevalidation();
-    
+
   }
 
   onKeyUpHoursStartDate() {

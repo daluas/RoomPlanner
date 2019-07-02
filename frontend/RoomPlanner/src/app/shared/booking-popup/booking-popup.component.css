@@ -1,15 +1,3 @@
-.containerMessage{
-    box-sizing: border-box;
-    position: relative;
-    padding: 25px 35px;
-    width: calc(100% - 20px);
-    max-width: 450px;
-    margin: 0 auto;
-    background: #ffffff;
-    border-radius: 4px;
-    z-index: 100;
-    margin-bottom: 10px;
-}
 ::ng-deep .cdk-overlay-container {
     position: fixed !important;
     z-index: 10000 !important; 
@@ -48,6 +36,19 @@
         margin-bottom: 10px;
     }
     
+    .containerMessage{
+        box-sizing: border-box;
+        position: relative;
+        padding: 15px 15px;
+        width: calc(100% - 20px);
+        max-width: 450px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 4px;
+        z-index: 100;
+        margin-bottom: 10px;
+    }
+
     .datePopup {
         width: 150px;
         text-align: center;
@@ -114,6 +115,19 @@
         margin-bottom: 10px;
     }
     
+    .containerMessage{
+        box-sizing: border-box;
+        position: relative;
+        padding: 15px 15px;
+        width: calc(100% - 20px);
+        max-width: 300px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 4px;
+        z-index: 100;
+        margin-bottom: 10px;
+    }
+
     .datePopup {
         width: 180px;
         text-align: center;
