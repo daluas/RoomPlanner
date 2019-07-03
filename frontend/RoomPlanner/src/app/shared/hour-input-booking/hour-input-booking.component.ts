@@ -7,6 +7,7 @@ import { Booking } from '../../core/models/BookingModel';
 import { BookingPopupComponent } from '../booking-popup/booking-popup.component';
 import { BookingService } from '../../core/services/booking/booking.service';
 import { ɵINTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic';
+import { HttpResponse } from '@angular/common/http';
 
 
 @Component({
@@ -16,8 +17,10 @@ import { ɵINTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform
 })
 export class HourInputBookingComponent implements OnInit {
 
-  @Output() hourEmitter: EventEmitter<any> = new EventEmitter();
-  @Output() statusMessage: EventEmitter<string> = new EventEmitter();
+  @Output() startHourEmitter: EventEmitter<Date> = new EventEmitter();
+  @Output() endHourEmitter: EventEmitter<Date> = new EventEmitter();
+
+  @Output() statusMessage: EventEmitter<number> = new EventEmitter();
   @Output() disableBookButton: EventEmitter<boolean> = new EventEmitter();
   @Input() booking: Booking;
 
@@ -27,7 +30,7 @@ export class HourInputBookingComponent implements OnInit {
   endHourForm: FormGroup;
   invalidHours: boolean;
   status: string;
-
+  prevalidationStatus: number;
   ngOnInit() {
 
 
@@ -42,13 +45,13 @@ export class HourInputBookingComponent implements OnInit {
     if (this.startHourForm.value.hour < 10) {
       this.startHourForm.setValue({ hour: '0' + (this.startHourForm.value.hour), minutes: this.startHourForm.value.minutes });
     }
-    else if (this.startHourForm.value.minutes < 10) {
+    if (this.startHourForm.value.minutes < 10) {
       this.startHourForm.setValue({ hour: this.startHourForm.value.hour, minutes: '0' + (this.startHourForm.value.minutes) });
     }
-    else if (this.endHourForm.value.hour < 10) {
+    if (this.endHourForm.value.hour < 10) {
       this.endHourForm.setValue({ hour: '0' + (this.endHourForm.value.hour), minutes: this.endHourForm.value.minutes });
     }
-    else if (this.endHourForm.value.minutes < 10) {
+    if (this.endHourForm.value.minutes < 10) {
       this.endHourForm.setValue({ hour: this.endHourForm.value.hour, minutes: '0' + (this.endHourForm.value.minutes) });
     }
 
@@ -82,17 +85,28 @@ export class HourInputBookingComponent implements OnInit {
     }
   }
   prevalidation() {
-    this.bookingService.prevalidation(this.booking).then((prevalidationStatus) => {
-      this.status = prevalidationStatus;
-
-      if (prevalidationStatus == "You can book" && this.invalidHours == false) {
+    // ok! (for integration)
+    this.bookingService.prevalidation(this.booking).subscribe(res => {
+      
+      this.prevalidationStatus = res.status;
+      if (this.prevalidationStatus == 200 && this.invalidHours == false) {
         this.disableBookButton.emit(false);//emit(false)=buton enabled
       }
       else {
         this.disableBookButton.emit(true);//emit(true)=buton disabled
       }
-      this.statusMessage.emit(prevalidationStatus);
+      this.statusMessage.emit(this.prevalidationStatus);
     })
+
+    //for mock
+    // this.prevalidationStatus= this.bookingService.prevalidation(this.booking);
+    // if (this.prevalidationStatus == 200 && this.invalidHours == false) {
+    //   this.disableBookButton.emit(false);//emit(false)=buton enabled
+    // }
+    // else {
+    //   this.disableBookButton.emit(true);//emit(true)=buton disabled
+    // }
+    // this.statusMessage.emit(this.prevalidationStatus);
   }
 
   update() {
@@ -108,14 +122,15 @@ export class HourInputBookingComponent implements OnInit {
     this.finalStartHour = new Date(new Date().setHours(this.startHourForm.value.hour, this.startHourForm.value.minutes, 0, 0));
     this.finalEndHour = new Date(new Date().setHours(this.endHourForm.value.hour, this.endHourForm.value.minutes, 0, 0));
 
-    this.hourEmitter.emit(this.finalStartHour);
-    this.hourEmitter.emit(this.finalEndHour);
+    this.startHourEmitter.emit(this.finalStartHour);
+    this.endHourEmitter.emit(this.finalEndHour);
     this.validateHours();
     this.prevalidation();
+
   }
 
   onKeyUpHoursStartDate() {
-    this.update();
+    
     if (this.startHourForm.value.hour == undefined) {
       this.startHourForm.setValue({ hour: '00', minutes: this.startHourForm.value.minutes });
     }
@@ -132,7 +147,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyUpHoursEndDate() {
-    this.update();
+    
     if (this.endHourForm.value.hour == undefined) {
       this.endHourForm.setValue({ hour: '00', minutes: this.endHourForm.value.minutes });
     }
@@ -149,7 +164,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyUpMinutesStartDate() {
-    this.update();
+    
     if (this.startHourForm.value.hour == undefined) {
       this.startHourForm.setValue({ hour: this.startHourForm.value.hour, minutes: '00' });
     }
@@ -163,7 +178,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyUpMinutesEndDate() {
-    this.update();
+    
     if (this.endHourForm.value.hour == undefined) {
       this.endHourForm.setValue({ hour: this.endHourForm.value.hour, minutes: '00' });
     }
@@ -177,7 +192,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyDownHoursStartDate() {
-    this.update();
+    
     if (this.startHourForm.value.hour == undefined) {
       this.startHourForm.setValue({ hour: 23, minutes: this.startHourForm.value.minutes });
     }
@@ -193,7 +208,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyDownMinutesStartDate() {
-    this.update();
+    
     if (this.startHourForm.value.minutes == undefined) {
       this.startHourForm.setValue({ hour: this.startHourForm.value.hour, minutes: '00' });
     }
@@ -207,7 +222,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyDownHoursEndDate() {
-    this.update();
+    
     if (this.endHourForm.value.hour == undefined) {
       this.endHourForm.setValue({ hour: 23, minutes: this.endHourForm.value.minutes });
     }
@@ -223,7 +238,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyDownMinutesEndDate() {
-    this.update();
+    
     if (this.endHourForm.value.minutes == undefined) {
       this.endHourForm.setValue({ hour: this.endHourForm.value.hour, minutes: '00' });
     }

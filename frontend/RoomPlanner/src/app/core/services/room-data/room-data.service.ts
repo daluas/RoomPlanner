@@ -47,7 +47,7 @@ export class RoomDataService {
           {
             "id": 4,
             "roomId": 2,
-            "personEmail": "sghitun@yahoo.com",
+            "personalEmail": "sghitun@yahoo.com",
             "startDate": "2019-06-28T09:00:00.000+0000",
             "endDate": "2019-06-28T12:00:00.000+0000",
             "description": "Retro meeting"
@@ -55,7 +55,7 @@ export class RoomDataService {
           {
             "id": 5,
             "roomId": 2,
-            "personEmail": "sghitun@yahoo.com",
+            "personalEmail": "sghitun@yahoo.com",
             "startDate": "2019-06-28T14:00:00.000+0000",
             "endDate": "2019-06-28T15:30:00.000+0000",
             "description": "Retro meeting"
@@ -77,7 +77,7 @@ export class RoomDataService {
         reserv.push(new Booking().create({
           id: resJson.id,
           roomId: resJson.roomId,
-          personEmail: resJson.personEmail,
+          personalEmail: resJson.personalEmail,
           startDate: new Date(new Date(resJson.startDate)),
           endDate: new Date(new Date(resJson.endDate)),
           description: resJson.description
@@ -120,7 +120,7 @@ export class RoomDataService {
               {
                 "id": 4,
                 "roomId": 2,
-                "personEmail": "sghitun@yahoo.com",
+                "personalEmail": "sghitun@yahoo.com",
                 "startDate": "2019-06-28T09:00:00.000+0000",
                 "endDate": "2019-06-28T12:00:00.000+0000",
                 "description": "Retro meeting"
@@ -128,7 +128,7 @@ export class RoomDataService {
               {
                 "id": 5,
                 "roomId": 2,
-                "personEmail": "sghitun@yahoo.com",
+                "personalEmail": "sghitun@yahoo.com",
                 "startDate": "2019-06-27T14:00:00.000+0000",
                 "endDate": "2019-06-27T15:30:00.000+0000",
                 "description": "Retro meeting"
@@ -152,7 +152,7 @@ export class RoomDataService {
                   {
                     "id": 4,
                     "roomId": 3,
-                    "personEmail": "sghitun@yahoo.com",
+                    "personalEmail": "sghitun@yahoo.com",
                     "startDate": "2019-06-29T11:30:00.000+0000",
                     "endDate": "2019-06-28T12:00:00.000+0000",
                     "description": "Retro meeting"
@@ -160,7 +160,7 @@ export class RoomDataService {
                   {
                     "id": 5,
                     "roomId": 3,
-                    "personEmail": "sghitun@yahoo.com",
+                    "personalEmail": "sghitun@yahoo.com",
                     "startDate": "2019-06-27T14:00:00.000+0000",
                     "endDate": "2019-06-29T12:30:00.000+0000",
                     "description": "Retro meeting"
@@ -184,7 +184,7 @@ export class RoomDataService {
                   {
                     "id": 4,
                     "roomId": 4,
-                    "personEmail": "sghitun@yahoo.com",
+                    "personalEmail": "sghitun@yahoo.com",
                     "startDate": "2019-06-28T13:00:00.000+0000",
                     "endDate": "2019-06-28T14:00:00.000+0000",
                     "description": "Retro meeting"
@@ -192,7 +192,7 @@ export class RoomDataService {
                   {
                     "id": 5,
                     "roomId": 4,
-                    "personEmail": "sghitun@yahoo.com",
+                    "personalEmail": "sghitun@yahoo.com",
                     "startDate": "2019-06-26T14:00:00.000+0000",
                     "endDate": "2019-06-26T15:30:00.000+0000",
                     "description": "Retro meeting"
@@ -232,7 +232,7 @@ export class RoomDataService {
           reserv.push(new Booking().create({
             id: resJson.id,
             roomId: resJson.roomId,
-            personEmail: resJson.personEmail,
+            personalEmail: resJson.personalEmail,
             startDate: new Date(new Date(resJson.startDate)),
             endDate: new Date(new Date(resJson.endDate)),
             description: resJson.description

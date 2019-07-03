@@ -2,7 +2,7 @@
 
     <span class="hourContainer">
 
-        <form [formGroup]="startHourForm" class="formStyle"  >
+        <form [formGroup]="startHourForm" class="formStyle">
 
             <span class="hoursInputContainer">
                 <div class="key_up_hours">
@@ -10,7 +10,7 @@
                 </div>
                 <div class="hoursInput">
                     <mat-form-field class="hour">
-                        <input matInput formControlName="hour" (blur)="updateHours()" >
+                        <input matInput formControlName="hour" (blur)="updateHours()">
                     </mat-form-field>
                 </div>
                 <div class="key_down_hours">
@@ -28,18 +28,15 @@
                 </div>
                 <div class="minutesInput">
                     <mat-form-field class="minutes">
-                        <input matInput formControlName="minutes" (blur)="updateMinutes()" >
+                        <input matInput formControlName="minutes" (blur)="updateMinutes()">
                     </mat-form-field>
                 </div>
                 <div class="key_down_minutes">
                     <i class="material-icons" (click)="onKeyDownMinutesStartDate()">arrow_drop_down</i>
                 </div>
             </span>
-           
-            <!-- <div class="errorText">
-                <div *ngIf="startHourForm.controls.minutes.invalid">Format invalid for minutes!</div>
-                <div *ngIf="startHourForm.controls.hour.invalid">Format invalid for hours !</div>
-            </div> -->
+
+          
 
         </form>
     </span>
@@ -48,7 +45,7 @@
 
     <span class="hourContainer">
 
-        <form [formGroup]="endHourForm" class="formStyle"  >
+        <form [formGroup]="endHourForm" class="formStyle">
 
             <span class="hoursInputContainer">
                 <div class="key_up_hours">
@@ -56,7 +53,7 @@
                 </div>
                 <div class="hoursInput">
                     <mat-form-field class="hour">
-                        <input matInput formControlName="hour" (blur)="updateHours()" >
+                        <input matInput formControlName="hour" (blur)="updateHours()">
                     </mat-form-field>
                 </div>
                 <div class="key_down_hours">
@@ -82,20 +79,10 @@
                 </div>
             </span>
 
-            <!-- <div class="errorText">
-                <div *ngIf="endHourForm.controls.minutes.invalid">Format invalid for minutes!</div>
-                <div *ngIf="endHourForm.controls.hour.invalid">Format invalid for hours !</div>
-            </div> -->
-
         </form>
     </span>
     <div class="invalidHoursContainer" *ngIf="invalidHours">
         <p>End hour has to be greater than start hour!</p>
     </div>
-    
-    <div *ngIf="status">
-        <div class="successText" *ngIf="(status=='You can book') && (invalidHours==false)">{{status}}</div>
-        <div class="errorText" *ngIf="(status!='You can book') && (invalidHours==false)">{{status}}</div>
-        
-    </div>
+    <div class="errorText" *ngIf="(prevalidationStatus!=200) && (invalidHours==false)">Invalid parameters</div>
 </div>

@@ -19,20 +19,24 @@ import { LoggedUser } from './models/LoggedUser';
 import { MatSnackBar } from '@angular/material';
 import { ok } from 'assert';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+import { Booking } from './models/BookingModel';
 
 @Injectable()
 export class Interceptor implements HttpInterceptor {
 
-    BASE_URL: string = 'http://178.22.68.114:8081';
+    BASE_URL: string = 'http://178.22.68.114:8081/api/RoomPlanner';
 
     constructor(private _snackBar: MatSnackBar) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log(request);
+       // console.log(request);
+
         if (request.url === `${this.BASE_URL}/oauth/token`) {
             //request token
-            if (request.body.get("grant_type") === "password") {
+            console.log(request.body)
 
+            if (request.body.get("grant_type") === "password") {
+                console.log("aiciii");
 
                 let token = new LoginToken().create({
                     access_token: "access",
@@ -94,6 +98,8 @@ export class Interceptor implements HttpInterceptor {
             }
         }
 
+
+
         if (request.url === `${this.BASE_URL}/users`) {
             
             console.log(request);
@@ -122,6 +128,42 @@ export class Interceptor implements HttpInterceptor {
                     })
                 );
         }
+        if (request.url === `${this.BASE_URL}/prevalidation`){
+            return of(new HttpResponse({
+                status: 200
+            }))
+        }
+
+        if (request.url.startsWith(`${this.BASE_URL}/reservation`)){
+            
+            let booking = new Booking().create({
+                id: 123,
+                email: "sghitun@yahoo.com",
+                startDate: new Date(),
+                endDate: new Date(new Date().getTime() + 200000),
+                description: "some description"
+            })
+            return of(new HttpResponse({
+                status: 200,
+                body: booking
+            }))
+        }
+        if (request.url.startsWith(`${this.BASE_URL}/update-reservations`)){
+            console.log(request);
+            
+            return of(new HttpResponse({
+                status: 200
+            }))
+        }
+        if (request.url.startsWith(`${this.BASE_URL}/delete`)){
+            console.log(request);
+            
+            return of(new HttpResponse({
+                status: 200
+            }))
+        }
+
+
     }
 
     getTokenLS(): LoginToken {
