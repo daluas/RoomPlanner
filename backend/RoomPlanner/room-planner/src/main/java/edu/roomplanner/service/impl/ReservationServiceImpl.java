@@ -3,9 +3,7 @@ package edu.roomplanner.service.impl;
 import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.UserEntity;
-import edu.roomplanner.exception.InvalidReservationDtoException;
-import edu.roomplanner.exception.InvalidReservationException;
-import edu.roomplanner.exception.UserNotFoundException;
+import edu.roomplanner.exception.*;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
@@ -82,9 +80,9 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public HttpStatus deleteReservation(Long reservationId) {
+    public void deleteReservation(Long reservationId) {
         if (!reservationRepository.findById(reservationId).isPresent()) {
-            return HttpStatus.NOT_FOUND;
+            throw new ReservationNotFoundException("Invalid reservation ID");
         }
         String userEmail = tokenParserService.getEmailFromToken();
         UserEntity userEntity = userRepository.findByEmail(userEmail).get();
@@ -94,10 +92,9 @@ public class ReservationServiceImpl implements ReservationService {
                 .getId();
 
         if (!userId.equals(userInReservation)) {
-            return HttpStatus.NOT_FOUND;
+            throw new UnauthorizedReservationException();
         }
         reservationRepository.deleteById(reservationId);
-        return HttpStatus.OK;
 
     }
 

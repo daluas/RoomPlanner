@@ -1,10 +1,7 @@
 package edu.roomplanner.rest.intercept;
 
 
-import edu.roomplanner.exception.InvalidReservationDtoException;
-import edu.roomplanner.exception.InvalidReservationException;
-import edu.roomplanner.exception.UnknownUserTypeException;
-import edu.roomplanner.exception.UserNotFoundException;
+import edu.roomplanner.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -55,6 +52,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<JsonResponse> handleInvalidReservationException(InvalidReservationException exception) {
 
         return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({ReservationNotFoundException.class})
+    public ResponseEntity<JsonResponse> handleReservationNotFoundException(ReservationNotFoundException exception) {
+
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({UnauthorizedReservationException.class})
+    public ResponseEntity<JsonResponse> handleUnauthorizedReservationException(UnauthorizedReservationException exception) {
+
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
 }

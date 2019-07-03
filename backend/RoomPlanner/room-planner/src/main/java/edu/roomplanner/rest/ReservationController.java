@@ -53,9 +53,9 @@ public class ReservationController {
     ResponseEntity<HttpStatus> deleteReservation(@RequestParam("reservation") Long reservationId) {
         LOGGER.info("Method was called.");
 
-        HttpStatus result = bookRoomService.deleteReservation(reservationId);
-        LOGGER.info("The following object was returned: " + result);
-        return new ResponseEntity<>(result);
+        bookRoomService.deleteReservation(reservationId);
+        LOGGER.info("Exist method called");
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 

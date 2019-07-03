@@ -7,6 +7,8 @@ import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.exception.InvalidReservationDtoException;
+import edu.roomplanner.exception.ReservationNotFoundException;
+import edu.roomplanner.exception.UnauthorizedReservationException;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
@@ -80,43 +82,36 @@ public class ReservationServiceTest {
         sut.createReservation(2L, reservationDto);
     }
 
-    @Test
+    @Test(expected = ReservationNotFoundException.class)
     public void shouldNotFindValidReservationId() {
-        HttpStatus expected = HttpStatus.NOT_FOUND;
         Long roomId = 4L;
 
         when(reservationRepository.findById(roomId)).thenReturn(Optional.empty());
-        HttpStatus actual = sut.deleteReservation(roomId);
-
-        Assert.assertEquals(expected, actual);
+        sut.deleteReservation(roomId);
     }
 
-    @Test
+    @Test(expected = UnauthorizedReservationException.class)
     public void shouldFindThatAPersonWantsToDeleteOtherUserReservation() {
-        HttpStatus expected = HttpStatus.NOT_FOUND;
         Long roomId = 4L;
         String email = "sghitun@yahoo.com";
 
         when(tokenParserService.getEmailFromToken()).thenReturn(email);
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(getPerson(6L)));
         when(reservationRepository.findById(roomId)).thenReturn(Optional.of(getReservation(5L)));
-        HttpStatus actual = sut.deleteReservation(roomId);
+        sut.deleteReservation(roomId);
 
-        Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldDeleteReservation() {
-        HttpStatus expected = HttpStatus.OK;
         Long roomId = 4L;
         String email = "sghitun@yahoo.com";
 
         when(tokenParserService.getEmailFromToken()).thenReturn(email);
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(getPerson(6L)));
         when(reservationRepository.findById(roomId)).thenReturn(Optional.of(getReservation(6L)));
-        HttpStatus actual = sut.deleteReservation(roomId);
+        sut.deleteReservation(roomId);
 
-        Assert.assertEquals(expected, actual);
     }
 
 

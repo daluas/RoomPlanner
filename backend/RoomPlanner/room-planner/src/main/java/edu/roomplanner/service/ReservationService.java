@@ -12,6 +12,6 @@ public interface ReservationService {
 
     ReservationDto convertToDto(ReservationEntity reservationEntity);
 
-    HttpStatus deleteReservation(Long reservationId);
+    void deleteReservation(Long reservationId);
 
 }
