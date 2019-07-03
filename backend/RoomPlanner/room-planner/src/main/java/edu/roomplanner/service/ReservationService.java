@@ -2,6 +2,7 @@ package edu.roomplanner.service;
 
 import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.entity.ReservationEntity;
+import org.springframework.http.HttpStatus;
 
 public interface ReservationService {
 
@@ -10,5 +11,7 @@ public interface ReservationService {
     ReservationEntity convertToEntity(ReservationDto reservationDto);
 
     ReservationDto convertToDto(ReservationEntity reservationEntity);
+
+    void deleteReservation(Long reservationId);
 
 }

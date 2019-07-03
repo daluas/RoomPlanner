@@ -2,12 +2,16 @@ package edu.roomplanner.service.impl;
 
 import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.entity.ReservationEntity;
+import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.exception.*;
+import edu.roomplanner.mappers.ReservationDtoMapper;
+import edu.roomplanner.repository.ReservationRepository;
+import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.exception.InvalidReservationDtoException;
 import edu.roomplanner.exception.InvalidReservationException;
 import edu.roomplanner.exception.UserNotFoundException;
-import edu.roomplanner.mappers.ReservationDtoMapper;
-import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.service.ReservationService;
+import edu.roomplanner.service.TokenParserService;
 import edu.roomplanner.validation.BookingChain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,15 +25,20 @@ public class ReservationServiceImpl implements ReservationService {
 
     private ReservationDtoMapper mapperService;
     private ReservationRepository reservationRepository;
+    private TokenParserService tokenParserService;
+    private UserRepository userRepository;
     private BookingChain bookingChain;
 
     @Autowired
     public ReservationServiceImpl(ReservationDtoMapper mapperService, ReservationRepository reservationRepository,
-                                  BookingChain bookingChain) {
+                                  TokenParserService tokenParserService, UserRepository userRepository, BookingChain bookingChain) {
         this.mapperService = mapperService;
         this.reservationRepository = reservationRepository;
+        this.tokenParserService = tokenParserService;
+        this.userRepository = userRepository;
         this.bookingChain = bookingChain;
     }
+
 
     @Override
     public ReservationDto createReservation(Long roomId, ReservationDto reservationDto) {
@@ -70,6 +79,25 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ReservationDto convertToDto(ReservationEntity reservationEntity) {
         return mapperService.mapReservationEntityToDto(reservationEntity);
+    }
+
+    @Override
+    public void deleteReservation(Long reservationId) {
+        if (!reservationRepository.findById(reservationId).isPresent()) {
+            throw new ReservationNotFoundException("Invalid reservation ID");
+        }
+        String userEmail = tokenParserService.getEmailFromToken();
+        UserEntity userEntity = userRepository.findByEmail(userEmail).get();
+        Long userId = userEntity.getId();
+        Long userInReservation = reservationRepository.findById(reservationId).get()
+                .getPerson()
+                .getId();
+
+        if (!userId.equals(userInReservation)) {
+            throw new UnauthorizedReservationException("Can't delete another user reservation");
+        }
+        reservationRepository.deleteById(reservationId);
+
     }
 
     private Boolean areReservationDtoMembersNull(ReservationDto reservationDto) {

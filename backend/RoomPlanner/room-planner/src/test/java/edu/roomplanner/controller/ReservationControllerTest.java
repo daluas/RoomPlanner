@@ -3,9 +3,9 @@ package edu.roomplanner.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
 import edu.roomplanner.dto.ReservationDto;
+import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.ReservationEntity;
-import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
@@ -69,12 +69,16 @@ public class ReservationControllerTest {
 
     private RequestPostProcessor bearerToken;
 
+    private RequestPostProcessor bearerTokenTest;
+
     @Before
     public void init() {
         flyway.clean();
         flyway.migrate();
 
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
+
+        bearerTokenTest = oAuthHelper.addBearerToken("testEmail@yahoo.com", "person");
 
         Calendar startDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         Calendar endDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
@@ -193,4 +197,45 @@ public class ReservationControllerTest {
 
     }
 
+    @Test
+    public void shouldReturnNotFoundWhenReservationIdIsInvalid() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations?reservation=20")
+                .with(bearerToken))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void shouldReturnNotFoundWhenReservationIsDeletedForAnotherUser() throws Exception {
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun",
+                new HashSet<>(), UserType.PERSON, "Stefania", "Ghitun");
+        FloorEntity floorEntity = BuildersWrapper.buildFloorEntity(1L, 5);
+        UserEntity roomEntity = BuildersWrapper.buildRoomEntity(3L, "wonderland@yahoo.com", "wonderland",
+                new HashSet<>(), floorEntity, UserType.ROOM, "Wonderland", 4);
+        UserEntity userEntityPersonOne = BuildersWrapper.buildPersonEntity(5L, "testEmail@yahoo.com", "test", null, UserType.PERSON, "Test", "Name");
+        ReservationEntity reservationEntityTwo = BuildersWrapper.buildReservationEntity(2L, Calendar.getInstance(), Calendar.getInstance(), userEntityPerson,
+                roomEntity, "ReservationToBeDeleted");
+        reservationRepository.save(reservationEntityTwo);
+        userRepository.save(userEntityPersonOne);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations?reservation=2")
+                .with(bearerTokenTest))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    }
+
+    @Test
+    public void shouldDeleteReservation() throws Exception {
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun",
+                new HashSet<>(), UserType.PERSON, "Stefania", "Ghitun");
+        FloorEntity floorEntity = BuildersWrapper.buildFloorEntity(1L, 5);
+        UserEntity roomEntity = BuildersWrapper.buildRoomEntity(3L, "wonderland@yahoo.com", "wonderland",
+                new HashSet<>(), floorEntity, UserType.ROOM, "Wonderland", 4);
+        UserEntity userEntityPersonOne = BuildersWrapper.buildPersonEntity(5L, "testEmail@yahoo.com", "test", null, UserType.PERSON, "Test", "Name");
+        ReservationEntity reservationEntityTwo = BuildersWrapper.buildReservationEntity(2L, Calendar.getInstance(), Calendar.getInstance(), userEntityPerson,
+                roomEntity, "ReservationToBeDeleted");
+        reservationRepository.save(reservationEntityTwo);
+        userRepository.save(userEntityPersonOne);
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations?reservation=2")
+                .with(bearerToken))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }

@@ -48,10 +48,21 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({ReservationNotFoundException.class})
+    public ResponseEntity<JsonResponse> handleReservationNotFoundException(ReservationNotFoundException exception) {
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler({FloorNotFoundException.class})
     public ResponseEntity<JsonResponse> handleFloorNotFoundException(FloorNotFoundException exception) {
 
         return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({UnauthorizedReservationException.class})
+    public ResponseEntity<JsonResponse> handleUnauthorizedReservationException(UnauthorizedReservationException exception) {
+
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({RoomNotFoundException.class})
