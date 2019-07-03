@@ -50,8 +50,6 @@ public class PrevalidationServiceImpl implements PrevalidationService {
             return HttpStatus.OK;
         }
         return HttpStatus.BAD_REQUEST;
-
-
     }
 
     private ReservationEntity getReservationEntity(Calendar startDate, Calendar endDate, PersonEntity personEntity, Long roomId) {
@@ -61,14 +59,12 @@ public class PrevalidationServiceImpl implements PrevalidationService {
                 .withRoom(userRepository.findById(roomId).get())
                 .withPerson(personEntity)
                 .build();
-
     }
 
     private boolean verifyPersonEntity(String email) {
         return userRepository.findByEmail(email)
                 .filter(userEntity -> userEntity.getType().equals(UserType.PERSON))
                 .isPresent();
-
     }
 
     private boolean verifyRoomEntity(Long roomId) {
@@ -83,6 +79,6 @@ public class PrevalidationServiceImpl implements PrevalidationService {
 
     private boolean verifyParameters(Calendar startDate, Calendar endDate, String email, Long roomId) {
         return startDate == null || endDate == null || email == null || roomId == null;
-
     }
+
 }

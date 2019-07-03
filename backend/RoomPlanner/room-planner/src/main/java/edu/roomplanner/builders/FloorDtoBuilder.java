@@ -32,11 +32,12 @@ public class FloorDtoBuilder {
 
     public FloorDto build() {
 
-        FloorDto floorBuilded = new FloorDto();
-        floorBuilded.setId(id);
-        floorBuilded.setFloor(floor);
-        floorBuilded.setRooms(rooms);
+        FloorDto floorBuilt = new FloorDto();
+        floorBuilt.setId(id);
+        floorBuilt.setFloor(floor);
+        floorBuilt.setRooms(rooms);
 
-        return floorBuilded;
+        return floorBuilt;
     }
+
 }

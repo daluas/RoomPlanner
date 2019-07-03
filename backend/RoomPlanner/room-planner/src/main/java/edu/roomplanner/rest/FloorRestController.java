@@ -36,7 +36,7 @@ public class FloorRestController {
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error.")})
     @PreAuthorize("hasAuthority('person')")
-    ResponseEntity<List<FloorDto>> getAllFloors() {
+    public ResponseEntity<List<FloorDto>> getAllFloors() {
 
         LOGGER.info("Method was called.");
         List<FloorDto> allFloors = floorService.getAllFloors();
@@ -51,12 +51,11 @@ public class FloorRestController {
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error.")})
     @PreAuthorize("hasAuthority('person')")
-    ResponseEntity<FloorDto> getFloorByName(@PathVariable Integer floor) {
-        FloorDto floorDto = floorService.getFloorByFloor(floor);
+    public ResponseEntity<FloorDto> getFloorByName(@PathVariable Integer floor) {
 
-        if (floorDto == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        LOGGER.info("Method was called.");
+        FloorDto floorDto = floorService.getFloorByFloor(floor);
+        LOGGER.info("The following object was returned:" + floorDto);
 
         return new ResponseEntity<>(floorDto, HttpStatus.FOUND);
     }

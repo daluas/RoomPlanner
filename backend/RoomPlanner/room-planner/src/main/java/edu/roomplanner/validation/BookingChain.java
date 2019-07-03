@@ -11,7 +11,6 @@ import java.util.List;
 @Component
 public class BookingChain {
 
-
     private List<BookingValidator> validatorChain;
 
     @Autowired
@@ -28,6 +27,5 @@ public class BookingChain {
                 .forEach(errors::add);
         return errors;
     }
-
 
 }

@@ -42,6 +42,7 @@ public class RoomDtoMapperTest {
         ((RoomEntity) userEntity).setReservations(new HashSet<>());
         ((RoomEntity) userEntity).setFloor(new FloorEntity());
         RoomDto expectedRoomDto = new RoomDto();
+        expectedRoomDto.setReservations(new HashSet<>());
         expectedRoomDto.setType(UserType.ROOM);
         RoomDto actualRoomDto = sut.mapEntityToDto((RoomEntity) userEntity);
 
@@ -58,8 +59,10 @@ public class RoomDtoMapperTest {
 
         List<RoomDto> actualRoomDtoList = sut.mapEntityListToDtoList(roomEntityList);
 
-        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland", null, 5, 14, UserType.ROOM);
-        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros", null, 8, 20, UserType.ROOM);
+        RoomDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
+                new HashSet<>(), 5, 14, UserType.ROOM);
+        RoomDto roomDtoTwo = BuildersWrapper.buildRoomDto(3L, "westeros@yahoo.com", "Westeros",
+                new HashSet<>(), 8, 20, UserType.ROOM);
         List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
 
         assertEquals(expectedRoomDtoList, actualRoomDtoList);
@@ -81,8 +84,10 @@ public class RoomDtoMapperTest {
 
         RoomDto roomDtoOne = new RoomDto();
         roomDtoOne.setType(UserType.ROOM);
+        roomDtoOne.setReservations(new HashSet<>());
         RoomDto roomDtoTwo = new RoomDto();
         roomDtoTwo.setType(UserType.ROOM);
+        roomDtoTwo.setReservations(new HashSet<>());
         List<RoomDto> expectedRoomDtoList = Arrays.asList(roomDtoOne, roomDtoTwo);
 
         assertEquals(expectedRoomDtoList, actualRoomDtoList);

@@ -12,4 +12,5 @@ public interface FloorDtoMapper {
     FloorDto mapEntityToDtoWithReservations(FloorEntity floorEntity);
 
     List<FloorDto> mapEntityListToDtoList(List<FloorEntity> floorEntityList);
+
 }

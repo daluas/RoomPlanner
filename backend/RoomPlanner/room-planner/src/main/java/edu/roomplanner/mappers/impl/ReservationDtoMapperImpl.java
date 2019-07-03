@@ -15,9 +15,6 @@ public class ReservationDtoMapperImpl implements ReservationDtoMapper {
 
     private UserRepository userRepository;
 
-    public ReservationDtoMapperImpl() {
-    }
-
     @Autowired
     public ReservationDtoMapperImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
