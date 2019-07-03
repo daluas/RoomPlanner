@@ -33,4 +33,5 @@ public class RoomPersonValidator implements BookingValidator {
                 .getType()
                 .equals(UserType.PERSON);
     }
+
 }

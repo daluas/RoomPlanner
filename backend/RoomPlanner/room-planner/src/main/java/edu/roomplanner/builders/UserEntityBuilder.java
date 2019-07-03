@@ -115,4 +115,5 @@ public class UserEntityBuilder {
         personEntity.setReservations(reservations);
         return personEntity;
     }
+
 }

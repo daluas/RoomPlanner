@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Api(value = "Reservation API", produces = MediaType.APPLICATION_JSON_VALUE)
-public class ReservationController {
+public class ReservationRestController {
 
-    private static final Logger LOGGER = LogManager.getLogger(ReservationController.class);
+    private static final Logger LOGGER = LogManager.getLogger(ReservationRestController.class);
 
     private final ReservationService bookRoomService;
 
     @Autowired
-    public ReservationController(ReservationService bookRoomService) {
+    public ReservationRestController(ReservationService bookRoomService) {
         this.bookRoomService = bookRoomService;
     }
 

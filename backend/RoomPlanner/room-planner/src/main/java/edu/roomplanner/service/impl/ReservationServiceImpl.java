@@ -4,13 +4,12 @@ import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.exception.InvalidReservationDtoException;
 import edu.roomplanner.exception.InvalidReservationException;
+import edu.roomplanner.exception.UserNotFoundException;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
-import edu.roomplanner.exception.UserNotFoundException;
 import edu.roomplanner.service.ReservationService;
 import edu.roomplanner.validation.BookingChain;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -89,7 +89,8 @@ public class UsersRestControllerTest {
         entityManager.createNativeQuery("ALTER SEQUENCE seq_user_id RESTART WITH 1").executeUpdate();
         entityManager.createNativeQuery("ALTER SEQUENCE seq_reservation_id RESTART WITH 1").executeUpdate();
 
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun", null, UserType.PERSON, "Stefania", "Ghitun");
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun",
+                new HashSet<>(), UserType.PERSON, "Stefania", "Ghitun");
         userRepository.save(userEntityPerson);
 
         bearerToken = oAuthHelper.addBearerToken("sghitun@yahoo.com", "person");
@@ -253,7 +254,7 @@ public class UsersRestControllerTest {
         userRepository.save(userEntityRoom);
         RoomDto roomDto = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
                 new HashSet<>(), 5, 14, UserType.ROOM);
-        String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
+        String jsonRoomDto = new ObjectMapper().writeValueAsString(Collections.singletonList(roomDto));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms", 1).with(roomBearerToken))
                 .andExpect(MockMvcResultMatchers.status().isFound())
@@ -276,14 +277,14 @@ public class UsersRestControllerTest {
 
     @Test
     public void shouldReturnResponseEntityWithStatusUnauthorizedWhenGetRoomByIdIsCalledWithOtherIdThenLoggedRoomId() throws Exception {
-        UserEntity userEntityWesteros = BuildersWrapper.buildRoomEntity(1L, "westeros@yahoo.com", "westeros",
+        UserEntity userEntityWesteros = BuildersWrapper.buildRoomEntity(2L, "westeros@yahoo.com", "westeros",
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(2L, 8), UserType.ROOM, "Westeros", 20);
-        UserEntity userEntityWonderland = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "wonderland",
+        UserEntity userEntityWonderland = BuildersWrapper.buildRoomEntity(3L, "wonderland@yahoo.com", "wonderland",
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         userRepository.save(userEntityWesteros);
         userRepository.save(userEntityWonderland);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/1", 1).with(roomBearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/2", 2).with(roomBearerToken))
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
@@ -293,7 +294,7 @@ public class UsersRestControllerTest {
                 new HashSet<>(), BuildersWrapper.buildFloorEntity(1L, 5), UserType.ROOM, "Wonderland", 14);
         userRepository.save(userEntityWonderland);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/users?email=sghitun%40yahoo.com", 1).with(roomBearerToken))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users?email=sghitun@yahoo.com", 1).with(roomBearerToken))
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 

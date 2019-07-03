@@ -1,9 +1,11 @@
 package edu.roomplanner.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
-@Data
+@Getter
+@Setter
 public class RoomDto extends UserDto {
 
     private String name;

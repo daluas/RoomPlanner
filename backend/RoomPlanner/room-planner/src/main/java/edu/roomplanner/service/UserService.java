@@ -7,7 +7,6 @@ import edu.roomplanner.entity.UserEntity;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public interface UserService {
@@ -18,7 +17,7 @@ public interface UserService {
 
     RoomDto getRoomByEmail(String email);
 
-    Optional<UserDto> getUserDto(String email);
+    UserDto getUserDto(String email);
 
     List<RoomDto> getRoomsByFilters(Calendar startDate, Calendar endDate, Integer minPersons, Integer floor);
 

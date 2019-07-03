@@ -4,7 +4,9 @@ import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.validation.ValidationResult;
 
 public interface BookingValidator {
+
     ValidationResult validate(ReservationEntity reservationEntity);
 
     int MIN_MINUTES = 30;
+
 }
