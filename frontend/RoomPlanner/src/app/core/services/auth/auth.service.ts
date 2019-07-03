@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material';
 })
 export class AuthService {
 	private token: LoginToken;
-	private backendUrl: string = 'http://178.22.68.114/api/RoomPlanner';
+	private backendUrl: string = 'http://178.22.68.114:8081/api/RoomPlanner';
 	private currentUser: LoggedUser;
 	private currentUserSubscriber: Subscriber<LoggedUser> = new Subscriber<LoggedUser>();
 
@@ -70,7 +70,6 @@ export class AuthService {
 		params = params.set("grant_type", "password");
 		params = params.set('username', loginModel.email);
 		params = params.set('password', loginModel.password);
-		let x: Promise<Object>
 	
 	
 		return this.httpClient.post(`${this.backendUrl}/oauth/token`, params).toPromise()
@@ -81,7 +80,6 @@ export class AuthService {
 				// x = 
 				return this.httpClient.get(`${this.backendUrl}/users`, { params: params }).toPromise()
 			})
-		return x
 	}
 
 

@@ -29,10 +29,12 @@ export class Interceptor implements HttpInterceptor {
     constructor(private _snackBar: MatSnackBar) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log(request);
+       // console.log(request);
 
         if (request.url === `${this.BASE_URL}/oauth/token`) {
             //request token
+            console.log(request.body)
+
             if (request.body.get("grant_type") === "password") {
                 console.log("aiciii");
 
@@ -95,6 +97,8 @@ export class Interceptor implements HttpInterceptor {
                 )
             }
         }
+
+
 
         if (request.url === `${this.BASE_URL}/users`) {
             

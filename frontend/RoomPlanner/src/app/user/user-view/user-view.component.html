@@ -5,7 +5,7 @@
 
   <div class="booking-popup-container" *ngIf="bookingPopupOpen" [ngClass]="{'display-block' : bookingPopupOpen}">
     <div class="booking-popup-close"></div>
-    <app-booking-popup [(booking)]="booking" (booked)="addCreatedBooking($event)" (closePopup)="closeBookingPopup()"></app-booking-popup>
+    <app-booking-popup [(booking)]="booking" (newBooking)="addCreatedBooking($event)" (updatedBooking)="updateBooking($event)" (deletedBooking)="deleteBooking($event)" (closePopup)="closeBookingPopup()"></app-booking-popup>
   </div>
 
   <div class="room-view-container">

@@ -87,11 +87,8 @@ export class HourInputBookingComponent implements OnInit {
   prevalidation() {
     // ok! (for integration)
     this.bookingService.prevalidation(this.booking).subscribe(res => {
-      console.log(res);
-
-
+      
       this.prevalidationStatus = res.status;
-      console.log("prevalidation status: " + res.status);
       if (this.prevalidationStatus == 200 && this.invalidHours == false) {
         this.disableBookButton.emit(false);//emit(false)=buton enabled
       }
@@ -133,7 +130,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyUpHoursStartDate() {
-    // this.update();
+    
     if (this.startHourForm.value.hour == undefined) {
       this.startHourForm.setValue({ hour: '00', minutes: this.startHourForm.value.minutes });
     }
@@ -150,7 +147,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyUpHoursEndDate() {
-    // this.update();
+    
     if (this.endHourForm.value.hour == undefined) {
       this.endHourForm.setValue({ hour: '00', minutes: this.endHourForm.value.minutes });
     }
@@ -167,7 +164,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyUpMinutesStartDate() {
-    // this.update();
+    
     if (this.startHourForm.value.hour == undefined) {
       this.startHourForm.setValue({ hour: this.startHourForm.value.hour, minutes: '00' });
     }
@@ -181,7 +178,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyUpMinutesEndDate() {
-    // this.update();
+    
     if (this.endHourForm.value.hour == undefined) {
       this.endHourForm.setValue({ hour: this.endHourForm.value.hour, minutes: '00' });
     }
@@ -195,7 +192,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyDownHoursStartDate() {
-    // this.update();
+    
     if (this.startHourForm.value.hour == undefined) {
       this.startHourForm.setValue({ hour: 23, minutes: this.startHourForm.value.minutes });
     }
@@ -211,7 +208,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyDownMinutesStartDate() {
-    // this.update();
+    
     if (this.startHourForm.value.minutes == undefined) {
       this.startHourForm.setValue({ hour: this.startHourForm.value.hour, minutes: '00' });
     }
@@ -225,7 +222,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyDownHoursEndDate() {
-    // this.update();
+    
     if (this.endHourForm.value.hour == undefined) {
       this.endHourForm.setValue({ hour: 23, minutes: this.endHourForm.value.minutes });
     }
@@ -241,7 +238,7 @@ export class HourInputBookingComponent implements OnInit {
   }
 
   onKeyDownMinutesEndDate() {
-    // this.update();
+    
     if (this.endHourForm.value.minutes == undefined) {
       this.endHourForm.setValue({ hour: this.endHourForm.value.hour, minutes: '00' });
     }

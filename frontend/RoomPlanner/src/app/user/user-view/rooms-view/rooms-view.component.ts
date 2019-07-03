@@ -184,7 +184,7 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   isBookingCreatedByCurrentUser(booking) {
-    return booking.personEmail === this.currentUser.email;
+    return booking.personalEmail === this.currentUser.email;
   }
 
   getUsernameFromEmail(email): string {

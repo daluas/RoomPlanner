@@ -16,7 +16,7 @@ export class BookingService {
   constructor(private httpClient: HttpClient, private authService: AuthService) { }
 
   prevalidation(booking: Booking): Observable<HttpResponse<Config>> {//Observable<HttpResponse<Config>>
-    console.log("prevalidation was called!");
+    //console.log("prevalidation was called!");
     let roomID: number = booking.roomId;
     let startDate = booking.startDate.toUTCString();
     let endDate = booking.endDate.toUTCString();
@@ -33,9 +33,6 @@ export class BookingService {
       params: params,
       observe: 'response'
     });
-
-    
-
   }
 
   createNewBooking(booking: Booking): Promise<any> {
@@ -67,7 +64,6 @@ export class BookingService {
       description: booking.description,
 
     }
-    console.log(params.startDate);
     return this.httpClient.patch(`${this.backendUrl}/update-reservations/${id}`, params, { observe: 'response' });
     //status code: 200 OK or 204 NO CONTENT 
   }
