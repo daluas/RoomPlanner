@@ -38,3 +38,12 @@
 .reserved{
     fill: #71c422;
 }
+
+.reservationPin{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    border: 3px solid #71c422;
+    transform: translate(-50%, -50%);
+}

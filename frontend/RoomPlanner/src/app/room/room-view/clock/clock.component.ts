@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } 
 import { Booking } from 'src/app/core/models/BookingModel';
 import { TimeInterval } from '../models/timeInterval';
 import { IntervalType } from '../enums/enums';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-clock',
@@ -31,7 +32,7 @@ export class ClockComponent implements OnInit, OnChanges, OnDestroy {
 
   svgWidth: number = 0;
 
-  constructor() { }
+  constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.svgWidth = document.getElementById('svg-clock').getBoundingClientRect().width;
@@ -185,6 +186,17 @@ export class ClockComponent implements OnInit, OnChanges, OnDestroy {
         if (this.availabilityIntervals[i].type === IntervalType.available) {
           this.availabilityIntervals[i].type = IntervalType.reserved;
 
+          let pin1Percent = this.getPercentsForTime(this.availabilityIntervals[i].from);
+          let pin2Percent = this.getPercentsForTime(this.availabilityIntervals[i].to);
+
+          let pin1 = this.getPinForPercent(pin1Percent);
+          let pin2 = this.getPinForPercent(pin2Percent);
+
+          let scope = this;
+          setTimeout(() => {
+            scope.reservationPins = [pin1, pin2];
+          }, 0);
+
           break;
         }
       }
@@ -195,36 +207,17 @@ export class ClockComponent implements OnInit, OnChanges, OnDestroy {
     let [x1, x2] = this.getCoordinatesForPercent(percent, 67);
     let [cx, cy] = this.getCoordinatesForPercent(percent, 51);
 
+    let style = `top: ${cy}px; left: ${cx}px`;
+
     return {
       x1: x1,
       y1: x2,
-      cx: cx,
-      cy: cy
+      circleStyle: this.sanitizer.bypassSecurityTrustStyle(style)
     }
+  }
 
-
-
-    // let width = this.getSvgWidth();
-
-    // let svg = document.getElementById('svg-clock');
-
-    // let [startX, startY] = this.getCoordinatesForPercent(0, 67);
-
-    // let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    // line.setAttribute('x1', startX.toString() + "px");
-    // line.setAttribute('y1', startY.toString() + "px");
-    // line.setAttribute('x2', width / 2 + "px");
-    // line.setAttribute('y2', width / 2 + "px");
-    // line.setAttribute("style", "stroke: #71c422; stroke-width: 3px;");
-    // svg.appendChild(line);
-
-    // [startX, startY] = this.getCoordinatesForPercent(0, 51);
-    // let circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
-    // circle.setAttributeNS(null, 'cx', startX + "px");
-    // circle.setAttributeNS(null, 'cy', startY + "px");
-    // circle.setAttributeNS(null, 'r', "15px");
-    // circle.setAttributeNS(null, 'style', 'fill: rgb(0,0,0,0); stroke: #71c422; stroke-width: 3px;');
-    // svg.appendChild(circle);
+  dragPin(event){
+    console.log(event);
   }
 
   getPercentsForTime(time: number) {
@@ -264,43 +257,4 @@ export class ClockComponent implements OnInit, OnChanges, OnDestroy {
       width * 0.5 + (width * 0.5 - minusLength) * y
     ];
   }
-
-  /*
-  drawClock() {
-
-    // selection pins
-    this.drawSelectionPins();
-
-  }
-
-  drawSelectionPins(){
-    // pin x, y, ipotenuza, cateta
-
-    this.drawPin();
-  }
-
-  drawPin(){
-    let width = this.getSvgWidth();
-
-    let svg = document.getElementById('svg-clock');
-
-    let [startX, startY] = this.getCoordinatesForPercent(0, 67);
-
-    let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', startX.toString() + "px");
-    line.setAttribute('y1', startY.toString() + "px");
-    line.setAttribute('x2', width / 2 + "px");
-    line.setAttribute('y2', width / 2 + "px");
-    line.setAttribute("style", "stroke: #71c422; stroke-width: 3px;");
-    svg.appendChild(line);
-
-    [startX, startY] = this.getCoordinatesForPercent(0, 51);
-    let circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
-    circle.setAttributeNS(null, 'cx', startX + "px");
-    circle.setAttributeNS(null, 'cy', startY + "px");
-    circle.setAttributeNS(null, 'r', "15px");
-    circle.setAttributeNS(null, 'style', 'fill: rgb(0,0,0,0); stroke: #71c422; stroke-width: 3px;');
-    svg.appendChild(circle);
-  }
-  */
 }

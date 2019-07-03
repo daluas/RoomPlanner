@@ -10,7 +10,7 @@
       style="fill: #fff; stroke: #222; stroke-width: 2px;" />
 
     <line [attr.x1]="beginningLine.x1" [attr.y1]="beginningLine.y1" [attr.x2]="beginningLine.x2"
-      [attr.y2]="beginningLine.y2" style="stroke: #ffaa21; stroke-width: 5px;" />
+      [attr.y2]="beginningLine.y2" style="stroke: #1faaff; stroke-width: 5px;" />
 
     <g *ngFor="let elm of clockNumbers">
       <circle *ngIf="elm.type === 'point'" [attr.cx]="elm.cx" [attr.cy]="elm.cy" [attr.r]="elm.r" style="fill: #222" />
@@ -27,8 +27,6 @@
       <g *ngFor="let reservationPin of reservationPins">
         <line [attr.x1]="reservationPin.x1" [attr.y1]="reservationPin.y1" [attr.x2]="svgWidth / 2"
           [attr.y2]="svgWidth / 2" style="stroke: #71c422; stroke-width: 3px;" />
-        <circle [attr.cx]="reservationPin.cx" [attr.cy]="reservationPin.cy" r="15"
-          style="fill: rgb(0,0,0,0); stroke: #71c422; stroke-width: 3px;" />
       </g>
     </g>
 
@@ -37,4 +35,9 @@
     <text [attr.x]="svgWidth / 2" [attr.y]="svgWidth / 2" dy="3"
       style="font-size: 24px; fill: #fff; font-weight: bold; alignment-baseline:middle; text-anchor:middle">{{clockTime}}</text>
   </svg>
+
+  <div *ngIf="isActive">
+    <div *ngFor="let reservationPin of reservationPins" class="reservationPin" [style]="reservationPin.circleStyle">
+    </div>
+  </div>
 </div>
