@@ -5,7 +5,6 @@ public class ValidationResult {
     private String error;
 
     public ValidationResult() {
-
     }
 
     public ValidationResult(String error) {

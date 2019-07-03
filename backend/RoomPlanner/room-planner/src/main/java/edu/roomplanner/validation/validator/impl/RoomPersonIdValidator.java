@@ -20,22 +20,22 @@ public class RoomPersonIdValidator implements BookingValidator {
     }
 
     public ValidationResult validate(ReservationEntity reservationEntity) {
-        if (!isPersonInDB(reservationEntity)) {
+        if (!isPersonPresent(reservationEntity)) {
             return new ValidationResult("User is missing");
         }
-        if (!isRoomInDB(reservationEntity)) {
+        if (!isRoomPresent(reservationEntity)) {
             return new ValidationResult("Room is missing");
         }
         return new ValidationResult();
     }
 
-    private boolean isPersonInDB(ReservationEntity reservationEntity) {
+    private boolean isPersonPresent(ReservationEntity reservationEntity) {
         return userRepository.findById(reservationEntity.getPerson()
                 .getId())
                 .isPresent();
     }
 
-    private boolean isRoomInDB(ReservationEntity reservationEntity) {
+    private boolean isRoomPresent(ReservationEntity reservationEntity) {
         return userRepository.findById(reservationEntity.getRoom()
                 .getId())
                 .isPresent();

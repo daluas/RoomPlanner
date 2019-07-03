@@ -6,5 +6,5 @@ import java.util.Calendar;
 
 public interface PrevalidationService {
 
-    HttpStatus prevalidate(Calendar startDate, Calendar endDate, String email, Long roomId);
+    void prevalidate(Calendar startDate, Calendar endDate, String email, Long roomId);
 }

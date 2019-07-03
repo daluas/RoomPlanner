@@ -43,7 +43,7 @@ public class UserRightsValidatorTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(roomEntity));
         when(tokenParserService.getEmailFromToken()).thenReturn(email);
 
-        boolean response = sut.checkIfUserIsRoom();
+        boolean response = sut.isUserLoggedAsRoom();
 
         assertTrue(response);
     }
@@ -59,7 +59,7 @@ public class UserRightsValidatorTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(userEntity));
         when(tokenParserService.getEmailFromToken()).thenReturn(email);
 
-        boolean response = sut.checkIfUserIsRoom();
+        boolean response = sut.isUserLoggedAsRoom();
 
         assertFalse(response);
     }
@@ -75,7 +75,7 @@ public class UserRightsValidatorTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(roomEntity));
         when(tokenParserService.getEmailFromToken()).thenReturn(email);
 
-        boolean response = sut.checkIfLoggedRoomIsRequestedRoom(1L);
+        boolean response = sut.isLoggedRoomARequestedRoom(1L);
 
         assertTrue(response);
     }
@@ -91,7 +91,7 @@ public class UserRightsValidatorTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(roomEntity));
         when(tokenParserService.getEmailFromToken()).thenReturn(email);
 
-        boolean response = sut.checkIfLoggedRoomIsRequestedRoom(2L);
+        boolean response = sut.isLoggedRoomARequestedRoom(2L);
 
         assertFalse(response);
     }

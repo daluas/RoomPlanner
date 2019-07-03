@@ -9,17 +9,13 @@ import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.entity.UserEntity;
-import edu.roomplanner.exception.*;
-import edu.roomplanner.mappers.ReservationDtoMapper;
-import edu.roomplanner.repository.ReservationRepository;
-import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.exception.InvalidReservationDtoException;
 import edu.roomplanner.exception.InvalidReservationException;
 import edu.roomplanner.exception.UserNotFoundException;
 import edu.roomplanner.service.ReservationService;
 import edu.roomplanner.service.TokenParserService;
 import edu.roomplanner.types.UserType;
-import edu.roomplanner.service.TokenParserService;
+import edu.roomplanner.util.ConverterUtil;
 import edu.roomplanner.validation.BookingChain;
 import edu.roomplanner.validation.ValidationResult;
 import edu.roomplanner.validation.validator.impl.StartEndDateValidator;
@@ -74,9 +70,7 @@ public class ReservationServiceImpl implements ReservationService {
         return currentReservationDto;
     }
 
-
-    @Override
-    public ReservationEntity convertToEntity(ReservationDto reservationDto) {
+    private ReservationEntity convertToEntity(ReservationDto reservationDto) {
         ReservationEntity reservationEntity = mapperService.mapReservationDtoToEntity(reservationDto);
         if (reservationEntity.getPerson() == null) {
             throw new UserNotFoundException("Invalid email");
@@ -87,8 +81,7 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationEntity;
     }
 
-    @Override
-    public ReservationDto convertToDto(ReservationEntity reservationEntity) {
+    private ReservationDto convertToDto(ReservationEntity reservationEntity) {
         return mapperService.mapReservationEntityToDto(reservationEntity);
     }
 
@@ -98,9 +91,11 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ReservationNotFoundException("Invalid reservation ID");
         }
         String userEmail = tokenParserService.getEmailFromToken();
-        UserEntity userEntity = userRepository.findByEmail(userEmail).get();
+        UserEntity userEntity = userRepository.findByEmail(userEmail).
+                orElseThrow(() -> new UserNotFoundException("User not found! Bad email"));
         Long userId = userEntity.getId();
-        Long userInReservation = reservationRepository.findById(reservationId).get()
+        Long userInReservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found! ID not found"))
                 .getPerson()
                 .getId();
 
@@ -128,20 +123,15 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ReservationDto updateReservation(Long id, ReservationDto reservationDto) {
-
-        ReservationDto copyDto = ReservationDtoBuilder.builder().withEndDate(Calendar.getInstance()).withStartDate(Calendar.getInstance()).build();
-        copyDto.getStartDate().setTime((Date) reservationDto.getStartDate().getTime().clone());
-        copyDto.getEndDate().setTime((Date) reservationDto.getEndDate().getTime().clone());
-
-        copyDto.getStartDate().setTime(conversionToGmt(reservationDto.getStartDate().getTime()));
-        copyDto.getEndDate().setTime(conversionToGmt(reservationDto.getEndDate().getTime()));
+        ReservationDto updateDto = createUpdateReservationDto(reservationDto);
 
         String userEmail = tokenParserService.getEmailFromToken();
         verifyParameters(userEmail, id);
 
-        ReservationEntity reservationEntity = reservationRepository.findById(id).get();
+        ReservationEntity reservationEntity = reservationRepository.findById(id)
+                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found! ID not found"));
 
-        ValidationResult result = startEndDateValidator.validate(getReservation(copyDto));
+        ValidationResult result = startEndDateValidator.validate(getReservation(updateDto));
 
         if (result.getError() != null) {
             throw new InvalidDateException(result.getError());
@@ -149,7 +139,20 @@ public class ReservationServiceImpl implements ReservationService {
 
         verifyPersonId(reservationEntity, userEmail);
         return getReservationDtoUpdated(reservationEntity, reservationDto);
+    }
+    
+    private ReservationDto createUpdateReservationDto(ReservationDto reservationDto) {
+        ReservationDto copyDto = ReservationDtoBuilder.builder()
+                .withEndDate(Calendar.getInstance())
+                .withStartDate(Calendar.getInstance())
+                .build();
+        copyDto.getStartDate().setTime((Date) reservationDto.getStartDate().getTime().clone());
+        copyDto.getEndDate().setTime((Date) reservationDto.getEndDate().getTime().clone());
 
+        copyDto.getStartDate().setTime(ConverterUtil.conversionToGmt(reservationDto.getStartDate().getTime()));
+        copyDto.getEndDate().setTime(ConverterUtil.conversionToGmt(reservationDto.getEndDate().getTime()));
+        
+        return copyDto;
     }
 
     private ReservationDto getReservationDtoUpdated(ReservationEntity reservationEntity, ReservationDto reservationDto) {
@@ -161,13 +164,15 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private void verifyPersonId(ReservationEntity reservationEntity, String userEmail) {
-        Long userId = userRepository.findByEmail(userEmail).get().getId();
+        Long userId = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("User not found! Email not found!"))
+                .getId();
         if (!userId.equals(reservationEntity.getPerson().getId())) {
             throw new PersonIdOfReservationNotEqualsUserIdException("Person id of reservation is not the same as user id.");
         }
     }
 
-    private boolean reservationExists(Long id) {
+    private boolean existsReservation(Long id) {
         return reservationRepository.findById(id)
                 .isPresent();
     }
@@ -188,25 +193,12 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private void verifyParameters(String userEmail, Long id) {
-        if (!reservationExists(id)) {
+        if (!existsReservation(id)) {
             throw new ReservationNotFoundException("Reservation not found! Bad id");
         }
         if (!isEmailOwnerPerson(userEmail)) {
             throw new NotPersonException("You are not a person");
         }
     }
-
-    private Date conversionToGmt(Date date) {
-        TimeZone tz = TimeZone.getDefault();
-        Date ret = new Date(date.getTime() - tz.getRawOffset());
-        if (tz.inDaylightTime(ret)) {
-            Date dstDate = new Date(ret.getTime() - tz.getDSTSavings());
-            if (tz.inDaylightTime(dstDate)) {
-                ret = dstDate;
-            }
-        }
-        return ret;
-    }
-
-
+    
 }

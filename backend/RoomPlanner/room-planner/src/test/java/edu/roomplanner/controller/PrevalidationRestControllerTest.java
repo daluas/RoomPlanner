@@ -167,7 +167,7 @@ public class PrevalidationRestControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/prevalidation?roomId=5000&startDate=" + df.format(startDate.getTime()) + "&endDate=" + df.format(endDate.getTime()) + "&email=sghitun@yahoo.com")
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test

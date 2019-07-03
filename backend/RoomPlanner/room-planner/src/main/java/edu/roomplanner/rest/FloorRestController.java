@@ -32,7 +32,8 @@ public class FloorRestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/floors")
     @ApiOperation("Gets a list of all floors")
-    @ApiResponses(value = {@ApiResponse(code = 301, message = "The following floors were returned."),
+    @ApiResponses(value = {
+            @ApiResponse(code = 301, message = "The following floors were returned."),
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error.")})
     @PreAuthorize("hasAuthority('person')")
@@ -41,12 +42,14 @@ public class FloorRestController {
         LOGGER.info("Method was called.");
         List<FloorDto> allFloors = floorService.getAllFloors();
         LOGGER.info("The following object was returned:" + allFloors);
+
         return new ResponseEntity<>(allFloors, HttpStatus.FOUND);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/floors/{floor}")
     @ApiOperation("Gets a floor with an specific \"name\"")
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "This floor was not found."),
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "This floor was not found."),
             @ApiResponse(code = 301, message = "The following floor was found", response = FloorDto.class),
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error.")})

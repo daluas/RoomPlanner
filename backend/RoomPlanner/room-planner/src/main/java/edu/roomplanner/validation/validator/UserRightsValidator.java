@@ -2,8 +2,8 @@ package edu.roomplanner.validation.validator;
 
 public interface UserRightsValidator {
 
-    boolean checkIfUserIsRoom();
+    boolean isUserLoggedAsRoom();
 
-    boolean checkIfLoggedRoomIsRequestedRoom(Long id);
+    boolean isLoggedRoomARequestedRoom(Long id);
 
 }

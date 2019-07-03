@@ -52,7 +52,7 @@ public class UserValidatorTest {
 
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(userEntity));
 
-        boolean response = sut.checkValidRoomId(1L);
+        boolean response = sut.isRoomIdValid(1L);
 
         assertTrue(response);
     }
@@ -63,7 +63,7 @@ public class UserValidatorTest {
                 "sghitun", null, UserType.PERSON, "Git", "Mast");
 
         when(userRepository.findById(3L)).thenReturn(Optional.ofNullable(userEntity));
-        boolean response = sut.checkValidRoomId(3L);
+        boolean response = sut.isRoomIdValid(3L);
 
         assertFalse(response);
     }
@@ -73,7 +73,7 @@ public class UserValidatorTest {
 
         UserEntity userEntity = new RoomEntity();
         when(userRepository.findById(3L)).thenReturn(Optional.ofNullable(userEntity));
-        boolean response = sut.checkValidRoomId(7L);
+        boolean response = sut.isRoomIdValid(7L);
 
         assertFalse(response);
     }

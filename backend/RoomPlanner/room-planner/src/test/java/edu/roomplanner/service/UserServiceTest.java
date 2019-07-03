@@ -99,7 +99,7 @@ public class UserServiceTest {
 
         PersonEntity personEntity = (PersonEntity) BuildersWrapper.buildPersonEntity(2L, "sghitun@yahoo.com", "sghitun",
                 null, UserType.PERSON, "Ghitun", "Stefania");
-        when(userValidator.checkValidRoomId(1L)).thenReturn(true);
+        when(userValidator.isRoomIdValid(1L)).thenReturn(true);
         when(roomDtoMapper.mapEntityToDto(roomEntity)).thenReturn(expectedRoomDto);
         when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(roomEntity));
         when(userRepository.findByType(UserType.ROOM)).thenReturn(Collections.singletonList(roomEntity));

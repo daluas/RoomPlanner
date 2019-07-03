@@ -1,6 +1,10 @@
 package edu.roomplanner.service;
 
 import edu.roomplanner.builders.UserEntityBuilder;
+import edu.roomplanner.exception.InvalidReservationDtoException;
+import edu.roomplanner.exception.RoomNotFoundException;
+import edu.roomplanner.exception.UserAuthorityException;
+import edu.roomplanner.exception.UserNotFoundException;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.impl.PrevalidationServiceImpl;
 import edu.roomplanner.types.UserType;
@@ -30,65 +34,49 @@ public class PrevalidationServiceImplTest {
     @InjectMocks
     private PrevalidationServiceImpl sut;
 
-    @Test
+    @Test(expected = InvalidReservationDtoException.class)
     public void shouldReturnInvalidNullParameters() {
-        HttpStatus expected = HttpStatus.BAD_REQUEST;
-        HttpStatus actual = sut.prevalidate(null, null, null, null);
-
-        assertEquals(expected, actual);
+        sut.prevalidate(null, null, null, null);
     }
 
-    @Test
+    @Test(expected = UserNotFoundException.class)
     public void shouldReturnInvalidPersonEmailParameters() {
-        HttpStatus expected = HttpStatus.BAD_REQUEST;
         String email = "invalidEmail@yahoo.com";
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
-        HttpStatus actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, 1L);
-
-        assertEquals(expected, actual);
-
+        sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, 1L);
     }
 
-    @Test
+    @Test(expected = UserAuthorityException.class)
     public void shouldReturnInvalidPersonTypeParameters() {
-        HttpStatus expected = HttpStatus.BAD_REQUEST;
         String email = "email@yahoo.com";
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.ofNullable(UserEntityBuilder.builder().withId(1L).withType(UserType.ROOM).build()));
 
-        HttpStatus actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, 1L);
-
-        assertEquals(expected, actual);
+        sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, 1L);
     }
 
-    @Test
+    @Test(expected = RoomNotFoundException.class)
     public void shouldReturnInvalidRoomIdParameters() {
-        HttpStatus expected = HttpStatus.BAD_REQUEST;
         String email = "email@yahoo.com";
         Long roomId = 2L;
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.ofNullable(UserEntityBuilder.builder().withId(1L).withType(UserType.PERSON).build()));
         when(userRepository.findById(roomId)).thenReturn(Optional.empty());
 
-        HttpStatus actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, roomId);
-
-        assertEquals(expected, actual);
+        sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, roomId);
     }
 
-    @Test
+    @Test(expected = UserAuthorityException.class)
     public void shouldReturnInvalidRoomTypeParameters() {
-        HttpStatus expected = HttpStatus.BAD_REQUEST;
         String email = "email@yahoo.com";
         Long roomId = 2L;
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.ofNullable(UserEntityBuilder.builder().withId(1L).withType(UserType.PERSON).build()));
         when(userRepository.findById(roomId)).thenReturn(Optional.ofNullable(UserEntityBuilder.builder().withId(roomId).withType(UserType.PERSON).build()));
 
-        HttpStatus actual = sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, roomId);
-
-        assertEquals(expected, actual);
+        sut.prevalidate(Calendar.getInstance(), Calendar.getInstance(), email, roomId);
     }
 
 }

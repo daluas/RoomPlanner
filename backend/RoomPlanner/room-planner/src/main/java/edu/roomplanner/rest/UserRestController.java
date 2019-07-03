@@ -59,7 +59,7 @@ public class UserRestController {
     public ResponseEntity<List<RoomDto>> getAllRooms() {
 
         LOGGER.info("Method was called.");
-        if (userRightsValidator.checkIfUserIsRoom()) {
+        if (userRightsValidator.isUserLoggedAsRoom()) {
             RoomDto roomDto = userService.getRoomByEmail(tokenParserService.getEmailFromToken());
             return new ResponseEntity<>(Collections.singletonList(roomDto), HttpStatus.FOUND);
         }
@@ -80,7 +80,7 @@ public class UserRestController {
         RoomDto roomDto = userService.getRoomById(id);
         LOGGER.info("The following object was returned: " + roomDto);
 
-        if (userRightsValidator.checkIfUserIsRoom() && !userRightsValidator.checkIfLoggedRoomIsRequestedRoom(id)) {
+        if (userRightsValidator.isUserLoggedAsRoom() && !userRightsValidator.isLoggedRoomARequestedRoom(id)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
@@ -99,7 +99,7 @@ public class UserRestController {
         UserDto userEmailTypeDto = userService.getUserDto(email);
         LOGGER.info("The following object was returned: " + userEmailTypeDto);
 
-        if (userRightsValidator.checkIfUserIsRoom()) {
+        if (userRightsValidator.isUserLoggedAsRoom()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
