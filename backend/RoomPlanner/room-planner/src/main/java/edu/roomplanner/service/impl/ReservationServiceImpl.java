@@ -7,11 +7,13 @@ import edu.roomplanner.exception.*;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
+import edu.roomplanner.exception.InvalidReservationDtoException;
+import edu.roomplanner.exception.InvalidReservationException;
+import edu.roomplanner.exception.UserNotFoundException;
 import edu.roomplanner.service.ReservationService;
 import edu.roomplanner.service.TokenParserService;
 import edu.roomplanner.validation.BookingChain;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

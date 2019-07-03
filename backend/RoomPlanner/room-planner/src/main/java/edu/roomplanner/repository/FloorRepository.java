@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface FloorRepository extends JpaRepository<FloorEntity, Long> {
 
     Optional<FloorEntity> findByFloor(Integer floor);
+
 }

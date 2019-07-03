@@ -2,6 +2,7 @@ package edu.roomplanner.service.impl;
 
 import edu.roomplanner.dto.FloorDto;
 import edu.roomplanner.entity.FloorEntity;
+import edu.roomplanner.exception.FloorNotFoundException;
 import edu.roomplanner.mappers.FloorDtoMapper;
 import edu.roomplanner.repository.FloorRepository;
 import edu.roomplanner.service.FloorService;
@@ -38,6 +39,8 @@ public class FloorServiceImpl implements FloorService {
         if (floorEntity.isPresent()) {
             return floorDtoMapper.mapEntityToDtoWithReservations(floorEntity.get());
         }
-        return null;
+
+        throw new FloorNotFoundException("Floor not found!");
     }
+
 }

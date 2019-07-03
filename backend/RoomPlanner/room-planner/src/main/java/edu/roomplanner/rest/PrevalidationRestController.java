@@ -21,7 +21,6 @@ import java.util.Calendar;
 @RestController
 public class PrevalidationRestController {
 
-
     private PrevalidationService prevalidationService;
 
     @Autowired
