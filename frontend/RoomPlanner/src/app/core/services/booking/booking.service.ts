@@ -64,14 +64,14 @@ export class BookingService {
       description: booking.description,
 
     }
-    return this.httpClient.patch(`${this.backendUrl}/update-reservations/${id}`, params, { observe: 'response' });
+    return this.httpClient.patch(`${this.backendUrl}/reservations/${id}`, params, { observe: 'response' });
     //status code: 200 OK or 204 NO CONTENT 
   }
 
   deleteBooking(booking: Booking): Observable<HttpResponse<Config>> {//
     console.log("deleteBooking(booking: Booking) was called!");
-    let bookingId: number = booking.id;
-    return this.httpClient.delete(`${this.backendUrl}/delete?reservations=${bookingId}`, { observe: 'response' });
+    // let bookingId: number = booking.id;
+    return this.httpClient.delete(`${this.backendUrl}/reservations/${booking.id}`, { observe: 'response' });
     //return 400;
   }
 

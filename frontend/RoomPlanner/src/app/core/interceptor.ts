@@ -314,14 +314,14 @@ export class Interceptor implements HttpInterceptor {
                 body: booking
             }))
         }
-        if (request.url.startsWith(`${this.BASE_URL}/update-reservations`)){
+        if (request.url.startsWith(`${this.BASE_URL}/reservations`)){
             console.log(request);
             
             return of(new HttpResponse({
                 status: 200
             }))
         }
-        if (request.url.startsWith(`${this.BASE_URL}/delete`)){
+        if (request.url.startsWith(`${this.BASE_URL}/reservations`)){
             console.log(request);
             
             return of(new HttpResponse({
