@@ -23,7 +23,7 @@ export class FiltersComponent implements OnInit, OnChanges {
   roomIsSelected: boolean = false;
 
   floors: FloorModel[] = new Array<FloorModel>();
-  floorByDefault: FloorModel = new FloorModel().create({floor:1});
+  floorByDefault: FloorModel = new FloorModel().create({ floor: 1 });
 
 
   startDate: Date = new Date(new Date().setHours(0, 0, 0, 0));
@@ -46,7 +46,6 @@ export class FiltersComponent implements OnInit, OnChanges {
   @Input() buildingLayout: FloorModel[];
 
   constructor(
-    private roomDataService: RoomDataService
   ) {
   }
 
@@ -54,23 +53,21 @@ export class FiltersComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    let firstFloor:FloorModel;
-   
-    
+    let firstFloor: FloorModel;
     if (changes['buildingLayout']) {
-      if (this.buildingLayout !== undefined) {
+      if (this.buildingLayout !== undefined && this.buildingLayout !== null) {
         this.buildingLayout.forEach(element => {
           this.floors.push(new FloorModel().create({
             floor: element.floor,
             rooms: element.rooms
           }));
         });
-        
+
         firstFloor = this.floors[0];
         this.floorByDefault = new FloorModel().create(firstFloor);
 
         this.floorSelected = this.floorByDefault;
-        
+
       }
     }
   }
@@ -134,7 +131,7 @@ export class FiltersComponent implements OnInit, OnChanges {
     if (this.floorSelected == undefined) {
       this.floorSelected = this.floorByDefault;
     }
-  
+
     this.filters = new Filters().create({
       startDate: this.startDate,
       endDate: this.endDate,
@@ -146,13 +143,13 @@ export class FiltersComponent implements OnInit, OnChanges {
     // console.log(this.filters.startDate)
     // console.log(this.filters.endDate)
 
-    if(this.roomSelected!=null){
+    if (this.roomSelected != null) {
       // this.roomChange.emit(this.roomSelected);
-      this.filters.roomSelected=this.roomSelected;
+      this.filters.roomSelected = this.roomSelected;
     }
 
     this.filterChange.emit(this.filters);
-   
+
   }
 
   onSliderChange(event) {
@@ -166,7 +163,7 @@ export class FiltersComponent implements OnInit, OnChanges {
   onRoomChange(event) {
     if (event.value == "all") {
       this.roomIsSelected = false;
-      this.roomSelected=null;
+      this.roomSelected = null;
     } else {
       this.roomSelected = new RoomModel().create(event.value);
       this.roomIsSelected = true;

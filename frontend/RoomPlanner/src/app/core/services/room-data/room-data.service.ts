@@ -159,6 +159,7 @@ export class RoomDataService {
 
     room.reservations.forEach(res => {
       console.log(res.startDate, res.endDate);
+
       if (this.isValueInInterval(res.startDate, filters.startDate, filters.endDate)) {
         status = false;
       }
