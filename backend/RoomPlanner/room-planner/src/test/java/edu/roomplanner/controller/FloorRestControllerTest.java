@@ -185,7 +185,7 @@ public class FloorRestControllerTest {
     }
 
     @Test
-    public void shouldReturnResponseEntityWithStatusNotFoundWhenFloorDoesNotExistWhenCalledByUser() throws Exception{
+    public void shouldReturnResponseEntityWithStatusNotFoundWhenFloorDoesNotExistWhenCalledByUser() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/floors/7").with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());

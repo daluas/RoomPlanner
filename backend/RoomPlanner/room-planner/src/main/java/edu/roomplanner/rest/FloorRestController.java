@@ -52,11 +52,10 @@ public class FloorRestController {
             @ApiResponse(code = 500, message = "Internal server error.")})
     @PreAuthorize("hasAuthority('person')")
     public ResponseEntity<FloorDto> getFloorByName(@PathVariable Integer floor) {
-        FloorDto floorDto = floorService.getFloorByFloor(floor);
 
-        if (floorDto == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        LOGGER.info("Method was called.");
+        FloorDto floorDto = floorService.getFloorByFloor(floor);
+        LOGGER.info("The following object was returned:" + floorDto);
 
         return new ResponseEntity<>(floorDto, HttpStatus.FOUND);
     }

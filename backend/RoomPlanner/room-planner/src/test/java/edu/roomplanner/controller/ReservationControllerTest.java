@@ -3,7 +3,9 @@ package edu.roomplanner.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.roomplanner.RoomPlannerApplication;
 import edu.roomplanner.dto.ReservationDto;
-import edu.roomplanner.entity.*;
+import edu.roomplanner.entity.FloorEntity;
+import edu.roomplanner.entity.ReservationEntity;
+import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
@@ -31,7 +33,6 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.TimeZone;
 
@@ -88,8 +89,8 @@ public class ReservationControllerTest {
         entityManager.createNativeQuery("ALTER SEQUENCE seq_user_id RESTART WITH 1").executeUpdate();
         entityManager.createNativeQuery("ALTER SEQUENCE seq_reservation_id RESTART WITH 1").executeUpdate();
 
-        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L,"sghitun@yahoo.com","sghitun",
-                new HashSet<>(), UserType.PERSON,"Stefania","Ghitun");
+        UserEntity userEntityPerson = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "sghitun",
+                new HashSet<>(), UserType.PERSON, "Stefania", "Ghitun");
         userRepository.save(userEntityPerson);
 
         UserEntity personEntity = BuildersWrapper.buildPersonEntity(2L, "marius@yahoo.com", "marius",

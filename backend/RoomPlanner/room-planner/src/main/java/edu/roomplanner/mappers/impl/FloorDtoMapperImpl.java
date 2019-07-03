@@ -27,7 +27,7 @@ public class FloorDtoMapperImpl implements FloorDtoMapper {
 
         Set<RoomDto> roomsDto = mapRoomEntityListToRoomDtoListWithoutReservations(floorEntity.getRooms());
 
-        return new FloorDtoBuilder()
+        return FloorDtoBuilder.builder()
                 .withId(floorEntity.getId())
                 .withFloor(floorEntity.getFloor())
                 .withRooms(roomsDto)
@@ -43,7 +43,7 @@ public class FloorDtoMapperImpl implements FloorDtoMapper {
 
         Set<RoomDto> roomsDto = mapRoomEntityListToRoomDtoListWithReservations(floorEntity.getRooms());
 
-        return new FloorDtoBuilder()
+        return FloorDtoBuilder.builder()
                 .withId(floorEntity.getId())
                 .withFloor(floorEntity.getFloor())
                 .withRooms(roomsDto)

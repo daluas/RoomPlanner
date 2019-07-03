@@ -41,4 +41,5 @@ public class UserRightsValidatorImpl implements UserRightsValidator {
         }
         return false;
     }
+
 }

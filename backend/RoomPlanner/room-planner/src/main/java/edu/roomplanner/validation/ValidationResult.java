@@ -1,6 +1,7 @@
 package edu.roomplanner.validation;
 
 public class ValidationResult {
+
     private String error;
 
     public ValidationResult() {
@@ -18,4 +19,5 @@ public class ValidationResult {
     public String getError() {
         return error;
     }
+
 }

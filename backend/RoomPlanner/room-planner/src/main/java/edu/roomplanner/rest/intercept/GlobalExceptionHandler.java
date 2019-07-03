@@ -1,10 +1,6 @@
 package edu.roomplanner.rest.intercept;
 
-
-import edu.roomplanner.exception.InvalidReservationDtoException;
-import edu.roomplanner.exception.InvalidReservationException;
-import edu.roomplanner.exception.UnknownUserTypeException;
-import edu.roomplanner.exception.UserNotFoundException;
+import edu.roomplanner.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,10 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     private class JsonResponse {
-        String error;
 
-        public JsonResponse() {
-        }
+        String error;
 
         public JsonResponse(String message) {
             super();
@@ -28,15 +22,12 @@ public class GlobalExceptionHandler {
             return error;
         }
 
-        public void setMessage(String message) {
-            this.error = message;
-        }
     }
 
     @ExceptionHandler({UnknownUserTypeException.class})
-    public ResponseEntity<String> handleUnknownUserTypeException(UnknownUserTypeException exception) {
+    public ResponseEntity<JsonResponse> handleUnknownUserTypeException(UnknownUserTypeException exception) {
 
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler({UserNotFoundException.class})
@@ -55,6 +46,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<JsonResponse> handleInvalidReservationException(InvalidReservationException exception) {
 
         return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({FloorNotFoundException.class})
+    public ResponseEntity<JsonResponse> handleFloorNotFoundException(FloorNotFoundException exception) {
+
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({RoomNotFoundException.class})
+    public ResponseEntity<JsonResponse> handleRoomNotFoundException(RoomNotFoundException exception) {
+
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NOT_FOUND);
     }
 
 }

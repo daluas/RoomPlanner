@@ -103,7 +103,7 @@ public class BuildersWrapper {
                 .withEndDate(endDate)
                 .withDescription(description)
                 .build();
-}
+    }
 
     public static ReservationEntity buildReservationEntity(Long id, Calendar startDate, Calendar endDate, UserEntity person, UserEntity room, String description) {
         return new ReservationEntityBuilder()
