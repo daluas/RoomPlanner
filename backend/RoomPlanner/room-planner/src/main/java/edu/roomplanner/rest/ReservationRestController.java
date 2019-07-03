@@ -36,7 +36,7 @@ public class ReservationRestController {
             @ApiResponse(code = 500, message = "Internal server error.")})
     @PreAuthorize("hasAuthority('person')")
     public ResponseEntity<ReservationDto> postReservationCreated(@PathVariable(name = "room_id") Long roomId,
-                                                          @RequestBody ReservationDto reservationDto) {
+                                                                 @RequestBody ReservationDto reservationDto) {
 
         LOGGER.info("Method was called.");
         ReservationDto reservationDtoResult = bookRoomService.createReservation(roomId, reservationDto);
@@ -51,7 +51,7 @@ public class ReservationRestController {
             @ApiResponse(code = 200, message = "Reservation was deleted."),
             @ApiResponse(code = 401, message = "User want to delete a reservation from another user.")})
     @PreAuthorize("hasAuthority('person')")
-    ResponseEntity<HttpStatus> deleteReservation(@RequestParam("reservation") Long reservationId) {
+    public ResponseEntity<HttpStatus> deleteReservation(@RequestParam("reservation") Long reservationId) {
         LOGGER.info("Method was called.");
 
         bookRoomService.deleteReservation(reservationId);
