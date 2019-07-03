@@ -35,7 +35,7 @@ public class ReservationController {
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error.")})
     @PreAuthorize("hasAuthority('person')")
-    ResponseEntity<ReservationDto> postReservationCreated(@PathVariable(name = "room_id") Long roomId,
+    public ResponseEntity<ReservationDto> postReservationCreated(@PathVariable(name = "room_id") Long roomId,
                                                           @RequestBody ReservationDto reservationDto) {
 
         LOGGER.info("Method was called.");
