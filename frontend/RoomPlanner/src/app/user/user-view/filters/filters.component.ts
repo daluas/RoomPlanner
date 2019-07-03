@@ -15,7 +15,7 @@ import { RoomModel } from '../../../core/models/RoomModel';
 export class FiltersComponent implements OnInit, OnChanges {
 
   @Output() filterChange: EventEmitter<any> = new EventEmitter();
-  @Output() roomChange:EventEmitter<any>=new EventEmitter();
+  //@Output() roomChange:EventEmitter<any>=new EventEmitter();
 
   dropdownOpen: boolean = false;
   dateChanged: boolean = false;
@@ -23,7 +23,7 @@ export class FiltersComponent implements OnInit, OnChanges {
   roomIsSelected: boolean = false;
 
   floors: FloorModel[] = new Array<FloorModel>();
-  floorByDefault: FloorModel = new FloorModel().create({floor:1});
+  floorByDefault: FloorModel = new FloorModel().create({ floor: 1 });
 
 
   startDate: Date = new Date(new Date().setHours(0, 0, 0, 0));
@@ -46,8 +46,6 @@ export class FiltersComponent implements OnInit, OnChanges {
   @Input() buildingLayout: FloorModel[];
 
   constructor(
-    private _dateAdapter: DateAdapter<Date>,
-    private roomDataService: RoomDataService
   ) {
   }
 
@@ -55,20 +53,21 @@ export class FiltersComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    let firstFloor:FloorModel;
-   
-    
+    let firstFloor: FloorModel;
     if (changes['buildingLayout']) {
-      if (this.buildingLayout !== undefined) {
+      if (this.buildingLayout !== undefined && this.buildingLayout !== null) {
         this.buildingLayout.forEach(element => {
           this.floors.push(new FloorModel().create({
             floor: element.floor,
             rooms: element.rooms
           }));
         });
-        
+
         firstFloor = this.floors[0];
         this.floorByDefault = new FloorModel().create(firstFloor);
+
+        this.floorSelected = this.floorByDefault;
+
       }
     }
   }
@@ -87,6 +86,8 @@ export class FiltersComponent implements OnInit, OnChanges {
   }
 
   onApplyFilters() {
+    //console.log(`applying on :`, this.filters)
+
     if (this.dateChanged) {
       this.finalDate = this.selectedDate;
     }
@@ -104,7 +105,6 @@ export class FiltersComponent implements OnInit, OnChanges {
     if (this.endDate.getMinutes() < 30 && this.endDate.getMinutes() > 0) {
       this.endDate.setMinutes(30);
     }
-
     else if (this.endDate.getMinutes() > 30) {
       if (this.endDate.getHours() != 23) {
         this.endDate.setMinutes(0);
@@ -117,8 +117,8 @@ export class FiltersComponent implements OnInit, OnChanges {
     if (this.dateInThePastIn == true || this.startDate.getTime() == this.endDate.getTime()) {
       this.startDate.setTime(this.finalDate.getTime());
       this.endDate.setTime(this.finalDate.getTime());
-      this.endDate.setHours(23);
-      this.endDate.setMinutes(59);
+      this.endDate.setHours(0);
+      this.endDate.setMinutes(0);
     } else {
       this.startDate.setDate(this.finalDate.getDate());
       this.startDate.setMonth(this.finalDate.getMonth());
@@ -128,8 +128,7 @@ export class FiltersComponent implements OnInit, OnChanges {
       this.endDate.setMonth(this.finalDate.getMonth());
       this.endDate.setFullYear(this.finalDate.getUTCFullYear());
     }
-
-    if (this.floorSelected == null) {
+    if (this.floorSelected == undefined) {
       this.floorSelected = this.floorByDefault;
     }
 
@@ -140,10 +139,17 @@ export class FiltersComponent implements OnInit, OnChanges {
       minPersons: this.numberOfPeople
     });
 
-    this.filterChange.emit(this.filters);
-    if(this.roomSelected!=null){
-      this.roomChange.emit(this.roomSelected);
+    // console.log(`Filtreleeee`)
+    // console.log(this.filters.startDate)
+    // console.log(this.filters.endDate)
+
+    if (this.roomSelected != null) {
+      // this.roomChange.emit(this.roomSelected);
+      this.filters.roomSelected = this.roomSelected;
     }
+
+    this.filterChange.emit(this.filters);
+
   }
 
   onSliderChange(event) {
@@ -157,6 +163,7 @@ export class FiltersComponent implements OnInit, OnChanges {
   onRoomChange(event) {
     if (event.value == "all") {
       this.roomIsSelected = false;
+      this.roomSelected = null;
     } else {
       this.roomSelected = new RoomModel().create(event.value);
       this.roomIsSelected = true;

@@ -19,6 +19,8 @@ import { LoggedUser } from './models/LoggedUser';
 import { MatSnackBar } from '@angular/material';
 import { ok } from 'assert';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+import { FloorModel } from './models/FloorModel';
+import { RoomModel } from './models/RoomModel';
 import { Booking } from './models/BookingModel';
 
 @Injectable()
@@ -101,17 +103,17 @@ export class Interceptor implements HttpInterceptor {
 
 
         if (request.url === `${this.BASE_URL}/users`) {
-            
-            console.log(request);
-            let userdata = new LoggedUser().create({
-                email: request.params.get("email"),
-                type: "PERSON"
-            })
-            console.log(userdata);
 
-            return of(new HttpResponse({
-                body: userdata
-            }))
+            // console.log(request);
+            // let userdata = new LoggedUser().create({
+            //     email: request.params.get("email"),
+            //     type: "PERSON"
+            // })
+            // console.log(userdata);
+
+            // return of(new HttpResponse({
+            //     body: userdata
+            // }))
 
             request = this.addAuthenticationToken(request, next);
             return next.handle(request)
@@ -128,6 +130,170 @@ export class Interceptor implements HttpInterceptor {
                     })
                 );
         }
+      
+        if (request.url === `${this.BASE_URL}/rooms/filters`) {
+            console.log(request);
+            let rooms: RoomModel[] = new Array<RoomModel>();
+            rooms.push(new RoomModel().create({
+                id: 4,
+                email: "wonderland@yahoo.com",
+                type: "ROOM",
+                reservations: [new Booking().create(
+                    {
+                        id: 4,
+                        roomId: 2,
+                        personalEmail: "sghitun@yahoo.com",
+                        startDate: "2019-07-01T09:00:00.000+0000",
+                        endDate: "2019-07-01T12:00:00.000+0000",
+                        description: "Retro meeting"
+                    }), new Booking().create(
+                        {
+                            id: 5,
+                            roomId: 2,
+                            personalEmail: "sghitun@yahoo.com",
+                            startDate: "2019-07-03T14:00:00.000+0000",
+                            endDate: "2019-07-03T15:30:00.000+0000",
+                            description: "Retro meeting"
+                        })
+                ],
+                name: "Wonderland",
+                floor: 5,
+                maxPersons: 14
+            }), new RoomModel().create({
+                id: 12,
+                email: "roomNew@yahoo.com",
+                type: "ROOM",
+                reservations: [
+                    new Booking().create({
+                        id: 4,
+                        roomId: 12,
+                        personalEmail: "sghitun@yahoo.com",
+                        startDate: "2019-07-02T09:00:00.000+0000",
+                        endDate: "2019-07-02T12:00:00.000+0000",
+                        description: "Retro meeting"
+                    }),
+                    new Booking().create({
+                        id: 5,
+                        roomId: 12,
+                        personalEmail: "sghitun@yahoo.com",
+                        startDate: "2019-07-01T12:00:00.000+0000",
+                        endDate: "2019-07-01T14:00:00.000+0000",
+                        description: "Retro meeting"
+                    })
+                ],
+                name: "roomNew",
+                floor: 5,
+                maxPersons: 20
+            })
+            )
+            return of(new HttpResponse({
+                status: 200,
+                body: rooms
+            }))
+
+
+        }
+
+        if (request.url === `${this.BASE_URL}/floors`) {
+            let floors: FloorModel[] = new Array<FloorModel>();
+            floors.push(new FloorModel().create({
+                id: 1,
+                floor: 5,
+                rooms: [
+                    new RoomModel().create(
+                        {
+                            id: 2,
+                            email: "wonderland@yahoo.com",
+                            type: "ROOM",
+                            reservations: [],
+                            name: "Wonderland",
+                            floor: 5,
+                            maxPersons: 14
+                        })
+                ]
+            }), new FloorModel().create(
+                {
+
+                    id: 2,
+                    floor: 8,
+                    rooms: [new RoomModel().create(
+                        {
+                            id: 3,
+                            email: "westeros@yahoo.com",
+                            type: "ROOM",
+                            reservations: [],
+                            name: "Westeros",
+                            floor: 8,
+                            maxPersons: 20
+                        })
+                    ]
+                }), new FloorModel().create(
+                    {
+                        id: 3,
+                        floor: 4,
+                        rooms: [
+                            {
+                                id: 4,
+                                email: "neverland@yahoo.com",
+                                type: "ROOM",
+                                reservations: [],
+                                name: "Neverland",
+                                floor: 4,
+                                maxPersons: 5
+                            }
+                        ]
+                    })
+            );
+
+            return of(new HttpResponse({
+                status: 200,
+                body: floors
+            }))
+            //console.log(request);
+        }
+
+        if (request.url.startsWith(`${this.BASE_URL}/floor`)) {
+            console.log(request);
+            let floor: FloorModel;
+            floor = new FloorModel().create({
+                id: 1,
+                floor: 5,
+                rooms: [
+                    new RoomModel().create(
+                        {
+                            id: 2,
+                            email: "wonderland@yahoo.com",
+                            type: "ROOM",
+                            reservations: [new Booking().create(
+                                {
+                                    id: 4,
+                                    roomId: 2,
+                                    personalEmail: "sghitun@yahoo.com",
+                                    startDate: "2019-07-01T09:00:00.000+0000",
+                                    endDate: "2019-07-01T12:00:00.000+0000",
+                                    description: "Retro meeting"
+                                }), new Booking().create(
+                                    {
+                                        id: 5,
+                                        roomId: 2,
+                                        personalEmail: "sghitun@yahoo.com",
+                                        startDate: "2019-07-03T14:00:00.000+0000",
+                                        endDate: "2019-07-03T15:30:00.000+0000",
+                                        description: "Retro meeting"
+                                    })
+                            ],
+                            name: "Wonderland",
+                            floor: 5,
+                            maxPersons: 14
+                        })
+                ]
+            });
+            return of(new HttpResponse({
+                status: 200,
+                body: floor
+            }))
+        }
+      
         if (request.url === `${this.BASE_URL}/prevalidation`){
             return of(new HttpResponse({
                 status: 200
@@ -162,8 +328,6 @@ export class Interceptor implements HttpInterceptor {
                 status: 200
             }))
         }
-
-
     }
 
     getTokenLS(): LoginToken {

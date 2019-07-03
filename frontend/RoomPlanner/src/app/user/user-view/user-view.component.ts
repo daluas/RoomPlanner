@@ -18,7 +18,7 @@ export class UserViewComponent implements OnInit {
   booking: Booking;
   newBooking: Booking;
   buildingLayout: FloorModel[] = new Array<FloorModel>();
-  rooms: RoomModel[];
+  rooms: RoomModel[] = new Array<RoomModel>();
   displayedRooms: RoomModel[];
   singleRoomSelected: RoomModel;
   previousFilters: Filters;
@@ -40,98 +40,126 @@ export class UserViewComponent implements OnInit {
 
     this.previousFilters = new Filters().create({
       startDate: new Date(new Date().setHours(0, 0, 0, 0)),
-      endDate: new Date(new Date().setHours(23, 59, 0, 0)),
+      endDate: new Date(new Date().setHours(0, 0, 0, 0)),
       minPersons: null,
       floor: null
     });
 
-    this.buildingLayout = await this.roomDataService.getFloors();
+    await this.roomDataService.getFloors().then((floors) => {
+      this.buildingLayout = <FloorModel[]>floors;
+    });
 
+    if (this.buildingLayout == undefined) {
+      return;
+    }
     this.buildingLayout.sort(function (a, b) { return a.floor - b.floor });
 
     let firstFloor: FloorModel;
 
     firstFloor = this.buildingLayout[0];
 
-    this.previousFilters.floor = firstFloor.floor
+    this.previousFilters.floor = firstFloor.floor;
 
-  
-
-    this.roomDataService.getRoomsByFilter(this.previousFilters).then((defaultRooms) => {
-      this.rooms = <RoomModel[]>defaultRooms;
-      this.displayedRooms = <RoomModel[]>defaultRooms;
+    await this.roomDataService.getSingleFloor(firstFloor.floor).then((floor) => {
+      this.rooms = <RoomModel[]>floor.rooms;
+      this.displayedRooms = <RoomModel[]>floor.rooms;
+      console.log("Rooms by default", this.rooms)
     })
 
   }
 
-  roomIsSelectedOnFilters(room: RoomModel) {
-    console.log("Room emited: ", room);
-    this.singleRoomSelected = room;
+  async updateRoomsBasedOnFilters(filters: Filters) {
+
+    console.log("Filters component emited: ", filters);
+
+    if (filters.roomSelected != null || filters.roomSelected != undefined) {
+      await this.roomDataService.getSingleFloor(filters.roomSelected.floor).then((floor) => {
+        floor.rooms.forEach(r => {
+          if (r.name == filters.roomSelected.name) {
+            this.singleRoomSelected = r;
+            this.checkRoomsBasedOnFilters(filters);
+          }
+        })
+      })
+    } else {
+      this.singleRoomSelected = null;
+      this.checkRoomsBasedOnFilters(filters);
+    }
   }
 
-  updateRoomsBasedOnFilters(filters: Filters) {
-    console.log("Filters component emited: ", filters);
+  async checkRoomsBasedOnFilters(filters: Filters) {
+
+    console.log("single room", this.singleRoomSelected)
+    this.displayedRooms = [];
 
     if (this.filteredRoomsAlreadyExist(filters)) {
       this.setDisplayedRooms(filters);
     } else {
-      this.roomDataService.getRoomsByFilter(filters).then((rooms) => {
+      this.rooms = [];
+      await this.roomDataService.getRoomsByFilter(filters).then((rooms) => {
         this.rooms = <RoomModel[]>rooms;
-        this.setDisplayedRooms(filters);
+        this.setDisplayedRooms(filters)
       })
     }
     this.previousFilters = new Filters().create(filters);
   }
 
   filteredRoomsAlreadyExist(filters: Filters): boolean {
-    if (this.verifyDate(this.previousFilters.startDate, filters.startDate) &&
+    if (this.previousFilters.startDate.getTime() == filters.startDate.getTime() &&
+      this.previousFilters.endDate.getTime() == filters.endDate.getTime() &&
       this.previousFilters.floor == filters.floor) {
       return true;
     }
     return false;
   }
 
-  verifyDate(date1: Date, date2: Date): boolean {
-    if (date1.getFullYear() == date2.getFullYear()) {
-      if (date1.getMonth() == date2.getMonth()) {
-        if (date1.getDate() == date2.getDate()) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
   setDisplayedRooms(filters: Filters) {
 
-    console.log(this.singleRoomSelected);
-
+    this.displayedRooms = [];
     if (this.singleRoomSelected != null) {
-
-      console.log(this.roomDataService.verifyRoomAvailabilityByFilters(this.singleRoomSelected, filters))
       if (this.roomDataService.verifyRoomAvailabilityByFilters(this.singleRoomSelected, filters)) {
-        this.displayedRooms = new Array<RoomModel>();
-        this.displayedRooms.push(this.singleRoomSelected);
-      }
-    } else {
-      this.displayedRooms = this.rooms.map((room) => {
-        if (filters.minPersons != null) {
-          if (filters.minPersons == room.maxPersons) {
-            if (this.roomDataService.verifyRoomAvailabilityByFilters(room, filters)) {
-              return room;
-            }
-          }
-        } else {
-          console.log(room);
-          console.log(this.roomDataService.verifyRoomAvailabilityByFilters(room, filters))
-          if (this.roomDataService.verifyRoomAvailabilityByFilters(room, filters)) {
-            return room;
+        
+        let reservations = this.singleRoomSelected.reservations;
+        let roomAux:RoomModel=new RoomModel().create(this.singleRoomSelected);
+        roomAux.reservations=[];    
+        for (let i = 0; i < reservations.length; i++) {
+          if (reservations[i].startDate.getDate() == filters.startDate.getDate()) {
+            roomAux.reservations.push(reservations[i])
+           
           }
         }
-      }
-      );
-    }
 
+        this.displayedRooms.push(roomAux);
+      }
+    } else {
+      if (filters.minPersons != null) {
+        this.rooms.forEach(room => {
+          if (room.maxPersons == filters.minPersons) {
+            let roomAux:RoomModel=new RoomModel().create(room);
+            roomAux.reservations=[];
+            let reservations = room.reservations;
+            for (let i = 0; i < reservations.length; i++) {
+              if (reservations[i].startDate.getDate() == filters.startDate.getDate()) {
+                roomAux.reservations.push(reservations[i])
+              }
+            }
+            this.displayedRooms.push(roomAux);
+          }
+        })
+      } else {
+        this.rooms.forEach(room => {
+            let roomAux:RoomModel=new RoomModel().create(room);
+            roomAux.reservations=[];
+            let reservations = room.reservations;
+            for (let i = 0; i < reservations.length; i++) {
+              if (reservations[i].startDate.getDate() == filters.startDate.getDate()) {
+                roomAux.reservations.push(reservations[i])
+              }
+            }
+            this.displayedRooms.push(roomAux);
+        })
+      }
+    }
   }
 
   createBooking(booking: any) {

@@ -193,7 +193,7 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
 
   setStyleForPastTime() {
     if (this.forDate) {
-      let forDate = new Date(this.forDate.setHours(0, 0, 0, 0)).getTime();
+      let forDate = new Date(new Date(this.forDate.getTime()).setHours(0, 0, 0, 0)).getTime();
       let today = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
       let style = "height: 0px";
 
@@ -211,7 +211,7 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   newBooking(roomIndex, intervalIndex) {
-    let forDate = new Date(this.forDate.setHours(0, 0, 0, 0)).getTime();
+    let forDate = new Date(new Date(this.forDate.getTime()).setHours(0, 0, 0, 0)).getTime();
     let today = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
     let nowIntervals = new Date().getHours() * 2 + (new Date().getMinutes() < 30 ? 0 : 1);
 
@@ -257,7 +257,7 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
 
     let arrowsStartTime, arrowsEndTime;
 
-    let forDate = new Date(this.forDate.setHours(0, 0, 0, 0)).getTime();
+    let forDate = new Date(new Date(this.forDate.getTime()).setHours(0, 0, 0, 0)).getTime();
     let today = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
     let now = new Date().setHours(new Date().getHours(), (new Date().getMinutes() < 30 ? 0 : 30), 0, 0);
 
