@@ -94,7 +94,7 @@ public class ReservationServiceImpl implements ReservationService {
                 .getId();
 
         if (!userId.equals(userInReservation)) {
-            throw new UnauthorizedReservationException();
+            throw new UnauthorizedReservationException("Can't delete another user reservation");
         }
         reservationRepository.deleteById(reservationId);
 

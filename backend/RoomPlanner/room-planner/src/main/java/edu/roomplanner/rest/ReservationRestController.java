@@ -47,8 +47,9 @@ public class ReservationRestController {
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/api/reservations")
     @ApiOperation("Delete a reservation for a room with a specific id.")
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Not a valid reservation id or you want to delete a reservation of other user."),
-            @ApiResponse(code = 200, message = "Reservation was deleted.")})
+    @ApiResponses(value = {@ApiResponse(code = 404, message = "Not a valid reservation id."),
+            @ApiResponse(code = 200, message = "Reservation was deleted."),
+            @ApiResponse(code = 401, message = "User want to delete a reservation from another user.")})
     @PreAuthorize("hasAuthority('person')")
     ResponseEntity<HttpStatus> deleteReservation(@RequestParam("reservation") Long reservationId) {
         LOGGER.info("Method was called.");
