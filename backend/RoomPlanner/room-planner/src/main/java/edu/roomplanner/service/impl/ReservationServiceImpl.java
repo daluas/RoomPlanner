@@ -8,9 +8,18 @@ import edu.roomplanner.exception.*;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
+import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.exception.*;
+import edu.roomplanner.mappers.ReservationDtoMapper;
+import edu.roomplanner.repository.ReservationRepository;
+import edu.roomplanner.repository.UserRepository;
+import edu.roomplanner.exception.InvalidReservationDtoException;
+import edu.roomplanner.exception.InvalidReservationException;
+import edu.roomplanner.exception.UserNotFoundException;
 import edu.roomplanner.service.ReservationService;
 import edu.roomplanner.service.TokenParserService;
 import edu.roomplanner.types.UserType;
+import edu.roomplanner.service.TokenParserService;
 import edu.roomplanner.validation.BookingChain;
 import edu.roomplanner.validation.ValidationResult;
 import edu.roomplanner.validation.validator.impl.StartEndDateValidator;
@@ -81,6 +90,25 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ReservationDto convertToDto(ReservationEntity reservationEntity) {
         return mapperService.mapReservationEntityToDto(reservationEntity);
+    }
+
+    @Override
+    public void deleteReservation(Long reservationId) {
+        if (!reservationRepository.findById(reservationId).isPresent()) {
+            throw new ReservationNotFoundException("Invalid reservation ID");
+        }
+        String userEmail = tokenParserService.getEmailFromToken();
+        UserEntity userEntity = userRepository.findByEmail(userEmail).get();
+        Long userId = userEntity.getId();
+        Long userInReservation = reservationRepository.findById(reservationId).get()
+                .getPerson()
+                .getId();
+
+        if (!userId.equals(userInReservation)) {
+            throw new UnauthorizedReservationException("Can't delete another user reservation");
+        }
+        reservationRepository.deleteById(reservationId);
+
     }
 
     private Boolean areReservationDtoMembersNull(ReservationDto reservationDto) {

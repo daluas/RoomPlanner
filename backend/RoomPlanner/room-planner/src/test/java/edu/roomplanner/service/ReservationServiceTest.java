@@ -3,12 +3,16 @@ package edu.roomplanner.service;
 import edu.roomplanner.builders.ReservationDtoBuilder;
 import edu.roomplanner.builders.ReservationEntityBuilder;
 import edu.roomplanner.builders.UserEntityBuilder;
+import edu.roomplanner.builders.ReservationEntityBuilder;
+import edu.roomplanner.builders.UserEntityBuilder;
 import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.exception.InvalidReservationDtoException;
 import edu.roomplanner.exception.ReservationNotFoundException;
+import edu.roomplanner.exception.ReservationNotFoundException;
+import edu.roomplanner.exception.UnauthorizedReservationException;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
@@ -160,5 +164,51 @@ public class ReservationServiceTest {
         }
         return ret;
     }
+    @Test(expected = ReservationNotFoundException.class)
+    public void shouldNotFindValidReservationId() {
+        Long roomId = 4L;
 
+        when(reservationRepository.findById(roomId)).thenReturn(Optional.empty());
+        sut.deleteReservation(roomId);
+    }
+
+    @Test(expected = UnauthorizedReservationException.class)
+    public void shouldFindThatAPersonWantsToDeleteOtherUserReservation() {
+        Long roomId = 4L;
+        String email = "sghitun@yahoo.com";
+
+        when(tokenParserService.getEmailFromToken()).thenReturn(email);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(getPerson(6L)));
+        when(reservationRepository.findById(roomId)).thenReturn(Optional.of(getReservation(5L)));
+        sut.deleteReservation(roomId);
+
+    }
+
+    @Test
+    public void shouldDeleteReservation() {
+        Long roomId = 4L;
+        String email = "sghitun@yahoo.com";
+
+        when(tokenParserService.getEmailFromToken()).thenReturn(email);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(getPerson(6L)));
+        when(reservationRepository.findById(roomId)).thenReturn(Optional.of(getReservation(6L)));
+        sut.deleteReservation(roomId);
+
+    }
+
+
+    private UserEntity getPerson(Long personId) {
+        return UserEntityBuilder.builder()
+                .withType(UserType.PERSON)
+                .withId(personId)
+                .build();
+    }
+
+    private ReservationEntity getReservation(Long personId) {
+        return ReservationEntityBuilder.builder()
+                .withId(4L)
+                .withPerson(getPerson(personId))
+                .build();
+    }
 }
+
