@@ -4,9 +4,7 @@ import edu.roomplanner.builders.ReservationDtoBuilder;
 import edu.roomplanner.builders.ReservationEntityBuilder;
 import edu.roomplanner.dto.ReservationDto;
 import edu.roomplanner.entity.ReservationEntity;
-import edu.roomplanner.exception.InvalidReservationDtoException;
-import edu.roomplanner.exception.InvalidReservationException;
-import edu.roomplanner.exception.UserNotFoundException;
+import edu.roomplanner.exception.*;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
@@ -111,32 +109,42 @@ public class ReservationServiceImpl implements ReservationService {
         copyDto.getEndDate().setTime(conversionToGmt(reservationDto.getEndDate().getTime()));
 
         String userEmail = tokenParserService.getEmailFromToken();
-        if (!verifyParameters(userEmail, reservationDto, id)) {
-            return null;
-        }
-        ReservationEntity reservationEntity = reservationRepository.findById(id).get();
-        Long userId = userRepository.findByEmail(userEmail).get().getId();
-        ValidationResult result = startEndDateValidator.validate(getReservation(copyDto));
-        if (result.getError() != null) {
-            return null;
-        }
-        if (userId.equals(reservationEntity.getPerson().getId())) {
-            reservationEntity.setStartDate(reservationDto.getStartDate());
-            reservationEntity.setEndDate(reservationDto.getEndDate());
-            reservationEntity.setDescription(reservationDto.getDescription());
-            ReservationEntity updatedEntity = reservationRepository.save(reservationEntity);
-            return mapperService.mapReservationEntityToDto(updatedEntity);
+        verifyParameters(userEmail, id);
 
+        ReservationEntity reservationEntity = reservationRepository.findById(id).get();
+
+        ValidationResult result = startEndDateValidator.validate(getReservation(copyDto));
+
+        if (result.getError() != null) {
+            throw new InvalidDateException(result.getError());
         }
-        return null;
+
+        verifyPersonId(reservationEntity, userEmail);
+        return getReservationDtoUpdated(reservationEntity, reservationDto);
+
     }
 
-    private boolean verifyReservationId(Long id) {
+    private ReservationDto getReservationDtoUpdated(ReservationEntity reservationEntity, ReservationDto reservationDto) {
+        reservationEntity.setStartDate(reservationDto.getStartDate());
+        reservationEntity.setEndDate(reservationDto.getEndDate());
+        reservationEntity.setDescription(reservationDto.getDescription());
+        ReservationEntity updatedEntity = reservationRepository.save(reservationEntity);
+        return mapperService.mapReservationEntityToDto(updatedEntity);
+    }
+
+    private void verifyPersonId(ReservationEntity reservationEntity, String userEmail) {
+        Long userId = userRepository.findByEmail(userEmail).get().getId();
+        if (!userId.equals(reservationEntity.getPerson().getId())) {
+            throw new PersonIdOfReservationNotEqualsUserIdException("Person id of reservation is not the same as user id.");
+        }
+    }
+
+    private boolean reservationExists(Long id) {
         return reservationRepository.findById(id)
                 .isPresent();
     }
 
-    private boolean validateEmail(String userEmail) {
+    private boolean isEmailOwnerPerson(String userEmail) {
         return userRepository.findByEmail(userEmail)
                 .filter(user -> user.getType().equals(UserType.PERSON))
                 .isPresent();
@@ -151,8 +159,13 @@ public class ReservationServiceImpl implements ReservationService {
                 .build();
     }
 
-    private boolean verifyParameters(String userEmail, ReservationDto reservationDto, Long id) {
-        return validateEmail(userEmail) && verifyReservationId(id);
+    private void verifyParameters(String userEmail, Long id) {
+        if (!reservationExists(id)) {
+            throw new ReservationNotFoundException("Reservation not found! Bad id");
+        }
+        if (!isEmailOwnerPerson(userEmail)) {
+            throw new NotPersonException("You are not a person");
+        }
     }
 
     private Date conversionToGmt(Date date) {

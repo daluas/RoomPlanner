@@ -8,6 +8,7 @@ import edu.roomplanner.entity.FloorEntity;
 import edu.roomplanner.entity.ReservationEntity;
 import edu.roomplanner.entity.UserEntity;
 import edu.roomplanner.exception.InvalidReservationDtoException;
+import edu.roomplanner.exception.ReservationNotFoundException;
 import edu.roomplanner.mappers.ReservationDtoMapper;
 import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
@@ -125,9 +126,8 @@ public class ReservationServiceTest {
 
     }
 
-    @Test
+    @Test(expected = ReservationNotFoundException.class)
     public void shouldReturnEmptyReservationDtoWhenUpdateReservationIsCalledWithInvalidId() {
-        ReservationDto expectedReservationDto = null;
         ReservationDto reservationDto = new ReservationDto();
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
@@ -136,8 +136,8 @@ public class ReservationServiceTest {
         reservationDto.setStartDate(startDate);
         reservationDto.setEndDate(endDate);
         reservationDto.setDescription("description");
-        ReservationDto actualReservationDto = sut.updateReservation(255L, reservationDto);
-        Assert.assertEquals(expectedReservationDto, actualReservationDto);
+        sut.updateReservation(255L, reservationDto);
+
     }
 
     private ReservationEntity getReservation(ReservationDto reservationDto) {
