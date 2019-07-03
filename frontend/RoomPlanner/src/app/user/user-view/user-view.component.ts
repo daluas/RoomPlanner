@@ -167,9 +167,9 @@ export class UserViewComponent implements OnInit {
     this.bookingPopupOpen = true;
   }
 
-  addCreatedBooking(booking: any) {
+  addCreatedBooking(booking: Booking) {
     // add to the list of bookings of the booked room the new booking 
-    console.log("Rooms list must be updated with: ", booking);
+    console.log("addCreatedBooking: ", booking);
     // call setDisplayedRooms(this.previousFilters); after setting this.rooms with new booking
 
     this.closeBookingPopup();
@@ -180,6 +180,45 @@ export class UserViewComponent implements OnInit {
       }
     });
 
-    this.rooms = [...this.rooms];
+    this.displayedRooms = [...this.displayedRooms];
+  }
+
+  updateBooking(booking: Booking) {
+    console.log("updateBooking: ", booking);
+    this.closeBookingPopup();
+
+    let index = 0;
+    this.rooms.forEach(room => {
+      if (room.id === booking.roomId ) {
+        room.reservations.forEach(bookingItem => {
+          if(bookingItem.id === booking.id) {
+            room.reservations.splice(index,1);
+            room.reservations.splice(index,0,booking);
+          }
+          index++;
+        })
+      }
+    });
+
+    this.displayedRooms = [...this.displayedRooms];
+  }
+
+  deleteBooking(booking: Booking) {
+    console.log("deleteBooking: ", booking);
+    this.closeBookingPopup();
+
+    let index = 0;
+    this.rooms.forEach(room => {
+      if (room.id === booking.roomId ) {
+        room.reservations.forEach(bookingItem => {
+          if(bookingItem.id === booking.id) {
+            room.reservations.splice(index,1);
+          }
+          index++;
+        })
+      }
+    });
+
+    this.displayedRooms = [...this.displayedRooms];
   }
 }

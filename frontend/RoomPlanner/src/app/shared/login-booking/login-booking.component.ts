@@ -16,7 +16,7 @@ import { UserType } from '../../core/enums/enums';
 export class LoginBookingComponent implements OnInit {
 
   @Input() isLogged: boolean;
-  @Input() isNewBooking: boolean;
+  @Input() isNewAction: boolean;
 
   @Output() logged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() closeLogin: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -39,7 +39,7 @@ export class LoginBookingComponent implements OnInit {
   ngOnInit() {
     this.status = false;
     this.statusMessage = "";
-    this.isNewBooking = false;
+    this.isNewAction = false;
     this.isLogout = false;
     this.counter = 60;
   }
@@ -75,9 +75,8 @@ export class LoginBookingComponent implements OnInit {
 
     this.authService.authenticateUser(user)
       .then((user: LoggedUser) => {
-        console.log("got user: ", user);
-        this.authService.OnCurrentUserChanged(user)
-
+        console.log("got user (room view): ", user);
+       
         switch (user.type) {
 
           case UserType.PERSON:
@@ -132,14 +131,14 @@ export class LoginBookingComponent implements OnInit {
     let scope = this;
     if (this.isLogout == false) {
 
-      if (this.isNewBooking == false) {
+      if (this.isNewAction == false) {
         this.countdownTimer();
         var startTimeout = setTimeout(() => {
           scope.logoutBooking()
         }, 60 * 1000);
       }
 
-      if (this.isNewBooking == true) {
+      if (this.isNewAction == true) {
         clearTimeout(startTimeout);
         this.countdownTimer();
         var startTimeout = setTimeout(() => {

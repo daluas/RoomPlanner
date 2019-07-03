@@ -40,11 +40,13 @@ export class RoomDataService {
 
     let result = await this.httpClient.get<RoomModel[]>(`${this.backendUrl}/rooms/filters`, { params: params }).toPromise();
 
+
     if (result == undefined) {
       return Promise.reject("No object from backend -- getRoomsByFilter");
     }
 
     let roomArray: RoomModel[] = new Array<RoomModel>();
+
 
     result.forEach(roomFromResult => {
       let reservationArray: Booking[] = new Array<Booking>();
@@ -56,6 +58,7 @@ export class RoomDataService {
           startDate: new Date(new Date(reservationFromResult.startDate)),
           endDate: new Date(new Date(reservationFromResult.endDate)),
           description: reservationFromResult.description
+
         }))
       });
       roomArray.push(new RoomModel().create({
@@ -76,11 +79,13 @@ export class RoomDataService {
     return Promise.resolve(roomArray);
   }
 
+
   async getFloors(): Promise<FloorModel[]> {
 
     var result = await this.httpClient.get<FloorModel[]>(`${this.backendUrl}/floors`).toPromise();
 
     let floorArray: FloorModel[] = new Array<FloorModel>();
+
     result.forEach(floorFromResult => {
       let roomArray: RoomModel[] = new Array<RoomModel>();
       floorFromResult.rooms.forEach(roomFromResult => {

@@ -1,8 +1,7 @@
 
-<app-login-booking *ngIf="this.usertype=='ROOM'" [isLogged]="this.isLogged" [isNewBooking]="this.isNewBooking" (logged)="loggedChange($event)" (closeLogin)="closeLoginPopup($event)"></app-login-booking>
+<app-login-booking *ngIf="this.usertype=='ROOM'" [isLogged]="this.isLogged" [isNewAction]="this.isNewAction" (logged)="loggedChange($event)" (closeLogin)="closeLoginPopup($event)"></app-login-booking>
 
 <div class="container" *ngIf="this.isLogged==true">
-
   <div>
     <span class="datePopup startDate">
       <div class="dateTitle">Start Date</div>
@@ -20,36 +19,39 @@
       <div class="dateTitle">End Date</div>
       <div>
         <mat-form-field class="datePicker">
-          <input matInput [min]="minDate" [matDatepicker]="picker" [(value)]="booking.endDate"  (dateChange)="endDateValidation($event)" >
-           
+          <input matInput [min]="minDate" [matDatepicker]="picker" [(value)]="booking.endDate"  (dateChange)="endDateValidation($event)" >           
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        
+        </mat-form-field>        
       </div>
     </span>
   </div> 
 
-
   <div class="hours">
-      <app-hour-input-booking [(booking)]="booking" (hourEmitter)="onHourEmit($event)" (statusMessage)="getPrevalidationMessage($event)" (disableBookButton)="getStatusOfBookButton($event)"></app-hour-input-booking>
+      <app-hour-input-booking [(booking)]="booking" (startHourEmitter)="onStartHourEmit($event)" (endHourEmitter)="onEndHourEmit($event)" (statusMessage)="getPrevalidationMessage($event)" (disableBookButton)="getStatusOfBookButton($event)"></app-hour-input-booking>
   </div>
+
   <mat-error class="errorMessage" *ngIf="status">Start date is bigger than end date</mat-error> 
+
   <div class="descriptionBox">
     <div class="dateTitle">Notes:</div>
-    <textarea class="descriptionContent" [value]="booking.description"> </textarea>
+    <textarea class="descriptionContent" [(value)]="booking.description" #desc (change) = "getDescription(desc)"> </textarea>
   </div>
 
   <div>
     <button *ngIf="!booking.id" mat-raised-button color="primary" class="bookBtn" (click)="createBookingTest()" [disabled]="!booked">Book now</button>
-    <button *ngIf="booking.id" mat-raised-button color="primary" class="updateBtn" (click)="updateBookingTest()">Update</button>
+    <button *ngIf="booking.id" mat-raised-button color="primary" class="updateBtn" (click)="updateBookingTest()"  [disabled]="!booked">Update</button>
     <button *ngIf="booking.id" mat-raised-button color="primary" class="deleteBtn" (click)="deleteBooking()">Delete</button>
     <button mat-button color="primary" class="cancelBtn" (click)="cancelBooking()">Cancel</button>
   </div>
+</div>
 
-</div>
-<div *ngIf="bookingStatus==false" class="container">
+<div *ngIf="bookingStatus==false || updateStatus==false || deleteStatus==false" class="containerMessage">
   <div class="errorMessage">
-    <p>Booking failed</p>
+    <p *ngIf="!booking.id">Booking failed</p>
+    <p *ngIf="booking.id && updateStatus==false">Update failed</p>
+    <p *ngIf="booking.id && deleteStatus==false">Delete failed</p>
   </div>
+ 
 </div>
+
