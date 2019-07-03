@@ -56,7 +56,7 @@ public class UserRestController {
     @ApiResponses(value = {@ApiResponse(code = 302, message = "FOUND", response = RoomDto.class),
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error")})
-    ResponseEntity<List<RoomDto>> getAllRooms() {
+    public ResponseEntity<List<RoomDto>> getAllRooms() {
 
         LOGGER.info("Method was called.");
         if (userRightsValidator.checkIfUserIsRoom()) {
@@ -75,8 +75,7 @@ public class UserRestController {
             @ApiResponse(code = 404, message = "This room was not found."),
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error.")})
-    ResponseEntity<RoomDto> getRoomById(@PathVariable Long id) {
-
+    public ResponseEntity<RoomDto> getRoomById(@PathVariable Long id) {
         LOGGER.info("Method was called.");
         RoomDto roomDto = userService.getRoomById(id);
         LOGGER.info("The following object was returned: " + roomDto);
