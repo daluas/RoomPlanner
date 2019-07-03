@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FiltersComponent } from './filters.component';
-import { DebugElement } from '@angular/core';
+import { DebugElement, SimpleChange } from '@angular/core';
 import { MaterialDesignModule } from 'src/app/material-design/material-design.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
@@ -12,9 +12,7 @@ import { RoomDataService } from '../../../core/services/room-data/room-data.serv
 import { RoomModel } from '../../../core/models/RoomModel';
 import { FloorModel } from '../../../core/models/FloorModel';
 
-
-
-fdescribe('FiltersComponent', () => {
+describe('FiltersComponent', () => {
   
   let component: FiltersComponent;
   let fixture: ComponentFixture<FiltersComponent>;
@@ -47,55 +45,58 @@ fdescribe('FiltersComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FiltersComponent);
     component = fixture.componentInstance;
-    component.buildingLayout = new Array<FloorModel>();
+    component.buildingLayout=new Array<FloorModel>();
     component.buildingLayout.push(new FloorModel().create({
-        id: 1,
-        floor: 5,
-        rooms: [
-            new RoomModel().create(
-                {
-                    id: 2,
-                    email: "wonderland@yahoo.com",
-                    type: "ROOM",
-                    reservations: [],
-                    name: "Wonderland",
-                    floor: 5,
-                    maxPersons: 14
-                })
-        ]
-    }), new FloorModel().create(
-        {
+      id: 1,
+      floor: 5,
+      rooms: [
+          new RoomModel().create(
+              {
+                  id: 2,
+                  email: "wonderland@yahoo.com",
+                  type: "ROOM",
+                  reservations: [],
+                  name: "Wonderland",
+                  floor: 5,
+                  maxPersons: 14
+              })
+      ]
+  }), new FloorModel().create(
+      {
 
-            id: 2,
-            floor: 8,
-            rooms: [new RoomModel().create(
-                {
-                    id: 3,
-                    email: "westeros@yahoo.com",
-                    type: "ROOM",
-                    reservations: [],
-                    name: "Westeros",
-                    floor: 8,
-                    maxPersons: 20
-                })
-            ]
-        }), new FloorModel().create(
-            {
-                id: 3,
-                floor: 4,
-                rooms: [
-                    {
-                        id: 4,
-                        email: "neverland@yahoo.com",
-                        type: "ROOM",
-                        reservations: [],
-                        name: "Neverland",
-                        floor: 4,
-                        maxPersons: 5
-                    }
-                ]
-            })
-    );;
+          id: 2,
+          floor: 8,
+          rooms: [new RoomModel().create(
+              {
+                  id: 3,
+                  email: "westeros@yahoo.com",
+                  type: "ROOM",
+                  reservations: [],
+                  name: "Westeros",
+                  floor: 8,
+                  maxPersons: 20
+              })
+          ]
+      }), new FloorModel().create(
+          {
+              id: 3,
+              floor: 4,
+              rooms: [
+                  {
+                      id: 4,
+                      email: "neverland@yahoo.com",
+                      type: "ROOM",
+                      reservations: [],
+                      name: "Neverland",
+                      floor: 4,
+                      maxPersons: 5
+                  }
+              ]
+          })
+      )
+
+    component.ngOnChanges({ buildingLayout: new SimpleChange(null, component.buildingLayout,true)})
+  
     fixture.detectChanges();
   });
 
