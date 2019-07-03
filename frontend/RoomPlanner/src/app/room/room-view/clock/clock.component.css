@@ -27,3 +27,14 @@
     height: calc(100% - 70px); */
 }
 
+.available{
+    fill: #fff;
+}
+
+.occupied{
+    fill: #FF5B3E;
+}
+
+.reserved{
+    fill: #71c422;
+}

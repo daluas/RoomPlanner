@@ -8,7 +8,7 @@ import { Booking } from 'src/app/core/models/BookingModel';
 })
 export class RoomViewComponent implements OnInit {
 
-  isClockActive: boolean = false;
+  isClockActive: boolean = true;
   reservations: Booking[];
 
   date: Date = new Date();

@@ -1,5 +1,40 @@
 <div class="container">
   <svg id="svg-clock">
-    <g id="svg-intervals"></g>
+    <g id="svg-intervals">
+      <path *ngFor="let interval of availabilityIntervals; let intervalIndex = index"
+        [attr.d]="getIntervalPath(intervalIndex)" style="stroke: #222; stroke-width: 2px;" [ngClass]="{'available': interval.type === intervalsType.available, 'occupied': interval.type === intervalsType.occupied, 'reserved': interval.type === intervalsType.reserved
+      }" />
+    </g>
+
+    <circle [attr.cx]="svgWidth / 2" [attr.cy]="svgWidth / 2" [attr.r]="svgWidth / 2 - 30"
+      style="fill: #fff; stroke: #222; stroke-width: 2px;" />
+
+    <line [attr.x1]="beginningLine.x1" [attr.y1]="beginningLine.y1" [attr.x2]="beginningLine.x2"
+      [attr.y2]="beginningLine.y2" style="stroke: #ffaa21; stroke-width: 5px;" />
+
+    <g *ngFor="let elm of clockNumbers">
+      <circle *ngIf="elm.type === 'point'" [attr.cx]="elm.cx" [attr.cy]="elm.cy" [attr.r]="elm.r" style="fill: #222" />
+      <text *ngIf="elm.type === 'text'" [attr.x]="elm.x" [attr.y]="elm.y" [attr.dy]="elm.dy"
+        style="font-size: 14px; fill: #222; font-weight: bold; alignment-baseline:middle; text-anchor:middle">{{elm.value}}</text>
+    </g>
+
+    <line [attr.x1]="clockPins.minutes.x1" [attr.y1]="clockPins.minutes.y1" [attr.x2]="clockPins.minutes.x2"
+      [attr.y2]="clockPins.minutes.y2" style="stroke: #222; stroke-width: 3px;" />
+    <line [attr.x1]="clockPins.hours.x1" [attr.y1]="clockPins.hours.y1" [attr.x2]="clockPins.hours.x2"
+      [attr.y2]="clockPins.hours.y2" style="stroke: #222; stroke-width: 5px;" />
+
+    <g *ngIf="isActive">
+      <g *ngFor="let reservationPin of reservationPins">
+        <line [attr.x1]="reservationPin.x1" [attr.y1]="reservationPin.y1" [attr.x2]="svgWidth / 2"
+          [attr.y2]="svgWidth / 2" style="stroke: #71c422; stroke-width: 3px;" />
+        <circle [attr.cx]="reservationPin.cx" [attr.cy]="reservationPin.cy" r="15"
+          style="fill: rgb(0,0,0,0); stroke: #71c422; stroke-width: 3px;" />
+      </g>
+    </g>
+
+    <circle [attr.cx]="svgWidth / 2" [attr.cy]="svgWidth / 2" r="50"
+      style="fill: #222; stroke: #222; stroke-width: 2px;" />
+    <text [attr.x]="svgWidth / 2" [attr.y]="svgWidth / 2" dy="3"
+      style="font-size: 24px; fill: #fff; font-weight: bold; alignment-baseline:middle; text-anchor:middle">{{clockTime}}</text>
   </svg>
 </div>
