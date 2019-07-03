@@ -35,8 +35,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.TimeZone;
 
-import static org.junit.Assert.*;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -98,10 +96,10 @@ public class PrevalidationRestControllerTest {
         endDate.add(endDate.MINUTE, 31);
         startDate.setTime(conversionToGmt(startDate.getTime()));
         endDate.setTime(conversionToGmt(endDate.getTime()));
-        startDate.set(Calendar.SECOND,0);
-        startDate.set(Calendar.MILLISECOND,0);
-        endDate.set(Calendar.SECOND,0);
-        endDate.set(Calendar.MILLISECOND,0);
+        startDate.set(Calendar.SECOND, 0);
+        startDate.set(Calendar.MILLISECOND, 0);
+        endDate.set(Calendar.SECOND, 0);
+        endDate.set(Calendar.MILLISECOND, 0);
 
         ReservationEntity reservationEntityOne = new ReservationEntityBuilder()
                 .withStartDate(startDate)
@@ -116,10 +114,10 @@ public class PrevalidationRestControllerTest {
         endDate.add(endDate.MINUTE, 31);
         startDate.setTime(conversionToGmt(startDate.getTime()));
         endDate.setTime(conversionToGmt(endDate.getTime()));
-        startDate.set(Calendar.SECOND,0);
-        startDate.set(Calendar.MILLISECOND,0);
-        endDate.set(Calendar.SECOND,0);
-        endDate.set(Calendar.MILLISECOND,0);
+        startDate.set(Calendar.SECOND, 0);
+        startDate.set(Calendar.MILLISECOND, 0);
+        endDate.set(Calendar.SECOND, 0);
+        endDate.set(Calendar.MILLISECOND, 0);
 
         ReservationEntity reservationEntityTwo = new ReservationEntityBuilder()
                 .withStartDate(startDate)

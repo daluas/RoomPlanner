@@ -57,9 +57,6 @@ public class ReservationController {
 
         LOGGER.info("Method was called.");
         ReservationDto reservationDtoUpdated = bookRoomService.updateReservation(id, reservationDto);
-        if (reservationDtoUpdated == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
         LOGGER.info("The following object was returned: " + reservationDtoUpdated);
         return new ResponseEntity<>(reservationDtoUpdated, HttpStatus.OK);
 
