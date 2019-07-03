@@ -68,6 +68,9 @@ public class ReservationControllerTest {
     private OAuthHelper oAuthHelper;
 
     private RequestPostProcessor bearerToken;
+    @Autowired
+    private ReservationDtoMapper mapperService;
+
 
     private RequestPostProcessor bearerTokenTest;
 
@@ -237,5 +240,59 @@ public class ReservationControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations?reservation=2")
                 .with(bearerToken))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+    @Test
+    public void shouldReturnResponseEntityWithValidReservationDtoAndStatusOkWhenUpdateReservationIsCalled() throws Exception {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.000Z");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        startDate.set(2019, Calendar.JULY, 7, 18, 10, 0);
+        endDate.set(2019, Calendar.JULY, 7, 18, 45, 0);
+        UserEntity roomEntity = BuildersWrapper.buildRoomEntity(2L, "wonderland@yahoo.com", "4wonD2C%",
+                new HashSet<>(), new FloorEntity(), UserType.ROOM, "Wonderland", 14);
+        UserEntity personEntity = BuildersWrapper.buildPersonEntity(1L, "sghitun@yahoo.com", "password",
+                new HashSet<>(), UserType.PERSON, "Popescu", "Ana");
+        ReservationEntity reservationEntity = BuildersWrapper.buildReservationEntity(1L, startDate, endDate, personEntity, roomEntity, "description");
+        reservationRepository.save(reservationEntity);
+
+        Calendar newStartDate = Calendar.getInstance();
+        Calendar newEndDate = Calendar.getInstance();
+        newStartDate.set(2040, Calendar.JUNE, 24, 13, 2, 0);
+        newEndDate.set(2040, Calendar.JUNE, 24, 13, 33, 0);
+
+        ReservationDto reservationDtoForUpdate = BuildersWrapper.buildReservationDto(null, null, null, newStartDate, newEndDate, "reservation updated");
+        ReservationDto reservationDtoUpdated = BuildersWrapper.buildReservationDto(1L, 2L, "sghitun@yahoo.com", newStartDate, newEndDate, "reservation updated");
+        String jsonReservationDto = new ObjectMapper().setDateFormat(dateFormat).writeValueAsString(reservationDtoForUpdate);
+        String jsonUpdatedReservationDto = new ObjectMapper().setDateFormat(dateFormat).writeValueAsString(reservationDtoUpdated);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/reservations/{id}", 1)
+                .with(bearerToken)
+                .content(jsonReservationDto)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.content().string(jsonUpdatedReservationDto))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+
+    }
+
+    @Test
+    public void shouldReturnResponseEntityWithStatusNoContentWhenUpdateReservationIsCalledWithInvalidId() throws Exception {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.000Z");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        startDate.set(2035, Calendar.JANUARY, 9, 12, 10, 0);
+        endDate.set(2035, Calendar.JANUARY, 6, 13, 45, 0);
+        ReservationDto reservationDto = BuildersWrapper.buildReservationDto(null, null, null, startDate, endDate, "reservation updated");
+        String jsonReservationDto = new ObjectMapper().setDateFormat(dateFormat).writeValueAsString(reservationDto);
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/reservations/{id}", 407)
+                .with(bearerToken)
+                .content(jsonReservationDto)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 }

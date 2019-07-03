@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     private class JsonResponse {
-
         String error;
+
+        public JsonResponse() {
+        }
 
         public JsonResponse(String message) {
             super();
@@ -69,6 +71,30 @@ public class GlobalExceptionHandler {
     public ResponseEntity<JsonResponse> handleRoomNotFoundException(RoomNotFoundException exception) {
 
         return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({ReservationNotFoundException.class})
+    public ResponseEntity<JsonResponse> handleReservationNotFoundException(ReservationNotFoundException exception) {
+
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler({NotPersonException.class})
+    public ResponseEntity<JsonResponse> handleNotPersonException(NotPersonException exception) {
+
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler({InvalidDateException.class})
+    public ResponseEntity<JsonResponse> handleInvalidDateExceptionn(InvalidDateException exception) {
+
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler({PersonIdOfReservationNotEqualsUserIdException.class})
+    public ResponseEntity<JsonResponse> handlePersonIdOfReservationNotEqualsUserId(PersonIdOfReservationNotEqualsUserIdException exception) {
+
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NO_CONTENT);
     }
 
 }
