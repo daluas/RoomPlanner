@@ -62,7 +62,20 @@ export class UserViewComponent implements OnInit {
 
     await this.roomDataService.getSingleFloor(firstFloor.floor).then((floor) => {
       this.rooms = <RoomModel[]>floor.rooms;
-      this.displayedRooms = <RoomModel[]>floor.rooms;
+      
+      this.rooms.forEach(room => {
+        let roomAux:RoomModel=new RoomModel().create(room);
+        roomAux.reservations=[];
+        let reservations = room.reservations;
+        for (let i = 0; i < reservations.length; i++) {
+          if (reservations[i].startDate.getDate() == new Date().getDate()) {
+            roomAux.reservations.push(reservations[i])
+          }
+        }
+        this.displayedRooms = new Array<RoomModel>();
+        this.displayedRooms.push(roomAux);
+      })
+   
       console.log("Rooms by default", this.rooms)
     })
 
@@ -181,6 +194,7 @@ export class UserViewComponent implements OnInit {
     });
 
     this.displayedRooms = [...this.displayedRooms];
+    this.updateRoomsBasedOnFilters(this.previousFilters);
   }
 
   updateBooking(booking: Booking) {
@@ -201,6 +215,7 @@ export class UserViewComponent implements OnInit {
     });
 
     this.displayedRooms = [...this.displayedRooms];
+    this.updateRoomsBasedOnFilters(this.previousFilters);
   }
 
   deleteBooking(booking: Booking) {
@@ -220,5 +235,6 @@ export class UserViewComponent implements OnInit {
     });
 
     this.displayedRooms = [...this.displayedRooms];
+    this.updateRoomsBasedOnFilters(this.previousFilters);
   }
 }

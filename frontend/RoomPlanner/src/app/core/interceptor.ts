@@ -104,16 +104,16 @@ export class Interceptor implements HttpInterceptor {
 
         if (request.url === `${this.BASE_URL}/users`) {
 
-            // console.log(request);
-            // let userdata = new LoggedUser().create({
-            //     email: request.params.get("email"),
-            //     type: "PERSON"
-            // })
-            // console.log(userdata);
+            console.log(request);
+            let userdata = new LoggedUser().create({
+                email: request.params.get("email"),
+                type: "PERSON"
+            })
+            console.log(userdata);
 
-            // return of(new HttpResponse({
-            //     body: userdata
-            // }))
+            return of(new HttpResponse({
+                body: userdata
+            }))
 
             request = this.addAuthenticationToken(request, next);
             return next.handle(request)

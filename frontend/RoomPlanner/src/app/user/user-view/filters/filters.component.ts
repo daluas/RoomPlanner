@@ -113,12 +113,16 @@ export class FiltersComponent implements OnInit, OnChanges {
         this.endDate.setMinutes(59);
       }
     }
+    if (this.dateInThePastIn == true){
+      this.numberOfPeople=null;
+    }
 
     if (this.dateInThePastIn == true || this.startDate.getTime() == this.endDate.getTime()) {
       this.startDate.setTime(this.finalDate.getTime());
       this.endDate.setTime(this.finalDate.getTime());
       this.endDate.setHours(0);
       this.endDate.setMinutes(0);
+      
     } else {
       this.startDate.setDate(this.finalDate.getDate());
       this.startDate.setMonth(this.finalDate.getMonth());

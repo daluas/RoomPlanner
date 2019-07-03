@@ -188,7 +188,11 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   getUsernameFromEmail(email): string {
-    return email.split('@')[0];
+    if(email != undefined){
+      return email.split('@')[0];
+
+    }
+    return "";
   }
 
   setStyleForPastTime() {
