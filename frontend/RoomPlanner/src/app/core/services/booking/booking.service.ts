@@ -78,8 +78,8 @@ export class BookingService {
 
   deleteBooking(booking: Booking): Observable<HttpResponse<Config>> {//
     console.log("deleteBooking(booking: Booking) was called!");
-    // let bookingId: number = booking.id;
-    return this.httpClient.delete(`${this.backendUrl}/api/reservations/${booking.id}`, { observe: 'response' });
+     let bookingId: number = booking.id;
+    return this.httpClient.delete(`${this.backendUrl}/api/reservations?reservation=${bookingId}`, { observe: 'response' });
     //return 400;
   }
 

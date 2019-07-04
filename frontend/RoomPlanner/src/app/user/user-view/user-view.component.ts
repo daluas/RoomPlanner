@@ -180,16 +180,16 @@ export class UserViewComponent implements OnInit {
     this.bookingPopupOpen = true;
   }
 
-  addCreatedBooking(booking: Booking) {
+  addCreatedBooking(newbooking: Booking) {
     // add to the list of bookings of the booked room the new booking 
-    console.log("addCreatedBooking: ", booking);
+    console.log("addCreatedBooking: ", newbooking);
     // call setDisplayedRooms(this.previousFilters); after setting this.rooms with new booking
 
     this.closeBookingPopup();
 
     this.rooms.forEach(room => {
-      if (room.id === booking.roomId) {
-        room.reservations.push(booking);
+      if (room.id === newbooking.roomId) {
+        room.reservations.push(newbooking);
       }
     });
 
