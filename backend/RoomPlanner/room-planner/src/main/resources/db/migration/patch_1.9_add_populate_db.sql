@@ -1,3 +1,6 @@
+delete from users_roles where role_id = 1;
+delete from roles where id = 1;
+
 insert into users (email, password, type, first_name, last_name, room_name, floor_id, max_persons)
 values('ageorge@yahoo.com', '{bcrypt}$2a$10$vFMyZ6cn75jjhsWnxAZTK.8EG4LHQc264yXMlKmq8n4LvNF59xpg.','PERSON', 'Adrian', 'George', null, null, null);
 insert into users (email, password, type, first_name, last_name, room_name, floor_id, max_persons)
@@ -5,8 +8,6 @@ values('ipopescu@yahoo.com', '{bcrypt}$2a$10$vFMyZ6cn75jjhsWnxAZTK.8EG4LHQc264yX
 
 insert into users_roles values (9,3);
 insert into users_roles values (10,3);
-insert into users_roles values (9,1);
-insert into users_roles values (10,1);
 
 insert into reservations (start_date, end_date, description, user_id, room_id) values (TO_TIMESTAMP('2019-07-18 7:30:00','YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2019-07-18 8:00:00','YYYY-MM-DD HH24:MI:SS'), 'Demo meeting', 1, 5);
 insert into reservations (start_date, end_date, description, user_id, room_id) values (TO_TIMESTAMP('2019-07-18 8:30:00','YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2019-07-18 9:00:00','YYYY-MM-DD HH24:MI:SS'), null, 8, 5);

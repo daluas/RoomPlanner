@@ -39,18 +39,18 @@ public class PrevalidationServiceImpl implements PrevalidationService {
 
         UserEntity personEntity = getPersonEntity(email);
 
-        if(!isUserPerson(personEntity)) {
+        if (!isUserPerson(personEntity)) {
             throw new UserAuthorityException("Not a person");
         }
 
         UserEntity roomEntity = getRoomEntity(roomId);
 
-        if(!isUserRoom(roomEntity)) {
+        if (!isUserRoom(roomEntity)) {
             throw new UserAuthorityException("Not a room");
         }
 
         ReservationEntity reservationEntity = getReservationEntity(startDate, endDate,
-                                              (PersonEntity) personEntity, (RoomEntity) roomEntity);
+                (PersonEntity) personEntity, (RoomEntity) roomEntity);
 
         ValidationResult validStartEndDate = startEndDateValidator.validate(reservationEntity);
         if (validStartEndDate.getError() != null) {
@@ -83,16 +83,16 @@ public class PrevalidationServiceImpl implements PrevalidationService {
     }
 
     private boolean isUserPerson(UserEntity personEntity) {
-        return personEntity.getType() != null && personEntity.getType().equals(UserType.PERSON);
+        return UserType.PERSON.equals(personEntity.getType());
     }
 
     private boolean isUserRoom(UserEntity roomEntity) {
-        return roomEntity.getType() != null && roomEntity.getType().equals(UserType.ROOM);
+        return UserType.ROOM.equals(roomEntity.getType());
     }
 
     private void verifyParametersValidation(Calendar startDate, Calendar endDate,
                                             String email, Long roomId) {
-        if(areParametersNotNull(startDate, endDate, email, roomId)) {
+        if (areParametersNotNull(startDate, endDate, email, roomId)) {
             throw new InvalidReservationDtoException("Invalid reservation dto");
         }
     }
