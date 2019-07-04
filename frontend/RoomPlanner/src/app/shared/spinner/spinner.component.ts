@@ -18,13 +18,8 @@ export class SpinnerComponent implements OnInit {
   @Input() isLoading: boolean;
 
   ngOnInit() {
-    this.mode = 'determinate';
-    this.value = 0;
+    this.mode = 'indeterminate';
     this.diameter = 30;
-    
-    if(this.isLoading) {
-      this.mode='indeterminate';
-    }
   }
 
 }
