@@ -8,6 +8,7 @@ import edu.roomplanner.repository.ReservationRepository;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
+import edu.roomplanner.util.ConverterUtil;
 import edu.roomplanner.util.OAuthHelper;
 import edu.roomplanner.util.ReservationEntityUtil;
 import org.flywaydb.core.Flyway;
@@ -94,8 +95,8 @@ public class PrevalidationRestControllerTest {
         Calendar startDate = (Calendar) sysDate.clone();
         Calendar endDate = (Calendar) sysDate.clone();
         endDate.add(endDate.MINUTE, 31);
-        startDate.setTime(conversionToGmt(startDate.getTime()));
-        endDate.setTime(conversionToGmt(endDate.getTime()));
+        startDate.setTime(ConverterUtil.conversionToGmt(startDate.getTime()));
+        endDate.setTime(ConverterUtil.conversionToGmt(endDate.getTime()));
         startDate.set(Calendar.SECOND, 0);
         startDate.set(Calendar.MILLISECOND, 0);
         endDate.set(Calendar.SECOND, 0);
@@ -112,8 +113,8 @@ public class PrevalidationRestControllerTest {
         endDate = (Calendar) sysDate.clone();
         endDate.add(startDate.HOUR, 2);
         endDate.add(endDate.MINUTE, 31);
-        startDate.setTime(conversionToGmt(startDate.getTime()));
-        endDate.setTime(conversionToGmt(endDate.getTime()));
+        startDate.setTime(ConverterUtil.conversionToGmt(startDate.getTime()));
+        endDate.setTime(ConverterUtil.conversionToGmt(endDate.getTime()));
         startDate.set(Calendar.SECOND, 0);
         startDate.set(Calendar.MILLISECOND, 0);
         endDate.set(Calendar.SECOND, 0);
@@ -253,18 +254,5 @@ public class PrevalidationRestControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
     }
-
-    private Date conversionToGmt(Date date) {
-        TimeZone tz = TimeZone.getDefault();
-        Date ret = new Date(date.getTime() - tz.getRawOffset());
-        if (tz.inDaylightTime(ret)) {
-            Date dstDate = new Date(ret.getTime() - tz.getDSTSavings());
-            if (tz.inDaylightTime(dstDate)) {
-                ret = dstDate;
-            }
-        }
-        return ret;
-    }
-
 
 }
