@@ -73,12 +73,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({ReservationNotFoundException.class})
-    public ResponseEntity<JsonResponse> handleReservationNotFoundException(ReservationNotFoundException exception) {
-
-        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NO_CONTENT);
-    }
-
     @ExceptionHandler({NotPersonException.class})
     public ResponseEntity<JsonResponse> handleNotPersonException(NotPersonException exception) {
 
