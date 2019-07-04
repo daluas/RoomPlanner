@@ -64,7 +64,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({UnauthorizedReservationException.class})
     public ResponseEntity<JsonResponse> handleUnauthorizedReservationException(UnauthorizedReservationException exception) {
 
-        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({RoomNotFoundException.class})

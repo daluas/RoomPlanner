@@ -53,7 +53,7 @@ public class UserRestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/rooms")
     @ApiOperation("Gets a list with all the rooms in our database")
-    @ApiResponses(value = {@ApiResponse(code = 302, message = "FOUND", response = RoomDto.class),
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "FOUND", response = RoomDto.class),
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error")})
     public ResponseEntity<List<RoomDto>> getAllRooms() {
@@ -61,17 +61,17 @@ public class UserRestController {
         LOGGER.info("Method was called.");
         if (userRightsValidator.isUserLoggedAsRoom()) {
             RoomDto roomDto = userService.getRoomByEmail(tokenParserService.getEmailFromToken());
-            return new ResponseEntity<>(Collections.singletonList(roomDto), HttpStatus.FOUND);
+            return new ResponseEntity<>(Collections.singletonList(roomDto), HttpStatus.OK);
         }
 
         List<RoomDto> allRooms = userService.getAllRooms();
         LOGGER.info("The following object was returned:" + allRooms);
-        return new ResponseEntity<>(allRooms, HttpStatus.FOUND);
+        return new ResponseEntity<>(allRooms, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/rooms/{id}")
     @ApiOperation("Gets a room with an specific id")
-    @ApiResponses(value = {@ApiResponse(code = 302, message = "FOUND", response = RoomDto.class),
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "FOUND", response = RoomDto.class),
             @ApiResponse(code = 404, message = "This room was not found."),
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error.")})
@@ -81,10 +81,10 @@ public class UserRestController {
         LOGGER.info("The following object was returned: " + roomDto);
 
         if (userRightsValidator.isUserLoggedAsRoom() && !userRightsValidator.isLoggedRoomARequestedRoom(id)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(roomDto, HttpStatus.FOUND);
+        return new ResponseEntity<>(roomDto, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/users")
@@ -100,7 +100,7 @@ public class UserRestController {
         LOGGER.info("The following object was returned: " + userEmailTypeDto);
 
         if (userRightsValidator.isUserLoggedAsRoom()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         return new ResponseEntity<>(userEmailTypeDto, HttpStatus.OK);
@@ -109,7 +109,7 @@ public class UserRestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/rooms/filters")
     @ApiOperation("Returns a list of rooms filtered by reservation start date, reservation end date, room capacity and room floor")
-    @ApiResponses(value = {@ApiResponse(code = 302, message = "FOUND", response = RoomDto.class),
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "FOUND", response = RoomDto.class),
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error")})
     @PreAuthorize("hasAuthority('person')")
@@ -122,7 +122,7 @@ public class UserRestController {
         List<RoomDto> filteredRooms = userService.getRoomsByFilters(startDate, endDate, minPersons, floor);
         LOGGER.info("The following object was returned: " + filteredRooms);
 
-        return new ResponseEntity<>(filteredRooms, HttpStatus.FOUND);
+        return new ResponseEntity<>(filteredRooms, HttpStatus.OK);
     }
 
 }

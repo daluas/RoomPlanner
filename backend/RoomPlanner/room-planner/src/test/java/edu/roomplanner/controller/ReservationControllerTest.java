@@ -222,7 +222,7 @@ public class ReservationControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations?reservation=2")
                 .with(bearerTokenTest))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
