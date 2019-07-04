@@ -222,7 +222,7 @@ public class ReservationControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations?reservation=2")
                 .with(bearerTokenTest))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
@@ -279,7 +279,7 @@ public class ReservationControllerTest {
     }
 
     @Test
-    public void shouldReturnResponseEntityWithStatusNoContentWhenUpdateReservationIsCalledWithInvalidId() throws Exception {
+    public void shouldReturnResponseEntityWithStatusNotFoundWhenUpdateReservationIsCalledWithInvalidId() throws Exception {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.000Z");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         Calendar startDate = Calendar.getInstance();
@@ -293,6 +293,6 @@ public class ReservationControllerTest {
                 .content(jsonReservationDto)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNoContent());
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }

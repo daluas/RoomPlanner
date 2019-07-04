@@ -19,6 +19,7 @@ import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.impl.ReservationServiceImpl;
 import edu.roomplanner.types.UserType;
 import edu.roomplanner.util.BuildersWrapper;
+import edu.roomplanner.util.ConverterUtil;
 import edu.roomplanner.validation.BookingChain;
 import edu.roomplanner.validation.ValidationResult;
 import edu.roomplanner.validation.validator.impl.StartEndDateValidator;
@@ -113,8 +114,8 @@ public class ReservationServiceTest {
         copyDto.getStartDate().setTime((Date) reservationDto.getStartDate().getTime().clone());
         copyDto.getEndDate().setTime((Date) reservationDto.getEndDate().getTime().clone());
 
-        copyDto.getStartDate().setTime(conversionToGmt(reservationDto.getStartDate().getTime()));
-        copyDto.getEndDate().setTime(conversionToGmt(reservationDto.getEndDate().getTime()));
+        copyDto.getStartDate().setTime(ConverterUtil.conversionToGmt(reservationDto.getStartDate().getTime()));
+        copyDto.getEndDate().setTime(ConverterUtil.conversionToGmt(reservationDto.getEndDate().getTime()));
 
 
         when(tokenParserService.getEmailFromToken()).thenReturn("sghitun@yahoo.com");
@@ -153,17 +154,6 @@ public class ReservationServiceTest {
                 .build();
     }
 
-    private Date conversionToGmt(Date date) {
-        TimeZone tz = TimeZone.getDefault();
-        Date ret = new Date(date.getTime() - tz.getRawOffset());
-        if (tz.inDaylightTime(ret)) {
-            Date dstDate = new Date(ret.getTime() - tz.getDSTSavings());
-            if (tz.inDaylightTime(dstDate)) {
-                ret = dstDate;
-            }
-        }
-        return ret;
-    }
     @Test(expected = ReservationNotFoundException.class)
     public void shouldNotFindValidReservationId() {
         Long roomId = 4L;

@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public RoomDto getRoomById(Long id) {
-        if (userValidator.checkValidRoomId(id)) {
+        if (userValidator.isRoomIdValid(id)) {
             RoomEntity userEntity = (RoomEntity) userRepository.findById(id)
                     .orElseThrow(() -> new UserNotFoundException("User not found"));
             Set<ReservationEntity> updatedReservationEntities = updateReservationDescription(userEntity.getReservations());
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public RoomDto getRoomByEmail(String email) {
-        if (userValidator.checkValidRoomEmail(email)) {
+        if (userValidator.isRoomEmailValid(email)) {
             UserEntity userEntity = userRepository.findByEmail(email).get();
             return roomDtoMapper.mapEntityToDto((RoomEntity) userEntity);
         }

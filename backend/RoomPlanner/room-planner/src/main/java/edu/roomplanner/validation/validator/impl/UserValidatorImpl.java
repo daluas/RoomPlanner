@@ -20,22 +20,17 @@ public class UserValidatorImpl implements UserValidator {
     }
 
     @Override
-    public boolean checkValidRoomId(Long id) {
+    public boolean isRoomIdValid(Long id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
-        if (userEntity.isPresent()) {
-            return UserType.ROOM.equals(userEntity.get().getType());
-        }
-        return false;
-
+        return userEntity.filter(userEntity1 -> UserType.ROOM.equals(userEntity1.getType()))
+                .isPresent();
     }
 
     @Override
-    public boolean checkValidRoomEmail(String email) {
+    public boolean isRoomEmailValid(String email) {
         Optional<UserEntity> userEntity = userRepository.findByEmail(email);
-        if (userEntity.isPresent()) {
-            return UserType.ROOM.equals(userEntity.get().getType());
-        }
-        return false;
+        return userEntity.filter(userEntity1 -> UserType.ROOM.equals(userEntity1.getType()))
+                .isPresent();
     }
 
 }
