@@ -1,8 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Validators, FormGroup, Form, NgForm, FormBuilder } from '@angular/forms';
-import { Time } from '@angular/common';
-import { Timeouts } from 'selenium-webdriver';
-import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 
 
 @Component({
@@ -10,14 +7,14 @@ import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
   templateUrl: './hour-input.component.html',
   styleUrls: ['./hour-input.component.css']
 })
-export class HourInputComponent implements OnInit,OnChanges {
+export class HourInputComponent implements OnInit, OnChanges {
 
-  
+
   @Output() hourEmitter: EventEmitter<any> = new EventEmitter()
 
   finalHour: Date;
   hourForm: FormGroup;
-  
+
   @Input() hoursRecieved;
   @Input() minutesRecieved;
 
@@ -25,7 +22,7 @@ export class HourInputComponent implements OnInit,OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.hourForm.setValue({ hour:this.hoursRecieved , minutes: this.minutesRecieved});
+    this.hourForm.setValue({ hour: this.hoursRecieved, minutes: this.minutesRecieved });
   }
 
   constructor(private fb: FormBuilder) {
@@ -108,7 +105,7 @@ export class HourInputComponent implements OnInit,OnChanges {
       this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: +'30' });
       this.onKeyDownHours();
     } else {
-      if (this.hourForm.value.minutes <=30) {
+      if (this.hourForm.value.minutes <= 30) {
         this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: '00' });
       } else {
         this.hourForm.setValue({ hour: this.hourForm.value.hour, minutes: +'30' });

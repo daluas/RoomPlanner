@@ -4,10 +4,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HourInputBookingComponent } from 'src/app/shared/hour-input-booking/hour-input-booking.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Router } from '@angular/router';
 
-describe('HourInputComponent', () => {
+describe('HourInputComponentBooking', () => {
   let component: HourInputBookingComponent;
   let fixture: ComponentFixture<HourInputBookingComponent>;
+  let routerMock = { navigate: (path: string) => { } }
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -19,7 +21,8 @@ describe('HourInputComponent', () => {
       ReactiveFormsModule,
       FormsModule,
       HttpClientTestingModule
-    ]
+    ],
+    providers: [{ provide: Router, useValue: routerMock}]
   })
     .compileComponents();
   }));

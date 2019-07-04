@@ -25,7 +25,7 @@ describe('HourInputComponent', () => {
         FormsModule,
         HttpClientTestingModule
       ],
-      providers: [AuthGuard, { provide: Router, useValue: routerMock},]
+      providers: [{ provide: Router, useValue: routerMock}]
     })
       .compileComponents();
   }));
