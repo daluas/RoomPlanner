@@ -6,5 +6,5 @@
     height: 20%;    
 }
 .spinner-color::ng-deep circle {
-    stroke: #0098c3 !important;
+    stroke: #673ab7 !important;
 }
