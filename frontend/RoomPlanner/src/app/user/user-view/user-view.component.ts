@@ -147,7 +147,7 @@ export class UserViewComponent implements OnInit {
     } else {
       if (filters.minPersons != null) {
         this.rooms.forEach(room => {
-          if (room.maxPersons == filters.minPersons) {
+          if (room.maxPersons >= filters.minPersons) {
             let roomAux:RoomModel=new RoomModel().create(room);
             roomAux.reservations=[];
             let reservations = room.reservations;

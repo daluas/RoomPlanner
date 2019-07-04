@@ -31,25 +31,25 @@ export class Interceptor implements HttpInterceptor {
     constructor(private _snackBar: MatSnackBar) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-       // console.log(request);
+        // console.log(request);
 
         if (request.url === `${this.BASE_URL}/oauth/token`) {
             //request token
             console.log(request.body)
 
             if (request.body.get("grant_type") === "password") {
-                console.log("aiciii");
+                // console.log("aiciii");
 
-                let token = new LoginToken().create({
-                    access_token: "access",
-                    token_type: "bearer",
-                    refresh_Token: "refreshh",
-                    expiration_timestamp: 1561102598
-                })
-                localStorage.setItem("access-token", JSON.stringify(token))
-                return of(new HttpResponse({
-                    body: token
-                }))
+                // let token = new LoginToken().create({
+                //     access_token: "access",
+                //     token_type: "bearer",
+                //     refresh_Token: "refreshh",
+                //     expiration_timestamp: 1561102598
+                // })
+                // localStorage.setItem("access-token", JSON.stringify(token))
+                // return of(new HttpResponse({
+                //     body: token
+                // }))
 
 
 
@@ -78,7 +78,6 @@ export class Interceptor implements HttpInterceptor {
                                 status: error.status
                             };
 
-                            // this.errorDialogService.openDialog(data);
                             return throwError(error);
                         })
                     );
@@ -100,20 +99,33 @@ export class Interceptor implements HttpInterceptor {
             }
         }
 
-
-
+        request = this.addAuthenticationToken(request, next);
+        return next.handle(request)
+            .pipe(
+                tap((event: HttpEvent<any>) => {
+                    if (event instanceof HttpResponse) {
+                        console.log(event.body)
+                        // goes here
+                    }
+                }),
+                catchError((error: HttpErrorResponse) => {
+                    console.log(error);
+                    return throwError(error);
+                })
+            );
+        /*
         if (request.url === `${this.BASE_URL}/users`) {
 
-            console.log(request);
-            let userdata = new LoggedUser().create({
-                email: request.params.get("email"),
-                type: "PERSON"
-            })
-            console.log(userdata);
+            // console.log(request);
+            // let userdata = new LoggedUser().create({
+            //     email: request.params.get("email"),
+            //     type: "PERSON"
+            // })
+            // console.log(userdata);
 
-            return of(new HttpResponse({
-                body: userdata
-            }))
+            // return of(new HttpResponse({
+            //     body: userdata
+            // }))
 
             request = this.addAuthenticationToken(request, next);
             return next.handle(request)
@@ -328,6 +340,7 @@ export class Interceptor implements HttpInterceptor {
                 status: 200
             }))
         }
+        */
     }
 
     getTokenLS(): LoginToken {
