@@ -83,6 +83,8 @@ public class StartEndDateValidatorUnitTest {
         startDate.set(sysDate.get(Calendar.YEAR), sysDate.get(Calendar.MONTH), sysDate.get(Calendar.DAY_OF_MONTH)
                 , sysDate.get(Calendar.HOUR_OF_DAY), sysDate.get(Calendar.MINUTE), 0);
         endDate.set(endYear, endMonth, endDay, endHour, endMinute, 0);
+        startDate.set(Calendar.MILLISECOND, 0);
+        endDate.set(Calendar.MILLISECOND, 0);
 
         return new ReservationEntityBuilder()
                 .withStartDate(startDate)

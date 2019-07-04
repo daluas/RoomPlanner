@@ -83,11 +83,11 @@ public class PrevalidationServiceImpl implements PrevalidationService {
     }
 
     private boolean isUserPerson(UserEntity personEntity) {
-        return personEntity.getType().equals(UserType.PERSON);
+        return personEntity.getType() != null && personEntity.getType().equals(UserType.PERSON);
     }
 
     private boolean isUserRoom(UserEntity roomEntity) {
-        return roomEntity.getType().equals(UserType.ROOM);
+        return roomEntity.getType() != null && roomEntity.getType().equals(UserType.ROOM);
     }
 
     private void verifyParametersValidation(Calendar startDate, Calendar endDate,
