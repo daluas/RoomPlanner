@@ -30,7 +30,8 @@ public class ReservationRestController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/api/reservations/{room_id}", produces = "application/json")
     @ApiOperation("Books a reservation for a room with a specific id.")
-    @ApiResponses(value = {@ApiResponse(code = 201, message = "Reservation was booked successfully."),
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Reservation was booked successfully."),
             @ApiResponse(code = 404, message = "This room was not found."),
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error.")})
@@ -46,25 +47,28 @@ public class ReservationRestController {
     }
 
     @ApiOperation("Update a reservation with a specific id.")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Reservation was updated successfully."),
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Reservation was updated successfully."),
             @ApiResponse(code = 404, message = "This reservation was not found."),
             @ApiResponse(code = 401, message = "You are not authenticated."),
             @ApiResponse(code = 500, message = "Internal server error.")})
     @PreAuthorize("hasAuthority('person')")
     @RequestMapping(method = RequestMethod.PATCH, value = "/api/reservations/{id}")
-    ResponseEntity<ReservationDto> updateReservation(@PathVariable Long id,
+    public ResponseEntity<ReservationDto> updateReservation(@PathVariable Long id,
                                                      @RequestBody ReservationDto reservationDto) {
 
         LOGGER.info("Method was called.");
         ReservationDto reservationDtoUpdated = bookRoomService.updateReservation(id, reservationDto);
         LOGGER.info("The following object was returned: " + reservationDtoUpdated);
+
         return new ResponseEntity<>(reservationDtoUpdated, HttpStatus.OK);
 
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/api/reservations")
     @ApiOperation("Delete a reservation for a room with a specific id.")
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Not a valid reservation id."),
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "Not a valid reservation id."),
             @ApiResponse(code = 200, message = "Reservation was deleted."),
             @ApiResponse(code = 401, message = "User want to delete a reservation from another user.")})
     @PreAuthorize("hasAuthority('person')")

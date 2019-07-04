@@ -23,23 +23,19 @@ public class UserRightsValidatorImpl implements UserRightsValidator {
     }
 
     @Override
-    public boolean checkIfUserIsRoom() {
+    public boolean isUserLoggedAsRoom() {
         String email = tokenParserService.getEmailFromToken();
         Optional<UserEntity> userEntity = userRepository.findByEmail(email);
-        if (userEntity.isPresent()) {
-            return (userEntity.get().getType() == UserType.ROOM);
-        }
-        return false;
+        return userEntity.filter(userEntity1 -> (userEntity1.getType() == UserType.ROOM))
+                .isPresent();
     }
 
     @Override
-    public boolean checkIfLoggedRoomIsRequestedRoom(Long id) {
+    public boolean isLoggedRoomARequestedRoom(Long id) {
         String email = tokenParserService.getEmailFromToken();
         Optional<UserEntity> userEntity = userRepository.findByEmail(email);
-        if (userEntity.isPresent()) {
-            return (userEntity.get().getId().equals(id));
-        }
-        return false;
+        return userEntity.map(userEntity1 -> (userEntity1.getId().equals(id)))
+                .orElse(false);
     }
 
 }

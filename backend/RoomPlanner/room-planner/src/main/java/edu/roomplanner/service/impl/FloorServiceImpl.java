@@ -36,11 +36,8 @@ public class FloorServiceImpl implements FloorService {
 
         Optional<FloorEntity> floorEntity = floorRepository.findByFloor(floor);
 
-        if (floorEntity.isPresent()) {
-            return floorDtoMapper.mapEntityToDtoWithReservations(floorEntity.get());
-        }
-
-        throw new FloorNotFoundException("Floor not found!");
+        return floorEntity.map(currentFloorEntity -> floorDtoMapper.mapEntityToDtoWithReservations(currentFloorEntity))
+                .orElseThrow(() -> new FloorNotFoundException("Floor not found!"));
     }
 
 }

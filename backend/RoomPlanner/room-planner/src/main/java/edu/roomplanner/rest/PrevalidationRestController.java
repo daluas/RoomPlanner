@@ -21,6 +21,7 @@ import java.util.Calendar;
 @RestController
 public class PrevalidationRestController {
 
+    private static final Logger LOGGER = LogManager.getLogger(PrevalidationRestController.class);
     private PrevalidationService prevalidationService;
 
     @Autowired
@@ -28,22 +29,22 @@ public class PrevalidationRestController {
         this.prevalidationService = prevalidationService;
     }
 
-    private static final Logger LOGGER = LogManager.getLogger(PrevalidationRestController.class);
-
     @RequestMapping(method = RequestMethod.GET, value = "api/prevalidation", produces = "application/json")
     @ApiOperation("Validate parameters for reservation.")
-    @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid parameters or invalid start and end dates."),
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Invalid parameters or invalid start and end dates."),
             @ApiResponse(code = 200, message = "You can book.")})
     @PreAuthorize("hasAuthority('person')")
-    public ResponseEntity<HttpStatus> prevalidation(@RequestParam("roomId") Long roomId, @RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar startDate,
-                                                    @RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar endDate, @RequestParam("email") String email) {
+    public ResponseEntity<HttpStatus> prevalidation(@RequestParam("roomId") Long roomId,
+                                                    @RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar startDate,
+                                                    @RequestParam @DateTimeFormat(pattern = "EEE',' dd MMM yyyy HH:mm:ss 'GMT'") Calendar endDate,
+                                                    @RequestParam("email") String email) {
 
         LOGGER.info("Method was called.");
-        HttpStatus result = prevalidationService.prevalidate(startDate, endDate, email, roomId);
-        LOGGER.info("The following object was returned:" + result);
+        prevalidationService.prevalidate(startDate, endDate, email, roomId);
+        LOGGER.info("No object returned");
 
-        return new ResponseEntity<>(result);
-
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
