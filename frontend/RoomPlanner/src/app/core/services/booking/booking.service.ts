@@ -12,26 +12,33 @@ import { AuthService } from 'src/app/core/services/auth/auth.service';
 })
 export class BookingService {
   private backendUrl: string = 'http://178.22.68.114:8081'; //  /RoomPlanner/ ...
-  private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
+  //private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
 
   constructor(private httpClient: HttpClient, private authService: AuthService) { }
 
   prevalidation(booking: Booking): Observable<HttpResponse<Config>> {//Observable<HttpResponse<Config>>
-    //console.log("prevalidation was called!");
+    console.log("prevalidation was called!");
     let roomID: number = booking.roomId;
     let startDate = booking.startDate.toUTCString();
     let endDate = booking.endDate.toUTCString();
     let email = this.authService.getCurrentUser().email;
     
-    let params = new HttpParams()
-    params = params.append("roomId", `${roomID}`);
-    params = params.append("startDate", `${startDate}`);
-    params = params.append("endDate", `${endDate}`);
-    params = params.append("email", `${email}`);
+    // let params = new HttpParams()
+    // params = params.append("roomId", `${roomID}`);
+    // params = params.append("startDate", `${startDate}`);
+    // params = params.append("endDate", `${endDate}`);
+    // params = params.append("email", `${email}`);
 
+    // let params = {
+    //   roomID:  booking.roomId,
+    //   startDate : booking.startDate.toUTCString(),
+    //   endDate : booking.endDate.toUTCString(),
+    //   email : this.authService.getCurrentUser().email
+    
+
+    // }
                       
-    return this.httpClient.get(`${this.backendUrl}/api/prevalidation`, {
-      params: params,
+    return this.httpClient.get(`${this.backendUrl}/api/prevalidation?roomId=${roomID}&startDate=${startDate}&endDate=${endDate}&email=${email}`, {
       observe: 'response'
     });
   }
@@ -55,7 +62,8 @@ export class BookingService {
     // params.append('description', booking.description)
   console.log(params);
 
-    return this.httpClient.post(`${this.backendUrl}/api/reservations/${roomID}`, params , this.options).toPromise();
+    // return this.httpClient.post(`${this.backendUrl}/api/reservations/${roomID}`, params , this.options).toPromise();
+    return this.httpClient.post(`${this.backendUrl}/api/reservations/${roomID}`, params).toPromise();
   }
 
 

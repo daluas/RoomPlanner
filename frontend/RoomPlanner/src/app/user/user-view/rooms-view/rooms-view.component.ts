@@ -188,6 +188,7 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   getUsernameFromEmail(email): string {
+    
     if(email != undefined){
       return email.split('@')[0];
 

@@ -182,6 +182,7 @@ export class UserViewComponent implements OnInit {
 
   addCreatedBooking(newbooking: Booking) {
     // add to the list of bookings of the booked room the new booking 
+    
     console.log("addCreatedBooking: ", newbooking);
     // call setDisplayedRooms(this.previousFilters); after setting this.rooms with new booking
 
@@ -197,17 +198,17 @@ export class UserViewComponent implements OnInit {
     this.updateRoomsBasedOnFilters(this.previousFilters);
   }
 
-  updateBooking(booking: Booking) {
-    console.log("updateBooking: ", booking);
+  updateBooking(updatedBooking: Booking) {
+    console.log("updateBooking: ", updatedBooking);
     this.closeBookingPopup();
 
     let index = 0;
     this.rooms.forEach(room => {
-      if (room.id === booking.roomId ) {
+      if (room.id === updatedBooking.roomId ) {
         room.reservations.forEach(bookingItem => {
-          if(bookingItem.id === booking.id) {
+          if(bookingItem.id === updatedBooking.id) {
             room.reservations.splice(index,1);
-            room.reservations.splice(index,0,booking);
+            room.reservations.splice(index,0,updatedBooking);
           }
           index++;
         })
