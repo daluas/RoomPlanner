@@ -83,12 +83,19 @@ export class RoomDataService {
   async getFloors(): Promise<FloorModel[]> {
 
     var result = await this.httpClient.get<FloorModel[]>(`${this.backendUrl}/api/floors`).toPromise();
+    if (result == undefined) {
+      return Promise.reject("No object from backend -- getFloors");
+    }
 
+
+    
     let floorArray: FloorModel[] = new Array<FloorModel>();
 
+    
     result.forEach(floorFromResult => {
       let roomArray: RoomModel[] = new Array<RoomModel>();
       floorFromResult.rooms.forEach(roomFromResult => {
+
         roomArray.push(new RoomModel().create({
           id: roomFromResult.id,
           email: roomFromResult.email,
@@ -115,7 +122,7 @@ export class RoomDataService {
 
   async getSingleFloor(floorId: number): Promise<FloorModel> {
 
-    let result = await this.httpClient.get<FloorModel>(`${this.backendUrl}/api/floor/${floorId}`).toPromise()
+    let result = await this.httpClient.get<FloorModel>(`${this.backendUrl}/api/floors/${floorId}`).toPromise()
     if (result == undefined) {
       return Promise.reject("No object from backend -- getSingleFloor");
     }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { HttpParams, HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpParams, HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { LoggedUser } from '../../models/LoggedUser';
 import { Booking } from '../../models/BookingModel';
 import { Observable, Subscription } from 'rxjs';
@@ -12,6 +12,7 @@ import { AuthService } from 'src/app/core/services/auth/auth.service';
 })
 export class BookingService {
   private backendUrl: string = 'http://178.22.68.114:8081'; //  /RoomPlanner/ ...
+  private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
 
   constructor(private httpClient: HttpClient, private authService: AuthService) { }
 
@@ -20,8 +21,8 @@ export class BookingService {
     let roomID: number = booking.roomId;
     let startDate = booking.startDate.toUTCString();
     let endDate = booking.endDate.toUTCString();
-    let email = booking.personalEmail;
-
+    let email = this.authService.getCurrentUser().email;
+    
     let params = new HttpParams()
     params = params.append("roomId", `${roomID}`);
     params = params.append("startDate", `${startDate}`);
@@ -39,15 +40,22 @@ export class BookingService {
     console.log("createNewBooking was called!");
     let roomID: number = booking.roomId;
     let currentUser: string = this.authService.getCurrentUser().email;
+    let params = {
+      email: currentUser,
+      startDate: booking.startDate.toJSON(),
+      endDate: booking.endDate.toJSON(),
+      description: booking.description,
 
-    let params = new HttpParams()
-    params.append('email', currentUser)
-    params.append('startDate', booking.startDate.toJSON())
-    params.append('endDate', booking.endDate.toJSON())
-    params.append('description', booking.description)
+    }
+    
+    // let params = new HttpParams()
+    // params.append('email', currentUser)
+    // params.append('startDate', booking.startDate.toJSON())
+    // params.append('endDate', booking.endDate.toJSON())
+    // params.append('description', booking.description)
+  console.log(params);
 
-
-    return this.httpClient.post(`${this.backendUrl}/api/reservations/${roomID}`, params).toPromise();
+    return this.httpClient.post(`${this.backendUrl}/api/reservations/${roomID}`, params , this.options).toPromise();
   }
 
 
