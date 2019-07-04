@@ -15,8 +15,7 @@ export class SpinnerComponent implements OnInit {
   @Input() mode: ProgressSpinnerMode;
   @Input() strokeWidth: number;
   @Input() value: number;
-  @Input() isLoading: boolean;
-
+  
   ngOnInit() {
     this.mode = 'indeterminate';
     this.diameter = 30;

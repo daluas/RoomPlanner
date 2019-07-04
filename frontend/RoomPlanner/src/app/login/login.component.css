@@ -70,6 +70,12 @@ h1{
 .colorGreen{
     color: green;
 }
+
+.spinner {
+    margin-top: 15px;
+    margin-bottom: 35px;
+    float:right;
+}
     
 @media only screen and (max-width: 300px) {
     mat-card{
