@@ -7,10 +7,6 @@ public interface ReservationService {
 
     ReservationDto createReservation(Long roomId, ReservationDto reservationDto);
 
-    ReservationEntity convertToEntity(ReservationDto reservationDto);
-
-    ReservationDto convertToDto(ReservationEntity reservationEntity);
-
     ReservationDto updateReservation(Long roomId, ReservationDto reservationDto);
 
     void deleteReservation(Long reservationId);

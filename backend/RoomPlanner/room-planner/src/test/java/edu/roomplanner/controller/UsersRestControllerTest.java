@@ -124,7 +124,7 @@ public class UsersRestControllerTest {
         String jsonRoomDtoList = new ObjectMapper().writeValueAsString(roomDtoList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms").with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDtoList));
     }
 
@@ -142,7 +142,7 @@ public class UsersRestControllerTest {
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/{id}", 2).with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDto));
     }
 
@@ -177,7 +177,7 @@ public class UsersRestControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/filters")
                 .params(params)
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isFound());
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
@@ -194,7 +194,7 @@ public class UsersRestControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/filters")
                 .params(params)
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isFound());
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
@@ -215,7 +215,7 @@ public class UsersRestControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/filters")
                 .params(params)
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
     }
 
@@ -243,7 +243,7 @@ public class UsersRestControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/filters")
                 .params(params)
                 .with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(jsonExpectedList));
     }
 
@@ -257,7 +257,7 @@ public class UsersRestControllerTest {
         String jsonRoomDto = new ObjectMapper().writeValueAsString(Collections.singletonList(roomDto));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms", 1).with(roomBearerToken))
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDto));
     }
 
@@ -271,7 +271,7 @@ public class UsersRestControllerTest {
         String jsonRoomDto = new ObjectMapper().writeValueAsString(roomDto);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/2", 1).with(roomBearerToken))
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(jsonRoomDto));
     }
 
@@ -285,7 +285,7 @@ public class UsersRestControllerTest {
         userRepository.save(userEntityWonderland);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/2", 2).with(roomBearerToken))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
@@ -295,7 +295,7 @@ public class UsersRestControllerTest {
         userRepository.save(userEntityWonderland);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users?email=sghitun@yahoo.com", 1).with(roomBearerToken))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
 }

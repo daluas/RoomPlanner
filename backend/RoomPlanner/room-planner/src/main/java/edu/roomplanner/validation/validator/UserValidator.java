@@ -2,8 +2,8 @@ package edu.roomplanner.validation.validator;
 
 public interface UserValidator {
 
-    boolean checkValidRoomId(Long id);
+    boolean isRoomIdValid(Long id);
 
-    boolean checkValidRoomEmail(String email);
+    boolean isRoomEmailValid(String email);
 
 }

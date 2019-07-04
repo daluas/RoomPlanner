@@ -64,7 +64,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({UnauthorizedReservationException.class})
     public ResponseEntity<JsonResponse> handleUnauthorizedReservationException(UnauthorizedReservationException exception) {
 
-        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({RoomNotFoundException.class})
@@ -73,28 +73,28 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({ReservationNotFoundException.class})
-    public ResponseEntity<JsonResponse> handleReservationNotFoundException(ReservationNotFoundException exception) {
-
-        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NO_CONTENT);
-    }
-
     @ExceptionHandler({NotPersonException.class})
     public ResponseEntity<JsonResponse> handleNotPersonException(NotPersonException exception) {
 
-        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({InvalidDateException.class})
     public ResponseEntity<JsonResponse> handleInvalidDateExceptionn(InvalidDateException exception) {
 
-        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({PersonIdOfReservationNotEqualsUserIdException.class})
-    public ResponseEntity<JsonResponse> handlePersonIdOfReservationNotEqualsUserId(PersonIdOfReservationNotEqualsUserIdException exception) {
+    public ResponseEntity<JsonResponse> handlePersonIdOfReservationNotEqualsUserIdException(PersonIdOfReservationNotEqualsUserIdException exception) {
 
-        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({UserAuthorityException.class})
+    public ResponseEntity<JsonResponse> handleUserAuthorityException(UserAuthorityException exception) {
+
+        return new ResponseEntity<>(new JsonResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
 }

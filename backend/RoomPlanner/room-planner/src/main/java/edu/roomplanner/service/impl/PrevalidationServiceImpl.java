@@ -3,6 +3,9 @@ package edu.roomplanner.service.impl;
 import edu.roomplanner.builders.ReservationEntityBuilder;
 import edu.roomplanner.entity.PersonEntity;
 import edu.roomplanner.entity.ReservationEntity;
+import edu.roomplanner.entity.RoomEntity;
+import edu.roomplanner.entity.UserEntity;
+import edu.roomplanner.exception.*;
 import edu.roomplanner.repository.UserRepository;
 import edu.roomplanner.service.PrevalidationService;
 import edu.roomplanner.types.UserType;
@@ -10,7 +13,6 @@ import edu.roomplanner.validation.ValidationResult;
 import edu.roomplanner.validation.validator.impl.AvailabilityValidator;
 import edu.roomplanner.validation.validator.impl.StartEndDateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -32,52 +34,70 @@ public class PrevalidationServiceImpl implements PrevalidationService {
     }
 
     @Override
-    public HttpStatus prevalidate(Calendar startDate, Calendar endDate, String email, Long roomId) {
-        if (verifyAllParameters(startDate, endDate, email, roomId)) {
-            return HttpStatus.BAD_REQUEST;
+    public void prevalidate(Calendar startDate, Calendar endDate, String email, Long roomId) {
+        verifyParametersValidation(startDate, endDate, email, roomId);
+
+        UserEntity personEntity = getPersonEntity(email);
+
+        if(!isUserPerson(personEntity)) {
+            throw new UserAuthorityException("Not a person");
         }
 
-        PersonEntity personEntity = (PersonEntity) userRepository.findByEmail(email).get();
-        ReservationEntity reservationEntity = getReservationEntity(startDate, endDate, personEntity, roomId);
+        UserEntity roomEntity = getRoomEntity(roomId);
+
+        if(!isUserRoom(roomEntity)) {
+            throw new UserAuthorityException("Not a room");
+        }
+
+        ReservationEntity reservationEntity = getReservationEntity(startDate, endDate,
+                                              (PersonEntity) personEntity, (RoomEntity) roomEntity);
 
         ValidationResult validStartEndDate = startEndDateValidator.validate(reservationEntity);
         if (validStartEndDate.getError() != null) {
-            return HttpStatus.BAD_REQUEST;
+            throw new InvalidDateException(validStartEndDate.getError());
         }
 
         ValidationResult validDate = availabilityValidator.validate(reservationEntity);
-        if (validDate.getError() == null) {
-            return HttpStatus.OK;
+        if (validDate.getError() != null) {
+            throw new InvalidDateException(validStartEndDate.getError());
         }
-        return HttpStatus.BAD_REQUEST;
     }
 
-    private ReservationEntity getReservationEntity(Calendar startDate, Calendar endDate, PersonEntity personEntity, Long roomId) {
-        return new ReservationEntityBuilder()
+    private ReservationEntity getReservationEntity(Calendar startDate, Calendar endDate, PersonEntity personEntity, RoomEntity roomEntity) {
+        return ReservationEntityBuilder.builder()
                 .withStartDate(startDate)
                 .withEndDate(endDate)
-                .withRoom(userRepository.findById(roomId).get())
+                .withRoom(roomEntity)
                 .withPerson(personEntity)
                 .build();
     }
 
-    private boolean verifyPersonEntity(String email) {
+    private UserEntity getPersonEntity(String email) {
         return userRepository.findByEmail(email)
-                .filter(userEntity -> userEntity.getType().equals(UserType.PERSON))
-                .isPresent();
+                .orElseThrow(() -> new UserNotFoundException("User not found! Invalid email"));
     }
 
-    private boolean verifyRoomEntity(Long roomId) {
-        return userRepository.findById(roomId)
-                .filter((userEntity -> userEntity.getType().equals(UserType.ROOM)))
-                .isPresent();
+    private UserEntity getRoomEntity(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RoomNotFoundException("Room not found! Invalid id"));
     }
 
-    private boolean verifyAllParameters(Calendar startDate, Calendar endDate, String email, Long roomId) {
-        return verifyParameters(startDate, endDate, email, roomId) || !verifyPersonEntity(email) || !verifyRoomEntity(roomId);
+    private boolean isUserPerson(UserEntity personEntity) {
+        return personEntity.getType().equals(UserType.PERSON);
     }
 
-    private boolean verifyParameters(Calendar startDate, Calendar endDate, String email, Long roomId) {
+    private boolean isUserRoom(UserEntity roomEntity) {
+        return roomEntity.getType().equals(UserType.ROOM);
+    }
+
+    private void verifyParametersValidation(Calendar startDate, Calendar endDate,
+                                            String email, Long roomId) {
+        if(areParametersNotNull(startDate, endDate, email, roomId)) {
+            throw new InvalidReservationDtoException("Invalid reservation dto");
+        }
+    }
+
+    private boolean areParametersNotNull(Calendar startDate, Calendar endDate, String email, Long roomId) {
         return startDate == null || endDate == null || email == null || roomId == null;
     }
 

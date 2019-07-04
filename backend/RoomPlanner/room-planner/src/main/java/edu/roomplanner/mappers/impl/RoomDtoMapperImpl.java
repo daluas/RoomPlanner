@@ -27,6 +27,7 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
         this.reservationDtoMapper = reservationDtoMapper;
     }
 
+    @Override
     public List<RoomDto> mapEntityListToDtoList(List<UserEntity> roomEntityList) {
         List<RoomDto> roomDtoList = new ArrayList<>();
         for (UserEntity room : roomEntityList) {
@@ -35,18 +36,7 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
         return roomDtoList;
     }
 
-    private Set<ReservationDto> mapRoomEntitySetToDtoSet(Set<ReservationEntity> reservationEntitySet) {
-        Set<ReservationDto> reservationDtoSet = new HashSet<>();
-        if (reservationEntitySet == null) {
-            return reservationDtoSet;
-        }
-        for (ReservationEntity entity : reservationEntitySet) {
-            reservationDtoSet.add(reservationDtoMapper.mapReservationEntityToDto(entity));
-        }
-        return reservationDtoSet;
-    }
-
-
+    @Override
     public RoomDto mapEntityToDto(RoomEntity roomEntity) {
 
         Set<ReservationEntity> reservationEntitySet = roomEntity.getReservations();
@@ -55,7 +45,6 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
             return (RoomDto) UserDtoBuilder.builder()
                     .withType(roomEntity.getType())
                     .build();
-
         }
 
         Set<ReservationDto> reservationDtoSet = mapRoomEntitySetToDtoSet(reservationEntitySet);
@@ -76,5 +65,17 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
                 .withReservations(reservationDtoSet)
                 .build();
     }
+
+    private Set<ReservationDto> mapRoomEntitySetToDtoSet(Set<ReservationEntity> reservationEntitySet) {
+        Set<ReservationDto> reservationDtoSet = new HashSet<>();
+        if (reservationEntitySet == null) {
+            return reservationDtoSet;
+        }
+        for (ReservationEntity entity : reservationEntitySet) {
+            reservationDtoSet.add(reservationDtoMapper.mapReservationEntityToDto(entity));
+        }
+        return reservationDtoSet;
+    }
+
 
 }
