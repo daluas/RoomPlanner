@@ -22,7 +22,11 @@ pipeline {
         }
         stage ('undeploy'){
             steps {
-                sh 'sudo fuser -k 8081/tcp'
+                try{
+                    sh 'sudo fuser -k 8081/tcp'
+                } catch (exec) {
+                    sh 'echo  "server was already stoped"'
+                }
             }
         }
         stage ('deploy'){
