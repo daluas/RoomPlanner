@@ -1,0 +1,1 @@
+update reservations set user_id = 10 where user_id = 8;
