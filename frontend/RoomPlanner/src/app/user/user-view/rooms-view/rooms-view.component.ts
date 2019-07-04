@@ -95,6 +95,7 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
         for (let i = 0; i < group.length - 1; i++) {
           for (let x = 0; x < group[i].bookings.length; x++) {
             for (let j = i + 1; j < group.length; j++) {
+              console.log(this.bookingsOverlap(group[i].bookings[x], group[j].bookings[0]));
               if (this.bookingsOverlap(group[i].bookings[x], group[j].bookings[0])) {
                 group[i].bookings.push(group[j].bookings[0]);
                 group[i].focus = null;
@@ -118,6 +119,8 @@ export class RoomsViewComponent implements OnInit, AfterViewInit, OnChanges {
 
       });
     }
+
+    console.log(this.groupedBookings);
   }
 
   bookRoom() {
