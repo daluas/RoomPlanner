@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material';
 })
 export class AuthService {
 	private token: LoginToken;
-	private backendUrl: string = 'http://178.22.68.114:8081/api/RoomPlanner';
+	private backendUrl: string = 'http://178.22.68.114:8081';
 	private currentUser: LoggedUser;
 	private currentUserSubscriber: Subscriber<LoggedUser> = new Subscriber<LoggedUser>();
 
@@ -78,7 +78,7 @@ export class AuthService {
 				let params = new HttpParams()
 				params = params.append("email", loginModel.email)
 				// x = 
-				return this.httpClient.get(`${this.backendUrl}/users`, { params: params }).toPromise()
+				return this.httpClient.get(`${this.backendUrl}/api/users`, { params: params }).toPromise()
 			})
 	}
 
@@ -86,7 +86,7 @@ export class AuthService {
 	getUser(userModel: LoginModel) {
 		let params = new HttpParams()
 		params = params.append("email", userModel.email)
-		return this.httpClient.get(`${this.backendUrl}/users`, { params: params }).toPromise()
+		return this.httpClient.get(`${this.backendUrl}/api/users`, { params: params }).toPromise()
 	}
 
 	async checkRoomPassword(password: string): Promise<Object> {
