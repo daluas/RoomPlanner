@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/core/services/auth/auth.service';
   providedIn: 'root'
 })
 export class BookingService {
-  private backendUrl: string = 'http://178.22.68.114:8081/api/RoomPlanner'; //  /RoomPlanner/ ...
+  private backendUrl: string = 'http://178.22.68.114:8081'; //  /RoomPlanner/ ...
 
   constructor(private httpClient: HttpClient, private authService: AuthService) { }
 
@@ -29,7 +29,7 @@ export class BookingService {
     params = params.append("email", `${email}`);
 
                       
-    return this.httpClient.get(`${this.backendUrl}/prevalidation`, {
+    return this.httpClient.get(`${this.backendUrl}/api/prevalidation`, {
       params: params,
       observe: 'response'
     });
@@ -47,7 +47,7 @@ export class BookingService {
     params.append('description', booking.description)
 
 
-    return this.httpClient.post(`${this.backendUrl}/reservations/${roomID}`, params).toPromise();
+    return this.httpClient.post(`${this.backendUrl}/api/reservations/${roomID}`, params).toPromise();
   }
 
 
@@ -64,14 +64,14 @@ export class BookingService {
       description: booking.description,
 
     }
-    return this.httpClient.patch(`${this.backendUrl}/reservations/${id}`, params, { observe: 'response' });
+    return this.httpClient.patch(`${this.backendUrl}/api/reservations/${id}`, params, { observe: 'response' });
     //status code: 200 OK or 204 NO CONTENT 
   }
 
   deleteBooking(booking: Booking): Observable<HttpResponse<Config>> {//
     console.log("deleteBooking(booking: Booking) was called!");
     // let bookingId: number = booking.id;
-    return this.httpClient.delete(`${this.backendUrl}/reservations/${booking.id}`, { observe: 'response' });
+    return this.httpClient.delete(`${this.backendUrl}/api/reservations/${booking.id}`, { observe: 'response' });
     //return 400;
   }
 

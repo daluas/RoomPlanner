@@ -11,13 +11,13 @@ import { Booking } from '../../models/BookingModel';
 })
 export class RoomDataService {
 
-  private backendUrl: string = 'http://178.22.68.114:8081/api/RoomPlanner';
+  private backendUrl: string = 'http://178.22.68.114:8081';
 
   constructor(private httpClient: HttpClient) { }
 
   getRoomById(room: RoomModel): Promise<Object> {
     var roomId: number = room.id;
-    return this.httpClient.get(`${this.backendUrl}/rooms/${roomId}`).toPromise();
+    return this.httpClient.get(`${this.backendUrl}/api/rooms/${roomId}`).toPromise();
   }
 
   async getRoomsByFilter(filter: Filters): Promise<RoomModel[]> {
@@ -38,7 +38,7 @@ export class RoomDataService {
       params = params.append("minPersons", filter.minPersons.toString());
     }
 
-    let result = await this.httpClient.get<RoomModel[]>(`${this.backendUrl}/rooms/filters`, { params: params }).toPromise();
+    let result = await this.httpClient.get<RoomModel[]>(`${this.backendUrl}/api/rooms/filters`, { params: params }).toPromise();
 
 
     if (result == undefined) {
@@ -82,7 +82,7 @@ export class RoomDataService {
 
   async getFloors(): Promise<FloorModel[]> {
 
-    var result = await this.httpClient.get<FloorModel[]>(`${this.backendUrl}/floors`).toPromise();
+    var result = await this.httpClient.get<FloorModel[]>(`${this.backendUrl}/api/floors`).toPromise();
 
     let floorArray: FloorModel[] = new Array<FloorModel>();
 
@@ -115,7 +115,7 @@ export class RoomDataService {
 
   async getSingleFloor(floorId: number): Promise<FloorModel> {
 
-    let result = await this.httpClient.get<FloorModel>(`${this.backendUrl}/floor/${floorId}`).toPromise()
+    let result = await this.httpClient.get<FloorModel>(`${this.backendUrl}/api/floor/${floorId}`).toPromise()
     if (result == undefined) {
       return Promise.reject("No object from backend -- getSingleFloor");
     }

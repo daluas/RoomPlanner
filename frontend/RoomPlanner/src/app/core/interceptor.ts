@@ -26,7 +26,7 @@ import { Booking } from './models/BookingModel';
 @Injectable()
 export class Interceptor implements HttpInterceptor {
 
-    BASE_URL: string = 'http://178.22.68.114:8081/api/RoomPlanner';
+    BASE_URL: string = 'http://178.22.68.114:8081';
 
     constructor(private _snackBar: MatSnackBar) { }
 
