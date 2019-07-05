@@ -10,6 +10,9 @@
 
   <div class="room-view-container">
     <app-rooms-view-empty *ngIf="displayedRooms==null || displayedRooms.length==0"></app-rooms-view-empty>
+    <div class="spinner">
+        <app-spinner *ngIf="displayedRooms==null"></app-spinner>
+    </div>
     <app-rooms-view [rooms]="displayedRooms" [forDate]="previousFilters.startDate" (createBooking)="createBooking($event)"></app-rooms-view>
     <!-- <app-rooms-view [rooms]="displayedRooms" [forDate]="previousFilters.startDate" (booking)="createBooking($event)"></app-rooms-view> -->
   </div>
