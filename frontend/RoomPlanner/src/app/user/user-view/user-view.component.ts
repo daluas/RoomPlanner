@@ -76,7 +76,7 @@ export class UserViewComponent implements OnInit {
         this.displayedRooms.push(roomAux);
       })
    
-      console.log("Rooms by default", this.rooms)
+      console.log("Rooms by default", this.displayedRooms)
     })
 
   }
@@ -112,6 +112,8 @@ export class UserViewComponent implements OnInit {
       await this.roomDataService.getRoomsByFilter(filters).then((rooms) => {
         this.rooms = <RoomModel[]>rooms;
         this.setDisplayedRooms(filters)
+      }).catch(error=>{
+        console.log(error)
       })
     }
     this.previousFilters = new Filters().create(filters);
