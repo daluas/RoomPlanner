@@ -12,6 +12,8 @@ import { LoginBookingComponent } from '../login-booking/login-booking.component'
 import { HourInputBookingComponent } from '../hour-input-booking/hour-input-booking.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SpinnerComponent } from '../spinner/spinner.component';
+import { MaterialDesignModule } from '../../material-design/material-design.module';
 
 describe('BookingPopupComponent', () => {
   let component: BookingPopupComponent;
@@ -23,7 +25,7 @@ describe('BookingPopupComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BookingPopupComponent, LoginBookingComponent, HourInputBookingComponent ],
+      declarations: [ BookingPopupComponent, LoginBookingComponent, HourInputBookingComponent, SpinnerComponent ],
       imports: [
         MatDatepickerModule,
         MatFormFieldModule,
@@ -34,7 +36,8 @@ describe('BookingPopupComponent', () => {
         ReactiveFormsModule,
         FormsModule,
         HttpClientTestingModule,
-        RouterTestingModule
+        RouterTestingModule, 
+        MaterialDesignModule
       ]
     })
     .compileComponents().then(() => {

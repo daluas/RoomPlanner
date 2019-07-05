@@ -11,6 +11,7 @@ import { AuthGuard } from 'src/app/core/guards/auth.guard';
 import { Router } from '@angular/router';
 import { RoomsViewEmptyComponent } from './rooms-view-empty/rooms-view-empty.component';
 
+
 describe('UserViewComponent', () => {
   let component: UserViewComponent;
   let fixture: ComponentFixture<UserViewComponent>;
