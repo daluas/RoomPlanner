@@ -32,7 +32,7 @@ export class RoomDataService {
     //   filter.endDate.setHours(23);
     //   filter.endDate.setHours(59);
     // }
-
+    
     let params = new HttpParams();
     params = params.append("startDate", filter.startDate.toUTCString());
     params = params.append("endDate", filter.endDate.toUTCString());
