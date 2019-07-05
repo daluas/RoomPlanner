@@ -8,8 +8,8 @@
     position: absolute;
     top: 10px;
     left: 0;
-    height: calc(100% - 30px);
-    width: 350px;
+    height: calc(100% - 5px);
+    width: 320px;
     overflow: auto;
     border-right: 1px solid #ccc;
     box-sizing: border-box;

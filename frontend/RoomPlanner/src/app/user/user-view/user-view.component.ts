@@ -76,7 +76,7 @@ export class UserViewComponent implements OnInit {
         this.displayedRooms.push(roomAux);
       })
    
-      console.log("Rooms by default", this.rooms)
+      console.log("Rooms by default", this.displayedRooms)
     })
 
   }
