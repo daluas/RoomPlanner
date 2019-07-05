@@ -150,7 +150,7 @@ public class FloorRestControllerTest {
         String jsonFloorDtoList = new ObjectMapper().writeValueAsString(floorDtoList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/floors").with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(jsonFloorDtoList));
 
     }
@@ -163,7 +163,7 @@ public class FloorRestControllerTest {
     }
 
     @Test
-    public void shouldReturnResponseEntityWithRequestedFloorAndStatusFoundWhenCalledByUser() throws Exception {
+    public void shouldReturnResponseEntityWithRequestedFloorAndStatusOkWhenCalledByUser() throws Exception {
 
         UserDto roomDtoOne = BuildersWrapper.buildRoomDto(2L, "wonderland@yahoo.com", "Wonderland",
                 new HashSet<ReservationDto>(), 5, 14, UserType.ROOM);
@@ -173,7 +173,7 @@ public class FloorRestControllerTest {
         String jsonFloorDto = new ObjectMapper().writeValueAsString(floorDtoOne);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/floors/5").with(bearerToken))
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(jsonFloorDto));
     }
 
