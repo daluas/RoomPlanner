@@ -118,10 +118,20 @@ export class FiltersComponent implements OnInit, OnChanges {
     }
 
     if (this.dateInThePastIn == true || this.startDate.getTime() == this.endDate.getTime()) {
-      this.startDate.setTime(this.finalDate.getTime());
-      this.endDate.setTime(this.finalDate.getTime());
-      this.endDate.setHours(0);
-      this.endDate.setMinutes(0);
+      // this.startDate.setTime(this.finalDate.getTime());
+      // this.endDate.setTime(this.finalDate.getTime());
+
+      this.startDate.setDate(this.finalDate.getDate());
+      this.startDate.setMonth(this.finalDate.getMonth());
+      this.startDate.setFullYear(this.finalDate.getUTCFullYear());
+      this.endDate.setHours(3);
+      this.endDate.setMinutes(1);
+
+      this.endDate.setDate(this.finalDate.getDate());
+      this.endDate.setMonth(this.finalDate.getMonth());
+      this.endDate.setFullYear(this.finalDate.getUTCFullYear());
+      this.endDate.setHours(23);
+      this.endDate.setMinutes(59);
       
     } else {
       this.startDate.setDate(this.finalDate.getDate());
