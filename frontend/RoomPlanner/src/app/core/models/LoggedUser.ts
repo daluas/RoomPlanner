@@ -1,6 +1,7 @@
 import { LoginToken } from './LoginToken';
 
 export class LoggedUser {
+    id: number;
     email: string;
     type?: string;
     firstName?: string;

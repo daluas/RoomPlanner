@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Booking } from 'src/app/core/models/BookingModel';
 import { TimeInterval } from './models/timeInterval';
+import { RoomDataService } from '../../core/services/room-data/room-data.service';
+import { Filters } from '../../shared/models/Filters';
+import { AuthService } from '../../core/core.module';
 
 @Component({
   selector: 'app-room-view',
@@ -8,6 +11,7 @@ import { TimeInterval } from './models/timeInterval';
   styleUrls: ['./room-view.component.css']
 })
 export class RoomViewComponent implements OnInit {
+
 
   isClockActive: boolean = false;
   reservations: Booking[];
@@ -19,11 +23,27 @@ export class RoomViewComponent implements OnInit {
 
   date: Date = new Date();
 
-  constructor() { }
+  constructor(
+    private roomDataService: RoomDataService,
+    private authService: AuthService
+  ) { }
+
+  async getRoomData(roomId): Promise<any> {
+    let room = await this.roomDataService.getRoomDataById(roomId)
+    this.reservations = room.reservations
+  }
 
   ngOnInit() {
+    // this.roomDataService.getRoomById()
+    let user = this.authService.getCurrentUser()
+    this.getRoomData(user.id).then(msg => {
+      console.log(msg)
+    }).catch(err => {
+      console.log(err)
+    })
 
-    // DELETE THIS
+    return;
+
     this.reservations = [
       new Booking().create({
         "id": 4,
@@ -76,9 +96,9 @@ export class RoomViewComponent implements OnInit {
   to: string;
   interval: TimeInterval
 
-  processNewInterval(interval: TimeInterval){
+  processNewInterval(interval: TimeInterval) {
     this.interval = interval;
-    if(interval){
+    if (interval) {
       let from = new Date(interval.startDate);
       let to = new Date(interval.endDate);
 
@@ -90,11 +110,11 @@ export class RoomViewComponent implements OnInit {
     }
   }
 
-  cancelBooking(){
+  cancelBooking() {
     this.isClockActive = false;
   }
 
-  createBooking(){
+  createBooking() {
     this.bookingPopupOpen = true;
     this.booking = new Booking().create({
       "personEmail": "sghitun@yahoo.com",

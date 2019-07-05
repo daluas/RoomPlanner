@@ -15,9 +15,14 @@ export class RoomDataService {
 
   constructor(private httpClient: HttpClient) { }
 
+  
   getRoomById(room: RoomModel): Promise<Object> {
     var roomId: number = room.id;
     return this.httpClient.get(`${this.backendUrl}/api/rooms/${roomId}`).toPromise();
+  }
+
+  getRoomDataById(roomId: number): Promise<RoomModel> {
+    return this.httpClient.get<RoomModel>(`${this.backendUrl}/api/rooms/${roomId}`).toPromise();
   }
 
   async getRoomsByFilter(filter: Filters): Promise<RoomModel[]> {
@@ -199,5 +204,6 @@ export class RoomDataService {
     }
     return false;
   }
+
 
 }
