@@ -5,6 +5,7 @@ import { FloorModel } from '../../core/models/FloorModel';
 import { Filters } from '../../shared/models/Filters';
 import { RoomModel } from '../../core/models/RoomModel';
 import { Booking } from '../../core/models/BookingModel';
+import { SpinnerComponent } from '../../shared/spinner/spinner.component';
 
 
 @Component({

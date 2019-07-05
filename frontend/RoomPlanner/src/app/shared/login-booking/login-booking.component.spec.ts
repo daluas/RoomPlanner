@@ -6,6 +6,8 @@ import { MatFormFieldModule, MatSnackBarModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { SpinnerComponent } from '../spinner/spinner.component';
+import { MaterialDesignModule } from '../../material-design/material-design.module';
 
 describe('LoginBookingComponent', () => {
   let component: LoginBookingComponent;
@@ -13,14 +15,15 @@ describe('LoginBookingComponent', () => {
  
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoginBookingComponent ],
+      declarations: [ LoginBookingComponent, SpinnerComponent ],
       imports: [
         ReactiveFormsModule,
         FormsModule,
         MatFormFieldModule,
         HttpClientTestingModule,
         RouterTestingModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MaterialDesignModule
       ]
     })
     .compileComponents();
