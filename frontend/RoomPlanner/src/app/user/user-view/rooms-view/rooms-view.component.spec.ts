@@ -43,39 +43,39 @@ describe('RoomsViewComponent', () => {
             id: 1,
             startDate: new Date(new Date().setHours(10, 0, 0, 0)),
             endDate: new Date(new Date().setHours(10, 30, 0, 0)),
-            personalEmail: "user1@cegeka.ro",
+            email: "user1@cegeka.ro",
             description: "this is a test description"
           },
           {
             id: 2,
             startDate: new Date(new Date().setHours(9, 0, 0, 0)),
             endDate: new Date(new Date().setHours(11, 0, 0, 0)),
-            personalEmail: "user1@cegeka.ro",
+            email: "user1@cegeka.ro",
             description: "this is a test description"
           },
           {
             id: 3,
             startDate: new Date(new Date().setHours(10, 30, 0, 0)),
             endDate: new Date(new Date().setHours(12, 0, 0, 0)),
-            personalEmail: "user1@cegeka.ro",
+            email: "user1@cegeka.ro",
             description: "this is a test description"
           },
           {
             id: 4,
             startDate: new Date(new Date().setHours(12, 0, 0, 0)),
             endDate: new Date(new Date().setHours(13, 0, 0, 0)),
-            personalEmail: "user1@cegeka.ro",
+            email: "user1@cegeka.ro",
             description: "this is a test description"
           },
           {
             startDate: new Date(new Date().setHours(14, 30, 0, 0)),
             endDate: new Date(new Date().setHours(15, 0, 0, 0)),
-            personalEmail: "user10@geceka.ro"
+            email: "user10@geceka.ro"
           },
           {
             startDate: new Date(new Date().setHours(14, 30, 0, 0)),
             endDate: new Date(new Date().setHours(16, 0, 0, 0)),
-            personalEmail: "user10@geceka.ro"
+            email: "user10@geceka.ro"
           },
         ]
       }), new RoomModel().create(
@@ -100,12 +100,12 @@ describe('RoomsViewComponent', () => {
     let booking1 = new Booking().create({
       startDate: new Date(new Date().setHours(14, 0, 0, 0)),
       endDate: new Date(new Date().setHours(16, 0, 0, 0)),
-      personalEmail: "user10@geceka.ro"
+      email: "user10@geceka.ro"
     });
     let booking2 = new Booking().create({
       startDate: new Date(new Date().setHours(14, 30, 0, 0)),
       endDate: new Date(new Date().setHours(15, 30, 0, 0)),
-      personalEmail: "user10@geceka.ro"
+      email: "user10@geceka.ro"
     });
 
     let result = component.bookingsOverlap(booking1, booking2);
@@ -117,12 +117,12 @@ describe('RoomsViewComponent', () => {
     let booking1 = new Booking().create({
       startDate: new Date(new Date().setHours(12, 0, 0, 0)),
       endDate: new Date(new Date().setHours(15, 0, 0, 0)),
-      personalEmail: "user10@geceka.ro"
+      email: "user10@geceka.ro"
     });
     let booking2 = new Booking().create({
       startDate: new Date(new Date().setHours(15, 0, 0, 0)),
       endDate: new Date(new Date().setHours(16, 0, 0, 0)),
-      personalEmail: "user10@geceka.ro"
+      email: "user10@geceka.ro"
     });
 
     let result = component.bookingsOverlap(booking1, booking2);

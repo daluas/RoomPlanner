@@ -154,7 +154,7 @@ export class Interceptor implements HttpInterceptor {
                     {
                         id: 4,
                         roomId: 2,
-                        personalEmail: "sghitun@yahoo.com",
+                        email: "sghitun@yahoo.com",
                         startDate: "2019-07-01T09:00:00.000+0000",
                         endDate: "2019-07-01T12:00:00.000+0000",
                         description: "Retro meeting"
@@ -162,7 +162,7 @@ export class Interceptor implements HttpInterceptor {
                         {
                             id: 5,
                             roomId: 2,
-                            personalEmail: "sghitun@yahoo.com",
+                            email: "sghitun@yahoo.com",
                             startDate: "2019-07-03T14:00:00.000+0000",
                             endDate: "2019-07-03T15:30:00.000+0000",
                             description: "Retro meeting"
@@ -179,7 +179,7 @@ export class Interceptor implements HttpInterceptor {
                     new Booking().create({
                         id: 4,
                         roomId: 12,
-                        personalEmail: "sghitun@yahoo.com",
+                        email: "sghitun@yahoo.com",
                         startDate: "2019-07-02T09:00:00.000+0000",
                         endDate: "2019-07-02T12:00:00.000+0000",
                         description: "Retro meeting"
@@ -187,7 +187,7 @@ export class Interceptor implements HttpInterceptor {
                     new Booking().create({
                         id: 5,
                         roomId: 12,
-                        personalEmail: "sghitun@yahoo.com",
+                        email: "sghitun@yahoo.com",
                         startDate: "2019-07-01T12:00:00.000+0000",
                         endDate: "2019-07-01T14:00:00.000+0000",
                         description: "Retro meeting"
@@ -280,7 +280,7 @@ export class Interceptor implements HttpInterceptor {
                                 {
                                     id: 4,
                                     roomId: 2,
-                                    personalEmail: "sghitun@yahoo.com",
+                                    email: "sghitun@yahoo.com",
                                     startDate: "2019-07-01T09:00:00.000+0000",
                                     endDate: "2019-07-01T12:00:00.000+0000",
                                     description: "Retro meeting"
@@ -288,7 +288,7 @@ export class Interceptor implements HttpInterceptor {
                                     {
                                         id: 5,
                                         roomId: 2,
-                                        personalEmail: "sghitun@yahoo.com",
+                                        email: "sghitun@yahoo.com",
                                         startDate: "2019-07-03T14:00:00.000+0000",
                                         endDate: "2019-07-03T15:30:00.000+0000",
                                         description: "Retro meeting"

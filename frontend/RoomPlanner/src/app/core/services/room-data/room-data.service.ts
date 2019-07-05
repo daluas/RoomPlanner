@@ -54,7 +54,7 @@ export class RoomDataService {
         reservationArray.push(new Booking().create({
           id: reservationFromResult.id,
           roomId: reservationFromResult.roomId,
-          personalEmail: reservationFromResult.personalEmail,
+          email: reservationFromResult.email,
           startDate: new Date(new Date(reservationFromResult.startDate)),
           endDate: new Date(new Date(reservationFromResult.endDate)),
           description: reservationFromResult.description
@@ -135,7 +135,7 @@ export class RoomDataService {
         reservationArray.push(new Booking().create({
           id: reservationFromResult.id,
           roomId: reservationFromResult.roomId,
-          personalEmail: reservationFromResult.personalEmail,
+          email: reservationFromResult.email,
           startDate: new Date(new Date(reservationFromResult.startDate)),
           endDate: new Date(new Date(reservationFromResult.endDate)),
           description: reservationFromResult.description
