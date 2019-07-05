@@ -17,7 +17,7 @@ export class LoginToken {
         console.log("expiration :", this.expiration_timestamp);
         console.log("now: ", now);
         if (now > this.expiration_timestamp) {
-            return false;
+            return true;
         }
         return false;
     }
