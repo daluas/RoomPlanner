@@ -8,6 +8,7 @@ import { LoginModel } from '../../core/models/LoginModel';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { LoggedUser } from '../../core/models/LoggedUser';
 import { LoginBookingComponent } from '../login-booking/login-booking.component'
+import { SpinnerComponent } from '../spinner/spinner.component'
 import { Booking } from '../../core/models/BookingModel';
 import { UserType } from '../../core/enums/enums';
 
@@ -51,9 +52,12 @@ export class BookingPopupComponent implements OnInit {
   statusDelete: number;
   openMessageContainter: boolean;
 
+  isLoading: boolean;
+
   ngOnInit() {
     this.status = false;
     this.isNewAction = false;
+    this.isLoading = false;
 
     let userData = JSON.parse(localStorage.getItem("user-data"));
 
@@ -101,6 +105,7 @@ export class BookingPopupComponent implements OnInit {
     this.booking.endDate.setHours(event.getHours(), event.getMinutes());
   }
   createBookingTest() {
+    this.isLoading = true;
 
     this.bookingService.createNewBooking(this.booking).then((bookingRes: Booking) => {
      
@@ -124,6 +129,8 @@ export class BookingPopupComponent implements OnInit {
   }
 
   updateBookingTest() {
+    this.isLoading = true;
+
     this.bookingService.updateBooking(this.booking).subscribe(res => {
       if (res.status==200) { // la fel, verificare ca la create NEW booking
         this.isNewAction = true;
@@ -145,6 +152,7 @@ export class BookingPopupComponent implements OnInit {
   }
 
   deleteBooking() {
+    this.isLoading = true;
     
     this.bookingService.deleteBooking(this.booking).subscribe((res) => {
       this.statusDelete = res.status;

@@ -5,6 +5,7 @@ import { AuthService } from '../../core/services/auth/auth.service';
 import { LoginModel } from '../../core/models/LoginModel';
 import { LoggedUser } from '../../core/models/LoggedUser';
 import { BookingPopupComponent } from '../booking-popup/booking-popup.component'
+import { SpinnerComponent } from '../spinner/spinner.component'
 import { UserType } from '../../core/enums/enums';
 
 @Component({
@@ -35,6 +36,7 @@ export class LoginBookingComponent implements OnInit {
   statusMessage: string;
   isLogout: boolean;
   counter: number;
+  isLoading: boolean;
 
   ngOnInit() {
     this.status = false;
@@ -42,6 +44,7 @@ export class LoginBookingComponent implements OnInit {
     this.isNewAction = false;
     this.isLogout = false;
     this.counter = 60;
+    this.isLoading = false;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -56,11 +59,13 @@ export class LoginBookingComponent implements OnInit {
 
   loginBookingSuccessfully() {
     this.status = true;
+    this.isLoading = false;
     this.logged.emit(true);
   }
 
   loginBookingFailed() {
     this.status = false;
+    this.isLoading = false;
     this.statusMessage = "Invalid credentials";
     this.logged.emit(false);
     this.loginBookingForm.reset();
@@ -68,6 +73,7 @@ export class LoginBookingComponent implements OnInit {
   }
 
   authenticate() {
+    this.isLoading = true;
     var user: LoginModel = new LoginModel().create({
       email: this.loginBookingForm.value.email,
       password: this.loginBookingForm.value.password

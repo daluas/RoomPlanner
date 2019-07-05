@@ -96,6 +96,12 @@
         width: 76px;
         margin-left: 20px;
     }
+    .spinner {
+        margin-top: 2px;
+        margin-bottom: 8px;
+        margin-left: 20px;
+        float:right;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -176,11 +182,23 @@
         width: 76px;
         margin-left: 5px;
     }
+    .spinner {
+        margin-top: 2px;
+        margin-bottom: 8px;
+        margin-left: 20px;
+        float:right;
+    }
 }
 @media screen and (max-width: 317px) {
     .cancelBtn {
         float:left;
         margin-top: 5px;
         margin-bottom: 5px;
+    }
+    .spinner {
+        margin-top: 2px;
+        margin-bottom: 8px;
+        margin-right: 22px;
+        float:right;
     }
 }
