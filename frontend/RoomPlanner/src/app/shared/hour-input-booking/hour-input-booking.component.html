@@ -84,5 +84,5 @@
     <div class="invalidHoursContainer" *ngIf="invalidHours">
         <p>End hour has to be greater than start hour!</p>
     </div>
-    <div class="errorText" *ngIf="(prevalidationStatus!=200) && (invalidHours==false)">Invalid parameters</div>
+    <div class="errorText" *ngIf="(prevalidationStatus==404) && (invalidHours==false)">Invalid parameters</div>
 </div>

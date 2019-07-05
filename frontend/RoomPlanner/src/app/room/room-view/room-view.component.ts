@@ -35,14 +35,13 @@ export class RoomViewComponent implements OnInit {
 
   ngOnInit() {
     // this.roomDataService.getRoomById()
-    let user = this.authService.getCurrentUser()
-    this.getRoomData(user.id).then(msg => {
-      console.log(msg)
-    }).catch(err => {
-      console.log(err)
-    })
+    // let user = this.authService.getCurrentUser()
+    // this.getRoomData(user.id).then(msg => {
+    //   console.log(msg)
+    // }).catch(err => {
+    //   console.log(err)
+    // })
 
-    return;
 
     this.reservations = [
       new Booking().create({

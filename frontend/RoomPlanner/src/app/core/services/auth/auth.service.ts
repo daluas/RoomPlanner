@@ -76,7 +76,7 @@ export class AuthService {
 			.then(token => {
 				console.log(token)
 				let params = new HttpParams()
-				params = params.append("email", loginModel.email)
+				params = params.append("email", encodeURI(loginModel.email))
 				// x = 
 				return this.httpClient.get(`${this.backendUrl}/api/users`, { params: params }).toPromise()
 			})
