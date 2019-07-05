@@ -7,7 +7,7 @@ export class Booking {
     endDate: Date;
     roomId: number;
     description: string;
-    personalEmail: string;
+    email: string;
   
     constructor() {
         this.startDate=new Date();
@@ -15,7 +15,7 @@ export class Booking {
         this.id=null;
         this.roomId=null;
         this.description=null;
-        this.personalEmail=null;
+        this.email=null;
      }
 
     create(bookingModel: any): Booking {

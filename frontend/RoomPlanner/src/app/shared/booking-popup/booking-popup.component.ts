@@ -104,7 +104,7 @@ export class BookingPopupComponent implements OnInit {
 
     this.bookingService.createNewBooking(this.booking).then((bookingRes: Booking) => {
      
-      this.booking.personalEmail=this.authService.getCurrentUser().email;
+      this.booking.email=this.authService.getCurrentUser().email;
       if (bookingRes.id) { 
         this.isNewAction = true;
         this.booking.id=bookingRes.id;

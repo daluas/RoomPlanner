@@ -34,14 +34,14 @@
           <div class="booking booking-personal" *ngIf="group.personal"
             (click)="openBooking(bookingIndex === group.focus, roomIndex, groupIndex, bookingIndex)" [style]="getStyleForBooking(booking)"
             [ngClass]="{'booking-half-left': personalBookingsDisplayedHalf && roomIndex === newBookingRoomIndex, 'booking-personal-active': bookingIndex === group.focus}">
-            <div class="booking-owner">{{getUsernameFromEmail(booking.personalEmail)}}</div>
+            <div class="booking-owner">{{getUsernameFromEmail(booking.email)}}</div>
             <div class="booking-description">{{booking.description}}
             </div>
           </div>
 
           <div class="booking booking-other" *ngIf="!group.personal && bookingIndex === 0"
             [style]="getStyleForGroup(group)">
-            <div class="booking-owner">{{getUsernameFromEmail(booking.personalEmail)}}</div>
+            <div class="booking-owner">{{getUsernameFromEmail(booking.email)}}</div>
           </div>
         </div>
       </div>
