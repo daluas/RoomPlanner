@@ -99,10 +99,6 @@ public class UserRestController {
         UserDto userEmailTypeDto = userService.getUserDto(email);
         LOGGER.info("The following object was returned: " + userEmailTypeDto);
 
-        if (userRightsValidator.isUserLoggedAsRoom()) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
         return new ResponseEntity<>(userEmailTypeDto, HttpStatus.OK);
     }
 
