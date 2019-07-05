@@ -1,12 +1,12 @@
-<div class="container" #outerDiv (mousemove)="mouseMove($event, outerDiv)" (mouseleave)="finishMove()" (mouseup)="finishMove()">
+<div class="container">
   <svg id="svg-clock">
     <g id="svg-intervals">
-      <path *ngFor="let interval of availabilityIntervals; let intervalIndex = index"
+      <path *ngFor="let interval of availabilityIntervals; let intervalIndex = index" (click)="selectInterval(intervalIndex)"
         [attr.d]="getIntervalPath(intervalIndex)" style="stroke: #222; stroke-width: 2px;" [ngClass]="{'available': interval.type === intervalsType.available, 'occupied': interval.type === intervalsType.occupied, 'reserved': interval.type === intervalsType.reserved
       }" />
     </g>
 
-    <circle [attr.cx]="svgWidth / 2" [attr.cy]="svgWidth / 2" [attr.r]="svgWidth / 2 - 30"
+    <circle [attr.cx]="svgWidth / 2" [attr.cy]="svgWidth / 2" [attr.r]="svgWidth / 2 - 50"
       style="fill: #fff; stroke: #222; stroke-width: 2px;" />
 
     <line [attr.x1]="beginningLine.x1" [attr.y1]="beginningLine.y1" [attr.x2]="beginningLine.x2"
@@ -23,22 +23,9 @@
     <line [attr.x1]="clockPins.hours.x1" [attr.y1]="clockPins.hours.y1" [attr.x2]="clockPins.hours.x2"
       [attr.y2]="clockPins.hours.y2" style="stroke: #222; stroke-width: 5px;" />
 
-    <g *ngIf="isActive">
-      <g *ngFor="let reservationPin of reservationPins">
-        <line [attr.x1]="reservationPin.x1" [attr.y1]="reservationPin.y1" [attr.x2]="svgWidth / 2"
-          [attr.y2]="svgWidth / 2" style="stroke: #71c422; stroke-width: 3px;" />
-      </g>
-    </g>
-
     <circle [attr.cx]="svgWidth / 2" [attr.cy]="svgWidth / 2" r="50"
       style="fill: #222; stroke: #222; stroke-width: 2px;" />
     <text [attr.x]="svgWidth / 2" [attr.y]="svgWidth / 2" dy="3"
       style="font-size: 24px; fill: #fff; font-weight: bold; alignment-baseline:middle; text-anchor:middle; user-select: none;">{{clockTime}}</text>
   </svg>
-
-  <div *ngIf="isActive" class="circle-div">
-    <div *ngFor="let reservationPin of reservationPins; let pinIndex = index" class="reservationPin"
-      [style]="reservationPin.circleStyle" (mousedown)="trackPinMove(pinIndex)">
-    </div>
-  </div>
 </div>

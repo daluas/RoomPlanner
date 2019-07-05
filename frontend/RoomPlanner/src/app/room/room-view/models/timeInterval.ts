@@ -1,8 +1,6 @@
 export class TimeInterval{
-    startHour: number;
-    startMinute: number;
-    endHour: number;
-    endMinute: number;
+    startDate: number;
+    endDate: number;
 
     create(obj: any): TimeInterval{
         return Object.assign(new TimeInterval(), obj);

@@ -2,7 +2,26 @@
   <div class="date">{{date.getDate()}}-{{date.getMonth() + 1}}-{{date.getFullYear()}}</div>
 
   <div class="clock-container">
-    <app-clock [isActive]="isClockActive" [reservations]="reservations" (setInterval)="setReservationInterval($event)">
+    <app-clock *ngIf="!displayGoodClock" [isActive]="isClockActive" [reservations]="reservations" (interval)="processNewInterval($event)">
     </app-clock>
+
+    <app-clock-three *ngIf="displayGoodClock" [isActive]="isClockActive" [reservations]="reservations" (setInterval)="setReservationInterval($event)">
+    </app-clock-three>
   </div>
+
+  <div class="date" *ngIf="isClockActive">{{from}} - {{to}} </div>
+
+  <div *ngIf="isClockActive" style="text-align: center">
+    <button (click)="cancelBooking()" style="margin-right: 10px;">cancel</button>
+    <button (click)="createBooking()">book</button>
+  </div>
+
+  <!-- <i class="material-icons switch" (click)="displayGoodClock = !displayGoodClock"> cached </i> -->
+
+  <div class="booking-popup-container" *ngIf="bookingPopupOpen" [ngClass]="{'display-block' : bookingPopupOpen}">
+    <div class="booking-popup-close"></div>
+    <app-booking-popup [(booking)]="booking" (booked)="addCreatedBooking($event)" (closePopup)="closeBookingPopup()"></app-booking-popup>
+  </div>
+
+  <div class="topActivator" *ngIf="!isClockActive" (click)="isClockActive = true"></div>
 </div>

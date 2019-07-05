@@ -16,3 +16,49 @@
     text-align: center;
     margin: 20px 0;
 }
+
+.switch{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    color: gray;
+    cursor: pointer;
+}
+
+.topActivator{
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+.booking-popup-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000;
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 75px 0 10px 0;
+   
+    display: none;
+}
+
+.display-block{
+    display: block !important;
+}
+
+.booking-popup-close{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(0,0,0,0.4);
+}
