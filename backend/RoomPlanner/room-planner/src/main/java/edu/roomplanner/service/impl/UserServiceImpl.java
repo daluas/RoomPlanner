@@ -71,7 +71,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public RoomDto getRoomByEmail(String email) {
         if (userValidator.isRoomEmailValid(email)) {
-            UserEntity userEntity = userRepository.findByEmail(email).get();
+            UserEntity userEntity = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new UserNotFoundException("User not found! Email is invalid!"));
             return roomDtoMapper.mapEntityToDto((RoomEntity) userEntity);
         }
 
